@@ -2,14 +2,11 @@ import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { Application } from "../db/schema/application";
 import { clientService } from "../src/services/clientService";
+import { Query } from "../src/types/query";
 import SigninPage from "../src/views/signin";
 
 interface SigninPageProps {
-  query: {
-    client_id?: string | string[] | null;
-    ref?: string | string[] | null;
-    scope?: string | string[] | null;
-  };
+  query: Query;
   app: Application | null;
 }
 
@@ -19,7 +16,7 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
       <Head>
         <title>Sign in</title>
       </Head>
-      <SigninPage app={app} />
+      <SigninPage app={app} query={query}/>
     </>
   );
 };

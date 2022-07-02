@@ -1,0 +1,1 @@
+export { handleSignin as default } from "../../../api/auth/signin";
