@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "production": "next build && next start",
+    "build-image": "docker build -t katrade-accounts-service ."
   },
   "dependencies": {
     "@chakra-ui/react": "^2.2.1",
