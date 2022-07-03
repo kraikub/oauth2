@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
+import { AuthenticationObject } from "../api/types/auth.response";
 import { AnyStudentScope } from "../scopes/student";
 
-export const generateAccessToken = (data: AnyStudentScope): string => {
-  let secret: string;
+export const signAuthObject = (data: AuthenticationObject): string => {
   if (!process.env.JWT_SECRET) {
     console.error("Cannot sign the message without secret.");
     process.exit(1);

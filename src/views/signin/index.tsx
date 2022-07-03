@@ -9,27 +9,25 @@ import {
   Heading,
   HStack,
   Image,
-  Input,
   ListItem,
-  SliderTrack,
   Text,
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import { useRouter } from "next/router";
-import { ChangeEvent, FC, FormEvent, useState } from "react";
+import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
 import { Application } from "../../../db/schema/application";
 import { authService } from "../../services/authService";
 import { Query } from "../../types/query";
 import { PrimaryInput } from "./PrimaryInput";
 
-interface SinginPageProps {
+interface SigninPageProps {
   query: Query;
   app: Application | null;
 }
 
-const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
-  console.log(query);
+const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
   const router = useRouter();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -59,11 +57,7 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
         query.scope as string,
         query.ref as string
       );
-      router.push(
-        `${app.redirectUrl}?client_id=${app.clientId}&token=${
-          data.payload.accessToken
-        }${query.ref ? `ref=${query.ref}` : ""}`
-      );
+      router.push(data.payload.url);
     } catch (error) {
       setIsSigninLoading(false);
       alert(error);
@@ -72,40 +66,65 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
 
   if (app === null || query.scope === null) {
     return (
-      <Container maxW={500} minH="100vh">
-        <Center h="100vh">
-          <VStack spacing={3} textAlign="center">
-            <Heading fontWeight={500}>🤔</Heading>
-            <Heading size="md" fontWeight={500}>
-              เกิดข้อผิดพลาดขึ้น
-            </Heading>
-            <Text>ดูเหมือนว่าเราไม่สามารถดำเนินการลิงค์ของคุณได้</Text>
-            <Text color="gray.500">
-              คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ
-            </Text>
-            <HStack mt="50px !important">
-              <Button size="sm" color="gray.400" fontWeight={400}>
-                ช่วยเหลือ
-              </Button>
-              <Button
-                size="sm"
-                fontWeight={400}
-                color="white"
-                bg="#00de73"
-                _hover={{ bg: undefined }}
-                _active={{ bg: undefined }}
-              >
-                แจ้งปัญหากับ Katrade
-              </Button>
-            </HStack>
-          </VStack>
-        </Center>
-      </Container>
+      <Fragment>
+        <Head>
+          <title>Invalid Signin URL - ลิงค์ของคุณไม่สามารถใช้งานได้</title>
+          <meta charSet="UTF-8" />
+          <meta
+            name="description"
+            content="เราไม่สามารถดำเนินการลิงค์ของคุณได้ คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ"
+          />
+          <meta name="author" content="Katrade Accounts" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+        </Head>
+        <Container maxW={500} minH="100vh">
+          <Center h="100vh">
+            <VStack spacing={3} textAlign="center">
+              <Heading fontWeight={500}>🤔</Heading>
+              <Heading size="md" fontWeight={500}>
+                เกิดข้อผิดพลาดขึ้น
+              </Heading>
+              <Text>ดูเหมือนว่าเราไม่สามารถดำเนินการลิงค์ของคุณได้</Text>
+              <Text color="gray.500">
+                คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ
+              </Text>
+              <HStack mt="50px !important">
+                <Button size="sm" color="gray.400" fontWeight={400}>
+                  ช่วยเหลือ
+                </Button>
+                <Button
+                  size="sm"
+                  fontWeight={400}
+                  color="white"
+                  bg="#00de73"
+                  _hover={{ bg: undefined }}
+                  _active={{ bg: undefined }}
+                >
+                  แจ้งปัญหากับ Katrade
+                </Button>
+              </HStack>
+            </VStack>
+          </Center>
+        </Container>
+      </Fragment>
     );
   }
 
   return (
-    <>
+    <Fragment>
+      <Head>
+        <title>Signin with KU - เข้าสู่ระบบด้วย KU</title>
+        <meta charSet="UTF-8" />
+        <meta
+          name="description"
+          content="เข้าสู่ระบบด้วยรหัสนนทรี (มหาวิิทยาลัยเกษตรศาสตร์) ของคุณ"
+        />
+        <meta name="author" content="Katrade Accounts" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <Container maxW={500} minH="100vh" py="4%">
         <form onSubmit={handleSigninEvent}>
           <Flex
@@ -181,7 +200,7 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
               </UnorderedList>
             </Box>
             <Button
-              mt="60px"
+              mt="5px"
               h="70px"
               w="full"
               bg="linear-gradient(149deg, rgba(32,222,0,1) 0%, rgba(0,255,224,1) 100%);"
@@ -203,7 +222,7 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
         </form>
       </Container>
       {/* <Footer /> */}
-    </>
+    </Fragment>
   );
 };
 export default SigninPage;

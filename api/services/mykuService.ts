@@ -1,6 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { mykuInstance, nextApiBaseInstance } from "../../libs/axios";
 import { AnyStudentScope } from "../../scopes/student";
+import { AuthenticationObject } from "../types/auth.response";
 import {
   MyKULoginResponse,
   MyKUPersonalResponse,
@@ -27,22 +28,19 @@ class MyKUService {
     username: string,
     password: string,
     scope: string
-  ): Promise<AnyStudentScope | null | boolean> => {
+  ): Promise<AuthenticationObject | null> => {
     const { status: loginStatus, data: loginData } = await this.login(
       username,
       password
     );
     if (loginStatus !== 200) {
-      return false;
+      return null;
     }
-    const { status: profileStatus, data: profileData } = await this.getProfile(
-      loginData.user.student.stdId,
-      loginData.accesstoken
-    );
-    if (profileStatus !== 200) {
-      return false;
-    }
-    return constructDataFromScope(scope, loginData, profileData);
+    return {
+      accessToken: loginData.accesstoken,
+      scope: scope,
+      stdId: loginData.user.student.stdId
+    };
   };
 
   public login = async (username: string, password: string) => {

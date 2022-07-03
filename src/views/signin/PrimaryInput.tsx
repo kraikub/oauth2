@@ -17,13 +17,13 @@ export const PrimaryInput: StyledComponent<"input", PrimaryInputProps> = styled.
     font-size: 1rem;
     outline: none;
     &:focus {
-        outline: solid #00de73 2px !important;
+        box-shadow: 0 0 0 2px #00de73 !important;
     }
     &:active {
-        outline: solid #00de73 2px !important;
+        box-shadow: 0 0 0 2px #00de73 !important;
     }
     &:hover {
-        outline: solid #00000010 3px;
+        box-shadow: 0 0 0 3px #00000010;
     }
     &::placeholder {
       color: #ccd6e0;
