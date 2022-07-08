@@ -18,8 +18,8 @@ const Footer: FC = () => {
           โปรดอ่าน!
         </Heading>
         <Text color="#00000090" fontSize="0.8rem">
-          พวกเราคือ นิสิตภาควิชาวิศวกรรมศาสตร์คอมพิวเตอร์ มหาวิทยาลัยเกษตรศาสตร์ เราสร้าง Katrade Login
-          ขึ้นมาเพื่อจุดประสงค์ทางการศึกษาเท่านั้น
+          พวกเราคือ นิสิตภาควิชาวิศวกรรมศาสตร์คอมพิวเตอร์ มหาวิทยาลัยเกษตรศาสตร์
+          เราสร้าง Katrade Login ขึ้นมาเพื่อจุดประสงค์ทางการศึกษาเท่านั้น
           เราไม่มีนโนบายในการเก็บข้อมูลนิสิตที่เป็นผู้ใช้งานใดๆทั้งสิ้น
         </Text>
         <Flex justifyContent="end" alignItems="center" mt="10px" gap={4}>
@@ -31,7 +31,9 @@ const Footer: FC = () => {
             _hover={{ bg: undefined }}
             _active={{ bg: undefined }}
             fontWeight={400}
-          >ส่ง Proposal ของคุณ</Button>
+          >
+            ส่ง Proposal ของคุณ
+          </Button>
         </Flex>
       </Container>
     </Box>

@@ -17,19 +17,20 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { ChangeEvent, FC, FormEvent, useState } from "react";
+import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
 import { Application } from "../../../db/schema/application";
 import { authService } from "../../services/authService";
 import { Query } from "../../types/query";
 import { PrimaryInput } from "./PrimaryInput";
-
+import logo from "../../../public/full-katrade-accounts-logo.svg";
+import Head from "next/head";
+import ogImage from "../../../public/og-image.png";
 interface SinginPageProps {
   query: Query;
   app: Application | null;
 }
 
 const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
-  console.log(query);
   const router = useRouter();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -72,44 +73,58 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
 
   if (app === null || query.scope === null) {
     return (
-      <Container maxW={500} minH="100vh">
-        <Center h="100vh">
-          <VStack spacing={3} textAlign="center">
-            <Heading fontWeight={500}>🤔</Heading>
-            <Heading size="md" fontWeight={500}>
-              เกิดข้อผิดพลาดขึ้น
-            </Heading>
-            <Text>ดูเหมือนว่าเราไม่สามารถดำเนินการลิงค์ของคุณได้</Text>
-            <Text color="gray.500">
-              คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ
-            </Text>
-            <HStack mt="50px !important">
-              <Button size="sm" color="gray.400" fontWeight={400}>
-                ช่วยเหลือ
-              </Button>
-              <Button
-                size="sm"
-                fontWeight={400}
-                color="white"
-                bg="#00de73"
-                _hover={{ bg: undefined }}
-                _active={{ bg: undefined }}
-              >
-                แจ้งปัญหากับ Katrade
-              </Button>
-            </HStack>
-          </VStack>
-        </Center>
-      </Container>
+      <Fragment>
+        <Head>
+          <title>Signin with KU</title>
+        </Head>
+        <Container maxW={500} minH="100vh">
+          <Center h="100vh">
+            <VStack spacing={3} textAlign="center">
+              <Heading fontWeight={500}>🤔</Heading>
+              <Heading size="md" fontWeight={500}>
+                เกิดข้อผิดพลาดขึ้น
+              </Heading>
+              <Text>ดูเหมือนว่าเราไม่สามารถดำเนินการลิงค์ของคุณได้</Text>
+              <Text color="gray.500">
+                คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ
+              </Text>
+              <HStack mt="50px !important">
+                <Button size="sm" color="gray.400" fontWeight={400}>
+                  ช่วยเหลือ
+                </Button>
+                <Button
+                  size="sm"
+                  fontWeight={400}
+                  color="white"
+                  bg="#00de73"
+                  _hover={{ bg: undefined }}
+                  _active={{ bg: undefined }}
+                >
+                  แจ้งปัญหากับ Katrade
+                </Button>
+              </HStack>
+            </VStack>
+          </Center>
+        </Container>
+      </Fragment>
     );
   }
 
   return (
-    <>
+    <Fragment>
+      <Head>
+        <title>Signin with KU</title>
+        <meta property="og:title" content={`Katrade - Sign in with KU`} />
+        <meta
+          property="og:description"
+          content={`Sign in to ${app.appName} with your Kasetsart Account.`}
+        />
+        <meta property="og:image" content={ogImage.src} />
+      </Head>
       <Container maxW={500} minH="100vh" py="4%">
         <form onSubmit={handleSigninEvent}>
           <Flex
-            boxShadow="0 0 20px #00000010"
+            // boxShadow="0 0 20px #00000010"
             rounded={22}
             minH="60vh"
             h="auto"
@@ -120,11 +135,7 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
             gap="20px"
             justifyContent="space-between !important"
           >
-            <Image
-              alt="z"
-              src="https://github.com/katrade/resources/blob/main/mainlogo-green.png?raw=true"
-              h="20px"
-            ></Image>
+            <Image alt="z" src={logo.src} h="24px"></Image>
             <Heading fontWeight={500} fontSize="26px">
               เข้าสู่ระบบด้วย KU
             </Heading>
@@ -133,9 +144,11 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
                 border="1px solid"
                 borderColor="gray.200"
                 py="5px"
-                px="20px"
+                ps="5px"
+                pe="16px"
+                fontSize="14px"
+                fontWeight={300}
                 rounded="full"
-                fontSize="16px"
                 color="gray.600"
                 alignItems="center"
                 gap={2}
@@ -161,7 +174,7 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
               bg="green.50"
               px="30px"
               py="12px"
-              rounded={16}
+              rounded={8}
               w="full"
               border="1px solid"
               borderColor="green.100"
@@ -181,15 +194,15 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
               </UnorderedList>
             </Box>
             <Button
-              mt="60px"
+              mt="10px"
               h="70px"
               w="full"
-              bg="linear-gradient(149deg, rgba(32,222,0,1) 0%, rgba(0,255,224,1) 100%);"
+              bg="#1ddb76"
               color="white"
               _active={{ bg: undefined }}
-              fontSize="1.2rem"
+              fontSize="1rem"
               fontWeight={500}
-              rounded={16}
+              rounded={8}
               isLoading={isSigninButtonLoading}
               _hover={{
                 bg: undefined,
@@ -203,7 +216,7 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
         </form>
       </Container>
       {/* <Footer /> */}
-    </>
+    </Fragment>
   );
 };
 export default SigninPage;

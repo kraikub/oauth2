@@ -10,7 +10,7 @@ export const PrimaryInput: StyledComponent<"input", PrimaryInputProps> = styled.
     width: ${(props) => props.width ? props.width : "100%"};
     background: transparent;
     padding: 0 20px 0 20px;
-    border-radius: 16px;
+    border-radius: 8px;
     border: solid #00000020;
     border-width: 1px;
     font-weight: 400;

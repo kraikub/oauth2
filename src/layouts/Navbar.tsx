@@ -8,6 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FC } from "react";
+import logo from "../../public/full-katrade-accounts-logo.svg";
 
 const Navbar: FC = () => {
   return (
@@ -16,7 +17,7 @@ const Navbar: FC = () => {
       top={0}
       left={0}
       right={0}
-      minH="70px"
+      py="12px"
       bg="white"
       zIndex={35}
       border="solid #00000010"
@@ -25,10 +26,7 @@ const Navbar: FC = () => {
       alignItems="center"
       justifyContent="space-between"
     >
-      <Image
-        src="https://github.com/katrade/resources/blob/main/mainlogo-dark.png?raw=true"
-        h="30px"
-      ></Image>
+      <Image src={logo.src} alt="logo" h="26px"></Image>
     </Flex>
   );
 };

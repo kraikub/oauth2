@@ -11,14 +11,7 @@ interface SigninPageProps {
 }
 
 const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
-  return (
-    <>
-      <Head>
-        <title>Sign in</title>
-      </Head>
-      <SigninPage app={app} query={query}/>
-    </>
-  );
+  return <SigninPage app={app} query={query} />;
 };
 
 export default Signin;
