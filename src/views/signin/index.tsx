@@ -9,13 +9,12 @@ import {
   Heading,
   HStack,
   Image,
-  Input,
   ListItem,
-  SliderTrack,
   Text,
   UnorderedList,
   VStack,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
 import { Application } from "../../../db/schema/application";
@@ -30,7 +29,7 @@ interface SinginPageProps {
   app: Application | null;
 }
 
-const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
+const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
   const router = useRouter();
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -60,11 +59,7 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
         query.scope as string,
         query.ref as string
       );
-      router.push(
-        `${app.redirectUrl}?client_id=${app.clientId}&token=${
-          data.payload.accessToken
-        }${query.ref ? `ref=${query.ref}` : ""}`
-      );
+      router.push(data.payload.url);
     } catch (error) {
       setIsSigninLoading(false);
       alert(error);
@@ -75,7 +70,17 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
     return (
       <Fragment>
         <Head>
-          <title>Signin with KU</title>
+          <title>Invalid Signin URL - ลิงค์ของคุณไม่สามารถใช้งานได้</title>
+          <meta charSet="UTF-8" />
+          <meta
+            name="description"
+            content="เราไม่สามารถดำเนินการลิงค์ของคุณได้ คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ"
+          />
+          <meta name="author" content="Katrade Accounts" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
         </Head>
         <Container maxW={500} minH="100vh">
           <Center h="100vh">
@@ -194,7 +199,7 @@ const SigninPage: FC<SinginPageProps> = ({ app, query }) => {
               </UnorderedList>
             </Box>
             <Button
-              mt="10px"
+              mt="5px"
               h="70px"
               w="full"
               bg="#1ddb76"

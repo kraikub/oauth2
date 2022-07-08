@@ -14,11 +14,6 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
   return <SigninPage app={app} query={query} />;
 };
 
-export default Signin;
-
-interface SigninServerSideProps {
-  props: SigninPageProps;
-}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { client_id, ref, scope } = context.query;
@@ -38,3 +33,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
+
+export default Signin;
