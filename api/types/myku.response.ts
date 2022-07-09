@@ -119,3 +119,9 @@ export interface MyKUPersonalResponse {
     };
   };
 }
+
+export interface MyKURenewTokenResponse {
+  code: string;
+  username: string;
+  accesstoken: string;
+}

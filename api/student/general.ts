@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { verify } from "../../libs/jwt";
 import { handleApiError } from "../error";
 import { AuthMiddleware } from "../middlewares/auth.middleware";
 import { myKUService } from "../services/mykuService";

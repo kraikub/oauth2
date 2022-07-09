@@ -3,8 +3,7 @@ import { mapQueryStringToUrl } from "./query";
 
 export const redirectToAuthenticateCallback = (
   url: string,
-  signedAuthObject: string,
-  ref?: string
+  queryString: { [key: string]: string }
 ) => {
-  return mapQueryStringToUrl(url, { token: signedAuthObject, ref: ref as string});
+  return mapQueryStringToUrl(url, queryString);
 };

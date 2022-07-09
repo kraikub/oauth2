@@ -1,12 +1,10 @@
-import axios, { AxiosError } from "axios";
-import { mykuInstance, nextApiBaseInstance } from "../../libs/axios";
-import { AnyStudentScope } from "../../scopes/student";
+import { mykuInstance } from "../../libs/axios";
 import { AuthenticationObject } from "../types/auth.response";
 import {
   MyKULoginResponse,
   MyKUPersonalResponse,
+  MyKURenewTokenResponse,
 } from "../types/myku.response";
-import { constructDataFromScope } from "../utils/data";
 import { mapQueryStringToUrl } from "../utils/query";
 
 class MyKUService {
@@ -27,7 +25,8 @@ class MyKUService {
   public externalLogin = async (
     username: string,
     password: string,
-    scope: string
+    scope: string,
+    clientId: string
   ): Promise<AuthenticationObject | null> => {
     const { status: loginStatus, data: loginData } = await this.login(
       username,
@@ -39,7 +38,9 @@ class MyKUService {
     return {
       accessToken: loginData.accesstoken,
       scope: scope,
-      stdId: loginData.user.student.stdId
+      stdId: loginData.user.student.stdId,
+      clientId: clientId,
+      refreshToken: loginData.renewtoken,
     };
   };
 
@@ -65,6 +66,24 @@ class MyKUService {
       mapQueryStringToUrl("/std-profile/getStdPersonal", {
         stdId: stdId,
       }),
+      {
+        headers: {
+          "x-access-token": accessToken,
+          "app-key": this.appKey,
+        },
+      }
+    );
+    return { status, data };
+  };
+
+  public getEducation = async (stdId: string, accessToken: string) => {};
+
+  public renew = async (accessToken: string, refreshToken: string) => {
+    const { status, data } = await mykuInstance.post<MyKURenewTokenResponse>(
+      "/auth/renew",
+      {
+        renewtoken: refreshToken,
+      },
       {
         headers: {
           "x-access-token": accessToken,

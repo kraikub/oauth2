@@ -22,9 +22,8 @@ import { authService } from "../../services/authService";
 import { Query } from "../../types/query";
 import { PrimaryInput } from "./PrimaryInput";
 import logo from "../../../public/full-katrade-accounts-logo.svg";
-import Head from "next/head";
 import ogImage from "../../../public/og-image.png";
-interface SinginPageProps {
+interface SigninPageProps {
   query: Query;
   app: Application | null;
 }

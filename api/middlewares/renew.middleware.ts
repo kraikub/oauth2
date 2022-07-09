@@ -1,31 +1,30 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { MiddlewareOutput } from ".";
+import { MiddlewareOutput, RenewMiddlewareOutput } from ".";
 import { verify } from "../../libs/jwt";
-import { AccessTokenBody, AuthenticationObject } from "../types/auth.response";
+import { AccessTokenBody, RefreshTokenBody } from "../types/auth.response";
 import { createResponse } from "../types/response";
 
-export const AuthMiddleware = (
+export const RenewMiddleware = (
   req: NextApiRequest,
   res: NextApiResponse
-): MiddlewareOutput<AccessTokenBody> => {
+): RenewMiddlewareOutput => {
   const { authorization } = req.headers;
   if (!authorization) {
     res.status(401).send(createResponse(false, "Unauthorized", {}));
     return {
       success: false,
-      payload: { accessToken: "", scope: "", stdId: "", clientId: "" },
+      accessTokenPayload: {
+        accessToken: "",
+        scope: "",
+        stdId: "",
+        clientId: "",
+      },
+      refreshTokenPayload: { refreshToken: "" },
     };
   }
   const token = authorization.split(" ")[1];
 
   const [success, payload, error] = verify(token);
-  if (!success) {
-    res.status(401).send(createResponse(false, `Unauthorized: ${error}`, {}));
-    return {
-      success: false,
-      payload: { accessToken: "", scope: "", stdId: "", clientId: "" },
-    };
-  }
   let output: AccessTokenBody = {
     accessToken: "",
     scope: "",
@@ -36,5 +35,19 @@ export const AuthMiddleware = (
   output.scope = payload?.scope;
   output.stdId = payload?.stdId;
   output.clientId = payload?.clientId;
-  return { success: true, payload: output };
+
+  const { refreshToken } = req.body;
+
+  const [, refreshPayload] = verify(refreshToken);
+  let refresh: RefreshTokenBody = {
+    refreshToken: "",
+  };
+  refresh.refreshToken = refreshPayload?.refreshToken;
+
+  return {
+    success: true,
+    accessTokenPayload: output,
+    refreshTokenPayload: refresh,
+    error: error,
+  };
 };

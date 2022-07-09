@@ -29,7 +29,8 @@ export async function handleSignin(req: NextApiRequest, res: NextApiResponse) {
     const externalLoginResult = await myKUService.externalLogin(
       username,
       password,
-      scope
+      scope,
+      app.clientId
     );
 
     if (externalLoginResult === null) {
@@ -40,13 +41,20 @@ export async function handleSignin(req: NextApiRequest, res: NextApiResponse) {
       );
       return res.status(400).send(response);
     } else {
-      const signedJwtToken = signAuthObject(externalLoginResult)
-      console.log(signedJwtToken)
-      const redirectUrl = redirectToAuthenticateCallback(
-        app.redirectUrl,
-        signedJwtToken,
-        ref
-      );
+      const { accessToken, refreshToken, scope, clientId, stdId } =
+        externalLoginResult;
+      const signedAuthJwtToken = signAuthObject({
+        accessToken,
+        scope,
+        clientId,
+        stdId,
+      }, "29m");
+      const signedRenewJwtToken = signAuthObject({ refreshToken }, "1h");
+      const redirectUrl = redirectToAuthenticateCallback(app.redirectUrl, {
+        ref: ref,
+        access: signedAuthJwtToken,
+        refresh: signedRenewJwtToken,
+      });
       const response = createResponse(true, "redirect url", {
         url: redirectUrl,
       });
