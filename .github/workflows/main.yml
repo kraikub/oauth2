@@ -9,9 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository
       - uses: actions/checkout@v2
-      - uses: CDNievas/heroku-action@v1.0 # This is the action
+      - name: Deploy to Heroku
+      - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_email: "edu.nutchanon@gmail.com"
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "accounts-katrade"
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
