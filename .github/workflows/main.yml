@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
+      - name: Setting up Heroku
+        run: heroku stack:set container
       - name: Deploy to Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
