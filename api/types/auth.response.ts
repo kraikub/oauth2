@@ -3,6 +3,7 @@ export interface AuthenticationObject {
   accessToken: string;
   scope: string;
   stdId: string;
+  stdCode: string;
   refreshToken: string;
 }
 
@@ -11,6 +12,7 @@ export interface AccessTokenBody {
   accessToken: string;
   scope: string;
   stdId: string;
+  stdCode: string;
 }
 
 export interface RefreshTokenBody {

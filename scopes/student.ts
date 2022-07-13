@@ -1,44 +1,21 @@
-export interface StudentScope1 {
-  studentId: string;
+import { MyKUPersonalResponse } from './../api/types/myku/student';
+import { PossibleEmptyField } from ".";
+
+export interface Student {
+  stdCode: string;
   name: {
-    th: Name;
-    en: Name;
-  };
-  education: {
-    en: Education;
-    th: Education;
+    th: string;
+    en: string;
   };
 }
 
-export interface StudentScope0 {
-  studentId: string;
-  name: {
-    th: Name;
-    en: Name;
-  };
-}
 
-export interface Name {
-  title: string;
-  firstName: string;
-  middleName: PossibleEmptyField;
-  lastName: string;
+export const studentFromResponse = (stdCode: string, kuResponse: MyKUPersonalResponse): Student => {
+  return {
+    stdCode: stdCode,
+    name: {
+      th: kuResponse.results.stdPersonalModel.nameTh,
+      en: kuResponse.results.stdPersonalModel.nameEn
+    }
+  }
 }
-
-export interface Education {
-  campus: {
-    code: string;
-    name: string;
-  };
-  faculty: {
-    code: string;
-    name: string;
-  };
-  department: {
-    code: string;
-    name: string;
-  };
-}
-
-export type PossibleEmptyField = string | null;
-export type AnyStudentScope = StudentScope0 | StudentScope1;

@@ -13,7 +13,7 @@ export const AuthMiddleware = (
     res.status(401).send(createResponse(false, "Unauthorized", {}));
     return {
       success: false,
-      payload: { accessToken: "", scope: "", stdId: "", clientId: "" },
+      payload: { accessToken: "", scope: "", stdId: "", clientId: "", stdCode: "" },
     };
   }
   const token = authorization.split(" ")[1];
@@ -23,7 +23,7 @@ export const AuthMiddleware = (
     res.status(401).send(createResponse(false, `Unauthorized: ${error}`, {}));
     return {
       success: false,
-      payload: { accessToken: "", scope: "", stdId: "", clientId: "" },
+      payload: { accessToken: "", scope: "", stdId: "", clientId: "", stdCode: "" },
     };
   }
   let output: AccessTokenBody = {
@@ -31,10 +31,12 @@ export const AuthMiddleware = (
     scope: "",
     stdId: "",
     clientId: "",
+    stdCode: "",
   };
   output.accessToken = payload?.accessToken;
   output.scope = payload?.scope;
   output.stdId = payload?.stdId;
   output.clientId = payload?.clientId;
+  output.stdCode = payload?.stdCode;
   return { success: true, payload: output };
 };

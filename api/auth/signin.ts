@@ -41,13 +41,14 @@ export async function handleSignin(req: NextApiRequest, res: NextApiResponse) {
       );
       return res.status(400).send(response);
     } else {
-      const { accessToken, refreshToken, scope, clientId, stdId } =
+      const { accessToken, refreshToken, scope, clientId, stdId, stdCode } =
         externalLoginResult;
       const signedAuthJwtToken = signAuthObject({
         accessToken,
         scope,
         clientId,
         stdId,
+        stdCode,
       }, "29m");
       const signedRenewJwtToken = signAuthObject({ refreshToken }, "1h");
       const redirectUrl = redirectToAuthenticateCallback(app.redirectUrl, {

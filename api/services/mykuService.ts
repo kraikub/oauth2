@@ -1,10 +1,9 @@
+import { MyKUGradeResponse } from './../types/myku/grade';
+import { MyKUEducationResponse } from "./../types/myku/education";
+import { MyKUPersonalResponse } from "./../types/myku/student";
 import { mykuInstance } from "../../libs/axios";
 import { AuthenticationObject } from "../types/auth.response";
-import {
-  MyKULoginResponse,
-  MyKUPersonalResponse,
-  MyKURenewTokenResponse,
-} from "../types/myku.response";
+import { MyKULoginResponse, MyKURenewTokenResponse } from "../types/myku/auth";
 import { mapQueryStringToUrl } from "../utils/query";
 
 class MyKUService {
@@ -39,6 +38,7 @@ class MyKUService {
       accessToken: loginData.accesstoken,
       scope: scope,
       stdId: loginData.user.student.stdId,
+      stdCode: loginData.user.idCode,
       clientId: clientId,
       refreshToken: loginData.renewtoken,
     };
@@ -76,7 +76,34 @@ class MyKUService {
     return { status, data };
   };
 
-  public getEducation = async (stdId: string, accessToken: string) => {};
+  public getEducation = async (stdId: string, accessToken: string) => {
+    const { status, data } = await mykuInstance.get<MyKUEducationResponse>(
+      mapQueryStringToUrl("/std-profile/getStdEducation", {
+        stdId: stdId,
+      }),
+      {
+        headers: {
+          "x-access-token": accessToken,
+          "app-key": this.appKey,
+        },
+      }
+    );
+    return { status, data };
+  };
+  public getGrades = async (stdCode: string, accessToken: string) => {
+    const { status, data } = await mykuInstance.get<MyKUGradeResponse>(
+      mapQueryStringToUrl("/std-profile/checkGrades", {
+        idcode: stdCode,
+      }),
+      {
+        headers: {
+          "x-access-token": accessToken,
+          "app-key": this.appKey,
+        },
+      }
+    );
+    return { status, data };
+  };
 
   public renew = async (accessToken: string, refreshToken: string) => {
     const { status, data } = await mykuInstance.post<MyKURenewTokenResponse>(

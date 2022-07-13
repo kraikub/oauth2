@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { studentFromResponse } from "../../scopes/student";
 import { handleApiError } from "../error";
 import { AuthMiddleware } from "../middlewares/auth.middleware";
 import { myKUService } from "../services/mykuService";
@@ -13,7 +14,8 @@ export async function studentGeneralApi(req: NextApiRequest,res: NextApiResponse
         if (status !== 200) {
             return res.status(status).send(createResponse(false, "Failed from myapi.ku.th", {}))
         }
-        return res.send(createResponse(true, "", data))
+        const converted = studentFromResponse(payload.stdCode, data)
+        return res.send(createResponse(true, "", converted))
     }
     res.status(404).send({})
     } catch(error) {
