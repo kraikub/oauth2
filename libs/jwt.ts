@@ -1,6 +1,4 @@
 import jwt from "jsonwebtoken";
-import { AuthenticationObject } from "../api/types/auth.response";
-import { AnyStudentScope } from "../scopes/student";
 
 export const signAuthObject = (data: any, expires: string): string => {
   if (!process.env.JWT_SECRET) {

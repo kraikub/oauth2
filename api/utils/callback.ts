@@ -1,4 +1,3 @@
-import { AuthenticationObject } from "../types/auth.response";
 import { mapQueryStringToUrl } from "./query";
 
 export const redirectToAuthenticateCallback = (
