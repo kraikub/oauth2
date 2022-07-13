@@ -64,4 +64,5 @@ export async function handleSignin(req: NextApiRequest, res: NextApiResponse) {
   } catch (error) {
     handleApiError(res, error);
   }
+  await mongodb.close();
 }

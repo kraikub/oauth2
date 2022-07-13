@@ -10,4 +10,6 @@ export async function handleGetApplicationData(req: NextApiRequest, res: NextApi
     
     const queryResult = await ApplicationModel.findOne({ clientId: client_id })
     res.json({ result: queryResult })
+
+    await mongodb.close()
 }
