@@ -18,6 +18,7 @@ export const RenewMiddleware = (
         scope: "",
         stdId: "",
         clientId: "",
+        stdCode: "",
       },
       refreshTokenPayload: { refreshToken: "" },
     };
@@ -30,11 +31,13 @@ export const RenewMiddleware = (
     scope: "",
     stdId: "",
     clientId: "",
+    stdCode: "",
   };
   output.accessToken = payload?.accessToken;
   output.scope = payload?.scope;
   output.stdId = payload?.stdId;
   output.clientId = payload?.clientId;
+  output.stdCode = payload?.stdCode;
 
   const { refreshToken } = req.body;
 
