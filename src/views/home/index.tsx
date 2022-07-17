@@ -9,7 +9,7 @@ import {
   HStack,
   Image,
 } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useState } from "react";
 import Navbar from "../../layouts/Navbar";
 import { FaLock } from "react-icons/fa";
 import { useRouter } from "next/router";
@@ -17,9 +17,11 @@ import { mapQueryStringToUrl } from "../../../api/utils/query";
 import { getSigninUrl } from "../../utils/path";
 
 const HomePage: FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const handleToSigninPage = () => {
-    return router.push(getSigninUrl())
+    setLoading(true);
+    return router.push(getSigninUrl());
   };
   return (
     <>
@@ -42,7 +44,11 @@ const HomePage: FC = () => {
             </Text>
           </Box>
           <HStack mt={10}>
-            <Button colorScheme="katrade" onClick={handleToSigninPage}>
+            <Button
+              colorScheme="katrade"
+              onClick={handleToSigninPage}
+              isLoading={loading}
+            >
               เริ่มต้นใช้งาน
             </Button>
             <Button colorScheme="gray" gap={2}>
