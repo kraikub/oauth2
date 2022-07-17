@@ -1,12 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
-const config: AxiosRequestConfig = {
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-};
-
 const mykuConfig: AxiosRequestConfig = {
   baseURL: process.env.MYKU_AUTH_URL,
 };
 
-export const nextApiBaseInstance: AxiosInstance = axios.create(config);
+export const nextApiBaseInstance: AxiosInstance = axios.create();
 export const mykuInstance: AxiosInstance = axios.create(mykuConfig);

@@ -4,7 +4,7 @@ import { ApplicationResponse } from "../../api/types/response"
 
 class ClientService {
     public async getApplication(clientId: string) { 
-        const { data, status } = await nextApiBaseInstance.get<ApplicationResponse>(mapQueryStringToUrl("/client/app", {
+        const { data, status } = await nextApiBaseInstance.get<ApplicationResponse>(mapQueryStringToUrl("/api/client/app", {
             client_id: clientId
         }))
         if (status === 200) {
