@@ -25,7 +25,6 @@ WORKDIR /katrade-accounts
 ENV MYKU_APPKEY $MYKU_APPKEY
 ENV JWT_SECRET $JWT_SECRET
 ENV MYKU_AUTH_URL $MYKU_AUTH_URL
-ENV MONGODB_URL $MONGODB_URL
 
 COPY --from=builder /katrade-accounts/next.config.js ./
 COPY --from=builder /katrade-accounts/public ./public
