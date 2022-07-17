@@ -2,8 +2,8 @@ import { ApplicationModel } from '../../db/models/application';
 import { mongodb } from '../../db/mongodb';
 import { Application } from './../../db/schema/application';
 interface ApplicationFilter {
-  clientId: string;
-  ownerId: string;
+  clientId?: string;
+  ownerId?: string;
 }
 
 export default class ApplicationRepository {
