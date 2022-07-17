@@ -9,9 +9,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: production
+    env:
+      API_URL: ${{ secrets.API_URL }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      MONGODB_URL: ${{ secrets.MONGODB_URL }}
+      MYKU_APPKEY: ${{ secrets.MYKU_APPKEY }}
+      MYKU_AUTH_URL: ${{ secrets.MYKU_AUTH_URL }}
+      NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
     steps:
       - name: Check envs
-        run: echo $NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID
+        run: echo ${{ env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
       - name: Check out repository
         uses: actions/checkout@v2
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
