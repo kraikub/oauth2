@@ -22,6 +22,8 @@ const defaultUserContextValue = {
   reload: () => {},
 };
 
+const signinUrl = getSigninUrl()
+
 export const userContext = createContext<UserContext>(defaultUserContextValue);
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
@@ -34,7 +36,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   };
 
   const handleRedirectToSigin = () => {
-    router.push(getSigninUrl());
+    router.push(signinUrl);
   };
 
   const getUser = async () => {

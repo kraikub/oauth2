@@ -13,17 +13,17 @@ import { FC, useState } from "react";
 import Navbar from "../../layouts/Navbar";
 import { FaLock } from "react-icons/fa";
 import { useRouter } from "next/router";
-import { mapQueryStringToUrl } from "../../../api/utils/query";
 import { getSigninUrl } from "../../utils/path";
 import { NextPage } from "next";
+
+const appSigninUrl = getSigninUrl()
 
 const HomePage: NextPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const handleToSigninPage = () => {
     setLoading(true);
-    console.log(process.env)
-    return router.push(getSigninUrl());
+    return router.push(appSigninUrl);
   };
   return (
     <>
