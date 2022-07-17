@@ -1,6 +1,7 @@
 import { mapQueryStringToUrl } from "../../api/utils/query";
 
 export const getSigninUrl = () => {
+  console.log(process.env)
   return mapQueryStringToUrl("/signin", {
     client_id:
       process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ||
