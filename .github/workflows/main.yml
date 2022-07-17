@@ -29,5 +29,5 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           dockerfile_directory: ./
           dockerfile_name: Dockerfile
-          docker_options: "--build-arg NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }} --build-arg NEXT_PUBLIC_API_URL_ARG=${{ env.NEXT_PUBLIC_API_URL }} --no-cache"
+          docker_options: "--build-arg ${{env.MONGODB_URL}} --build-arg NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }} --build-arg NEXT_PUBLIC_API_URL_ARG=${{ env.NEXT_PUBLIC_API_URL }} --no-cache"
           process_type: web
