@@ -1,3 +1,5 @@
+import { MyKULoginResponse } from "./myku/auth";
+
 export interface AuthenticationObject {
   clientId: string;
   accessToken: string;
@@ -5,6 +7,7 @@ export interface AuthenticationObject {
   stdId: string;
   stdCode: string;
   refreshToken: string;
+  response: MyKULoginResponse;
 }
 
 export interface AccessTokenBody {
@@ -13,6 +16,7 @@ export interface AccessTokenBody {
   scope: string;
   stdId: string;
   stdCode: string;
+  uid: string;
 }
 
 export interface RefreshTokenBody {

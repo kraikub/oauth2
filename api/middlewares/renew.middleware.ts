@@ -19,6 +19,7 @@ export const RenewMiddleware = (
         stdId: "",
         clientId: "",
         stdCode: "",
+        uid: "",
       },
       refreshTokenPayload: { refreshToken: "" },
     };
@@ -26,27 +27,62 @@ export const RenewMiddleware = (
   const token = authorization.split(" ")[1];
 
   const [success, payload, error] = verify(token);
+  if (!success) {
+    res.status(401).send(createResponse(false, `Unauthorized: ${error}`, {}));
+    
+    return {
+      success: false,
+      accessTokenPayload: {
+        accessToken: "",
+        scope: "",
+        stdId: "",
+        clientId: "",
+        stdCode: "",
+        uid: "",
+      },
+      refreshTokenPayload: { refreshToken: "" },
+    };
+  }
   let output: AccessTokenBody = {
     accessToken: "",
     scope: "",
     stdId: "",
     clientId: "",
     stdCode: "",
+    uid: "",
   };
   output.accessToken = payload?.accessToken;
   output.scope = payload?.scope;
   output.stdId = payload?.stdId;
   output.clientId = payload?.clientId;
   output.stdCode = payload?.stdCode;
+  output.uid = payload?.uid;
 
   const { refreshToken } = req.body;
 
-  const [, refreshPayload] = verify(refreshToken);
+  const [refreshVerifySuccess, refreshPayload, refreshVerifyError] =
+    verify(refreshToken);
+  if (!refreshVerifySuccess) {
+    res
+      .status(401)
+      .send(createResponse(false, `Unauthorized: ${refreshVerifyError}`, {}));
+    return {
+      success: false,
+      accessTokenPayload: {
+        accessToken: "",
+        scope: "",
+        stdId: "",
+        clientId: "",
+        stdCode: "",
+        uid: "",
+      },
+      refreshTokenPayload: { refreshToken: "" },
+    };
+  }
   let refresh: RefreshTokenBody = {
     refreshToken: "",
   };
   refresh.refreshToken = refreshPayload?.refreshToken;
-
   return {
     success: true,
     accessTokenPayload: output,

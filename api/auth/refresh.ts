@@ -8,19 +8,26 @@ export async function handleRenewAccessToken(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { accessTokenPayload, refreshTokenPayload } = RenewMiddleware(req, res);
+  const { accessTokenPayload, refreshTokenPayload, success } = RenewMiddleware(
+    req,
+    res
+  );
+  if (!success) return;
   const { status, data } = await myKUService.renew(
     accessTokenPayload.accessToken,
     refreshTokenPayload.refreshToken
   );
 
   if (status === 401) {
-    res.status(status).send(createResponse(false, "Unauthorized", {}));
+    return res.status(status).send(createResponse(false, "Unauthorized", {}));
   }
-  accessTokenPayload.accessToken = data.accesstoken
-  const signedJwt = signAuthObject({
-    accessTokenPayload
-  }, "29m")
+  accessTokenPayload.accessToken = data.accesstoken;
+  const signedJwt = signAuthObject(
+    {
+      accessTokenPayload,
+    },
+    "29m"
+  );
 
   res.status(200).send(
     createResponse(true, "New access token", {

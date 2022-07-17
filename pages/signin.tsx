@@ -16,7 +16,7 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { client_id, ref, scope } = context.query;
+  const { client_id, ref, scope, dev, secret } = context.query;
   let app: Application | undefined;
   if (client_id !== undefined) {
     app = await clientService.getApplication(client_id?.toString());
@@ -28,6 +28,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         client_id: client_id ? client_id : null,
         ref: ref ? ref : null,
         scope: scope ? scope : null,
+        dev: dev ? dev : null,
+        secret: secret ? secret : null,
       },
       app: app ? app : null,
     },

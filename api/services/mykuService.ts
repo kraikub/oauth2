@@ -41,6 +41,7 @@ class MyKUService {
       stdCode: loginData.user.idCode,
       clientId: clientId,
       refreshToken: loginData.renewtoken,
+      response: loginData
     };
   };
 
@@ -106,6 +107,7 @@ class MyKUService {
   };
 
   public renew = async (accessToken: string, refreshToken: string) => {
+    console.log(accessToken)
     const { status, data } = await mykuInstance.post<MyKURenewTokenResponse>(
       "/auth/renew",
       {

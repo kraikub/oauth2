@@ -1,1 +1,1 @@
-export { studentGradesApi as default } from "../../../api/student/grades";
+export { studentGradesApi as default } from "../../../api/data/student/grades";

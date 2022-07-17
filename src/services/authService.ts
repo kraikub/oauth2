@@ -7,7 +7,9 @@ class AuthService {
     password: string,
     clientId: string,
     scope: string,
-    ref?: string
+    ref?: string,
+    dev?: boolean,
+    secret?: string
   ) => {
     const { status, data } = await nextApiBaseInstance.post<
       CustomApiResponse<{ url: string }>
@@ -17,7 +19,26 @@ class AuthService {
       clientId: clientId,
       scope: scope,
       ref: ref,
+      dev: dev,
+      secret: secret,
     });
+    return { status, data };
+  };
+
+  public refresh = async (accessToken: string, refreshToken: string) => {
+    const { status, data } = await nextApiBaseInstance.post<
+      CustomApiResponse<{ accessToken: string }>
+    >(
+      "/api/auth/refresh",
+      {
+        refreshToken: refreshToken,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
     return { status, data };
   };
 }

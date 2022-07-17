@@ -42,6 +42,14 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
     setPassword(e.target.value);
   };
 
+  const bindStringToBoolean = (
+    text?: string | string[] | null | undefined
+  ): boolean | undefined => {
+    if (text === "true") return true;
+    else if (text === "false") return false;
+    return undefined;
+  };
+
   const handleSigninEvent = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (app == null || query.scope === null) return;
@@ -56,7 +64,9 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
         password,
         app.clientId,
         query.scope as string,
-        query.ref as string
+        query.ref as string,
+        bindStringToBoolean(query.dev),
+        query.secret as string | undefined
       );
       router.push(data.payload.url);
     } catch (error) {
@@ -83,29 +93,18 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
         </Head>
         <Container maxW={500} minH="100vh">
           <Center h="100vh">
-            <VStack spacing={3} textAlign="center">
+            <VStack spacing={5} textAlign="center">
               <Heading fontWeight={500}>🤔</Heading>
               <Heading size="md" fontWeight={500}>
-                เกิดข้อผิดพลาดขึ้น
+                เกิดข้อผิดพลาดขึ้น | Invalid Signin URL
               </Heading>
               <Text>ดูเหมือนว่าเราไม่สามารถดำเนินการลิงค์ของคุณได้</Text>
               <Text color="gray.500">
                 คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ
               </Text>
               <HStack mt="50px !important">
-                <Button size="sm" color="gray.400" fontWeight={400}>
-                  ช่วยเหลือ
-                </Button>
-                <Button
-                  size="sm"
-                  fontWeight={400}
-                  color="white"
-                  bg="#00de73"
-                  _hover={{ bg: undefined }}
-                  _active={{ bg: undefined }}
-                >
-                  แจ้งปัญหากับ Katrade
-                </Button>
+                <Button>ช่วยเหลือ / Help</Button>
+                <Button colorScheme="katrade">แจ้งปัญหากับ Katrade</Button>
               </HStack>
             </VStack>
           </Center>
@@ -128,8 +127,9 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
       <Container maxW={500} minH="100vh" py="4%">
         <form onSubmit={handleSigninEvent}>
           <Flex
-            // boxShadow="0 0 20px #00000010"
-            rounded={22}
+            border="1px solid"
+            borderColor="gray.100"
+            rounded={8}
             minH="60vh"
             h="auto"
             px="30px"
@@ -151,7 +151,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
                 ps="5px"
                 pe="16px"
                 fontSize="14px"
-                fontWeight={300}
+                fontWeight={600}
                 rounded="full"
                 color="gray.600"
                 alignItems="center"
@@ -201,15 +201,12 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
               mt="5px"
               h="70px"
               w="full"
-              bg="#1ddb76"
-              color="white"
-              _active={{ bg: undefined }}
+              colorScheme="katrade"
               fontSize="1rem"
-              fontWeight={500}
+              fontWeight={700}
               rounded={8}
               isLoading={isSigninButtonLoading}
               _hover={{
-                bg: undefined,
                 boxShadow: "0 0 10px #00000030",
               }}
               type="submit"

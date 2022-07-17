@@ -13,7 +13,7 @@ export const PrimaryInput: StyledComponent<"input", PrimaryInputProps> = styled.
     border-radius: 8px;
     border: solid #00000020;
     border-width: 1px;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 1rem;
     outline: none;
     &:focus {
