@@ -43,7 +43,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     setRender(false);
     const accessToken = localStorage.getItem("access");
     const refreshToken = localStorage.getItem("refresh");
-    if (!accessToken || !refreshToken) return alert("tokens not defined");
+    if (!accessToken || !refreshToken) return handleRedirectToSigin();
     try {
       const { data } = await userService.get(accessToken);
       if (data.payload === null) {

@@ -14,16 +14,12 @@ import Navbar from "../../layouts/Navbar";
 import { FaLock } from "react-icons/fa";
 import { useRouter } from "next/router";
 
-interface HomePageProps {
-  signinUrl: string
-}
-
-const HomePage: FC<HomePageProps> = ({ signinUrl }) => {
+const HomePage: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const handleToSigninPage = () => {
     setLoading(true);
-    return router.push(signinUrl);
+    return router.push('/projects/manager');
   };
   return (
     <>

@@ -4,6 +4,10 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID: process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID,
+    NEXT_PUBLIC_ACCOUNTS_API_CALLBACK_ENV: process.env.NEXT_PUBLIC_ACCOUNTS_API_CALLBACK_ENV,
+  },
   env: {
     API_URL: process.env.API_URL,
     JWT_SECRET: process.env.JWT_SECRET,
@@ -11,7 +15,6 @@ const nextConfig = {
     MYKU_APPKEY: process.env.MYKU_APPKEY,
     MYKU_AUTH_URL: process.env.MYKU_AUTH_URL,
     NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID: process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID,
-    NEXT_PUBLIC_ACCOUNTS_API_CLIENT_SECRET: process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_SECRET,
     NEXT_PUBLIC_ACCOUNTS_API_CALLBACK_ENV: process.env.NEXT_PUBLIC_ACCOUNTS_API_CALLBACK_ENV,
   }
 }
