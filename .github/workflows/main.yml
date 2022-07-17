@@ -29,5 +29,12 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           dockerfile_directory: ./
           dockerfile_name: Dockerfile
-          docker_options: "--build-arg MYKU_APPKEY_ARG=${{ env.API_URL }} JWT_SECRET_ARG=${{ env.JWT_SECRET }} MONGODB_URL_ARG=${{ env.MONGODB_URL }} MYKU_APPKEY_ARG=${{ env.MYKU_APPKEY }} MYKU_AUTH_URL_ARG=${{ env.MYKU_AUTH_URL }} NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }} --no-cache"
+          docker_options: |
+            --build-arg MYKU_APPKEY_ARG=${{ env.API_URL }}
+            --build-arg JWT_SECRET_ARG=${{ env.JWT_SECRET }}
+            --build-arg MONGODB_URL_ARG=${{ env.MONGODB_URL }}
+            --build-arg MYKU_APPKEY_ARG=${{ env.MYKU_APPKEY }}
+            --build-arg MYKU_AUTH_URL_ARG=${{ env.MYKU_AUTH_URL }}
+            --build-arg NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
+            --no-cache
           process_type: web
