@@ -7,8 +7,13 @@ FROM node:18.4.0-alpine as builder
 WORKDIR /katrade-accounts
 COPY . .
 COPY --from=dependencies /katrade-accounts/node_modules ./node_modules
+
 ARG NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG
 ENV NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID $NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG
+
+ARG NEXT_PUBLIC_API_URL_ARG
+ENV NEXT_PUBLIC_API_URL $NEXT_PUBLIC_API_URL_ARG
+
 RUN yarn build
 
 FROM node:18.4.0-alpine as runner
@@ -17,7 +22,6 @@ WORKDIR /katrade-accounts
 ENV MYKU_APPKEY $MYKU_APPKEY
 ENV JWT_SECRET $JWT_SECRET
 ENV MYKU_AUTH_URL $MYKU_AUTH_URL
-ENV API_URL $API_URL
 ENV MONGODB_URL $MONGODB_URL
 
 COPY --from=builder /katrade-accounts/next.config.js ./
