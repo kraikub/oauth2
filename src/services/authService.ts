@@ -13,7 +13,7 @@ class AuthService {
   ) => {
     const { status, data } = await nextApiBaseInstance.post<
       CustomApiResponse<{ url: string }>
-    >("/api/auth/signin", {
+    >("/auth/signin", {
       username: username,
       password: password,
       clientId: clientId,
@@ -29,7 +29,7 @@ class AuthService {
     const { status, data } = await nextApiBaseInstance.post<
       CustomApiResponse<{ accessToken: string }>
     >(
-      "/api/auth/refresh",
+      "/auth/refresh",
       {
         refreshToken: refreshToken,
       },
