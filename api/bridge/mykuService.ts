@@ -1,6 +1,6 @@
-import { MyKUGradeResponse } from './../types/myku/grade';
-import { MyKUEducationResponse } from "./../types/myku/education";
-import { MyKUPersonalResponse } from "./../types/myku/student";
+import { MyKUGradeResponse } from '../types/myku/grade';
+import { MyKUEducationResponse } from "../types/myku/education";
+import { MyKUPersonalResponse } from "../types/myku/student";
 import { mykuInstance } from "../../libs/axios";
 import { AuthenticationObject } from "../types/auth.response";
 import { MyKULoginResponse, MyKURenewTokenResponse } from "../types/myku/auth";

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { signAuthObject } from "../../libs/jwt";
 import { RenewMiddleware } from "../middlewares/renew.middleware";
-import { myKUService } from "../services/mykuService";
+import { myKUService } from "../bridge/mykuService";
 import { createResponse } from "../types/response";
 
 export async function handleRenewAccessToken(

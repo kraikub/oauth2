@@ -1,10 +1,6 @@
-import { mongo } from "mongoose";
 import type { GetServerSideProps, NextPage } from "next";
-import Head from "next/head";
 import { applicationRepository } from "../api/repositories/application.repo";
-import { mongodb } from "../db/mongodb";
 import { Application } from "../db/schema/application";
-import { clientService } from "../src/services/clientService";
 import { Query } from "../src/types/query";
 import SigninPage from "../src/views/signin";
 
@@ -21,7 +17,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { client_id, ref, scope, dev, secret } = context.query;
   let app: Application | null = null;
   if (client_id !== undefined) {
-    await mongodb.connect();
     app = await applicationRepository.findOneApp({
       clientId: client_id as string,
     });

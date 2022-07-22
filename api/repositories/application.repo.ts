@@ -8,15 +8,16 @@ interface ApplicationFilter {
 
 export default class ApplicationRepository {
   findOneApp = async (filter: ApplicationFilter) => {
+    mongodb.connect()
     return await ApplicationModel.findOne<Application>(filter)
   }
   findApp = async (filter: ApplicationFilter) => {
+    mongodb.connect()
     return await ApplicationModel.find<Application>(filter)
   }
   createApp = async (app: Application) => {
-    await mongodb.connect()
+    mongodb.connect()
     await ApplicationModel.create(app)
-    await mongodb.close()
   }
 }
 export const applicationRepository = new ApplicationRepository()

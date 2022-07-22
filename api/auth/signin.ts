@@ -6,7 +6,7 @@ import { Application } from "../../db/schema/application";
 import { User } from "../../db/schema/user";
 import { signAuthObject } from "../../libs/jwt";
 import { handleApiError } from "../error";
-import { myKUService } from "../services/mykuService";
+import { myKUService } from "../bridge/mykuService";
 import { createResponse } from "../types/response";
 import { redirectToAuthenticateCallback } from "../utils/callback";
 import * as crypto from "crypto";
