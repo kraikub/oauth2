@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { studentFromResponse } from "../../../scopes/student";
 import { handleApiError } from "../../error";
 import { AuthMiddleware } from "../../middlewares/auth.middleware";
-import { myKUService } from "../../services/mykuService";
+import { myKUService } from "../../bridge/mykuService";
 import { createResponse } from "../../types/response";
 
 export async function studentGeneralApi(req: NextApiRequest,res: NextApiResponse) {

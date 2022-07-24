@@ -5,7 +5,6 @@ import HomePage from "../src/views/home";
 
 
 const Home: NextPage = () => {
-  console.log("env", process.env);
   return (
     <>
       <Head>
