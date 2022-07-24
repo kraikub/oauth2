@@ -1,6 +1,6 @@
 import { ApplicationModel } from '../../db/models/application';
 import { mongodb } from '../../db/mongodb';
-import { Application } from './../../db/schema/application';
+import { Application } from '../../db/schema/application';
 interface ApplicationFilter {
   clientId?: string;
   ownerId?: string;

@@ -1,5 +1,5 @@
 import { Application } from "../../db/schema/application";
-import { applicationRepository } from "../repositories/application.repo";
+import { applicationRepository } from "../repositories/application";
 
 interface ApplicationFilter {
   clientId?: string;
