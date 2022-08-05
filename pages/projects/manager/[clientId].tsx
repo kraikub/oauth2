@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
-import { applicationRepository } from "../../../api/repositories/application.repo";
+import { applicationRepository } from "../../../api/repositories/application";
 import { Application } from "../../../db/schema/application";
 import ClientPage from "../../../src/views/projects/manager/client";
 
