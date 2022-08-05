@@ -51,7 +51,6 @@ export const CreateProjectPage: NextPage = () => {
               return reload();
             }
             const res = await appService.createApplication(data, ac)
-            console.log(res?.payload)
             setLoading(false)
             router.push(`/projects/manager/${res?.payload.clientId}`)
           })}

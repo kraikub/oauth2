@@ -77,7 +77,6 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
       alert(error);
     }
   };
-  console.log();
   if (app === null || query.scope === null) {
     return (
       <Fragment>

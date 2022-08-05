@@ -15,7 +15,6 @@ import { useUser } from "../contexts/User";
 
 const Navbar: FC = () => {
   const { user } = useUser();
-  console.log(user)
   return (
     <Flex
       position="sticky"
