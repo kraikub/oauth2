@@ -115,7 +115,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
     );
   }
 
-  if (query.dev && query.secret !== app?.secret) {
+  if (query.dev === "true" && query.secret !== app?.secret) {
     return (
       <Fragment>
         <Head>
