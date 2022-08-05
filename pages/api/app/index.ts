@@ -5,14 +5,21 @@ import { Application } from "../../../db/schema/application";
 import * as crypto from "crypto";
 import { applicationUsecase } from "../../../api/usecases";
 
-
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { success, payload, error } = AuthMiddleware(req, res);
+    if (!success) {
+      return;
+    }
+
+    if (req.method === "GET") {
+      const apps = await applicationUsecase.findApp({
+        ownerId: payload.uid,
+      });
+      return res.status(200).send(createResponse(true, "", apps));
+    }
+
     if (req.method === "POST") {
-      const { success, payload, error } = AuthMiddleware(req, res);
-      if (!success) {
-        return;
-      }
       const {
         appName,
         appDescription,
@@ -22,7 +29,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         appType,
       } = req.body;
       if (
-      !appName ||
+        !appName ||
         !appDescription ||
         !creatorName ||
         !callbackUrl ||

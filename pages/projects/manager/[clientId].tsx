@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import { applicationRepository } from "../../../api/repositories/application";
 import { Application } from "../../../db/schema/application";
+import { UserProvider } from "../../../src/contexts/User";
 import ClientPage from "../../../src/views/projects/manager/client";
 
 interface ClientPageProps {
@@ -8,7 +9,11 @@ interface ClientPageProps {
 }
 
 const Client: NextPage<ClientPageProps> = ({ app }) => {
-  return <ClientPage app={app} />;
+  return (
+    <UserProvider>
+      <ClientPage app={app} />
+    </UserProvider>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

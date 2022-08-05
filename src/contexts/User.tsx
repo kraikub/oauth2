@@ -89,6 +89,10 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     getUser();
   }, [toggleState]);
 
+  useEffect(() => {
+    getUser();
+  }, []);
+
   if (!render) {
     return <Progress size="xs" isIndeterminate colorScheme="katrade" />;
   }

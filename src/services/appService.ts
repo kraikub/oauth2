@@ -12,6 +12,22 @@ interface CreateApp {
 }
 
 class AppService {
+
+  // User owned applications only.
+  public async getApplications(accessToken: string) {
+    const { data, status } = await nextApiBaseInstance.get<CustomApiResponse<Application[]>>(
+      `/api/app`,
+      {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+      }
+    );
+    if (status === 200) {
+      return data.payload;
+    }
+  }
+
   public async getApplication(clientId: string) {
     const { data, status } = await nextApiBaseInstance.get<ApplicationResponse>(
       `/api/app/${clientId}`

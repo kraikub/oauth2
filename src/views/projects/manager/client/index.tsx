@@ -1,8 +1,10 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import Navbar from "../../../../layouts/Navbar";
 import {
   Box,
   Button,
+  ButtonGroup,
+  Collapse,
   Container,
   Divider,
   Flex,
@@ -10,6 +12,7 @@ import {
   GridItem,
   Heading,
   HStack,
+  IconButton,
   Input,
   SimpleGrid,
   Spacer,
@@ -18,16 +21,18 @@ import {
 } from "@chakra-ui/react";
 import { FaCopy } from "react-icons/fa";
 import { Application } from "../../../../../db/schema/application";
-
+import bg1 from "../../../../../public/katrade-bg-1.png";
 interface ClientPageProps {
   app: Application | null;
 }
 
 const ClientPage: FC<ClientPageProps> = ({ app }) => {
+  const [hideSecret, setHideSecret] = useState(true);
+
   return (
     <>
       <Navbar />
-      <Box bg="linear-gradient(269deg, #15A835 31.15%, #00D2A0 70.74%)">
+      <Box bgImage={`url(${bg1.src})`} bgSize="cover" bgPosition="center">
         <Container
           maxW="container.xl"
           h="200px"
@@ -36,10 +41,10 @@ const ClientPage: FC<ClientPageProps> = ({ app }) => {
           alignItems="center"
         >
           <Box>
-            <Heading fontWeight={800} fontSize="44px">
+            <Heading fontWeight={700} fontSize="44px" letterSpacing="-2px">
               {app?.appName}
             </Heading>
-            <Heading fontWeight={600} fontSize="20px">
+            <Heading fontWeight={600} fontSize="20px" opacity={0.6}>
               {app?.appDescription}
             </Heading>
           </Box>
@@ -60,15 +65,15 @@ const ClientPage: FC<ClientPageProps> = ({ app }) => {
             <Text fontWeight={500} fontSize="16px">
               App Name
             </Text>
-            <Input size="md" my={2} value={app?.appName}/>
+            <Input size="md" my={2} value={app?.appName} onChange={() => {}} />
             <Text fontWeight={500} fontSize="16px">
               Creator Name
             </Text>
-            <Input size="md" my={2} value={app?.creatorName}/>
+            <Input size="md" my={2} value={app?.creatorName} onChange={() => {}}/>
             <Text fontWeight={500} fontSize="16px">
               App Description
             </Text>
-            <Textarea my={2} width="100%" value={app?.appDescription}/>
+            <Textarea my={2} width="100%" value={app?.appDescription} onChange={() => {}}/>
           </GridItem>
         </Grid>
         <Divider my={10} />
@@ -86,23 +91,42 @@ const ClientPage: FC<ClientPageProps> = ({ app }) => {
               Client ID
             </Text>
             <HStack>
-              <Text color="#4E2CDA" my={2} word-wrap="break-word">
-                {app?.ownerId}
-              </Text>
-              <FaCopy />
+              <Input color="#4E2CDA" my={2} value={app?.clientId} onChange={() => {}}></Input>
+              <IconButton aria-label="copy" rounded="full">
+                <FaCopy />
+              </IconButton>
             </HStack>
             <Text fontWeight={500} fontSize="16px">
               Secret
             </Text>
-            <HStack>
-              <Text color="#4E2CDA" my={2}>
-                {app?.secret}
-              </Text>
-              <FaCopy />
-            </HStack>
-            <Button colorScheme="red" variant="outline" size="sm" w="10%">
-              Hide
-            </Button>
+            <Collapse in={!hideSecret} animateOpacity>
+              <HStack>
+                <Input color="#4E2CDA" my={2} value={app?.secret} onChange={() => {}}></Input>
+                <IconButton aria-label="copy" rounded="full">
+                  <FaCopy />
+                </IconButton>
+              </HStack>
+            </Collapse>
+            <ButtonGroup>
+              <Button
+                colorScheme="red"
+                variant="outline"
+                size="sm"
+                mt={2}
+                onClick={() => setHideSecret(!hideSecret)}
+              >
+                {hideSecret ? "Reveal" : "Hide"}
+              </Button>
+              <Button
+                colorScheme="blue"
+                variant="outline"
+                size="sm"
+                mt={2}
+                onClick={() => alert("not ready")}
+              >
+                New Secret
+              </Button>
+            </ButtonGroup>
           </GridItem>
         </Grid>
         <Divider my={10} />
@@ -119,30 +143,33 @@ const ClientPage: FC<ClientPageProps> = ({ app }) => {
             <Text fontWeight={500} fontSize="16px">
               Callback URL (production)
             </Text>
-            <Input size="sm" my={2} value={app?.callbackUrl}/>
+            <Input size="sm" my={2} value={app?.callbackUrl} onChange={() => {}} />
             <Text fontWeight={500} fontSize="16px">
               Callback URL (development)
             </Text>
-            <Input size="sm" my={2} value={app?.devCallbackUrl}/>
+            <Input size="sm" my={2} value={app?.devCallbackUrl} onChange={() => {}} />
           </GridItem>
         </Grid>
       </Container>
-      <hr style={{ width: "100%" }} />
-      <Container
-        maxW="container.xl"
-        h="80px"
-        gap="5"
-        display="flex"
-        alignItems="center"
-        justifyContent="end"
-      >
-        <Spacer />
+      <Box my={20}></Box>
+      <Box position="fixed" bottom={0} left={0} right={0} bg="white">
+        <hr style={{ width: "100%" }} />
+        <Container
+          maxW="container.xl"
+          h="80px"
+          gap="5"
+          display="flex"
+          alignItems="center"
+          justifyContent="end"
+        >
+          <Spacer />
 
-        <Button colorScheme="red" variant="ghost">
-          Discard Changes
-        </Button>
-        <Button colorScheme="katrade">Save</Button>
-      </Container>
+          <Button colorScheme="red" variant="ghost">
+            Discard Changes
+          </Button>
+          <Button colorScheme="katrade">Save</Button>
+        </Container>
+      </Box>
     </>
   );
 };

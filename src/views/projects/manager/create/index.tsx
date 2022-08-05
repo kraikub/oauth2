@@ -10,6 +10,7 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { UserProvider, useUser } from "../../../../contexts/User";
@@ -26,6 +27,7 @@ const typeOptions = [
 ];
 
 export const CreateProjectPage: NextPage = () => {
+  const router = useRouter()
   const { register, handleSubmit } = useForm();
   const { reload } = useUser()
   const [loading, setLoading] = useState<boolean>(false);
@@ -51,6 +53,7 @@ export const CreateProjectPage: NextPage = () => {
             const res = await appService.createApplication(data, ac)
             console.log(res?.payload)
             setLoading(false)
+            router.push(`/projects/manager/${res?.payload.clientId}`)
           })}
         >
           <FormLabel htmlFor="app-name" mt={6}>
