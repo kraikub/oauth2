@@ -43,7 +43,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
       const user = await userUsecase.findOne({
         stdId: externalLoginResult.stdId,
-        stdCode: externalLoginResult.stdId,
+        stdCode: externalLoginResult.stdCode,
       });
       const uid = crypto
         .createHash("sha256")

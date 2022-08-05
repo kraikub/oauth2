@@ -15,11 +15,13 @@ interface UserProviderProps {
 interface UserContext {
   user?: User;
   reload: () => void;
+  accessToken: () => string | null;
 }
 
 const defaultUserContextValue = {
   user: undefined,
   reload: () => {},
+  accessToken: () => null,
 };
 
 const signinUrl = getSigninUrl()
@@ -38,6 +40,10 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const handleRedirectToSigin = () => {
     router.push(signinUrl);
   };
+
+  const accessToken = () => {
+    return localStorage.getItem("access")
+  }
 
   const getUser = async () => {
     setRender(false);
@@ -91,6 +97,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       value={{
         user,
         reload,
+        accessToken
       }}
     >
       {children}

@@ -1,8 +1,11 @@
 import {
+  Alert,
+  AlertIcon,
   Avatar,
   Box,
   Button,
   Center,
+  Code,
   Container,
   Divider,
   Flex,
@@ -74,7 +77,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
       alert(error);
     }
   };
-
+  console.log();
   if (app === null || query.scope === null) {
     return (
       <Fragment>
@@ -113,6 +116,55 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
     );
   }
 
+  if (query.dev && query.secret !== app?.secret) {
+    return (
+      <Fragment>
+        <Head>
+          <title>Authorization failed</title>
+          <meta charSet="UTF-8" />
+          <meta name="description" content="Invalid OAuth login credentials." />
+          <meta name="author" content="Katrade Accounts" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+        </Head>
+        <Container maxW={500} minH="100vh">
+          <Center h="100vh">
+            <VStack spacing={5} textAlign="center">
+              <Heading fontWeight={500}>⚠️</Heading>
+              <Heading size="md" fontWeight={500}>
+                Secret authorization failed
+              </Heading>
+              <Text>
+                We could not authorize your app secret with{" "}
+                <strong>{app.appName}</strong>
+              </Text>
+              <Text color="gray.700">
+                Please contact your app developers or try the tip below.
+              </Text>
+              <Alert status="warning" rounded={8} textAlign="start">
+                <AlertIcon />
+                <Text fontSize={12} fontWeight={700}>
+                  Tip: If you are using developer mode. Please provide{" "}
+                  <Code fontSize={12} bg="white" color="pink.400">
+                    dev=true&secret={"<your-app-secret>"}
+                  </Code>{" "}
+                  as a query string in your signin url. App secret can be found
+                  in your application details page.
+                </Text>
+              </Alert>
+              <HStack mt="50px !important">
+                <Button>ช่วยเหลือ / Help</Button>
+                <Button colorScheme="katrade">แจ้งปัญหากับ Katrade</Button>
+              </HStack>
+            </VStack>
+          </Center>
+        </Container>
+      </Fragment>
+    );
+  }
+
   return (
     <Fragment>
       <Head>
@@ -128,7 +180,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
         <form onSubmit={handleSigninEvent}>
           <Flex
             border="1px solid"
-            borderColor="gray.100"
+            borderColor="gray.300"
             rounded={8}
             minH="60vh"
             h="auto"
@@ -183,7 +235,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
               border="1px solid"
               borderColor="green.100"
             >
-              <Heading fontWeight={500} fontSize="14px" color="gray.600">
+              <Heading fontWeight={600} fontSize="14px" color="gray.600">
                 อนุญาติให้{" "}
                 <Box as="span" color="green.500">
                   {app.appName}

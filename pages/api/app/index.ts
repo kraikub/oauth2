@@ -45,10 +45,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         ownerId: payload.uid,
       };
       await applicationUsecase.createApp(newApp);
-      return res.status(200).send(createResponse(true, "", null));
+      return res.status(200).send(createResponse(true, "", newApp));
     }
     return res.status(404).send(createResponse(false, "Not found.", null));
   } catch (error) {
     return res.status(500).send(createResponse(false, error as string, null));
   }
 };
+export default handler;

@@ -16,7 +16,8 @@ export class ApplicationUsecase {
   };
 
   createApp = async (app: Application) => {
-    return await applicationRepository.createApp(app);
+    await applicationRepository.createApp(app);
+    return app
   };
 }
 export const applicationUsecase = new ApplicationUsecase();

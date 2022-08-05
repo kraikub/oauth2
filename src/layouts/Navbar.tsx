@@ -11,7 +11,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import logo from "../../public/full-katrade-accounts-logo.svg";
 import { useUser } from "../contexts/User";
 
 const Navbar: FC = () => {
@@ -32,11 +31,11 @@ const Navbar: FC = () => {
       alignItems="center"
       justifyContent="space-between"
     >
-      <Heading size="sm" fontWeight={500} fontFamily="Inter" color="gray.500">
-        <Box as="span" fontWeight={700} fontFamily="Inter" color="black">
-          Katrade
-        </Box>{" "}
-        Accounts API
+      <Heading size="sm" fontWeight={600} fontFamily="Inter" color="black">
+        Katrade Accounts{" "}
+        <Box as="span" color="katrade.600">
+          for KU 💚
+        </Box>
       </Heading>
       {user ? (
         <ButtonGroup>
