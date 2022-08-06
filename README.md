@@ -13,7 +13,7 @@ Katrade Account is a middleman between you (as both developers and users) and Ka
 Check out [Katrade Accounts](https://accounts-katrade.herokuapp.com), Log in with your KU account and create your first app now!
 
 ## Our Contributors 👩🏻‍💻
-- [NUTCHANON C.](https://github.com/nutchanonc) `Team Lead` `Developer`
+- [NUTCHANON C.](https://github.com/nutchanonc) `Katrade Accounts Project Lead` `Developer`
 - [NAPASIN S.](https://github.com/frankydesu) `Developer`
 
 
