@@ -20,6 +20,9 @@ const Callback: NextPage = () => {
       localStorage.getItem("refresh") &&
       cont
     ) {
+      if (router.query.ref && router.query.ref[0] as string === "/") {
+        return router.push(router.query.ref as string)
+      }
       return router.push("/projects/manager");
     }
   };

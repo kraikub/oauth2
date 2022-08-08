@@ -10,8 +10,8 @@ export const ProjectManagerDashboard: NextPage = () => {
     <>
       <UserProvider>
         <Navbar />
-        <Container maxW="container.xl" py="200px">
-          <ProjectOwner />
+        <Container maxW="container.xl">
+          {/* <ProjectOwner /> */}
           <AppTable />
         </Container>
       </UserProvider>

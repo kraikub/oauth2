@@ -12,6 +12,8 @@ import {
   Box,
   Flex,
   Button,
+  VStack,
+  Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
@@ -23,11 +25,15 @@ interface RowProps {
 }
 
 const Row: FC<RowProps> = ({ app }) => {
-  const router = useRouter()
+  const router = useRouter();
   return (
-    <Tr cursor="pointer" _hover={{bg: "gray.50"}} onClick={() => router.push(`/projects/manager/${app.clientId}`)}>
+    <Tr
+      cursor="pointer"
+      _hover={{ bg: "gray.50" }}
+      onClick={() => router.push(`/projects/manager/${app.clientId}`)}
+    >
       <Td>{app.clientId}</Td>
-      <Td>{app.appName}</Td>
+      <Td fontWeight={600}>{app.appName}</Td>
       <Td>{app.appType}</Td>
       <Td isNumeric>0</Td>
       <Td isNumeric>0</Td>
@@ -56,26 +62,53 @@ const AppTable: FC = () => {
     getApps();
   }, []);
 
+  if (!apps.length && !isLoading) {
+    // No app found
+    return (
+      <VStack my={20} spacing={10}>
+        <Heading fontWeight={600} letterSpacing={-1}>
+          Create your first app
+        </Heading>
+        <Text fontSize={20} fontWeight={500}>
+          Make your idea comes true now!
+        </Text>
+        <Button
+          w="80px"
+          h="80px"
+          rounded="full"
+          fontWeight={300}
+          fontSize="50px"
+          bg="katrade.main"
+          color="white"
+          _hover={{ bg: undefined, transform: "scale(1.1)" }}
+          onClick={() => router.push("/projects/manager/create")}
+        >
+          +
+        </Button>
+      </VStack>
+    );
+  }
+
   return (
     <Box my={20}>
       <Flex justifyContent="space-between" my={8}>
-        <Heading size="md" fontWeight={500} mb={10}>
-          แอปของคุณ
+        <Heading size="lg" fontWeight={500} mb={10} letterSpacing={-1}>
+          Your Apps
         </Heading>
         <Button
-          colorScheme="katrade"
+          colorScheme="katrade.scheme.fix"
           _hover={{ transform: "scale(1.05)" }}
           rounded="full"
           transition="300ms ease"
           onClick={() => router.push("/projects/manager/create")}
         >
-          + สร้างแอป
+          + Create an app
         </Button>
       </Flex>
       <TableContainer>
         <Table variant="simple" border="1px solid" borderColor="gray.300">
-          <TableCaption>คุณเหลือสิทธิ์การสร้างแอปอีก 5 ครั้ง</TableCaption>
-          <Thead bg="katrade.600">
+          <TableCaption>Apps quota limits are free during beta version.</TableCaption>
+          <Thead bg="katrade.main">
             <Tr>
               <Th color="white">Client ID</Th>
               <Th color="white">Name</Th>
@@ -88,7 +121,7 @@ const AppTable: FC = () => {
               </Th>
             </Tr>
           </Thead>
-          <Tbody fontWeight={500} fontSize={14}>
+          <Tbody fontWeight={400} fontSize={14}>
             {apps.map((app, index) => (
               <Row app={app} key={`app-${app.clientId}`} />
             ))}

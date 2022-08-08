@@ -1,12 +1,16 @@
 import { mapQueryStringToUrl } from "../../api/utils/query";
 
-export const getSigninUrl = () => {
+interface signinOptions {
+  redirectPath?: string
+}
+
+export const getSigninUrl = (p: signinOptions) => {
   return mapQueryStringToUrl("/signin", {
     client_id:
       process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ||
       "ENV_CLIENT_ID_NOT_CONFIGURED",
     scope: "0",
-    ref: "client-signin-kapis-auth",
+    ref: p.redirectPath ? p.redirectPath :"client-signin-kapis-auth",
     dev:
       process.env.NEXT_PUBLIC_ACCOUNTS_API_CALLBACK_ENV === "development"
         ? "true"

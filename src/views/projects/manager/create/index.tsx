@@ -35,7 +35,7 @@ export const CreateProjectPage: NextPage = () => {
     <UserProvider>
       <Navbar />
       <Container maxW="container.md" py="100px">
-        <Heading fontWeight={600}>สร้างแอปของคุณ</Heading>
+        <Heading fontWeight={600} letterSpacing={-1}>Tell us about your new app.</Heading>
         <FormControl
           as="form"
           my={10}
@@ -108,7 +108,7 @@ export const CreateProjectPage: NextPage = () => {
             <Button type="submit" colorScheme="gray">
               Cancel
             </Button>
-            <Button type="submit" colorScheme="katrade" isLoading={loading}>
+            <Button type="submit" colorScheme="katrade.scheme.fix" isLoading={loading}>
               Create
             </Button>
           </ButtonGroup>

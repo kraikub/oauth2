@@ -24,7 +24,7 @@ import { Application } from "../../../db/schema/application";
 import { authService } from "../../services/authService";
 import { Query } from "../../types/query";
 import { PrimaryInput } from "./PrimaryInput";
-import logo from "../../../public/full-katrade-accounts-logo.svg";
+import { MdPrivacyTip } from "react-icons/md";
 import ogImage from "../../../public/og-image.png";
 interface SigninPageProps {
   query: Query;
@@ -178,9 +178,8 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
       <Container maxW={500} minH="100vh" py="4%">
         <form onSubmit={handleSigninEvent}>
           <Flex
-            border="1px solid"
-            borderColor="gray.300"
-            rounded={8}
+            boxShadow="0 6px 30px 20px #00000010"
+            rounded={4}
             minH="60vh"
             h="auto"
             px="30px"
@@ -190,79 +189,75 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
             gap="20px"
             justifyContent="space-between !important"
           >
-            <Image alt="z" src={logo.src} h="24px"></Image>
-            <Heading fontWeight={500} fontSize="26px">
-              เข้าสู่ระบบด้วย KU
+            <Heading fontWeight={600} fontSize="22px" letterSpacing={-1}>
+              Sign in with KU Account
             </Heading>
-            <Center mt="30px">
-              <Flex
-                border="1px solid"
-                borderColor="gray.200"
-                py="5px"
-                ps="5px"
-                pe="16px"
-                fontSize="14px"
-                fontWeight={600}
-                rounded="full"
-                color="gray.600"
-                alignItems="center"
-                gap={2}
-              >
-                <Avatar name={app.appName} size="sm"></Avatar>
-                {app.appName}
-              </Flex>
-            </Center>
-            <VStack mt="30px" spacing={4} w="full">
+            <Box mt="30px" w="full">
+              <Text fontSize={14}>
+                <Box as="span" fontWeight={700} color="katrade.main">
+                  {app.appName}
+                </Box>
+                {" wants you to sign in to their app."}
+              </Text>
+            </Box>
+            <Box mt="10px" w="full">
+              <Text fontSize={12} fontWeight={500}>
+                KU Username
+              </Text>
               <PrimaryInput
-                placeholder="รหัสนิสิต เช่น b621050XXXX"
+                placeholder="Ex. b621050XXXX"
                 onChange={handleUsernameChange}
                 value={username}
               />
+              <Text fontSize={12} mt={5} fontWeight={500}>
+                Password
+              </Text>
               <PrimaryInput
-                placeholder="รหัสผ่าน"
+                placeholder="Password"
                 type="password"
                 onChange={handlePasswordChange}
                 value={password}
               />
-            </VStack>
+            </Box>
             <Box
               bg="green.50"
               px="30px"
               py="12px"
-              rounded={8}
+              rounded={4}
               w="full"
               border="1px solid"
               borderColor="green.100"
             >
-              <Heading fontWeight={600} fontSize="14px" color="gray.600">
-                อนุญาติให้{" "}
-                <Box as="span" color="green.500">
-                  {app.appName}
-                </Box>{" "}
-                เข้าถึง
-              </Heading>
+              <HStack spacing={2}>
+                
+                <Heading fontWeight={700} fontSize="14px" color="gray.600">
+                  Data Privacy Warning
+                </Heading>
+                <MdPrivacyTip size="20px"/>
+              </HStack>
               <Divider my="10px" />
-              <UnorderedList fontSize="12px" fontWeight={400} color="gray.500">
-                <ListItem>ชื่อ-นามสกุล</ListItem>
-                <ListItem>รหัสนิสิต</ListItem>
-                <ListItem>การศึกษา</ListItem>
+              <Text fontSize={12}><Box as="span" fontWeight={600} color="katrade.main">{app.appName}</Box> want to access these personal data.</Text>
+              <UnorderedList fontSize="12px" fontWeight={500} my={6} color="gray.800">
+                <ListItem>Your full name.</ListItem>
+                <ListItem>Phone number and email.</ListItem>
+                <ListItem>Educational data such as faculty, major.</ListItem>
               </UnorderedList>
             </Box>
             <Button
               mt="5px"
               h="70px"
               w="full"
-              colorScheme="katrade"
+              colorScheme="katrade.scheme.fix"
               fontSize="1rem"
               fontWeight={700}
-              rounded={8}
+              rounded={6}
               isLoading={isSigninButtonLoading}
               _hover={{
                 boxShadow: "0 0 10px #00000030",
               }}
               type="submit"
             >
-              เข้าสู่ระบบ
+              Sign in
             </Button>
           </Flex>
         </form>
