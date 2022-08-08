@@ -24,8 +24,6 @@ const defaultUserContextValue = {
   accessToken: () => null,
 };
 
-const signinUrl = getSigninUrl()
-
 export const userContext = createContext<UserContext>(defaultUserContextValue);
 
 export const UserProvider: FC<UserProviderProps> = ({ children }) => {
@@ -38,6 +36,9 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   };
 
   const handleRedirectToSigin = () => {
+    const signinUrl = getSigninUrl({
+      redirectPath: router.route
+    })
     router.push(signinUrl);
   };
 
