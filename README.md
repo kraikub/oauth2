@@ -14,7 +14,7 @@ Check out [Katrade Accounts](https://accounts-katrade.herokuapp.com), Log in wit
 
 ## Our Contributors 👩🏻‍💻
 - [NUTCHANON C.](https://github.com/nutchanonc) `Project Owner`
-- Sepcial thanks to [NAPASIN S.](https://github.com/frankydesu) `Developer`
+- Special thanks to [NAPASIN S.](https://github.com/frankydesu) `Developer`
 
 
 ## About Katrade (Team)
