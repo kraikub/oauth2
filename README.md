@@ -1,4 +1,4 @@
-# Kaikub
+# Kaikub 🦄
 Kaikub is a authentication service that integrates with Kasetsart University API (Unofficial Project).
 Kaikub adapts the core concept of OAuth2.0 standard and be as an API adapter that plugs in to **myapi.ku.th**
 which is a part of Kasetsart University APIs.
