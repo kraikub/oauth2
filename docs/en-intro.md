@@ -1,4 +1,4 @@
-# Introduction to Software Development on Kraikub
+# Introduction to Kraikub
 
 ### What is Kraikub?
 Kraikub is a software development platform that provides user authentication for Kasetsart University students. It helps KU developers to create an application that needs users' identities from Kasetsart University without creating their authentication system/protocol.
