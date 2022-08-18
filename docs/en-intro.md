@@ -10,5 +10,5 @@ information like their name, education, grades, or contact info (only users' per
 
 ### About your data protections
 First, let's talk about the moment that you sign in to our authentication system using KU Account (Nontsri Account). Your username (b6xxxxxxxxx) and your password will be sent to the Kraikub API gateway. Once they reach our API gateway, they both will be forwarded to myapi.ku.th
-which is an official API from Kasetsart University to authenticate who you are. Once it is authorized by myapi.ku.th, the access token from myapi.ku.th will be sent back to Kraikub. We must inform you that ***your KU username and password WON'T BE STORED on our databases.***
+which is an official API from Kasetsart University to authenticate who you are. Once it is authorized by myapi.ku.th, the access token from myapi.ku.th will be sent back to Kraikub. We must inform you that your KU username and password ***WON'T BE STORED*** on our databases.
 We know who you are through the access token which does not contain any part of your credentials.
