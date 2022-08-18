@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { FaCopy } from "react-icons/fa";
 import { Application } from "../../../../../db/schema/application";
-import bg1 from "../../../../../public/katrade-bg-1.png";
+import bg1 from "../../../../../public/bg-1.png";
 interface ClientPageProps {
   app: Application | null;
 }

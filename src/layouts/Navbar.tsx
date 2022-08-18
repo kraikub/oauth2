@@ -21,7 +21,7 @@ import { useUser } from "../contexts/User";
 
 const Navbar: FC = () => {
   const router = useRouter()
-  const { user } = useUser();
+  const { user, signout } = useUser();
   return (
     <Flex
       position="sticky"
@@ -34,15 +34,12 @@ const Navbar: FC = () => {
       border="solid #00000010"
       borderWidth="0 0 1px 0"
       px="20px"
-      minH="50px"
+      minH="60px"
       alignItems="center"
       justifyContent="space-between"
     >
-      <Heading size="sm" fontWeight={600} fontFamily="Inter" color="black">
-        Katrade Accounts{" "}
-        <Box as="span" color="katrade.600">
-          for KU 💚
-        </Box>
+      <Heading size="md" fontWeight={700} color="black">
+        kraikub{" "}
       </Heading>
       {user ? (
         <Menu>
@@ -69,7 +66,7 @@ const Navbar: FC = () => {
             </Box>
             <Divider mb={4}/>
             <MenuItem fontWeight={500} onClick={() => router.push("/projects/manager")}>Your Apps</MenuItem>
-            <MenuItem color="red.600" _hover={{bg: "red.50"}} fontWeight={500}>Sign out</MenuItem>
+            <MenuItem color="red.600" _hover={{bg: "red.50"}} fontWeight={500} onClick={signout}>Sign out</MenuItem>
           </MenuList>
         </Menu>
       ) : null}
