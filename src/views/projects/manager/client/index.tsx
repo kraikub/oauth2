@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Navbar from "../../../../layouts/Navbar";
 import {
   Box,
@@ -21,13 +21,38 @@ import {
 } from "@chakra-ui/react";
 import { FaCopy } from "react-icons/fa";
 import { Application } from "../../../../../db/schema/application";
-import bg1 from "../../../../../public/katrade-bg-1.png";
-interface ClientPageProps {
-  app: Application | null;
-}
+import bg1 from "../../../../../public/bg-1.png";
+import { useRouter } from "next/router";
+import { appService } from "../../../../services/appService";
+interface ClientPageProps {}
 
-const ClientPage: FC<ClientPageProps> = ({ app }) => {
+const ClientPage: FC<ClientPageProps> = ({}) => {
+  const router = useRouter();
+  const { clientId } = router.query;
+  const [app, setApp] = useState<Application>();
+  const [isFetched, setIsFetched] = useState(false);
   const [hideSecret, setHideSecret] = useState(true);
+
+  const getApp = async () => {
+    if (!clientId) return;
+    const ac = localStorage.getItem("access");
+    if (!ac) return; //
+    try {
+      const res = await appService.getApplication(clientId as string, ac);
+      console.log(res)
+      if (res) {
+        setApp(res);
+      }
+      setIsFetched(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!clientId) return;
+    getApp();
+  }, [clientId]);
 
   return (
     <>
@@ -69,11 +94,21 @@ const ClientPage: FC<ClientPageProps> = ({ app }) => {
             <Text fontWeight={500} fontSize="16px">
               Creator Name
             </Text>
-            <Input size="md" my={2} value={app?.creatorName} onChange={() => {}}/>
+            <Input
+              size="md"
+              my={2}
+              value={app?.creatorName}
+              onChange={() => {}}
+            />
             <Text fontWeight={500} fontSize="16px">
               App Description
             </Text>
-            <Textarea my={2} width="100%" value={app?.appDescription} onChange={() => {}}/>
+            <Textarea
+              my={2}
+              width="100%"
+              value={app?.appDescription}
+              onChange={() => {}}
+            />
           </GridItem>
         </Grid>
         <Divider my={10} />
@@ -91,7 +126,12 @@ const ClientPage: FC<ClientPageProps> = ({ app }) => {
               Client ID
             </Text>
             <HStack>
-              <Input color="#4E2CDA" my={2} value={app?.clientId} onChange={() => {}}></Input>
+              <Input
+                color="#4E2CDA"
+                my={2}
+                value={app?.clientId}
+                onChange={() => {}}
+              ></Input>
               <IconButton aria-label="copy" rounded="full">
                 <FaCopy />
               </IconButton>
@@ -101,7 +141,12 @@ const ClientPage: FC<ClientPageProps> = ({ app }) => {
             </Text>
             <Collapse in={!hideSecret} animateOpacity>
               <HStack>
-                <Input color="#4E2CDA" my={2} value={app?.secret} onChange={() => {}}></Input>
+                <Input
+                  color="#4E2CDA"
+                  my={2}
+                  value={app?.secret}
+                  onChange={() => {}}
+                ></Input>
                 <IconButton aria-label="copy" rounded="full">
                   <FaCopy />
                 </IconButton>
@@ -143,11 +188,21 @@ const ClientPage: FC<ClientPageProps> = ({ app }) => {
             <Text fontWeight={500} fontSize="16px">
               Callback URL (production)
             </Text>
-            <Input size="sm" my={2} value={app?.callbackUrl} onChange={() => {}} />
+            <Input
+              size="sm"
+              my={2}
+              value={app?.callbackUrl}
+              onChange={() => {}}
+            />
             <Text fontWeight={500} fontSize="16px">
               Callback URL (development)
             </Text>
-            <Input size="sm" my={2} value={app?.devCallbackUrl} onChange={() => {}} />
+            <Input
+              size="sm"
+              my={2}
+              value={app?.devCallbackUrl}
+              onChange={() => {}}
+            />
           </GridItem>
         </Grid>
       </Container>

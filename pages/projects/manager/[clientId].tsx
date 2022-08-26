@@ -11,40 +11,10 @@ interface ClientPageProps {
 const Client: NextPage<ClientPageProps> = ({ app }) => {
   return (
     <UserProvider>
-      <ClientPage app={app} />
+      <ClientPage  />
     </UserProvider>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { clientId } = context.query;
-  if (!clientId) {
-    return {
-      props: {
-        app: null,
-      },
-    };
-  }
-  const app = await applicationRepository.findOneApp({
-    clientId: clientId as string,
-  });
-  return {
-    props: {
-      app: app
-        ? {
-            appName: app.appName,
-            appDescription: app.appDescription,
-            appType: app.appType,
-            clientId: app.clientId,
-            ownerId: app.ownerId,
-            creatorName: app.creatorName,
-            callbackUrl: app.callbackUrl,
-            devCallbackUrl: app.devCallbackUrl,
-            secret: app.secret,
-          }
-        : null,
-    },
-  };
-};
 
 export default Client;

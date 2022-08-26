@@ -15,12 +15,14 @@ interface UserProviderProps {
 interface UserContext {
   user?: User;
   reload: () => void;
+  signout: () => void;
   accessToken: () => string | null;
 }
 
 const defaultUserContextValue = {
   user: undefined,
   reload: () => {},
+  signout: () => {},
   accessToken: () => null,
 };
 
@@ -37,14 +39,14 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const handleRedirectToSigin = () => {
     const signinUrl = getSigninUrl({
-      redirectPath: router.route
-    })
+      redirectPath: router.route,
+    });
     router.push(signinUrl);
   };
 
   const accessToken = () => {
-    return localStorage.getItem("access")
-  }
+    return localStorage.getItem("access");
+  };
 
   const getUser = async () => {
     setRender(false);
@@ -86,6 +88,11 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     }
   };
 
+  const signout = () => {
+    localStorage.clear();
+    reload();
+  };
+
   useEffect(() => {
     getUser();
   }, [toggleState]);
@@ -102,7 +109,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
       value={{
         user,
         reload,
-        accessToken
+        accessToken,
+        signout,
       }}
     >
       {children}
@@ -110,4 +118,4 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   );
 };
 
-export const useUser = () => useContext(userContext)
+export const useUser = () => useContext(userContext);

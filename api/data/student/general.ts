@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { studentFromResponse } from "../../../scopes/student";
 import { handleApiError } from "../../error";
 import { AuthMiddleware } from "../../middlewares/auth.middleware";
-import { myKUService } from "../../bridge/mykuService";
+import { bridge } from "../../bridge/bridge";
 import { createResponse } from "../../types/response";
 
 export async function studentGeneralApi(req: NextApiRequest,res: NextApiResponse) {
@@ -10,7 +10,7 @@ export async function studentGeneralApi(req: NextApiRequest,res: NextApiResponse
     if (req.method === "GET") {
         const {success, payload} = AuthMiddleware(req, res)
         if (!success) return
-        const {status, data} = await myKUService.getProfile(payload.stdId, payload.accessToken)
+        const {status, data} = await bridge.getProfile(payload.stdId, payload.accessToken)
         if (status !== 200) {
             return res.status(status).send(createResponse(false, "Failed from myapi.ku.th", {}))
         }

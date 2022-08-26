@@ -42,14 +42,24 @@ export const colors = {
 };
 
 const fonts = {
-  body: `'Noto Sans Thai', 'Inter', sans-serif`,
-  heading: `'Noto Sans Thai', 'Inter', sans-serif`,
+  body: `'Manrope', 'Noto Sans Thai', sans-serif`,
+  heading: `'Manrope', 'Noto Sans Thai', sans-serif`,
 };
+
+const components = {
+  Text: {
+    baseStyle: {
+      fontSize: 14,
+      fontWeight: 500,
+    }
+  }
+}
 
 const overrides = {
   config,
   colors,
   fonts,
+  components,
 };
 
 const theme = extendTheme(overrides);

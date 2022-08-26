@@ -18,8 +18,10 @@ import {
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import { Application } from "../../../../../../db/schema/application";
+import { useUser } from "../../../../../contexts/User";
 import { appService } from "../../../../../services/appService";
-
+import AppCard from "./AppCard";
+import background from "../../../../../../public/bg-1.png";
 interface RowProps {
   app: Application;
 }
@@ -43,7 +45,7 @@ const Row: FC<RowProps> = ({ app }) => {
 
 const AppTable: FC = () => {
   const router = useRouter();
-
+  const { user } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const [apps, setApps] = useState<Application[]>([]);
@@ -62,6 +64,19 @@ const AppTable: FC = () => {
     getApps();
   }, []);
 
+  const handleCreateAppClick = (limit: boolean) => {
+    if (!limit) {
+      router.push("/projects/manager/create")
+    }
+    else {
+      router.push("/pricing")
+    }
+  }
+
+  if (!user) {
+    return null;
+  }
+
   if (!apps.length && !isLoading) {
     // No app found
     return (
@@ -70,7 +85,7 @@ const AppTable: FC = () => {
           Create your first app
         </Heading>
         <Text fontSize={20} fontWeight={500}>
-          Make your idea comes true now!
+          Make an idea comes true now!
         </Text>
         <Button
           w="80px"
@@ -92,42 +107,40 @@ const AppTable: FC = () => {
   return (
     <Box my={20}>
       <Flex justifyContent="space-between" my={8}>
-        <Heading size="lg" fontWeight={500} mb={10} letterSpacing={-1}>
+        <Heading size="lg" mb={10} letterSpacing={-1}>
           Your Apps
         </Heading>
         <Button
-          colorScheme="katrade.scheme.fix"
+          colorScheme={user.appOwned >= user.appQuota ? "red" : "katrade.scheme.fix"}
           _hover={{ transform: "scale(1.05)" }}
           rounded="full"
           transition="300ms ease"
-          onClick={() => router.push("/projects/manager/create")}
+          onClick={() => handleCreateAppClick(user.appOwned >= user.appQuota)}
         >
-          + Create an app
+          {user.appOwned >= user.appQuota ? "Upgrade plan" : "+ Create app"}
+          
         </Button>
       </Flex>
-      <TableContainer>
-        <Table variant="simple" border="1px solid" borderColor="gray.300">
-          <TableCaption>Apps quota limits are free during beta version.</TableCaption>
-          <Thead bg="katrade.main">
-            <Tr>
-              <Th color="white">Client ID</Th>
-              <Th color="white">Name</Th>
-              <Th color="white">Type</Th>
-              <Th color="white" isNumeric>
-                API Calls
-              </Th>
-              <Th color="white" isNumeric>
-                Bridge API Calls
-              </Th>
-            </Tr>
-          </Thead>
-          <Tbody fontWeight={400} fontSize={14}>
-            {apps.map((app, index) => (
-              <Row app={app} key={`app-${app.clientId}`} />
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+      <Box
+        py="100px"
+        px={10}
+        backgroundImage={background.src}
+        backgroundSize="cover"
+        backgroundPosition="center"
+        rounded={10}
+        color="white"
+      >
+        <Heading size="xl">Hi {user.firstNameEn}, let{"'"}s build something.</Heading>
+        <Text fontWeight={600} fontSize={20} mt={7}>
+          {user ? `You have ${user.appQuota - user.appOwned} quota(s) left.` : ""}
+        </Text>
+      </Box>
+
+      <Flex flexWrap="wrap" gap={4} my={20}>
+        {apps.map((app, index) => (
+          <AppCard app={app} key={`app-${app.clientId}`} />
+        ))}
+      </Flex>
     </Box>
   );
 };

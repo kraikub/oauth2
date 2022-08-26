@@ -27,38 +27,57 @@ const typeOptions = [
 ];
 
 export const CreateProjectPage: NextPage = () => {
-  const router = useRouter()
-  const { register, handleSubmit } = useForm();
-  const { reload } = useUser()
+  const router = useRouter();
+  const { register, handleSubmit, getValues } = useForm();
+  const { reload } = useUser();
+  const [hasName, setHasName] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
+
   return (
     <UserProvider>
       <Navbar />
       <Container maxW="container.md" py="100px">
-        <Heading fontWeight={600} letterSpacing={-1}>Tell us about your new app.</Heading>
+        <Heading fontWeight={600} letterSpacing={-1}>
+          Tell us about your new app.
+        </Heading>
         <FormControl
           as="form"
           my={10}
           isRequired
           maxW="700px"
           onSubmit={handleSubmit(async (data) => {
-            
-            const ac = localStorage.getItem("access")
-            setLoading(true)
+            const ac = localStorage.getItem("access");
+            setLoading(true);
             if (!ac) {
-              alert("no access token!")
-              setLoading(false)
+              alert("no access token!");
+              setLoading(false);
               return reload();
             }
-            const res = await appService.createApplication(data, ac)
-            setLoading(false)
-            router.push(`/projects/manager/${res?.payload.clientId}`)
+            const hasNameResponse = await appService.hasName(data.appName);
+            if (hasNameResponse?.payload !== false) {
+              setHasName(true);
+              setLoading(false);
+              return;
+            }
+            const res = await appService.createApplication(data, ac);
+            setLoading(false);
+            router.push(`/projects/manager/${res?.payload.clientId}`);
           })}
         >
-          <FormLabel htmlFor="app-name" mt={6}>
-            Application name
+          <FormLabel
+            htmlFor="app-name"
+            mt={6}
+            color={hasName ? "red.400" : "black"}
+          >
+            Application name{" "}
+            {hasName ? "(This application name is not available!)" : null}
           </FormLabel>
-          <Input id="app-name" {...register("appName")} size="sm" />
+          <Input
+            id="app-name"
+            {...register("appName")}
+            size="sm"
+            isInvalid={hasName}
+          />
 
           <FormLabel htmlFor="app-details" mt={6}>
             Tell us more about your application
@@ -108,7 +127,11 @@ export const CreateProjectPage: NextPage = () => {
             <Button type="submit" colorScheme="gray">
               Cancel
             </Button>
-            <Button type="submit" colorScheme="katrade.scheme.fix" isLoading={loading}>
+            <Button
+              type="submit"
+              colorScheme="katrade.scheme.fix"
+              isLoading={loading}
+            >
               Create
             </Button>
           </ButtonGroup>

@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Center,
+  Checkbox,
   Code,
   Container,
   Divider,
@@ -12,6 +13,7 @@ import {
   Heading,
   HStack,
   Image,
+  Input,
   ListItem,
   Text,
   UnorderedList,
@@ -33,6 +35,7 @@ interface SigninPageProps {
 
 const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
   const router = useRouter();
+  const [pdpaAgreed, setPdpaAgreed] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
@@ -74,7 +77,8 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
       router.push(data.payload.url);
     } catch (error) {
       setIsSigninLoading(false);
-      alert(error);
+      console.error(error)
+      alert("Sign in failed, please try again.");
     }
   };
   if (app === null || query.scope === null) {
@@ -229,20 +233,39 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
               borderColor="green.100"
             >
               <HStack spacing={2}>
-                
                 <Heading fontWeight={700} fontSize="14px" color="gray.600">
                   Data Privacy Warning
                 </Heading>
-                <MdPrivacyTip size="20px"/>
+                <MdPrivacyTip size="20px" />
               </HStack>
               <Divider my="10px" />
-              <Text fontSize={12}><Box as="span" fontWeight={600} color="katrade.main">{app.appName}</Box> want to access these personal data.</Text>
-              <UnorderedList fontSize="12px" fontWeight={500} my={6} color="gray.800">
+              <Text fontSize={12}>
+                <Box as="span" fontWeight={600} color="katrade.main">
+                  {app.appName}
+                </Box>{" "}
+                want to access these personal data.
+              </Text>
+              <UnorderedList
+                fontSize="12px"
+                fontWeight={500}
+                my={6}
+                color="gray.800"
+              >
                 <ListItem>Your full name.</ListItem>
                 <ListItem>Phone number and email.</ListItem>
                 <ListItem>Educational data such as faculty, major.</ListItem>
               </UnorderedList>
             </Box>
+            <Checkbox
+                colorScheme="katrade"
+                isChecked={pdpaAgreed}
+                onChange={(e) => setPdpaAgreed(e.target.checked)}
+              >
+                <Text fontSize={12} fontWeight={600}>
+                  I agree to share my data which is held by Kasetsart University
+                  with Kraikub and applications on Kraikub platform.
+                </Text>
+              </Checkbox>
             <Button
               mt="5px"
               h="70px"
@@ -256,6 +279,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
                 boxShadow: "0 0 10px #00000030",
               }}
               type="submit"
+              disabled={!pdpaAgreed}
             >
               Sign in
             </Button>

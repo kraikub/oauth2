@@ -14,8 +14,9 @@ import {
 } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { useRouter } from "next/router";
-import katradeBg from "../../../public/katrade-bg-1-darken.png";
+import bg from "../../../public/bg-2.png";
 import dataProtection from "../../../public/data-protection.png";
+import anonymous from "../../../public/anonymous.png";
 
 const HomePage: FC = () => {
   const headerBaseStyles = {
@@ -33,33 +34,32 @@ const HomePage: FC = () => {
     <Box pb="100px">
       <Box
         h="100vh"
-        bgImage={katradeBg.src}
+        bgImage={bg.src}
         bgPosition="center"
         bgSize="cover"
         borderRadius="0 0 28px 28px"
       >
         <Container maxW="container.xl" py="24vh" position="relative" h="full">
           <Box maxW="700px">
-            <Heading color="white" fontSize="2.6rem">
-              Create awesome apps for Kasetsart University
-            </Heading>
-            <Text fontWeight={600} fontSize={18} color="#ffffff80" my={6}>
-              with Katrade Accounts, Developer Platform for KU Developers
+            <Heading fontSize="3rem">Build your KU app with kraikub</Heading>
+            <Text fontWeight={600} fontSize={26} my={6}>
+              Kraikub is a software development platform for KU.
             </Text>
             <Flex my={8} flexWrap="wrap" gap={4}>
               <Button
                 size="md"
-                bg="white"
-                color="katrade.main"
+                bg="katrade.main"
+                color="white"
+                _hover={{ bg: undefined }}
                 onClick={() => router.push("/projects/manager")}
               >
-                Create your app now
+                Use Kraikub
               </Button>
               <Button
                 size="md"
-                bg="#ffffff50"
-                color="white"
-                _hover={{ bg: "#ffffff80" }}
+                bg="#00000010"
+                color="black"
+                _hover={{ bg: "#00000030" }}
               >
                 How it works ?
               </Button>
@@ -77,7 +77,7 @@ const HomePage: FC = () => {
           >
             Key Features
           </Heading>
-          <SimpleGrid columns={{ sm: 1, md: 2, lg: 2 }} my={16} gap={20}>
+          <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} my={16} gap={20}>
             <VStack spacing={16}>
               <Heading {...headerBaseStyles} size="md">
                 Users Authentication
@@ -104,11 +104,7 @@ const HomePage: FC = () => {
                 Students API
               </Heading>
               <Box h="80px">
-                <Image
-                  src={dataProtection.src}
-                  alt="data-icon"
-                  h="60px"
-                />
+                <Image src={dataProtection.src} alt="data-icon" h="60px" />
               </Box>
               <Box color="#00000090" maxW={300} fontWeight={500}>
                 Students API is an interface which help developers to request
@@ -117,6 +113,23 @@ const HomePage: FC = () => {
                   protect your sensitive data, personal data
                 </Box>{" "}
                 and let you customize how apps can access your personal data.
+              </Box>
+            </VStack>
+            <VStack spacing={16}>
+              <Heading {...headerBaseStyles} size="md">
+                Anonymous Sign in
+              </Heading>
+              <Box h="80px">
+                <Image src={anonymous.src} alt="data-icon" h="60px" />
+              </Box>
+              <Box color="#00000090" maxW={300} fontWeight={500}>
+                Sign in to any app on Kraikub{" "}
+                <Box as="span" color="katrade.main" fontWeight={700}>
+                  with out revealing any of your personal data
+                </Box>
+                {". "}
+                Apps will only know that you are Kasetsart University student,
+                but {"won't"} know who you are.
               </Box>
             </VStack>
           </SimpleGrid>
@@ -129,8 +142,8 @@ const HomePage: FC = () => {
               </Box>
             </Heading>
             <Text fontSize={20} fontWeight={500} maxW={560} textAlign="center">
-              Katrade Accounts let you create applications a lot easier. Sign up
-              now, and make KU better with your hands.
+              Kraikub let you create applications a lot easier. Sign up now, and
+              make KU better with your hands.
             </Text>
           </VStack>
         </Container>
