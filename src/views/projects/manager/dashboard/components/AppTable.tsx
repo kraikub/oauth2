@@ -14,6 +14,8 @@ import {
   Button,
   VStack,
   Text,
+  Center,
+  CircularProgress,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
@@ -66,12 +68,11 @@ const AppTable: FC = () => {
 
   const handleCreateAppClick = (limit: boolean) => {
     if (!limit) {
-      router.push("/projects/manager/create")
+      router.push("/projects/manager/create");
+    } else {
+      router.push("/pricing");
     }
-    else {
-      router.push("/pricing")
-    }
-  }
+  };
 
   if (!user) {
     return null;
@@ -111,14 +112,15 @@ const AppTable: FC = () => {
           Your Apps
         </Heading>
         <Button
-          colorScheme={user.appOwned >= user.appQuota ? "red" : "katrade.scheme.fix"}
+          colorScheme={
+            user.appOwned >= user.appQuota ? "red" : "katrade.scheme.fix"
+          }
           _hover={{ transform: "scale(1.05)" }}
           rounded="full"
           transition="300ms ease"
           onClick={() => handleCreateAppClick(user.appOwned >= user.appQuota)}
         >
           {user.appOwned >= user.appQuota ? "Upgrade plan" : "+ Create app"}
-          
         </Button>
       </Flex>
       <Box
@@ -130,17 +132,27 @@ const AppTable: FC = () => {
         rounded={10}
         color="white"
       >
-        <Heading size="xl">Hi {user.firstNameEn}, let{"'"}s build something.</Heading>
+        <Heading size="xl">
+          Hi {user.firstNameEn}, let{"'"}s build something.
+        </Heading>
         <Text fontWeight={600} fontSize={20} mt={7}>
-          {user ? `You have ${user.appQuota - user.appOwned} quota(s) left.` : ""}
+          {user
+            ? `You have ${user.appQuota - user.appOwned} quota(s) left.`
+            : ""}
         </Text>
       </Box>
-
-      <Flex flexWrap="wrap" gap={4} my={20}>
-        {apps.map((app, index) => (
-          <AppCard app={app} key={`app-${app.clientId}`} />
-        ))}
-      </Flex>
+      {isLoading ? (
+        <Center gap={3} py="40px">
+          <CircularProgress isIndeterminate color="katrade.main" />
+          <Text fontSize={20}>Getting your data..</Text>
+        </Center>
+      ) : (
+        <Flex flexWrap="wrap" gap={4} my={20}>
+          {apps.map((app, index) => (
+            <AppCard app={app} key={`app-${app.clientId}`} />
+          ))}
+        </Flex>
+      )}
     </Box>
   );
 };

@@ -39,7 +39,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const handleRedirectToSigin = () => {
     const signinUrl = getSigninUrl({
-      redirectPath: router.route,
+      redirectPath: location.href,
     });
     router.push(signinUrl);
   };

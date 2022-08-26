@@ -52,6 +52,12 @@ const components = {
       fontSize: 14,
       fontWeight: 500,
     }
+  },
+  Input: {
+    defaultProps: {
+      fontSize: 20,
+      fontWeight: 600,
+    }
   }
 }
 
