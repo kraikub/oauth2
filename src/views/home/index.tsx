@@ -54,7 +54,7 @@ const HomePage: FC = () => {
                 _hover={{ bg: undefined }}
                 onClick={() => router.push("/projects/manager")}
               >
-                Use Kraikub
+                Try now
               </Button>
               <Button
                 size="md"
