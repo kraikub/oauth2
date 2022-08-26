@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { educationFromResponse } from "../../../scopes/education";
 import { handleApiError } from "../../error";
 import { AuthMiddleware } from "../../middlewares/auth.middleware";
-import { myKUService } from "../../bridge/mykuService";
+import { bridge } from "../../bridge/bridge";
 import { createResponse } from "../../types/response";
 
 export async function studentEducationApi(
@@ -13,7 +13,7 @@ export async function studentEducationApi(
     if (req.method === "GET") {
       const { success, payload } = AuthMiddleware(req, res);
       if (!success) return;
-      const { status, data } = await myKUService.getEducation(
+      const { status, data } = await bridge.getEducation(
         payload.stdId,
         payload.accessToken
       );

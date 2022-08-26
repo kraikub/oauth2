@@ -2,7 +2,7 @@ import { gradeFromResponse } from '../../../scopes/grade';
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleApiError } from "../../error";
 import { AuthMiddleware } from "../../middlewares/auth.middleware";
-import { myKUService } from "../../bridge/mykuService";
+import { bridge } from "../../bridge/bridge";
 import { createResponse } from "../../types/response";
 
 export async function studentGradesApi(
@@ -13,7 +13,7 @@ export async function studentGradesApi(
     if (req.method === "GET") {
       const { success, payload } = AuthMiddleware(req, res);
       if (!success) return;
-      const { status, data } = await myKUService.getGrades(
+      const { status, data } = await bridge.getGrades(
         payload.stdCode,
         payload.accessToken
       );

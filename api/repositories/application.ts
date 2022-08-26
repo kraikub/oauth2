@@ -4,6 +4,7 @@ import { Application } from '../../db/schema/application';
 interface ApplicationFilter {
   clientId?: string;
   ownerId?: string;
+  appName?: string;
 }
 
 export default class ApplicationRepository {
@@ -18,6 +19,14 @@ export default class ApplicationRepository {
   createApp = async (app: Application) => {
     mongodb.connect()
     await ApplicationModel.create(app)
+  }
+
+  hasAppName = async (appName: string) => {
+    mongodb.connect()
+    const app = await ApplicationModel.findOne<Application>({
+      appName: appName,
+    });
+    return app === null ? false : true;
   }
 }
 export const applicationRepository = new ApplicationRepository()

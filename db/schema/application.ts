@@ -22,4 +22,4 @@ export const applicationSchema = new Schema<Application>({
     callbackUrl: { type: String },
     devCallbackUrl: { type: String },
     secret: { type: String },
-})
+}, { timestamps: true })

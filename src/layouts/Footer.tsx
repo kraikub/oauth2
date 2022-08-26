@@ -8,7 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FC } from "react";
-import { BsGithub } from "react-icons/bs";
+import { BsGithub, BsInstagram } from "react-icons/bs";
 
 const Footer: FC = () => {
   return (
@@ -23,10 +23,12 @@ const Footer: FC = () => {
     >
       <Container size="container.xl" h="full">
         <Center>
-          <Text fontWeight={500}>Made with 💚 by Nutchanon C.</Text>
+          <Text fontWeight={500}>Made with 💚 by my hands.</Text>
         </Center>
-        <Center mt={4}>
-          <BsGithub size="24px"/>
+        <Center mt={4} gap={3}>
+          <Text fontWeight={800} fontSize={12}> Nutchanon</Text>
+          <BsGithub size="24px" />
+          <BsInstagram size="24px" />
         </Center>
       </Container>
     </Box>

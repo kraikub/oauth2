@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { myKUService } from "../../../api/bridge/mykuService";
+import { bridge } from "../../../api/bridge/bridge";
 import { RenewMiddleware } from "../../../api/middlewares/renew.middleware";
 import { createResponse } from "../../../api/types/response";
 import { signAuthObject } from "../../../libs/jwt";
@@ -10,7 +10,7 @@ const refreshHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     res
   );
   if (!success) return;
-  const { status, data } = await myKUService.renew(
+  const { status, data } = await bridge.renew(
     accessTokenPayload.accessToken,
     refreshTokenPayload.refreshToken
   );

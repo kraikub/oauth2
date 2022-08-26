@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { myKUService } from "../../../api/bridge/mykuService";
+import { bridge } from "../../../api/bridge/bridge";
 import { createResponse } from "../../../api/types/response";
 import { applicationUsecase, userUsecase } from "../../../api/usecases";
 import * as crypto from "crypto";
@@ -26,7 +26,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).send({});
     }
 
-    const externalLoginResult = await myKUService.externalLogin(
+    const externalLoginResult = await bridge.externalLogin(
       username,
       password,
       scope,
@@ -51,7 +51,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         .digest("hex");
       if (user === null) {
         // handle new user
-        const { status, data: personal } = await myKUService.getProfile(
+        const { status, data: personal } = await bridge.getProfile(
           externalLoginResult.stdId,
           externalLoginResult.accessToken
         );
@@ -85,6 +85,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           ...extracted,
           uid: uid,
           appQuota: 5,
+          appOwned: 0,
           stdId: externalLoginResult.stdId,
           stdCode: externalLoginResult.stdCode,
           genderCode,
@@ -146,6 +147,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).send(response);
     }
   } catch (error) {
+    console.error(error)
     handleApiError(res, error);
   }
 };

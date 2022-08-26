@@ -46,10 +46,20 @@ const fonts = {
   heading: `'Manrope', 'Noto Sans Thai', sans-serif`,
 };
 
+const components = {
+  Text: {
+    baseStyle: {
+      fontSize: 14,
+      fontWeight: 500,
+    }
+  }
+}
+
 const overrides = {
   config,
   colors,
   fonts,
+  components,
 };
 
 const theme = extendTheme(overrides);

@@ -17,6 +17,7 @@ export interface User {
   phone: string;
   email: string;
   appQuota: number;
+  appOwned: number;
   uid: string;
   titleTh: string;
   titleEn: string;
@@ -76,6 +77,7 @@ export const userSchema = new Schema<User>({
   phone: { type: String },
   email: { type: String },
   appQuota: { type: Number },
+  appOwned: { type: Number },
   uid: { type: String },
   titleTh: { type: String },
   titleEn: { type: String },
@@ -116,4 +118,4 @@ export const userSchema = new Schema<User>({
   advisorNameTh: { type: String },
   advisorNameEn: { type: String },
   positionTh: { type: String },
-});
+}, { timestamps: true });

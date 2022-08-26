@@ -8,6 +8,11 @@ interface UserFilter {
   stdCode?: string;
 }
 
+interface UserUpdatableFields {
+  appOwned?: number;
+  appQuota?: number;
+}
+
 class UserRepository {
   findOne = async (filter: UserFilter) => {
     await mongodb.connect();
@@ -15,6 +20,9 @@ class UserRepository {
   };
   create = async (u: User) => {
     return await UserModel.create<User>(u);
+  }
+  update = async (uid: string, update: UserUpdatableFields) => {
+    return await UserModel.updateOne<User>({ uid: uid }, update)
   }
 }
 export const userRepository = new UserRepository();

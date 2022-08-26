@@ -1,12 +1,13 @@
-import { MyKUGradeResponse } from '../types/myku/grade';
+import { MyKUGradeResponse } from "../types/myku/grade";
 import { MyKUEducationResponse } from "../types/myku/education";
 import { MyKUPersonalResponse } from "../types/myku/student";
 import { mykuInstance } from "../../libs/axios";
 import { AuthenticationObject } from "../types/auth.response";
 import { MyKULoginResponse, MyKURenewTokenResponse } from "../types/myku/auth";
 import { mapQueryStringToUrl } from "../utils/query";
+import { RSAEncryptionForMyKU } from "../utils/rsa";
 
-class MyKUService {
+class Bridge {
   private appKey: string;
   constructor() {
     this.appKey = process.env.MYKU_APPKEY
@@ -41,7 +42,7 @@ class MyKUService {
       stdCode: loginData.user.idCode,
       clientId: clientId,
       refreshToken: loginData.renewtoken,
-      response: loginData
+      response: loginData,
     };
   };
 
@@ -49,8 +50,8 @@ class MyKUService {
     const { status, data } = await mykuInstance.post<MyKULoginResponse>(
       "/auth/login",
       {
-        username: username,
-        password: password,
+        username: RSAEncryptionForMyKU(username),
+        password: RSAEncryptionForMyKU(password),
       },
       {
         headers: {
@@ -58,7 +59,6 @@ class MyKUService {
         },
       }
     );
-
     return { status, data };
   };
 
@@ -122,4 +122,4 @@ class MyKUService {
     return { status, data };
   };
 }
-export const myKUService = new MyKUService();
+export const bridge = new Bridge();

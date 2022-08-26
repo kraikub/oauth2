@@ -28,10 +28,9 @@ const StaticNavbar: FC = () => {
       py="12px"
       bg="white"
       zIndex={35}
-      border="solid #00000010"
-      borderWidth="0 0 1px 0"
+      boxShadow="0 10px 10px #00000010"
       px="20px"
-      minH="60px"
+      minH="70px"
       alignItems="center"
       justifyContent="space-between"
     >

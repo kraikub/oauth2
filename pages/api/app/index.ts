@@ -4,6 +4,7 @@ import { createResponse } from "../../../api/types/response";
 import { Application } from "../../../db/schema/application";
 import * as crypto from "crypto";
 import { applicationUsecase } from "../../../api/usecases";
+import { handleApiError } from "../../../api/error";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -51,12 +52,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         secret: crypto.randomBytes(28).toString("hex"),
         ownerId: payload.uid,
       };
-      await applicationUsecase.createApp(newApp);
+      const success = await applicationUsecase.createApp(newApp);
+      if (!success) {
+        return res.status(403).send(createResponse(false, "Unable to create an app for this user.", newApp));
+      }
       return res.status(200).send(createResponse(true, "", newApp));
     }
     return res.status(404).send(createResponse(false, "Not found.", null));
   } catch (error) {
-    return res.status(500).send(createResponse(false, error as string, null));
+    return handleApiError(res, error);
   }
 };
 export default handler;
