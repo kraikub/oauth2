@@ -91,7 +91,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
             name="description"
             content="เราไม่สามารถดำเนินการลิงค์ของคุณได้ คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ"
           />
-          <meta name="author" content="Katrade Accounts" />
+          <meta name="author" content="Kraikub Official" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
@@ -109,8 +109,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
                 คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ
               </Text>
               <HStack mt="50px !important">
-                <Button>ช่วยเหลือ / Help</Button>
-                <Button colorScheme="katrade">แจ้งปัญหากับ Katrade</Button>
+                <Button colorScheme="katrade.scheme.fix" rounded="full">แจ้งปัญหากับ Kraikub</Button>
               </HStack>
             </VStack>
           </Center>
@@ -126,7 +125,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
           <title>Authorization failed</title>
           <meta charSet="UTF-8" />
           <meta name="description" content="Invalid OAuth login credentials." />
-          <meta name="author" content="Katrade Accounts" />
+          <meta name="author" content="Kraikub Official" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
@@ -158,8 +157,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
                 </Text>
               </Alert>
               <HStack mt="50px !important">
-                <Button>ช่วยเหลือ / Help</Button>
-                <Button colorScheme="katrade">แจ้งปัญหากับ Katrade</Button>
+                <Button colorScheme="katrade.scheme.fix" rounded="full">แจ้งปัญหากับ Kraikub</Button>
               </HStack>
             </VStack>
           </Center>
@@ -183,7 +181,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
         <form onSubmit={handleSigninEvent}>
           <Flex
             boxShadow="0 6px 30px 20px #00000010"
-            rounded={4}
+            rounded={16}
             minH="60vh"
             h="auto"
             px="30px"
@@ -193,7 +191,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
             gap="20px"
             justifyContent="space-between !important"
           >
-            <Heading fontWeight={600} fontSize="22px" letterSpacing={-1}>
+            <Heading fontSize="22px" fontWeight={800} letterSpacing={-1}>
               Sign in with KU Account
             </Heading>
             <Box mt="30px" w="full">

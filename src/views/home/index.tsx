@@ -15,6 +15,7 @@ import {
 import { FC, useState } from "react";
 import { useRouter } from "next/router";
 import bg from "../../../public/bg-2.png";
+import bgx from "../../../public/bg-1.png";
 import dataProtection from "../../../public/data-protection.png";
 import anonymous from "../../../public/anonymous.png";
 
@@ -33,7 +34,7 @@ const HomePage: FC = () => {
   return (
     <Box pb="100px">
       <Box
-        h="100vh"
+        minH="100vh"
         bgImage={bg.src}
         bgPosition="center"
         bgSize="cover"
@@ -65,6 +66,31 @@ const HomePage: FC = () => {
               </Button>
             </Flex>
           </Box>
+          <Center mt="180px">
+            <Box>
+              <Box
+                px={10}
+                py={7}
+                mb={8}
+                // bgImage={bgx.src}
+                // bgSize="cover"
+                // bgPos="center"
+                // color="white"
+                bg="#010101"
+                color="white"
+                boxShadow="10px 10px 0px #EE1D52, -10px -10px 0px #69C9D0"
+                rounded={4}
+                fontSize={24}
+                fontWeight={600}
+                fontFamily="'Roboto Mono', monospace"
+              >
+                npm install kraikub
+              </Box>
+              <Text textAlign="center" fontWeight={600} fontSize={18}>
+                Proudly made for Developers.
+              </Text>
+            </Box>
+          </Center>
         </Container>
       </Box>
       <Box>
