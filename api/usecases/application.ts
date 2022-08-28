@@ -8,6 +8,14 @@ interface ApplicationFilter {
   appName?: string;
 }
 
+interface ApplicationUpdatable {
+  appDescription: string;
+  creatorName: string;
+  callbackUrl: string;
+  devCallbackUrl: string;
+}
+
+
 export class ApplicationUsecase {
   findOneApp = async (filter: ApplicationFilter) => {
     return await applicationRepository.findOneApp(filter);
@@ -58,6 +66,44 @@ export class ApplicationUsecase {
     return {
       success: true,
       status: 200,
+    };
+  };
+
+  updateApp = async (
+    uid: string,
+    clientId: string,
+    a: ApplicationUpdatable
+  ): Promise<{
+    success: boolean;
+    status: number;
+    application: any;
+  }> => {
+    if (!(await this.isOwned(uid, clientId))) {
+      return {
+        success: false,
+        status: 403,
+        application: null,
+      };
+    }
+    const { appDescription, creatorName, callbackUrl, devCallbackUrl } = a;
+    if (!callbackUrl || !devCallbackUrl || !creatorName || !appDescription) {
+      return {
+        success: false,
+        status: 422,
+        application: null,
+      };
+    }
+    const updatedApp = await applicationRepository.updateOne(clientId, {
+      appDescription,
+      creatorName,
+      callbackUrl,
+      devCallbackUrl,
+    });
+    
+    return {
+      success: true,
+      status: 200,
+      application: updatedApp,
     };
   };
 

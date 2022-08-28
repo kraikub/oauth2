@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { appService } from "../../../../services/appService";
 import { FieldContainer } from "./components/FieldContainer";
 import { AppForm } from "./components/AppForm";
+import { Box, Center } from "@chakra-ui/react";
+import { InterWindLoader } from "../../../../layouts/Loader";
 interface ClientPageProps {}
 
 const ClientPage: FC<ClientPageProps> = ({}) => {
@@ -36,7 +38,11 @@ const ClientPage: FC<ClientPageProps> = ({}) => {
   return (
     <>
       <Navbar />
-      {app ? <AppForm app={app} /> : null}
+      {app ? <AppForm app={app} /> : (
+        <Center my="100px">
+          <InterWindLoader />
+        </Center>
+      )}
     </>
   );
 };

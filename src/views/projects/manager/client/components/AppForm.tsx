@@ -37,6 +37,7 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { appService } from "../../../../../services/appService";
 import { useRouter } from "next/router";
+import { useUser } from "../../../../../contexts/User";
 
 interface AppFormProps {
   app: Application;
@@ -46,7 +47,8 @@ const kraikubUrl = "https://kraikub.com/signin";
 
 export const AppForm: FC<AppFormProps> = ({ app }) => {
   const router = useRouter();
-  const { register, getValues, watch, reset } = useForm({
+  const { reload } = useUser();
+  const { register, getValues, watch, reset, handleSubmit } = useForm({
     defaultValues: app,
   });
   const [devToolsScope, setDevToolsScope] = useState<number>(0);
@@ -54,7 +56,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
   const [hasChanged, setHasChanged] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteInputValue, setDeleteInputValue] = useState<string>("");
-
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const resetForm = () => {
     reset();
   };
@@ -81,7 +83,21 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
   }, [watch()]);
 
   return (
-    <FormControl as="form" isRequired>
+    <FormControl
+      as="form"
+      isRequired
+      onSubmit={handleSubmit(async (data) => {
+        const ac = localStorage.getItem("access");
+        setIsUpdating(true);
+        if (!ac) {
+          setIsUpdating(false);
+          return reload();
+        }
+        const res = await appService.updateAppplcation(app.clientId, ac, data);
+        setIsUpdating(false);
+        router.reload();
+      })}
+    >
       <Box bgImage={`url(${bg1.src})`} bgSize="cover" bgPosition="center">
         <Container
           maxW="container.xl"
@@ -438,7 +454,13 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             >
               Discard Changes
             </Button>
-            <Button colorScheme="katrade.scheme.fix" size="lg" rounded={12}>
+            <Button
+              type="submit"
+              colorScheme="katrade.scheme.fix"
+              size="lg"
+              rounded={12}
+              isLoading={isUpdating}
+            >
               Save
             </Button>
           </Container>
@@ -490,7 +512,12 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             >
               I changed my mind.
             </Button>
-            <Button colorScheme="red" size="sm" onClick={handleDeleteApp} disabled={deleteInputValue !== `delete/${app.appName}`}>
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={handleDeleteApp}
+              disabled={deleteInputValue !== `delete/${app.appName}`}
+            >
               Delete it 🚀
             </Button>
           </ModalFooter>
