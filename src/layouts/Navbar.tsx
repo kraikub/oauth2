@@ -18,7 +18,8 @@ import {
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { useUser } from "../contexts/User";
-import { HiHome } from "react-icons/hi"
+import { HiHome } from "react-icons/hi";
+import logo from "../../public/logo.png";
 const Navbar: FC = () => {
   const router = useRouter();
   const { user, signout } = useUser();
@@ -37,13 +38,21 @@ const Navbar: FC = () => {
       alignItems="center"
       justifyContent="space-between"
     >
-      <Heading size="md" fontWeight={700} color="black">
-        kraikub{" "}
-      </Heading>
+      <Flex alignItems="center" gap={3}>
+        <Image src={logo.src} h="26px" alt="logo"/>
+        <Heading size="md" fontWeight={700} color="black">
+          kraikub{" "}
+        </Heading>
+      </Flex>
       {user ? (
         <Flex alignItems="center" gap={4}>
-          <Button rounded="full" aria-label="home" gap={1} onClick={() => router.push('/projects/manager')}>
-            <HiHome size="20px"/>
+          <Button
+            rounded="full"
+            aria-label="home"
+            gap={1}
+            onClick={() => router.push("/projects/manager")}
+          >
+            <HiHome size="20px" />
             <Heading size="sm">Home</Heading>
           </Button>
           <Menu>

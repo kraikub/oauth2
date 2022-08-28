@@ -18,6 +18,16 @@ import bg from "../../../public/bg-2.png";
 import bgx from "../../../public/bg-1.png";
 import dataProtection from "../../../public/data-protection.png";
 import anonymous from "../../../public/anonymous.png";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { materialLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
+
+const codeString = `const myapp = window.kraikub.createInstance({
+  clientId: "<clientId>",
+  secret: "<secret>"
+});
+myapp.onDeviceSignin(0, (access, refresh) => {
+  console.log("signed in");
+});`;
 
 const HomePage: FC = () => {
   const headerBaseStyles = {
@@ -159,6 +169,32 @@ const HomePage: FC = () => {
               </Box>
             </VStack>
           </SimpleGrid>
+
+          <Box my="100px">
+            <Heading>Sign in with less than 10 lines of code.</Heading>
+            <Box my="40px">
+              <SyntaxHighlighter language="javascript" style={materialLight}>
+                {codeString}
+              </SyntaxHighlighter>
+              <ButtonGroup my="20px">
+                <Button
+                  size="lg"
+                  rounded="full"
+                  bg="#c2f2d7"
+                  _hover={{ bg: undefined }}
+                  color="#3c00b5"
+                >
+                  Start now
+                </Button>
+                <Button size="lg" rounded="full">
+                  Demo
+                </Button>
+                <Button size="lg" rounded="full">
+                  Documentation
+                </Button>
+              </ButtonGroup>
+            </Box>
+          </Box>
 
           <VStack my="200px" gap={6}>
             <Heading {...headerBaseStyles} textAlign="center">

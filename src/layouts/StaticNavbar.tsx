@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC } from "react";
+import logo from "../../public/logo.png";
 
 const StaticNavbar: FC = () => {
   return (
@@ -34,9 +35,12 @@ const StaticNavbar: FC = () => {
       alignItems="center"
       justifyContent="space-between"
     >
-      <Heading size="md" fontWeight={700} color="black">
-        kraikub{" "}
-      </Heading>
+      <Flex alignItems="center" gap={3}>
+        <Image src={logo.src} h="26px" alt="logo"/>
+        <Heading size="md" fontWeight={700} color="black">
+          kraikub{" "}
+        </Heading>
+      </Flex>
     </Flex>
   );
 };

@@ -3,48 +3,70 @@ import type { GetServerSideProps, NextPage } from "next";
 import { applicationRepository } from "../../api/repositories/application";
 import { Application } from "../../db/schema/application";
 import SigninPage from "../../src/views/signin";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import OnDeviceSigninPage from "../../src/views/signin/ondevice-signin";
 
 interface SigninPageProps {
   query: Query;
   app: Application | null;
 }
 
+interface SigninRequestSignal {
+  ref: string;
+  origin: string;
+  secret: string;
+  type: string;
+}
+
 const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
   const origin = useRef<string>("");
-  const child = useRef<Window | null>(null);
-
+  const [secret, setSecret] = useState("");
+  const [isRecieveRequest, setIsRecieveRequest] = useState<boolean>(false)
   function msg(access: string, refresh: string) {
     if (typeof window !== "undefined") {
       // Client-side-only code
-      window.opener.postMessage({ access, refresh }, origin.current);
+      const msgBody = {
+        ref: "kraikub-signin",
+        type: "report",
+        success: true,
+        access: access,
+        refresh: refresh,
+      };
+      window.opener.postMessage(msgBody, origin.current);
       setTimeout(() => window.close(), 1000);
     }
   }
+
   useEffect(() => {
-    console.log("top", window.top?.name);
-    console.log("parent", window.parent?.name);
     window.addEventListener(
       "message",
       (event) => {
         // Do we trust the sender of this message?  (might be
         // different from what we originally opened, for example).
         const data = `${event.data}`;
-        if (data.includes("reply;")) {
-          const lc = (event.data as string).split(";")[1];
-          console.log(lc);
-          origin.current = lc;
+        if (event.data.ref === "kraikub-signin") {
+          const req = event.data as SigninRequestSignal;
+          
+          if (req.secret && req.origin) {
+            origin.current = req.origin;
+            setSecret(req.secret);
+            setIsRecieveRequest(true);
+          }
+
         }
-        console.log(event.data);
-        // event.source is popup
-        // event.data is "hi there yourself! the secret response is: rheeeeet!"
       },
       false
     );
   }, []);
   return (
     <>
-      <SigninPage app={app} query={query} onSigninComplete={msg} />
+      <OnDeviceSigninPage
+        app={app}
+        query={query}
+        onSigninComplete={msg}
+        secret={secret}
+        isRecieveRequest={isRecieveRequest}
+      />
     </>
   );
 };
