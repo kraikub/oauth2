@@ -16,31 +16,63 @@ import {
   Button,
   Spacer,
   Slide,
+  Flex,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from "@chakra-ui/react";
+import { MdDelete } from "react-icons/md";
 import { FaCopy } from "react-icons/fa";
 import { FieldContainer } from "./FieldContainer";
 import bg1 from "../../../../../../public/bg-1.png";
+import bg3 from "../../../../../../public/bg-3.png";
+import bg4 from "../../../../../../public/bg-4.png";
+import bg5 from "../../../../../../public/bg-5.png";
 import { Application } from "../../../../../../db/schema/application";
-import { FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { appService } from "../../../../../services/appService";
+import { useRouter } from "next/router";
 
 interface AppFormProps {
   app: Application;
 }
 
+const kraikubUrl = "https://kraikub.com/signin";
+
 export const AppForm: FC<AppFormProps> = ({ app }) => {
+  const router = useRouter();
   const { register, getValues, watch, reset } = useForm({
     defaultValues: app,
   });
+  const [devToolsScope, setDevToolsScope] = useState<number>(0);
   const [hideSecret, setHideSecret] = useState(true);
   const [hasChanged, setHasChanged] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteInputValue, setDeleteInputValue] = useState<string>("");
 
   const resetForm = () => {
-    reset()
-  }
+    reset();
+  };
+
+  const handleDeleteApp = async () => {
+    const ac = localStorage.getItem("access");
+    if (!ac) {
+      return router.push("/projects/manager");
+    }
+    const response = await appService.deleteApplication(app.clientId, ac);
+    if (!response?.status) {
+      // do something
+    } else {
+      return router.push("/projects/manager");
+    }
+  };
 
   useEffect(() => {
-    console.log(JSON.stringify(getValues()) !== JSON.stringify(app));
     if (JSON.stringify(getValues()) !== JSON.stringify(app)) {
       setHasChanged(true);
     } else {
@@ -283,6 +315,108 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           </GridItem>
         </Grid>
       </Container>
+      <Divider my={10} />
+      <Container maxW="container.xl">
+        <Box
+          minH="100px"
+          bg="red.400"
+          rounded={16}
+          color="white"
+          px={4}
+          py={8}
+          bgImage={bg5.src}
+          bgSize="cover"
+          bgPos="center"
+        >
+          <Heading size="md" mb={3}>
+            Developer Tools
+          </Heading>
+          <Text>
+            Instantly get your development resources from Kraikub here.
+          </Text>
+        </Box>
+        <Box mt={4} p={4} bg="gray.100" rounded={10}>
+          <Box mb={8}>
+            <Heading size="md" mb={2}>
+              Authentication URL Generator
+            </Heading>
+            <Divider />
+          </Box>
+          <Box my={4}>
+            <Heading size="sm" mb={4}>
+              Production URL
+            </Heading>
+            <Box px={5} py={3} bg="gray.300" rounded={10}>
+              <Text fontWeight={700} color="#171633">
+                {kraikubUrl +
+                  `?client_id=${app.clientId}&scope=${devToolsScope}`}
+              </Text>
+            </Box>
+          </Box>
+          <Box my={4}>
+            <Heading size="sm" mb={4}>
+              Development URL
+            </Heading>
+            <Box px={5} py={3} bg="gray.300" rounded={10}>
+              <Text fontWeight={700} color="#171633">
+                {kraikubUrl +
+                  `?client_id=${app.clientId}&scope=${devToolsScope}&dev=true&secret=${app.secret}`}
+              </Text>
+            </Box>
+          </Box>
+        </Box>
+      </Container>
+      <Divider my={10} />
+      <Container maxW="container.xl">
+        <Box
+          minH="100px"
+          bg="red.400"
+          rounded={16}
+          color="white"
+          px={4}
+          py={8}
+          bgImage={bg3.src}
+          bgSize="cover"
+          bgPos="center"
+        >
+          <Heading size="md" mb={3}>
+            Danger Zone
+          </Heading>
+          <Text>
+            These operations below make a hard changes to your application
+            settings. Please make sure about what you are going to do.
+          </Text>
+        </Box>
+        <Flex
+          mt={4}
+          p={4}
+          bg="gray.100"
+          rounded={10}
+          justifyContent="space-between"
+        >
+          <Box>
+            <Heading size="md" mb={2}>
+              Delete this app
+            </Heading>
+            <Text>
+              Permanently delete this app from Kraikub. Once you have deleted,
+              your app cannot be recovered.
+            </Text>
+          </Box>
+          <IconButton
+            aria-label="delete-app"
+            rounded="full"
+            bg="red.500"
+            onClick={() => setIsDeleteModalOpen(true)}
+            _hover={{
+              bg: undefined,
+              transform: "scale(1.1)",
+            }}
+          >
+            <MdDelete size="22px" color="#fff" />
+          </IconButton>
+        </Flex>
+      </Container>
       <Box my={20}></Box>
       <Slide direction="bottom" in={hasChanged} style={{ zIndex: 10 }}>
         <Box bg="white" boxShadow="0 -10px 10px #00000006">
@@ -296,13 +430,72 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           >
             <Spacer />
 
-            <Button colorScheme="red" size="lg" onClick={resetForm} rounded={12}>
+            <Button
+              colorScheme="red"
+              size="lg"
+              onClick={resetForm}
+              rounded={12}
+            >
               Discard Changes
             </Button>
-            <Button colorScheme="katrade.scheme.fix" size="lg" rounded={12}>Save</Button>
+            <Button colorScheme="katrade.scheme.fix" size="lg" rounded={12}>
+              Save
+            </Button>
           </Container>
         </Box>
       </Slide>
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        isCentered
+        motionPreset="slideInBottom"
+      >
+        <ModalOverlay />
+        <ModalContent rounded={16}>
+          <ModalHeader>Are you sure about this? 🤔</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              You are about to permanently delete{" "}
+              <Box as="span" fontWeight={700} color="blue.500">
+                {app.appName}
+              </Box>{" "}
+              from our platform. This operation cannot be reverted once it is
+              executed.
+            </Text>
+            <Box my={4}>
+              <Text mb={3}>
+                Please type{" "}
+                <Box as="span" fontWeight={700} color="red.500">
+                  delete/{app.appName}
+                </Box>{" "}
+                to continue the progress.
+              </Text>
+              <Input
+                rounded={6}
+                size="sm"
+                value={deleteInputValue}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setDeleteInputValue(e.target.value)
+                }
+              />
+            </Box>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              mr={3}
+              onClick={() => setIsDeleteModalOpen(false)}
+              size="sm"
+            >
+              I changed my mind.
+            </Button>
+            <Button colorScheme="red" size="sm" onClick={handleDeleteApp} disabled={deleteInputValue !== `delete/${app.appName}`}>
+              Delete it 🚀
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </FormControl>
   );
 };

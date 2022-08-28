@@ -1,31 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import Navbar from "../../../../layouts/Navbar";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Collapse,
-  Container,
-  Divider,
-  Flex,
-  FormControl,
-  Grid,
-  GridItem,
-  Heading,
-  HStack,
-  IconButton,
-  Input,
-  SimpleGrid,
-  Spacer,
-  Text,
-  Textarea,
-} from "@chakra-ui/react";
 
 import { Application } from "../../../../../db/schema/application";
 import { useRouter } from "next/router";
 import { appService } from "../../../../services/appService";
 import { FieldContainer } from "./components/FieldContainer";
-import { useForm } from "react-hook-form";
 import { AppForm } from "./components/AppForm";
 interface ClientPageProps {}
 

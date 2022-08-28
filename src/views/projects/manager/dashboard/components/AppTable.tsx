@@ -16,6 +16,7 @@ import {
   Text,
   Center,
   CircularProgress,
+  Image,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
@@ -24,26 +25,11 @@ import { useUser } from "../../../../../contexts/User";
 import { appService } from "../../../../../services/appService";
 import AppCard from "./AppCard";
 import background from "../../../../../../public/bg-1.png";
+import loader from "../../../../../../public/loader.svg";
+import { InterWindLoader } from "../../../../../layouts/Loader";
 interface RowProps {
   app: Application;
 }
-
-const Row: FC<RowProps> = ({ app }) => {
-  const router = useRouter();
-  return (
-    <Tr
-      cursor="pointer"
-      _hover={{ bg: "gray.50" }}
-      onClick={() => router.push(`/projects/manager/${app.clientId}`)}
-    >
-      <Td>{app.clientId}</Td>
-      <Td fontWeight={600}>{app.appName}</Td>
-      <Td>{app.appType}</Td>
-      <Td isNumeric>0</Td>
-      <Td isNumeric>0</Td>
-    </Tr>
-  );
-};
 
 const AppTable: FC = () => {
   const router = useRouter();
@@ -75,7 +61,9 @@ const AppTable: FC = () => {
   };
 
   if (!user) {
-    return null;
+    return (
+      <InterWindLoader />
+    );
   }
 
   if (!apps.length && !isLoading) {
@@ -143,8 +131,7 @@ const AppTable: FC = () => {
       </Box>
       {isLoading ? (
         <Center gap={3} py="40px">
-          <CircularProgress isIndeterminate color="katrade.main" />
-          <Text fontSize={20}>Getting your data..</Text>
+          <InterWindLoader />
         </Center>
       ) : (
         <Flex flexWrap="wrap" gap={4} my={20}>

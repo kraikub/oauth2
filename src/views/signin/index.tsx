@@ -31,9 +31,10 @@ import ogImage from "../../../public/og-image.png";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
+  onSigninComplete?: (access: string, refresh: string) => void;
 }
 
-const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
+const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
   const router = useRouter();
   const [pdpaAgreed, setPdpaAgreed] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
@@ -74,7 +75,10 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
         bindStringToBoolean(query.dev),
         query.secret as string | undefined
       );
-      router.push(data.payload.url);
+      if (onSigninComplete) {
+        return onSigninComplete(data.payload.access, data.payload.refresh);
+      }
+      return router.push(data.payload.url);
     } catch (error) {
       setIsSigninLoading(false);
       console.error(error)

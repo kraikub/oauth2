@@ -28,17 +28,45 @@ export class ApplicationUsecase {
     }
     const owner = await userRepository.findOne({ uid: app.ownerId });
     if (!owner) {
-      throw new Error("User is not existed.")
+      throw new Error("User is not existed.");
     }
     if (owner.appOwned >= owner.appQuota) {
       return false;
     }
-    console.log(1)
     await applicationRepository.createApp(app);
-    console.log(2)
-    await userRepository.update(owner.uid, { appOwned: owner.appOwned + 1 })
-    console.log(3)
+    await userRepository.update(owner.uid, { appOwned: owner.appOwned + 1 });
     return true;
+  };
+
+  deleteApp = async (
+    uid: string,
+    clientId: string
+  ): Promise<{ success: boolean; status: number }> => {
+    if (!(await this.isOwned(uid, clientId))) {
+      return {
+        success: false,
+        status: 403,
+      };
+    }
+    await applicationRepository.deleteOne(clientId);
+    const owner = await userRepository.findOne({ uid: uid });
+    if (!owner) {
+      throw new Error("User is not existed.");
+    }
+    await userRepository.update(owner.uid, { appOwned: owner.appOwned - 1 });
+
+    return {
+      success: true,
+      status: 200,
+    };
+  };
+
+  isOwned = async (uid: string, clientId: string): Promise<boolean> => {
+    const app = await applicationRepository.findOneApp({ clientId });
+    if (!app) {
+      return false;
+    }
+    return app.ownerId === uid;
   };
 }
 export const applicationUsecase = new ApplicationUsecase();

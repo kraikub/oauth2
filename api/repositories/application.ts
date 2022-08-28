@@ -28,5 +28,10 @@ export default class ApplicationRepository {
     });
     return app === null ? false : true;
   }
+
+  deleteOne = async (clientId: string) => {
+    await mongodb.connect()
+    await ApplicationModel.deleteOne({ clientId })
+  }
 }
 export const applicationRepository = new ApplicationRepository()

@@ -70,7 +70,7 @@ const HomePage: FC = () => {
             <Box>
               <Box
                 px={10}
-                py={7}
+                py={3}
                 mb={8}
                 // bgImage={bgx.src}
                 // bgSize="cover"
@@ -80,13 +80,13 @@ const HomePage: FC = () => {
                 color="white"
                 boxShadow="10px 10px 0px #EE1D52, -10px -10px 0px #69C9D0"
                 rounded={4}
-                fontSize={24}
+                fontSize={18}
                 fontWeight={600}
                 fontFamily="'Roboto Mono', monospace"
               >
                 npm install kraikub
               </Box>
-              <Text textAlign="center" fontWeight={600} fontSize={18}>
+              <Text textAlign="center" fontWeight={600} fontSize={16}>
                 Proudly made for Developers.
               </Text>
             </Box>

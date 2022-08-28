@@ -143,6 +143,8 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
       const response = createResponse(true, "redirect url", {
         url: redirectUrl,
+        access: signedAuthJwtToken,
+        refresh: signedRenewJwtToken,
       });
       return res.status(200).send(response);
     }

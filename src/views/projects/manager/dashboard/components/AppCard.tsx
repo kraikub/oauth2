@@ -1,4 +1,4 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
+import { Badge, Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { Application } from "../../../../../../db/schema/application";
@@ -19,9 +19,13 @@ const AppCard: FC<AppCardProps> = ({ app }) => {
       overflow="hidden"
       cursor="pointer"
       onClick={() => router.push(`/projects/manager/${app.clientId}`)}
+      transition="300ms ease"
+      _hover={{
+        transform: "scale(1.04)",
+      }}
     >
       <Box
-        minH="60px"
+        h="80px"
         bg="katrade.main"
         backgroundImage={background.src}
         backgroundSize="cover"
