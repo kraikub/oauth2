@@ -176,13 +176,13 @@ const HomePage: FC = () => {
               <SyntaxHighlighter language="javascript" style={materialLight}>
                 {codeString}
               </SyntaxHighlighter>
-              <ButtonGroup my="20px">
+              <ButtonGroup my="20px" gap={3} flexWrap="wrap">
                 <Button
                   size="lg"
                   rounded="full"
                   bg="#c2f2d7"
                   _hover={{ bg: undefined }}
-                  color="#3c00b5"
+                  color="#004222"
                 >
                   Start now
                 </Button>
