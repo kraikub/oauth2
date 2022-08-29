@@ -21,7 +21,7 @@ interface SigninRequestSignal {
 const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
   const origin = useRef<string>("");
   const [secret, setSecret] = useState("");
-  const [isRecieveRequest, setIsRecieveRequest] = useState<boolean>(false)
+  const [isRecieveRequest, setIsRecieveRequest] = useState<boolean>(false);
   function msg(access: string, refresh: string) {
     if (typeof window !== "undefined") {
       // Client-side-only code
@@ -43,16 +43,26 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
       (event) => {
         // Do we trust the sender of this message?  (might be
         // different from what we originally opened, for example).
-        const data = `${event.data}`;
+        const data = event.data;
         if (event.data.ref === "kraikub-signin") {
           const req = event.data as SigninRequestSignal;
-          
-          if (req.secret && req.origin) {
+          if (req.type === "init") {
             origin.current = req.origin;
-            setSecret(req.secret);
-            setIsRecieveRequest(true);
+            if (origin.current) {
+              const initReport = {
+                ref: "kraikub-signin",
+                type: "init",
+              };
+              window.opener.postMessage(initReport, origin.current);
+            }
           }
-
+          if (req.type === "request") {
+            if (req.secret && req.origin) {
+              origin.current = req.origin;
+              setSecret(req.secret);
+              setIsRecieveRequest(true);
+            }
+          }
         }
       },
       false
