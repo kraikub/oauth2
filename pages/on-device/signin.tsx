@@ -44,7 +44,6 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
         // Do we trust the sender of this message?  (might be
         // different from what we originally opened, for example).
         const data = event.data;
-        console.log(data)
         if (event.data.ref === "kraikub-signin") {
           const req = event.data as SigninRequestSignal;
           if (req.type === "init") {
