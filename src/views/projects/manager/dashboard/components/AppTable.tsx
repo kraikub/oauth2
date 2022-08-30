@@ -1,13 +1,4 @@
 import {
-  TableContainer,
-  Table,
-  TableCaption,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Tfoot,
   Heading,
   Box,
   Flex,
@@ -15,7 +6,6 @@ import {
   VStack,
   Text,
   Center,
-  CircularProgress,
   Image,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -25,7 +15,6 @@ import { useUser } from "../../../../../contexts/User";
 import { appService } from "../../../../../services/appService";
 import AppCard from "./AppCard";
 import background from "../../../../../../public/bg-1.png";
-import loader from "../../../../../../public/loader.svg";
 import { InterWindLoader } from "../../../../../layouts/Loader";
 interface RowProps {
   app: Application;

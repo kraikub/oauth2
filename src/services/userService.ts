@@ -4,7 +4,7 @@ import { nextApiBaseInstance } from "../../libs/axios";
 
 class UserService {
   public get = async (accessToken: string) => {
-    const { status, data } = await nextApiBaseInstance.get<CustomApiResponse<User | null>>("/api/user", {
+    const { status, data } = await nextApiBaseInstance.get<CustomApiResponse<User | null>>("/api/public/user", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

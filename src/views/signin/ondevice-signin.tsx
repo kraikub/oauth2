@@ -32,6 +32,9 @@ import bg3 from "../../../public/bg-3.png";
 import ogImage from "../../../public/og-image.png";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { InterWindLoader } from "../../layouts/Loader";
+import { ScopeBadge } from "./components/ScopeBadge";
+import { RiAccountCircleFill } from "react-icons/ri";
+import { DataTips } from "../../components/DataTips";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
@@ -118,6 +121,7 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
             content="width=device-width, initial-scale=1.0"
           />
         </Head>
+        <DataTips />
         <Box bgImage={bg3.src}>
           <Container maxW={500} minH="100vh">
             <Center h="100vh" color="white">
@@ -164,7 +168,6 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
   }
 
   if (secret !== app?.secret && isRecieveRequest) {
-    console.log(secret, app?.secret);
     return (
       <Fragment>
         <Head>
@@ -290,41 +293,29 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
                 value={password}
               />
             </Box>
-            <Box
-              bg="green.50"
-              px="30px"
-              py="12px"
-              rounded={4}
-              w="full"
-              border="1px solid"
-              borderColor="green.100"
-            >
+            <Box bg="gray.100" px="20px" py="12px" rounded={4} w="full">
               <HStack spacing={2}>
-                <Heading fontWeight={700} fontSize="14px" color="gray.600">
-                  Data Privacy Warning
+                <Heading fontWeight={700} fontSize="14px">
+                  Data Protection
                 </Heading>
                 <MdPrivacyTip size="20px" />
               </HStack>
               <Divider my="10px" />
-              <Text fontSize={12}>
-                <Box as="span" fontWeight={600} color="katrade.main">
+              <Text fontSize={12} fontWeight={700}>
+                <Box as="span" color="katrade.main">
                   {app?.appName}
                 </Box>{" "}
                 want to access these personal data.
               </Text>
-              <UnorderedList
-                fontSize="12px"
-                fontWeight={500}
-                my={6}
-                color="gray.800"
-              >
-                <ListItem>Your full name.</ListItem>
-                <ListItem>Phone number and email.</ListItem>
-                <ListItem>Educational data such as faculty, major.</ListItem>
-              </UnorderedList>
+              <Flex flexWrap="wrap" gap={3} my={4}>
+                <ScopeBadge>
+                  <RiAccountCircleFill />
+                  Full Name
+                </ScopeBadge>
+              </Flex>
             </Box>
             <Checkbox
-              colorScheme="katrade"
+              colorScheme="katrade.scheme.fix"
               isChecked={pdpaAgreed}
               onChange={(e) => setPdpaAgreed(e.target.checked)}
             >
@@ -353,7 +344,6 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
           </Flex>
         </form>
       </Container>
-      {/* <Footer /> */}
     </Fragment>
   );
 };

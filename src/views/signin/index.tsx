@@ -2,6 +2,7 @@ import {
   Alert,
   AlertIcon,
   Avatar,
+  Badge,
   Box,
   Button,
   Center,
@@ -28,6 +29,11 @@ import { Query } from "../../types/query";
 import { PrimaryInput } from "./PrimaryInput";
 import { MdPrivacyTip } from "react-icons/md";
 import ogImage from "../../../public/og-image.png";
+import { RiAccountCircleFill } from "react-icons/ri";
+import { ScopeBadge } from "./components/ScopeBadge";
+import { AiFillInfoCircle } from "react-icons/ai";
+import bg3 from "../../../public/bg-3.png";
+import { DataTips } from "../../components/DataTips";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
@@ -81,7 +87,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
       return router.push(data.payload.url);
     } catch (error) {
       setIsSigninLoading(false);
-      console.error(error)
+      console.error(error);
       alert("Sign in failed, please try again.");
     }
   };
@@ -102,23 +108,47 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
             content="width=device-width, initial-scale=1.0"
           />
         </Head>
-        <Container maxW={500} minH="100vh">
-          <Center h="100vh">
-            <VStack spacing={5} textAlign="center">
-              <Heading fontWeight={500}>🤔</Heading>
-              <Heading size="md" fontWeight={500}>
-                เกิดข้อผิดพลาดขึ้น | Invalid Signin URL
-              </Heading>
-              <Text>ดูเหมือนว่าเราไม่สามารถดำเนินการลิงค์ของคุณได้</Text>
-              <Text color="gray.500">
-                คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ
-              </Text>
-              <HStack mt="50px !important">
-                <Button colorScheme="katrade.scheme.fix" rounded="full">แจ้งปัญหากับ Kraikub</Button>
-              </HStack>
-            </VStack>
-          </Center>
-        </Container>
+        <Box bgImage={bg3.src}>
+          <Container maxW={500} minH="100vh">
+            <Center h="100vh" color="white">
+              <VStack gap={5} textAlign="center">
+                <Heading fontWeight={500}>🤔</Heading>
+                <Heading>Invalid sign in URL</Heading>
+                <Text fontSize={20}>
+                  We cannot validate your sign in request.
+                </Text>
+                <Box
+                  maxW={400}
+                  textAlign="start"
+                  bg="white"
+                  color="black"
+                  px={4}
+                  py={6}
+                  rounded={10}
+                  my="30px !important"
+                  position="relative"
+                >
+                  <Box position="absolute" top="15px" right="15px">
+                    <AiFillInfoCircle size="26px" />
+                  </Box>
+                  <Heading size="md" mb={3}>
+                    What should I do next?
+                  </Heading>
+                  <Divider my={4} />
+                  <Text fontSize={14} mb={3}>
+                    If you are the developers of this app, the On-device signin
+                    is not working properly. Check your source code or contact
+                    our admins.
+                  </Text>
+                  <Text fontSize={14} mb={3}>
+                    If you are a user, the app that you are using is working
+                    wrong.
+                  </Text>
+                </Box>
+              </VStack>
+            </Center>
+          </Container>
+        </Box>
       </Fragment>
     );
   }
@@ -127,52 +157,68 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
     return (
       <Fragment>
         <Head>
-          <title>Authorization failed</title>
+          <title>Invalid Signin URL - ลิงค์ของคุณไม่สามารถใช้งานได้</title>
           <meta charSet="UTF-8" />
-          <meta name="description" content="Invalid OAuth login credentials." />
+          <meta
+            name="description"
+            content="เราไม่สามารถดำเนินการลิงค์ของคุณได้ คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ"
+          />
           <meta name="author" content="Kraikub Official" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"
           />
         </Head>
-        <Container maxW={500} minH="100vh">
-          <Center h="100vh">
-            <VStack spacing={5} textAlign="center">
-              <Heading fontWeight={500}>⚠️</Heading>
-              <Heading size="md" fontWeight={500}>
-                Secret authorization failed
-              </Heading>
-              <Text>
-                We could not authorize your app secret with{" "}
-                <strong>{app.appName}</strong>
-              </Text>
-              <Text color="gray.700">
-                Please contact your app developers or try the tip below.
-              </Text>
-              <Alert status="warning" rounded={8} textAlign="start">
-                <AlertIcon />
-                <Text fontSize={12} fontWeight={700}>
-                  Tip: If you are using developer mode. Please provide{" "}
-                  <Code fontSize={12} bg="white" color="pink.400">
-                    dev=true&secret={"<your-app-secret>"}
-                  </Code>{" "}
-                  as a query string in your signin url. App secret can be found
-                  in your application details page.
+        <Box bgImage={bg3.src}>
+          <Container maxW={500} minH="100vh">
+            <Center h="100vh" color="white">
+              <VStack gap={5} textAlign="center">
+                <Heading fontWeight={500}>⚠️</Heading>
+                <Heading>Unauthorized</Heading>
+                <Text fontSize={20}>
+                  This application are not allowed to use the sign in service.
+                  It might be misconfigured by the developers or might be
+                  harmful!
                 </Text>
-              </Alert>
-              <HStack mt="50px !important">
-                <Button colorScheme="katrade.scheme.fix" rounded="full">แจ้งปัญหากับ Kraikub</Button>
-              </HStack>
-            </VStack>
-          </Center>
-        </Container>
+                <Box
+                  maxW={400}
+                  textAlign="start"
+                  bg="white"
+                  color="black"
+                  px={4}
+                  py={6}
+                  rounded={10}
+                  my="30px !important"
+                  position="relative"
+                >
+                  <Box position="absolute" top="15px" right="15px">
+                    <AiFillInfoCircle size="26px" />
+                  </Box>
+                  <Heading size="md" mb={3}>
+                    {"What's hapenning?"}
+                  </Heading>
+                  <Divider my={4} />
+                  <Text fontSize={14} mb={3}>
+                    This application {`"${app?.appName}"`} tries to let you sign
+                    in to their app. But we are not sure that this is a real{" "}
+                    {`"${app?.appName}"`} app.
+                  </Text>
+                  <Text fontSize={14} mb={3}>
+                    <strong>Tip for devs:</strong> Your application secret is
+                    not correct.
+                  </Text>
+                </Box>
+              </VStack>
+            </Center>
+          </Container>
+        </Box>
       </Fragment>
     );
   }
 
   return (
     <Fragment>
+      <DataTips />
       <Head>
         <title>Signin with KU</title>
         <meta property="og:title" content={`Katrade - Sign in with KU`} />
@@ -226,49 +272,37 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
                 value={password}
               />
             </Box>
-            <Box
-              bg="green.50"
-              px="30px"
-              py="12px"
-              rounded={4}
-              w="full"
-              border="1px solid"
-              borderColor="green.100"
-            >
+            <Box bg="gray.100" px="20px" py="12px" rounded={4} w="full">
               <HStack spacing={2}>
-                <Heading fontWeight={700} fontSize="14px" color="gray.600">
-                  Data Privacy Warning
+                <Heading fontWeight={700} fontSize="14px">
+                  Data Protection
                 </Heading>
                 <MdPrivacyTip size="20px" />
               </HStack>
               <Divider my="10px" />
-              <Text fontSize={12}>
-                <Box as="span" fontWeight={600} color="katrade.main">
+              <Text fontSize={12} fontWeight={700}>
+                <Box as="span" color="katrade.main">
                   {app.appName}
                 </Box>{" "}
                 want to access these personal data.
               </Text>
-              <UnorderedList
-                fontSize="12px"
-                fontWeight={500}
-                my={6}
-                color="gray.800"
-              >
-                <ListItem>Your full name.</ListItem>
-                <ListItem>Phone number and email.</ListItem>
-                <ListItem>Educational data such as faculty, major.</ListItem>
-              </UnorderedList>
+              <Flex flexWrap="wrap" gap={3} my={4}>
+                <ScopeBadge>
+                  <RiAccountCircleFill />
+                  Full Name
+                </ScopeBadge>
+              </Flex>
             </Box>
             <Checkbox
-                colorScheme="katrade"
-                isChecked={pdpaAgreed}
-                onChange={(e) => setPdpaAgreed(e.target.checked)}
-              >
-                <Text fontSize={12} fontWeight={600}>
-                  I agree to share my data which is held by Kasetsart University
-                  with Kraikub and applications on Kraikub platform.
-                </Text>
-              </Checkbox>
+              colorScheme="katrade.scheme.fix"
+              isChecked={pdpaAgreed}
+              onChange={(e) => setPdpaAgreed(e.target.checked)}
+            >
+              <Text fontSize={12} fontWeight={600}>
+                I agree to share my data which is held by Kasetsart University
+                with Kraikub and applications on Kraikub platform.
+              </Text>
+            </Checkbox>
             <Button
               mt="5px"
               h="70px"
@@ -289,7 +323,6 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
           </Flex>
         </form>
       </Container>
-      {/* <Footer /> */}
     </Fragment>
   );
 };
