@@ -85,7 +85,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
       alert("Sign in failed, please try again.");
     }
   };
-  console.log(app, query.scope)
+
   if (app === null || query.scope === null) {
     return (
       <Fragment>
