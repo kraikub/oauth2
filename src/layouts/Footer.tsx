@@ -26,9 +26,16 @@ const Footer: FC = () => {
           <Text fontWeight={500}>Made with 💚 by my hands.</Text>
         </Center>
         <Center mt={4} gap={3}>
-          <Text fontWeight={800} fontSize={12}> Nutchanon</Text>
-          <BsGithub size="24px" />
-          <BsInstagram size="24px" />
+          <Text fontWeight={800} fontSize={12}>
+            {" "}
+            Nutchanon
+          </Text>
+          <a href="https://github.com/nutchanonc">
+            <BsGithub size="24px" />
+          </a>
+          <a href="https://instagram.com/beamuuuu">
+            <BsInstagram size="24px" />
+          </a>
         </Center>
       </Container>
     </Box>

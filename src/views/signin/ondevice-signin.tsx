@@ -1,20 +1,13 @@
 import {
-  Alert,
-  AlertIcon,
-  Avatar,
-  Badge,
   Box,
   Button,
   Center,
   Checkbox,
-  Code,
   Container,
   Divider,
   Flex,
   Heading,
   HStack,
-  Image,
-  Input,
   ListItem,
   Text,
   UnorderedList,
@@ -22,25 +15,41 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  FormEvent,
+  Fragment,
+  useEffect,
+  useState,
+} from "react";
 import { Application } from "../../../db/schema/application";
 import { authService } from "../../services/authService";
 import { Query } from "../../types/query";
 import { PrimaryInput } from "./PrimaryInput";
 import { MdPrivacyTip } from "react-icons/md";
-import ogImage from "../../../public/og-image.png";
-import { RiAccountCircleFill } from "react-icons/ri";
-import { ScopeBadge } from "./components/ScopeBadge";
-import { AiFillInfoCircle } from "react-icons/ai";
 import bg3 from "../../../public/bg-3.png";
+import ogImage from "../../../public/og-image.png";
+import { AiFillInfoCircle } from "react-icons/ai";
+import { InterWindLoader } from "../../layouts/Loader";
+import { ScopeBadge } from "./components/ScopeBadge";
+import { RiAccountCircleFill } from "react-icons/ri";
 import { DataTips } from "../../components/DataTips";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
+  secret: string;
+  isRecieveRequest: boolean;
   onSigninComplete?: (access: string, refresh: string) => void;
 }
 
-const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
+const OnDeviceSigninPage: FC<SigninPageProps> = ({
+  app,
+  query,
+  onSigninComplete,
+  secret,
+  isRecieveRequest,
+}) => {
   const router = useRouter();
   const [pdpaAgreed, setPdpaAgreed] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
@@ -79,7 +88,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
         query.scope as string,
         query.ref as string,
         bindStringToBoolean(query.dev),
-        query.secret as string | undefined
+        secret
       );
       if (onSigninComplete) {
         return onSigninComplete(data.payload.access, data.payload.refresh);
@@ -92,7 +101,11 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
     }
   };
 
-  if (app === null || query.scope === null) {
+  useEffect(() => {
+    console.log(secret);
+  }, [secret]);
+
+  if ((app === null || query.scope === null) && isRecieveRequest) {
     return (
       <Fragment>
         <Head>
@@ -108,6 +121,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
             content="width=device-width, initial-scale=1.0"
           />
         </Head>
+        <DataTips />
         <Box bgImage={bg3.src}>
           <Container maxW={500} minH="100vh">
             <Center h="100vh" color="white">
@@ -153,7 +167,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
     );
   }
 
-  if (query.dev === "true" && query.secret !== app?.secret) {
+  if (secret !== app?.secret && isRecieveRequest) {
     return (
       <Fragment>
         <Head>
@@ -216,15 +230,22 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
     );
   }
 
+  if (!isRecieveRequest) {
+    return (
+      <Center h="100vh">
+        <InterWindLoader />
+      </Center>
+    );
+  }
+
   return (
     <Fragment>
-      <DataTips />
       <Head>
         <title>Signin with KU</title>
         <meta property="og:title" content={`Katrade - Sign in with KU`} />
         <meta
           property="og:description"
-          content={`Sign in to ${app.appName} with your Kasetsart Account.`}
+          content={`Sign in to ${app?.appName} with your Kasetsart Account.`}
         />
         <meta property="og:image" content={ogImage.src} />
       </Head>
@@ -248,7 +269,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
             <Box mt="30px" w="full">
               <Text fontSize={14}>
                 <Box as="span" fontWeight={700} color="katrade.main">
-                  {app.appName}
+                  {app?.appName}
                 </Box>
                 {" wants you to sign in to their app."}
               </Text>
@@ -282,7 +303,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
               <Divider my="10px" />
               <Text fontSize={12} fontWeight={700}>
                 <Box as="span" color="katrade.main">
-                  {app.appName}
+                  {app?.appName}
                 </Box>{" "}
                 want to access these personal data.
               </Text>
@@ -326,4 +347,4 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
     </Fragment>
   );
 };
-export default SigninPage;
+export default OnDeviceSigninPage;

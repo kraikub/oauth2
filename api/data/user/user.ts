@@ -9,9 +9,7 @@ export const handleUserAPI = async (
   try {
     const { success, payload, error } = AuthMiddleware(req, res);
     if (!success) {
-      return res
-        .status(401)
-        .send(createResponse(false, `Unauthorized: ${error}`, null));
+      return;
     }
     if (req.method === "GET") {
       const user = await userRepository.findOne({ uid: payload.uid });

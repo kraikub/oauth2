@@ -15,8 +15,19 @@ import {
 import { FC, useState } from "react";
 import { useRouter } from "next/router";
 import bg from "../../../public/bg-2.png";
+import bgx from "../../../public/bg-1.png";
 import dataProtection from "../../../public/data-protection.png";
 import anonymous from "../../../public/anonymous.png";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { materialLight } from "react-syntax-highlighter/dist/cjs/styles/prism";
+
+const codeString = `const myapp = window.kraikub.createInstance({
+  clientId: "<clientId>",
+  secret: "<secret>"
+});
+myapp.onDeviceSignin(0, (access, refresh) => {
+  console.log("signed in");
+});`;
 
 const HomePage: FC = () => {
   const headerBaseStyles = {
@@ -33,7 +44,7 @@ const HomePage: FC = () => {
   return (
     <Box pb="100px">
       <Box
-        h="100vh"
+        minH="100vh"
         bgImage={bg.src}
         bgPosition="center"
         bgSize="cover"
@@ -53,7 +64,7 @@ const HomePage: FC = () => {
                 _hover={{ bg: undefined }}
                 onClick={() => router.push("/projects/manager")}
               >
-                Use Kraikub
+                Try now
               </Button>
               <Button
                 size="md"
@@ -65,6 +76,31 @@ const HomePage: FC = () => {
               </Button>
             </Flex>
           </Box>
+          <Center mt="180px">
+            <Box>
+              <Box
+                px={10}
+                py={3}
+                mb={8}
+                // bgImage={bgx.src}
+                // bgSize="cover"
+                // bgPos="center"
+                // color="white"
+                bg="#010101"
+                color="white"
+                boxShadow="10px 10px 0px #EE1D52, -10px -10px 0px #69C9D0"
+                rounded={4}
+                fontSize={18}
+                fontWeight={600}
+                fontFamily="'Roboto Mono', monospace"
+              >
+                npm install kraikub
+              </Box>
+              <Text textAlign="center" fontWeight={600} fontSize={16}>
+                Proudly made for Developers.
+              </Text>
+            </Box>
+          </Center>
         </Container>
       </Box>
       <Box>
@@ -133,6 +169,32 @@ const HomePage: FC = () => {
               </Box>
             </VStack>
           </SimpleGrid>
+
+          <Box my="100px">
+            <Heading>Sign in with less than 10 lines of code.</Heading>
+            <Box my="40px">
+              <SyntaxHighlighter language="javascript" style={materialLight}>
+                {codeString}
+              </SyntaxHighlighter>
+              <ButtonGroup my="20px" gap={3} flexWrap="wrap">
+                <Button
+                  size="lg"
+                  rounded="full"
+                  bg="#c2f2d7"
+                  _hover={{ bg: undefined }}
+                  color="#004222"
+                >
+                  Start now
+                </Button>
+                <Button size="lg" rounded="full">
+                  Demo
+                </Button>
+                <Button size="lg" rounded="full">
+                  Documentation
+                </Button>
+              </ButtonGroup>
+            </Box>
+          </Box>
 
           <VStack my="200px" gap={6}>
             <Heading {...headerBaseStyles} textAlign="center">

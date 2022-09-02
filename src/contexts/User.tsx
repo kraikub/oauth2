@@ -39,7 +39,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const handleRedirectToSigin = () => {
     const signinUrl = getSigninUrl({
-      redirectPath: router.route,
+      redirectPath: location.href,
     });
     router.push(signinUrl);
   };
@@ -102,7 +102,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   }, []);
 
   if (!render) {
-    return <Progress size="xs" isIndeterminate colorScheme="katrade" />;
+    return <Progress size="xs" isIndeterminate colorScheme="katrade.scheme.fix" />;
   }
   return (
     <userContext.Provider

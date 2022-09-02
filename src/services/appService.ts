@@ -55,6 +55,30 @@ class AppService {
     }
   }
 
+  public async deleteApplication(clientId: string, accessToken: string) {
+    const { status, data } = await nextApiBaseInstance.delete<CustomApiResponse<any>>(`/api/app/${clientId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (status === 200) {
+      return data;
+    }
+  }
+
+  public async updateAppplcation(clientId: string, accessToken: string, payload: any) {
+    const { data, status } = await nextApiBaseInstance.put<
+      CustomApiResponse<Application>
+    >(`/api/app/${clientId}`, payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    if (status === 200) {
+      return data;
+    }
+  }
+
   public async hasName(appNameToCheck: string) {
     const { data, status } = await nextApiBaseInstance.get<
       CustomApiResponse<boolean>

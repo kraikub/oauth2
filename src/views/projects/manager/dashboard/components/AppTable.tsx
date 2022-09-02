@@ -1,19 +1,12 @@
 import {
-  TableContainer,
-  Table,
-  TableCaption,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-  Tfoot,
   Heading,
   Box,
   Flex,
   Button,
   VStack,
   Text,
+  Center,
+  Image,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
@@ -22,26 +15,10 @@ import { useUser } from "../../../../../contexts/User";
 import { appService } from "../../../../../services/appService";
 import AppCard from "./AppCard";
 import background from "../../../../../../public/bg-1.png";
+import { InterWindLoader } from "../../../../../layouts/Loader";
 interface RowProps {
   app: Application;
 }
-
-const Row: FC<RowProps> = ({ app }) => {
-  const router = useRouter();
-  return (
-    <Tr
-      cursor="pointer"
-      _hover={{ bg: "gray.50" }}
-      onClick={() => router.push(`/projects/manager/${app.clientId}`)}
-    >
-      <Td>{app.clientId}</Td>
-      <Td fontWeight={600}>{app.appName}</Td>
-      <Td>{app.appType}</Td>
-      <Td isNumeric>0</Td>
-      <Td isNumeric>0</Td>
-    </Tr>
-  );
-};
 
 const AppTable: FC = () => {
   const router = useRouter();
@@ -66,15 +43,16 @@ const AppTable: FC = () => {
 
   const handleCreateAppClick = (limit: boolean) => {
     if (!limit) {
-      router.push("/projects/manager/create")
+      router.push("/projects/manager/create");
+    } else {
+      router.push("/pricing");
     }
-    else {
-      router.push("/pricing")
-    }
-  }
+  };
 
   if (!user) {
-    return null;
+    return (
+      <InterWindLoader />
+    );
   }
 
   if (!apps.length && !isLoading) {
@@ -111,14 +89,15 @@ const AppTable: FC = () => {
           Your Apps
         </Heading>
         <Button
-          colorScheme={user.appOwned >= user.appQuota ? "red" : "katrade.scheme.fix"}
+          colorScheme={
+            user.appOwned >= user.appQuota ? "red" : "katrade.scheme.fix"
+          }
           _hover={{ transform: "scale(1.05)" }}
           rounded="full"
           transition="300ms ease"
           onClick={() => handleCreateAppClick(user.appOwned >= user.appQuota)}
         >
           {user.appOwned >= user.appQuota ? "Upgrade plan" : "+ Create app"}
-          
         </Button>
       </Flex>
       <Box
@@ -130,17 +109,26 @@ const AppTable: FC = () => {
         rounded={10}
         color="white"
       >
-        <Heading size="xl">Hi {user.firstNameEn}, let{"'"}s build something.</Heading>
+        <Heading size="xl">
+          Hi {user.firstNameEn}, let{"'"}s build something.
+        </Heading>
         <Text fontWeight={600} fontSize={20} mt={7}>
-          {user ? `You have ${user.appQuota - user.appOwned} quota(s) left.` : ""}
+          {user
+            ? `You have ${user.appQuota - user.appOwned} quota(s) left.`
+            : ""}
         </Text>
       </Box>
-
-      <Flex flexWrap="wrap" gap={4} my={20}>
-        {apps.map((app, index) => (
-          <AppCard app={app} key={`app-${app.clientId}`} />
-        ))}
-      </Flex>
+      {isLoading ? (
+        <Center gap={3} py="40px">
+          <InterWindLoader />
+        </Center>
+      ) : (
+        <Flex flexWrap="wrap" gap={4} my={20}>
+          {apps.map((app, index) => (
+            <AppCard app={app} key={`app-${app.clientId}`} />
+          ))}
+        </Flex>
+      )}
     </Box>
   );
 };
