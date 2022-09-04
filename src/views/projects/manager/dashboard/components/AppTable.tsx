@@ -7,6 +7,8 @@ import {
   Text,
   Center,
   Image,
+  Center,
+  Image,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
@@ -15,6 +17,7 @@ import { useUser } from "../../../../../contexts/User";
 import { appService } from "../../../../../services/appService";
 import AppCard from "./AppCard";
 import background from "../../../../../../public/bg-1.png";
+import { InterWindLoader } from "../../../../../layouts/Loader";
 import { InterWindLoader } from "../../../../../layouts/Loader";
 interface RowProps {
   app: Application;
@@ -44,6 +47,8 @@ const AppTable: FC = () => {
   const handleCreateAppClick = (limit: boolean) => {
     if (!limit) {
       router.push("/projects/manager/create");
+    } else {
+      router.push("/pricing");;
     } else {
       router.push("/pricing");
     }
@@ -88,7 +93,9 @@ const AppTable: FC = () => {
         </Heading>
         <Button
           colorScheme={
+            
             user.appOwned >= user.appQuota ? "red" : "katrade.scheme.fix"
+          
           }
           _hover={{ transform: "scale(1.05)" }}
           rounded="full"
