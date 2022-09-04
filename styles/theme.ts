@@ -42,8 +42,8 @@ export const colors = {
 };
 
 const fonts = {
-  body: `'Manrope', 'Noto Sans Thai', sans-serif`,
-  heading: `'Manrope', 'Noto Sans Thai', sans-serif`,
+  body: `'Manrope', 'Sarabun', sans-serif`,
+  heading: `'Manrope','Sarabun', sans-serif`,
 };
 
 const components = {

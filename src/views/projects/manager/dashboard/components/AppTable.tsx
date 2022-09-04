@@ -50,9 +50,7 @@ const AppTable: FC = () => {
   };
 
   if (!user) {
-    return (
-      <InterWindLoader />
-    );
+    return <InterWindLoader />;
   }
 
   if (!apps.length && !isLoading) {
@@ -101,7 +99,7 @@ const AppTable: FC = () => {
         </Button>
       </Flex>
       <Box
-        py="100px"
+        py="60px"
         px={10}
         backgroundImage={background.src}
         backgroundSize="cover"
@@ -109,10 +107,9 @@ const AppTable: FC = () => {
         rounded={10}
         color="white"
       >
-        <Heading size="xl">
-          Hi {user.firstNameEn}, let{"'"}s build something.
-        </Heading>
-        <Text fontWeight={600} fontSize={20} mt={7}>
+        <Heading size="xl">Hi {user.firstNameEn}</Heading>
+        <Heading size="xl" mt={1}>Let{"'"}s build something.</Heading>
+        <Text fontWeight={600} fontSize={20} mt={4}>
           {user
             ? `You have ${user.appQuota - user.appOwned} quota(s) left.`
             : ""}

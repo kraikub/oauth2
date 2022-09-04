@@ -1,3 +1,0 @@
-interface MarkdownBaseProps {
-  markdownContent: string;
-}
