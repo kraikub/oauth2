@@ -7,8 +7,6 @@ import {
   Text,
   Center,
   Image,
-  Center,
-  Image,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
@@ -17,7 +15,6 @@ import { useUser } from "../../../../../contexts/User";
 import { appService } from "../../../../../services/appService";
 import AppCard from "./AppCard";
 import background from "../../../../../../public/bg-1.png";
-import { InterWindLoader } from "../../../../../layouts/Loader";
 import { InterWindLoader } from "../../../../../layouts/Loader";
 interface RowProps {
   app: Application;
@@ -49,8 +46,6 @@ const AppTable: FC = () => {
       router.push("/projects/manager/create");
     } else {
       router.push("/pricing");;
-    } else {
-      router.push("/pricing");
     }
   };
 
