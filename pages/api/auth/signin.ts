@@ -84,7 +84,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         await userUsecase.create({
           ...extracted,
           uid: uid,
-          appQuota: 5,
+          appQuota: 3,
           appOwned: 0,
           stdId: externalLoginResult.stdId,
           stdCode: externalLoginResult.stdCode,
