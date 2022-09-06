@@ -22,7 +22,7 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
   const origin = useRef<string>("");
   const [secret, setSecret] = useState("");
   const [isRecieveRequest, setIsRecieveRequest] = useState<boolean>(false);
-  function msg(access: string, refresh: string) {
+  function msg(access: string, refresh: string, u: PublicUserData) {
     if (typeof window !== "undefined") {
       // Client-side-only code
       const msgBody = {
@@ -31,6 +31,7 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
         success: true,
         access: access,
         refresh: refresh,
+        user: u,
       };
       window.opener.postMessage(msgBody, origin.current);
       setTimeout(() => window.close(), 1000);

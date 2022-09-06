@@ -40,7 +40,7 @@ interface SigninPageProps {
   app: Application | null;
   secret: string;
   isRecieveRequest: boolean;
-  onSigninComplete?: (access: string, refresh: string) => void;
+  onSigninComplete?: (access: string, refresh: string, u: PublicUserData) => void;
 }
 
 const OnDeviceSigninPage: FC<SigninPageProps> = ({
@@ -91,7 +91,7 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
         secret
       );
       if (onSigninComplete) {
-        return onSigninComplete(data.payload.access, data.payload.refresh);
+        return onSigninComplete(data.payload.access, data.payload.refresh, data.payload.user);
       }
       return router.push(data.payload.url);
     } catch (error) {
