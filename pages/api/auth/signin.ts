@@ -8,6 +8,7 @@ import { redirectToAuthenticateCallback } from "../../../api/utils/callback";
 import { handleApiError } from "../../../api/error";
 import { MyKULoginResponse } from "../../../api/types/myku/auth";
 import { ExtractFilter } from "../../../api/types/data/user";
+import { User } from "../../../db/schema/user";
 
 const extractFromSigninResponse = (obj: MyKULoginResponse): ExtractFilter => {
   return obj.user.student;
@@ -41,7 +42,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       );
       return res.status(400).send(response);
     } else {
-      const user = await userUsecase.findOne({
+      let user: User | null = await userUsecase.findOne({
         stdId: externalLoginResult.stdId,
         stdCode: externalLoginResult.stdCode,
       });
@@ -81,7 +82,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           phone,
           email,
         } = personal.results.stdPersonalModel;
-        await userUsecase.create({
+        user = await userUsecase.create({
           ...extracted,
           uid: uid,
           appQuota: 3,
@@ -136,6 +137,17 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       } else {
         selectedUrl = app.callbackUrl;
       }
+      const publicUser: PublicUserData = {
+        uid: user.uid,
+        firstNameEn: user.firstNameEn,
+        middleNameEn: user.middleNameEn,
+        lastNameEn: user.lastNameEn,
+        firstNameTh: user.firstNameTh,
+        middleNameTh: user.middleNameTh,
+        lastNameTh: user.lastNameTh,
+        appOwned: user.appOwned,
+        appQuota: user.appQuota,
+      }
       const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
         ref: ref,
         access: signedAuthJwtToken,
@@ -145,6 +157,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         url: redirectUrl,
         access: signedAuthJwtToken,
         refresh: signedRenewJwtToken,
+        user: publicUser,
       });
       return res.status(200).send(response);
     }

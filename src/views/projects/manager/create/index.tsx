@@ -37,9 +37,7 @@ export const CreateProjectPage: NextPage = () => {
     <UserProvider>
       <Navbar />
       <Container maxW="container.md" py="100px">
-        <Heading fontWeight={600} letterSpacing={-1}>
-          Tell us about your new app.
-        </Heading>
+        <Heading letterSpacing={-1}>Tell us about your new app.</Heading>
         <FormControl
           as="form"
           my={10}
@@ -59,9 +57,13 @@ export const CreateProjectPage: NextPage = () => {
               setLoading(false);
               return;
             }
-            const res = await appService.createApplication(data, ac);
-            setLoading(false);
-            router.push(`/projects/manager/${res?.payload.clientId}`);
+            try {
+              const res = await appService.createApplication(data, ac);
+              setLoading(false);
+              router.push(`/projects/manager/${res?.payload.clientId}`);
+            } catch (err) {
+              setLoading(false);
+            }
           })}
         >
           <FormLabel
@@ -77,36 +79,22 @@ export const CreateProjectPage: NextPage = () => {
             {...register("appName")}
             size="sm"
             isInvalid={hasName}
+            rounded={8}
           />
 
           <FormLabel htmlFor="app-details" mt={6}>
             Tell us more about your application
           </FormLabel>
-          <Textarea {...register("appDescription")} />
+          <Textarea {...register("appDescription")} rounded={8} />
 
           <FormLabel htmlFor="app-creator" mt={6}>
             Creator name
           </FormLabel>
-          <Input id="app-creator" size="sm" {...register("creatorName")} />
-
-          <FormLabel htmlFor="app-url" mt={6}>
-            Callback URL
-          </FormLabel>
           <Input
-            id="app-url"
+            id="app-creator"
             size="sm"
-            placeholder="Ex. https://example.com/callback"
-            {...register("callbackUrl")}
-          />
-
-          <FormLabel htmlFor="app-local-url" mt={6}>
-            Development callback URL
-          </FormLabel>
-          <Input
-            id="app-local-url"
-            size="sm"
-            placeholder="Ex. http://localhost:3000/callback or http://127.0.0.1:8080/callback"
-            {...register("devCallbackUrl")}
+            {...register("creatorName")}
+            rounded={8}
           />
 
           <FormLabel htmlFor="app-type" mt={6}>
@@ -116,6 +104,8 @@ export const CreateProjectPage: NextPage = () => {
             id="app-type"
             placeholder="Select type"
             {...register("appType")}
+            rounded={8}
+            boxShadow="0 4px 4px #00000010"
           >
             {typeOptions.map((opt, index) => (
               <option key={`${opt.name}-${index}`} value={opt.value}>
@@ -124,13 +114,15 @@ export const CreateProjectPage: NextPage = () => {
             ))}
           </Select>
           <ButtonGroup mt={10}>
-            <Button type="submit" colorScheme="gray">
+            <Button type="submit" colorScheme="gray" rounded={14} size="lg">
               Cancel
             </Button>
             <Button
               type="submit"
               colorScheme="katrade.scheme.fix"
               isLoading={loading}
+              rounded={14}
+              size="lg"
             >
               Create
             </Button>

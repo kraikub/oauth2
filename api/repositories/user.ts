@@ -19,7 +19,8 @@ class UserRepository {
     return UserModel.findOne<User>(filter);
   };
   create = async (u: User) => {
-    return await UserModel.create<User>(u);
+    await UserModel.create<User>(u);
+    return u;
   }
   update = async (uid: string, update: UserUpdatableFields) => {
     return await UserModel.updateOne<User>({ uid: uid }, update)

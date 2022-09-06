@@ -2,23 +2,6 @@ import { User } from "../../db/schema/user";
 import { PossibleEmptyField } from "../../scopes";
 import { userRepository } from "../repositories/user";
 
-interface UserFilter {
-  uid?: string;
-  stdId?: string;
-  stdCode?: string;
-}
-
-interface PublicUserData {
-  uid: string;
-  firstNameTh: string;
-  middleNameTh: PossibleEmptyField;
-  lastNameTh: string;
-  firstNameEn: string;
-  middleNameEn: PossibleEmptyField;
-  lastNameEn: string;
-  appQuota: number;
-  appOwned: number;
-}
 
 export class UserUsecase {
   publicData = async (uid: string):Promise<PublicUserData | null> => {

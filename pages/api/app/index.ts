@@ -33,8 +33,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         !appName ||
         !appDescription ||
         !creatorName ||
-        !callbackUrl ||
-        !devCallbackUrl ||
         !appType
       ) {
         return res
@@ -45,9 +43,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         appName,
         appDescription,
         creatorName,
-        callbackUrl,
-        devCallbackUrl,
         appType,
+        callbackUrl: "",
+        devCallbackUrl: "",
         clientId: crypto.randomBytes(16).toString("hex"),
         secret: crypto.randomBytes(28).toString("hex"),
         ownerId: payload.uid,

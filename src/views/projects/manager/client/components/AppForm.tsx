@@ -38,6 +38,7 @@ import { useForm } from "react-hook-form";
 import { appService } from "../../../../../services/appService";
 import { useRouter } from "next/router";
 import { useUser } from "../../../../../contexts/User";
+import { noWhiteSpace } from "../../../../../utils/string";
 
 interface AppFormProps {
   app: Application;
@@ -489,7 +490,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               <Text mb={3}>
                 Please type{" "}
                 <Box as="span" fontWeight={700} color="red.500">
-                  delete/{app.appName}
+                  delete/{noWhiteSpace(app.appName)}
                 </Box>{" "}
                 to continue the progress.
               </Text>
