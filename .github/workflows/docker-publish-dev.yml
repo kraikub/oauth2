@@ -17,13 +17,20 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
-
+  IMAGE_NAME: ${{ github.repository }}-develop
+  
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  MONGODB_URL: ${{ secrets.MONGODB_URL }}
+  MYKU_APPKEY: ${{ secrets.MYKU_APPKEY }}
+  MYKU_AUTH_URL: ${{ secrets.MYKU_AUTH_URL }}
+  NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
+  IDENTITY_SECRET: ${{ secrets.IDENTITY_SECRET }}
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: development
     permissions:
       contents: read
       packages: write
@@ -74,8 +81,9 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: MONGODB_URL_ARG=${{env.MONGODB_URL}},NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }},MYKU_AUTH_URL=${{ env.MYKU_AUTH_URL }},MYKU_APPKEY=${{ env.MYKU_APPKEY }},JWT_SECRET=${{ env.JWT_SECRET }},IDENTITY_SECRET=${{ secrets.IDENTITY_SECRET }}
 
       # Sign the resulting Docker image digest except on PRs.
       # This will only write to the public Rekor transparency log when the Docker
