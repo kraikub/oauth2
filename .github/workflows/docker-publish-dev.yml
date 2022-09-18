@@ -1,4 +1,4 @@
-name: Docker
+name: Build and Deploy (dev)
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -6,8 +6,6 @@ name: Docker
 # documentation.
 
 on:
-  schedule:
-    - cron: '20 17 * * *'
   push:
     branches: [ "develop" ]
     # Publish semver tags as releases.
@@ -83,17 +81,19 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: MONGODB_URL_ARG=${{env.MONGODB_URL}},NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }},MYKU_AUTH_URL=${{ env.MYKU_AUTH_URL }},MYKU_APPKEY=${{ env.MYKU_APPKEY }},JWT_SECRET=${{ env.JWT_SECRET }},IDENTITY_SECRET=${{ secrets.IDENTITY_SECRET }}
+          build-args: NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
 
-      # Sign the resulting Docker image digest except on PRs.
-      # This will only write to the public Rekor transparency log when the Docker
-      # repository is public to avoid leaking data.  If you would like to publish
-      # transparency data even for private images, pass --force to cosign below.
-      # https://github.com/sigstore/cosign
-      - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
+      # Remote
+      - name: Deploy to development
+        uses: appleboy/ssh-action@master
         env:
-          COSIGN_EXPERIMENTAL: "true"
-        # This step uses the identity token to provision an ephemeral certificate
-        # against the sigstore community Fulcio instance.
-        run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USERNAME }}
+          password: ${{ secrets.VM_PASSWORD }}
+          port: ${{ secrets.VM_PORT }}
+          envs: GIT_USERNAME, GITHUB_TOKEN
+          script: ""
+
