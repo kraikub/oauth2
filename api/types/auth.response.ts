@@ -14,8 +14,6 @@ export interface AccessTokenBody {
   clientId: string;
   accessToken: string;
   scope: string;
-  stdId: string;
-  stdCode: string;
   uid: string;
 }
 

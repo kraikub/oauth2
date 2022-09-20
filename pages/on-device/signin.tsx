@@ -22,6 +22,7 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
   const origin = useRef<string>("");
   const [secret, setSecret] = useState("");
   const [isRecieveRequest, setIsRecieveRequest] = useState<boolean>(false);
+  const pass = useRef<boolean>(false);
   function msg(access: string, refresh: string, u: PublicUserData) {
     if (typeof window !== "undefined") {
       // Client-side-only code
@@ -62,12 +63,18 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
               origin.current = req.origin;
               setSecret(req.secret);
               setIsRecieveRequest(true);
+              pass.current = true;
             }
           }
         }
       },
       false
     );
+    setTimeout(() => {
+      if (!pass.current) {
+        alert("Operation timeout, please try again.");
+      }
+    }, 20000);
   }, []);
   return (
     <>

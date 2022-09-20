@@ -10,7 +10,7 @@ export const ProjectManagerDashboard: NextPage = () => {
     <>
       <UserProvider>
         <Navbar />
-        <Container maxW="container.xl">
+        <Container maxW="container.lg">
           <AppTable />
         </Container>
       </UserProvider>

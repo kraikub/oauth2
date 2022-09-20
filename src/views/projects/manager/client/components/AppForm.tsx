@@ -212,7 +212,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             </Text>
           </GridItem>
           <GridItem colSpan={[12, 8]}>
-            <FieldContainer title="Client ID Name">
+            <FieldContainer title="Client ID">
               <HStack>
                 <Input
                   variant="unstyled"
@@ -267,7 +267,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 >
                   {hideSecret ? "Reveal" : "Hide"}
                 </Button>
-                <Button
+                {/* <Button
                   rounded="full"
                   colorScheme="teal"
                   size="md"
@@ -275,7 +275,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                   onClick={() => alert("not ready")}
                 >
                   New Secret
-                </Button>
+                </Button> */}
               </ButtonGroup>
             </FieldContainer>
           </GridItem>
@@ -517,7 +517,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               colorScheme="red"
               size="sm"
               onClick={handleDeleteApp}
-              disabled={deleteInputValue !== `delete/${app.appName}`}
+              disabled={deleteInputValue !== `delete/${noWhiteSpace(app.appName)}`}
             >
               Delete it 🚀
             </Button>

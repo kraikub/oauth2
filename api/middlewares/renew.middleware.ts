@@ -16,9 +16,7 @@ export const RenewMiddleware = (
       accessTokenPayload: {
         accessToken: "",
         scope: "",
-        stdId: "",
         clientId: "",
-        stdCode: "",
         uid: "",
       },
       refreshTokenPayload: { refreshToken: "" },
@@ -35,9 +33,7 @@ export const RenewMiddleware = (
       accessTokenPayload: {
         accessToken: "",
         scope: "",
-        stdId: "",
         clientId: "",
-        stdCode: "",
         uid: "",
       },
       refreshTokenPayload: { refreshToken: "" },
@@ -46,16 +42,12 @@ export const RenewMiddleware = (
   let output: AccessTokenBody = {
     accessToken: "",
     scope: "",
-    stdId: "",
     clientId: "",
-    stdCode: "",
     uid: "",
   };
   output.accessToken = payload?.accessToken;
   output.scope = payload?.scope;
-  output.stdId = payload?.stdId;
   output.clientId = payload?.clientId;
-  output.stdCode = payload?.stdCode;
   output.uid = payload?.uid;
 
   const { refreshToken } = req.body;
@@ -71,9 +63,7 @@ export const RenewMiddleware = (
       accessTokenPayload: {
         accessToken: "",
         scope: "",
-        stdId: "",
         clientId: "",
-        stdCode: "",
         uid: "",
       },
       refreshTokenPayload: { refreshToken: "" },
