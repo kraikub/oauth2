@@ -34,6 +34,7 @@ import { ScopeBadge } from "./components/ScopeBadge";
 import { AiFillInfoCircle } from "react-icons/ai";
 import bg3 from "../../../public/bg-3.png";
 import { DataTips } from "../../components/DataTips";
+import { SigninForm } from "./components/SigninForm";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
@@ -217,113 +218,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
   }
 
   return (
-    <Fragment>
-      <DataTips />
-      <Head>
-        <title>Signin with KU</title>
-        <meta property="og:title" content={`Katrade - Sign in with KU`} />
-        <meta
-          property="og:description"
-          content={`Sign in to ${app.appName} with your Kasetsart Account.`}
-        />
-        <meta property="og:image" content={ogImage.src} />
-      </Head>
-      <Container maxW={500} minH="100vh" py="4%">
-        <form onSubmit={handleSigninEvent}>
-          <Flex
-            boxShadow="0 6px 30px 20px #00000010"
-            rounded={16}
-            minH="60vh"
-            h="auto"
-            px="30px"
-            py="40px"
-            direction="column"
-            alignItems="center"
-            gap="20px"
-            justifyContent="space-between !important"
-          >
-            <Heading fontSize="22px" fontWeight={800} letterSpacing={-1}>
-              Sign in with KU Account
-            </Heading>
-            <Box mt="30px" w="full">
-              <Text fontSize={14}>
-                <Box as="span" fontWeight={700} color="katrade.main">
-                  {app.appName}
-                </Box>
-                {" wants you to sign in to their app."}
-              </Text>
-            </Box>
-            <Box mt="10px" w="full">
-              <Text fontSize={12} fontWeight={500}>
-                KU Username
-              </Text>
-              <PrimaryInput
-                placeholder="Ex. b621050XXXX"
-                onChange={handleUsernameChange}
-                value={username}
-              />
-              <Text fontSize={12} mt={5} fontWeight={500}>
-                Password
-              </Text>
-              <PrimaryInput
-                placeholder="Password"
-                type="password"
-                onChange={handlePasswordChange}
-                value={password}
-              />
-            </Box>
-            <Box bg="gray.100" px="20px" py="12px" rounded={4} w="full">
-              <HStack spacing={2}>
-                <Heading fontWeight={700} fontSize="14px">
-                  Data Protection
-                </Heading>
-                <MdPrivacyTip size="20px" />
-              </HStack>
-              <Divider my="10px" />
-              <Text fontSize={12} fontWeight={700}>
-                <Box as="span" color="katrade.main">
-                  {app.appName}
-                </Box>{" "}
-                want to access these personal data.
-              </Text>
-              <Flex flexWrap="wrap" gap={3} my={4}>
-                <ScopeBadge>
-                  <RiAccountCircleFill />
-                  Full Name
-                </ScopeBadge>
-              </Flex>
-            </Box>
-            <Checkbox
-              colorScheme="katrade.scheme.fix"
-              isChecked={pdpaAgreed}
-              onChange={(e) => setPdpaAgreed(e.target.checked)}
-            >
-              <Text fontSize={12} fontWeight={600}>
-                I agree to share my data which is held by Kasetsart University
-                with Kraikub and applications on Kraikub platform.
-              </Text>
-            </Checkbox>
-            <Button
-              mt="5px"
-              h="70px"
-              w="full"
-              colorScheme="katrade.scheme.fix"
-              fontSize="1rem"
-              fontWeight={700}
-              rounded={6}
-              isLoading={isSigninButtonLoading}
-              _hover={{
-                boxShadow: "0 0 10px #00000030",
-              }}
-              type="submit"
-              disabled={!pdpaAgreed}
-            >
-              Sign in
-            </Button>
-          </Flex>
-        </form>
-      </Container>
-    </Fragment>
+    <SigninForm app={app} query={query} />
   );
 };
 export default SigninPage;

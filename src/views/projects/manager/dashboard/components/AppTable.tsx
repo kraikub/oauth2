@@ -7,6 +7,7 @@ import {
   Text,
   Center,
   Image,
+  IconButton,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
@@ -16,6 +17,7 @@ import { appService } from "../../../../../services/appService";
 import AppCard from "./AppCard";
 import background from "../../../../../../public/bg-1.png";
 import { InterWindLoader } from "../../../../../layouts/Loader";
+import { MdOutlineAdd } from "react-icons/md";
 interface RowProps {
   app: Application;
 }
@@ -45,7 +47,7 @@ const AppTable: FC = () => {
     if (!limit) {
       router.push("/projects/manager/create");
     } else {
-      router.push("/pricing");;
+      router.push("/pricing");
     }
   };
 
@@ -88,16 +90,15 @@ const AppTable: FC = () => {
         </Heading>
         <Button
           colorScheme={
-            
             user.appOwned >= user.appQuota ? "red" : "katrade.scheme.fix"
-          
           }
           _hover={{ transform: "scale(1.05)" }}
-          rounded="full"
+          rounded={12}
           transition="300ms ease"
+          size="lg"
           onClick={() => handleCreateAppClick(user.appOwned >= user.appQuota)}
         >
-          {user.appOwned >= user.appQuota ? "Upgrade plan" : "+ Create app"}
+          {user.appOwned >= user.appQuota ? "Upgrade plan" : "Create"}
         </Button>
       </Flex>
       <Box
@@ -110,7 +111,9 @@ const AppTable: FC = () => {
         color="white"
       >
         <Heading size="xl">Hi {user.firstNameEn}</Heading>
-        <Heading size="xl" mt={1}>Let{"'"}s build something.</Heading>
+        <Heading size="xl" mt={1}>
+          Let{"'"}s build something.
+        </Heading>
         <Text fontWeight={600} fontSize={20} mt={4}>
           {user
             ? `You have ${user.appQuota - user.appOwned} quota(s) left.`
@@ -126,6 +129,11 @@ const AppTable: FC = () => {
           {apps.map((app, index) => (
             <AppCard app={app} key={`app-${app.clientId}`} />
           ))}
+          <Center display={["none", "flex"]}>
+            <IconButton aria-label="add-button" size="lg" rounded="full" onClick={() => handleCreateAppClick(user.appOwned >= user.appQuota)}>
+              <MdOutlineAdd />
+            </IconButton>
+          </Center>
         </Flex>
       )}
     </Box>

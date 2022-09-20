@@ -9,6 +9,7 @@ import { handleApiError } from "../../../api/error";
 import { MyKULoginResponse } from "../../../api/types/myku/auth";
 import { ExtractFilter } from "../../../api/types/data/user";
 import { User } from "../../../db/schema/user";
+import { createAnonymousIdentity } from "../../../api/utils/crypto";
 
 const extractFromSigninResponse = (obj: MyKULoginResponse): ExtractFilter => {
   return obj.user.student;
@@ -147,22 +148,33 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         lastNameTh: user.lastNameTh,
         appOwned: user.appOwned,
         appQuota: user.appQuota,
-      }
+      };
       const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
         ref: ref,
         access: signedAuthJwtToken,
         refresh: signedRenewJwtToken,
       });
-      const response = createResponse(true, "redirect url", {
-        url: redirectUrl,
-        access: signedAuthJwtToken,
-        refresh: signedRenewJwtToken,
-        user: publicUser,
-      });
+      const response =
+        scope === "0"
+          ? {
+              access: signAuthObject(
+                { user: createAnonymousIdentity(uid, clientId) },
+                "1d"
+              ),
+              user: {
+                uid: createAnonymousIdentity(uid, clientId),
+              }
+            }
+          : createResponse(true, "Authorized", {
+              url: redirectUrl,
+              access: signedAuthJwtToken,
+              refresh: signedRenewJwtToken,
+              user: publicUser,
+            });
       return res.status(200).send(response);
     }
   } catch (error) {
-    console.error(error)
+    console.error(error);
     handleApiError(res, error);
   }
 };

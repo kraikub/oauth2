@@ -114,7 +114,7 @@ export const CreateProjectPage: NextPage = () => {
             ))}
           </Select>
           <ButtonGroup mt={10}>
-            <Button type="submit" colorScheme="gray" rounded={14} size="lg">
+            <Button type="submit" colorScheme="gray" rounded={14} size="lg" onClick={() => router.push("/projects/manager")}>
               Cancel
             </Button>
             <Button

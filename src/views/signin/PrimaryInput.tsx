@@ -3,14 +3,20 @@ import { FC } from "react";
 import { colors } from "../../../styles/theme";
 
 interface PrimaryInputProps {
-    width?: string 
+    width?: string; 
+    backgroundColor?: string;
+    placeholderColor?: string;
 }
 
-export const PrimaryInput: StyledComponent<"input", PrimaryInputProps> = styled.input`
+type WrappedPrimaryInputProps = StyledComponent<"input", PrimaryInputProps>
+
+export const PrimaryInput: WrappedPrimaryInputProps= styled.input`
     height: 50px;
-    width: ${(props) => props.width ? props.width : "100%"};
-    background: transparent;
-    padding: 0;
+    margin-top: 4px;
+    width: ${(props: WrappedPrimaryInputProps) => props.width ? props.width : "100%"};
+    background: ${(props: WrappedPrimaryInputProps) => props.backgroundColor ? props.backgroundColor : "transparent"};
+    border-radius: 8px 8px 0 0;
+    padding: 0 10px 0 10px;
     border: solid #00000020;
     border-width: 0 0 2px 0;
     font-weight: 500;
@@ -26,6 +32,6 @@ export const PrimaryInput: StyledComponent<"input", PrimaryInputProps> = styled.
         border-color: #00000040;
     }
     &::placeholder {
-      color: #ccd6e0;
+      color: ${(props: WrappedPrimaryInputProps) => props.placeholderColor ? props.placeholderColor : "#ccd6e0"};
     }
 `
