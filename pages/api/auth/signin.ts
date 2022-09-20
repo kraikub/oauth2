@@ -156,7 +156,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       });
       const response =
         scope === "0"
-          ? {
+          ? createResponse(true, "Authorized", {
               access: signAuthObject(
                 { user: createAnonymousIdentity(uid, clientId) },
                 "1d"
@@ -164,7 +164,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
               user: {
                 uid: createAnonymousIdentity(uid, clientId),
               }
-            }
+            })
           : createResponse(true, "Authorized", {
               url: redirectUrl,
               access: signedAuthJwtToken,
