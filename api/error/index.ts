@@ -11,12 +11,12 @@ export const handleErrResponse = (
   return res.status(status).send(createResponse(false, message, payload));
 };
 
-export const handleApiError = (res: NextApiResponse, error: unknown) => {
+export const handleApiError = (res: NextApiResponse, error: any) => {
   if (axios.isAxiosError(error)) {
     res
       .status(error.response?.status as number)
       .send(createResponse(false, error.response?.statusText as string, {}));
   } else {
-    res.status(500).send(createResponse(false, error as string, {}));
+    res.status(500).send(createResponse(false, error.toString() as string, {}));
   }
 };
