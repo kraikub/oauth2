@@ -1,10 +1,9 @@
 import { Query } from "../../src/types/query";
 import type { GetServerSideProps, NextPage } from "next";
 import { applicationRepository } from "../../api/repositories/application";
-import { Application } from "../../db/schema/application";
 import SigninPage from "../../src/views/signin";
 import { useEffect, useRef, useState } from "react";
-import OnDeviceSigninPage from "../../src/views/signin/ondevice-signin";
+import OnDeviceSigninPage from "../../src/views/signin/sdk-signin";
 
 interface SigninPageProps {
   query: Query;
@@ -23,16 +22,14 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
   const [secret, setSecret] = useState("");
   const [isRecieveRequest, setIsRecieveRequest] = useState<boolean>(false);
   const pass = useRef<boolean>(false);
-  function msg(access: string, refresh: string, u: PublicUserData) {
+  function msg(ctoken: string) {
     if (typeof window !== "undefined") {
       // Client-side-only code
       const msgBody = {
         ref: "kraikub-signin",
         type: "report",
         success: true,
-        access: access,
-        refresh: refresh,
-        user: u,
+        ctoken: ctoken,
       };
       window.opener.postMessage(msgBody, origin.current);
       setTimeout(() => window.close(), 1000);

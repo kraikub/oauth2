@@ -18,7 +18,7 @@ import {
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { useUser } from "../contexts/User";
-import { HiHome } from "react-icons/hi";
+import { MdDashboardCustomize } from "react-icons/md";
 import logo from "../../public/logo.png";
 const Navbar: FC = () => {
   const router = useRouter();
@@ -47,13 +47,14 @@ const Navbar: FC = () => {
       {user ? (
         <Flex alignItems="center" gap={4}>
           <Button
-            rounded="full"
             aria-label="home"
+            variant="ghost"
+            colorScheme="teal"
             gap={1}
             onClick={() => router.push("/projects/manager")}
           >
-            <HiHome size="20px" />
-            <Heading size="sm">Home</Heading>
+            <MdDashboardCustomize size="20px" />
+            <Heading size="sm">แอปพลิเคชัน</Heading>
           </Button>
           <Menu>
             <MenuButton>
@@ -65,7 +66,7 @@ const Navbar: FC = () => {
                   _active={{ bg: undefined }}
                 >
                   <Avatar
-                    name={`${user?.firstNameEn} ${user?.lastNameEn}`}
+                    name={user.student.nameEn.split(" ").slice(1).join(" ")}
                     size="sm"
                   />
                 </IconButton>
@@ -73,10 +74,10 @@ const Navbar: FC = () => {
             </MenuButton>
             <MenuList fontSize={14}>
               <Box px={4} py={3} fontSize={12} fontWeight={500}>
-                <Text>Signed in as </Text>
+                <Text>เข้าสู่ระบบด้วย</Text>
 
                 <Text fontWeight={600}>
-                  {user.firstNameEn} {user.lastNameEn[0]}.
+                  {user.student.nameTh.split(" ").slice(1).join(" ")}
                 </Text>
               </Box>
               <Divider mb={4} />
@@ -84,7 +85,7 @@ const Navbar: FC = () => {
                 fontWeight={500}
                 onClick={() => router.push("/projects/manager")}
               >
-                Your Apps
+                แอป
               </MenuItem>
               <MenuItem
                 color="red.600"
@@ -92,7 +93,7 @@ const Navbar: FC = () => {
                 fontWeight={500}
                 onClick={signout}
               >
-                Sign out
+                ออกจากระบบ
               </MenuItem>
             </MenuList>
           </Menu>

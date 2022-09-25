@@ -35,3 +35,6 @@ yarn-error.log*
 *.tsbuildinfo
 
 tmp.js
+
+# for local development files
+db

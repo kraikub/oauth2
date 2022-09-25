@@ -1,4 +1,6 @@
 import { CustomApiResponse } from "../../api/types/response";
+import { sha256 } from "../../api/utils/crypto";
+import { RSAEncryptionForMyKU } from "../../api/utils/rsa";
 import { nextApiBaseInstance } from "../../libs/axios";
 
 class AuthService {
@@ -12,10 +14,11 @@ class AuthService {
     secret?: string
   ) => {
     const { status, data } = await nextApiBaseInstance.post<
-      CustomApiResponse<{ url: string; access: string; refresh: string, user: PublicUserData }>
+      CustomApiResponse<{ url: string; ctoken: string }>
     >("/api/auth/signin", {
-      username: username,
-      password: password,
+      username: RSAEncryptionForMyKU(username),
+      password: RSAEncryptionForMyKU(password),
+      sig: sha256(username),
       clientId: clientId,
       scope: scope,
       ref: ref,
@@ -39,6 +42,23 @@ class AuthService {
         },
       }
     );
+    return { status, data };
+  };
+
+  public validateSigninSignature = async (username: string) => {
+    const { status, data } = await nextApiBaseInstance.post<
+      CustomApiResponse<{ validateResult: boolean }>
+    >("/api/private/user/validate", {
+      sig: sha256(username),
+    });
+    return { status, data };
+  };
+
+  public claimAccessToken = async (ctoken: string) => {
+    console.log("claiming access token...")
+    const { status, data } = await nextApiBaseInstance.get<
+      CustomApiResponse<{ user: UserWithStudent }>
+    >(`/api/public/claim?ctoken=${ctoken}`);
     return { status, data };
   };
 }

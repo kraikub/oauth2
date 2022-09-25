@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
-import { Application } from "../../../../../../db/schema/application";
 import { useUser } from "../../../../../contexts/User";
 import { appService } from "../../../../../services/appService";
 import AppCard from "./AppCard";
@@ -31,9 +30,7 @@ const AppTable: FC = () => {
 
   const getApps = async () => {
     setIsLoading(true);
-    const access = localStorage.getItem("access");
-    if (!access) return alert("Token not found!");
-    const a = await appService.getApplications(access);
+    const a = await appService.getApplications();
     if (!a) return alert("Fetch apps failed!");
     setApps(a);
     setIsLoading(false);
@@ -86,7 +83,7 @@ const AppTable: FC = () => {
     <Box my={20}>
       <Flex justifyContent="space-between" my={8}>
         <Heading size="lg" mb={10} letterSpacing={-1}>
-          Your Apps
+        แอปพลิเคชันของคุณ
         </Heading>
         <Button
           colorScheme={
@@ -98,7 +95,7 @@ const AppTable: FC = () => {
           size="lg"
           onClick={() => handleCreateAppClick(user.appOwned >= user.appQuota)}
         >
-          {user.appOwned >= user.appQuota ? "Upgrade plan" : "Create"}
+          {user.appOwned >= user.appQuota ? "คุณใช้สิทธิหมดแล้ว" : "สร้างแอป"}
         </Button>
       </Flex>
       <Box
@@ -110,13 +107,10 @@ const AppTable: FC = () => {
         rounded={10}
         color="white"
       >
-        <Heading size="xl">Hi {user.firstNameEn}</Heading>
-        <Heading size="xl" mt={1}>
-          Let{"'"}s build something.
-        </Heading>
+        <Heading size="xl">{user.student.nameTh}</Heading>
         <Text fontWeight={600} fontSize={20} mt={4}>
           {user
-            ? `You have ${user.appQuota - user.appOwned} quota(s) left.`
+            ? `คุณสามารถสร้างแอปได้อีก ${user.appQuota - user.appOwned} แอป`
             : ""}
         </Text>
       </Box>

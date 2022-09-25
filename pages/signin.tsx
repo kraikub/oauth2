@@ -1,6 +1,5 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { applicationRepository } from "../api/repositories/application";
-import { Application } from "../db/schema/application";
 import { Query } from "../src/types/query";
 import SigninPage from "../src/views/signin";
 

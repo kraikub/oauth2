@@ -6,12 +6,6 @@ interface UserFilter {
 
 interface PublicUserData {
   uid: string;
-  firstNameTh: string;
-  middleNameTh: PossibleEmptyField;
-  lastNameTh: string;
-  firstNameEn: string;
-  middleNameEn: PossibleEmptyField;
-  lastNameEn: string;
-  appQuota: number;
-  appOwned: number;
+  appQuota?: number;
+  appOwned?: number;
 }

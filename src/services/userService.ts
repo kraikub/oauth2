@@ -1,15 +1,14 @@
 import { CustomApiResponse } from "../../api/types/response";
-import { User } from "../../db/schema/user";
 import { nextApiBaseInstance } from "../../libs/axios";
 
 class UserService {
-  public get = async (accessToken: string) => {
-    const { status, data } = await nextApiBaseInstance.get<CustomApiResponse<User | null>>("/api/public/user", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+  public get = async () => {
+    const { status, data } = await nextApiBaseInstance.get<CustomApiResponse<UserWithStudent | null>>("/api/private/user");
     return { status, data };
   };
+  public signout = async () => {
+    const { status, data } = await nextApiBaseInstance.get<CustomApiResponse<null>>("/api/public/signout");
+    return { status, data };
+  }
 }
 export const userService = new UserService();

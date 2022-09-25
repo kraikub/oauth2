@@ -1,7 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import Navbar from "../../../../layouts/Navbar";
-
-import { Application } from "../../../../../db/schema/application";
 import { useRouter } from "next/router";
 import { appService } from "../../../../services/appService";
 import { FieldContainer } from "./components/FieldContainer";
@@ -17,10 +15,8 @@ const ClientPage: FC<ClientPageProps> = ({}) => {
 
   const getApp = async () => {
     if (!clientId) return;
-    const ac = localStorage.getItem("access");
-    if (!ac) return; //
     try {
-      const res = await appService.getApplication(clientId as string, ac);
+      const res = await appService.getApplication(clientId as string);
       console.log(res);
       if (res) {
         setApp(res);

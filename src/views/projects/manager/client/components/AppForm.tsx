@@ -24,6 +24,9 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Radio,
+  Stack,
+  RadioGroup,
 } from "@chakra-ui/react";
 import { MdDelete } from "react-icons/md";
 import { FaCopy } from "react-icons/fa";
@@ -32,7 +35,6 @@ import bg1 from "../../../../../../public/bg-1.png";
 import bg3 from "../../../../../../public/bg-3.png";
 import bg4 from "../../../../../../public/bg-4.png";
 import bg5 from "../../../../../../public/bg-5.png";
-import { Application } from "../../../../../../db/schema/application";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { appService } from "../../../../../services/appService";
@@ -52,7 +54,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
   const { register, getValues, watch, reset, handleSubmit } = useForm({
     defaultValues: app,
   });
-  const [devToolsScope, setDevToolsScope] = useState<number>(0);
+  const [devToolsScope, setDevToolsScope] = useState<string>("1");
   const [hideSecret, setHideSecret] = useState(true);
   const [hasChanged, setHasChanged] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -67,7 +69,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
     if (!ac) {
       return router.push("/projects/manager");
     }
-    const response = await appService.deleteApplication(app.clientId, ac);
+    const response = await appService.deleteApplication(app.clientId);
     if (!response?.status) {
       // do something
     } else {
@@ -94,7 +96,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           setIsUpdating(false);
           return reload();
         }
-        const res = await appService.updateAppplcation(app.clientId, ac, data);
+        const res = await appService.updateAppplcation(app.clientId, data);
         setIsUpdating(false);
         router.reload();
       })}
@@ -132,14 +134,14 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             color="white"
           >
             <Heading size="md" mb={4}>
-              App Information
+              ข้อมูลแอปพลิเคชัน
             </Heading>
             <Text fontSize={16} opacity={0.8}>
-              These fields tell your users about what your application does.
+              ข้อมูลโดยทั่วไปเกี่ยวกับแอปพลิเคชันของคุณ
             </Text>
           </GridItem>
           <GridItem colSpan={[12, 8]}>
-            <FieldContainer title="App Name">
+            <FieldContainer title="ชื่อแอปพลิเคชั่น">
               <Input
                 variant="unstyled"
                 fontSize={22}
@@ -156,7 +158,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 disabled
               />
             </FieldContainer>
-            <FieldContainer title="Creator Name">
+            <FieldContainer title="ผู้สร้าง">
               <Input
                 variant="unstyled"
                 fontSize={22}
@@ -171,7 +173,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 {...register("creatorName")}
               />
             </FieldContainer>
-            <FieldContainer title="App Description">
+            <FieldContainer title="เกี่ยวกับแอปพลิเคชัน">
               <Textarea
                 my={2}
                 width="100%"
@@ -204,11 +206,11 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             w="full"
           >
             <Heading size="md" mb={4}>
-              Credentials
+              ข้อมูลสำคัญ
             </Heading>
             <Text fontSize={16} opacity={0.8}>
-              This is your application identity. Do not let someone knows your
-              application SECRET KEY!
+              ข้อมูลเกี่ยวกับการยืนยันตัวตนของแอปพลิเคชันคุณรวมถึงเป็นรหัสสำหรับใช้งาน
+              Kraikub ดังนั้นห้ามให้ใครเห็น secret ของคุณ!
             </Text>
           </GridItem>
           <GridItem colSpan={[12, 8]}>
@@ -294,10 +296,12 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             color="white"
           >
             <Heading size="md" mb={4}>
-              Callbacks
+              Callbacks (optional)
             </Heading>
             <Text fontSize={16} opacity={0.8}>
-              These are how we send user{"'"}s data back to you via HTTP.
+              ใช้สำหรับกรณีที่ต้องการให้ Kraikub ส่งข้อมูลกลับไปที่ URL ของคุณ
+              ไม่จำเป็นต้องกรอกหากคุณใช้ Kraikub SDK
+              ในการพัฒนาแอปพลิเคชั่นของคุณ
             </Text>
           </GridItem>
           <GridItem colSpan={[12, 8]}>
@@ -316,6 +320,10 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               />
             </FieldContainer>
             <FieldContainer title="Callback URL (Development)">
+              <Text mt={6} color="gray.600">
+                *จำเป็นต้องใช้ secret ในการยืนยันให้ Kraikub ส่งข้อมูลกลับไปที่
+                Development Callback
+              </Text>
               <Input
                 variant="unstyled"
                 fontSize={16}
@@ -346,24 +354,43 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           bgPos="center"
         >
           <Heading size="md" mb={3}>
-            Developer Tools
+            Shortcuts
           </Heading>
           <Text>
-            Instantly get your development resources from Kraikub here.
+            เครื่องมือเหล่านี้จะช่วยให้คุณพัฒนาแอปพลิเคชันได้รวดเร็วยิ่งขึ้น
           </Text>
         </Box>
         <Box mt={4} p={4} bg="gray.100" rounded={10}>
           <Box mb={8}>
             <Heading size="md" mb={2}>
-              Authentication URL Generator
+              URL สำหรับใช้งาน Sign in with KU (ใช้ได้กับ Callback เท่านั้น)
             </Heading>
             <Divider />
           </Box>
           <Box my={4}>
+            <Text my={4}>
+              ไม่จำเป็นต้องใช้ URL เหล่านี้ในการณีที่คุณใช้ Kraikub SDK
+            </Text>
+            <Box px={5} py={3} mb={10} bg="white" rounded={8}>
+              <Heading size="sm">เลือกประเภทการเข้าสู่ระบบ</Heading>
+              <RadioGroup defaultValue="1" onChange={setDevToolsScope} value={devToolsScope}>
+                <Stack spacing={5} direction="column" my={5} fontWeight={700} color="gray.500">
+                  <Radio colorScheme="teal" value="0">
+                    Anonymous Sign in
+                  </Radio>
+                  <Radio colorScheme="teal" value="1">
+                    Sign in with KU
+                  </Radio>
+                  <Radio colorScheme="teal" value="2">
+                    Sign in with KU (with student data)
+                  </Radio>
+                </Stack>
+              </RadioGroup>
+            </Box>
             <Heading size="sm" mb={4}>
-              Production URL
+              สำหรับส่งกลับไปที่ Production URL
             </Heading>
-            <Box px={5} py={3} bg="gray.300" rounded={10}>
+            <Box px={5} py={3} bg="white" rounded={2}>
               <Text fontWeight={700} color="#171633">
                 {kraikubUrl +
                   `?client_id=${app.clientId}&scope=${devToolsScope}`}
@@ -372,9 +399,9 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           </Box>
           <Box my={4}>
             <Heading size="sm" mb={4}>
-              Development URL
+            สำหรับส่งกลับไปที่ Development URL
             </Heading>
-            <Box px={5} py={3} bg="gray.300" rounded={10}>
+            <Box px={5} py={3} bg="white" rounded={2}>
               <Text fontWeight={700} color="#171633">
                 {kraikubUrl +
                   `?client_id=${app.clientId}&scope=${devToolsScope}&dev=true&secret=${app.secret}`}
@@ -397,11 +424,10 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           bgPos="center"
         >
           <Heading size="md" mb={3}>
-            Danger Zone
+            โซนอันตราย
           </Heading>
           <Text>
-            These operations below make a hard changes to your application
-            settings. Please make sure about what you are going to do.
+            การตั้งค่าเหล่านี้อาจมีผลกระทบกับแอปพลิเคชั่นของคุณ โปรดตรวจสอบความถูกต้องก่อนกระทำการใดๆในโซนนี้
           </Text>
         </Box>
         <Flex
@@ -413,11 +439,10 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
         >
           <Box>
             <Heading size="md" mb={2}>
-              Delete this app
+              ลบแอปพลิเคชันนี้
             </Heading>
             <Text>
-              Permanently delete this app from Kraikub. Once you have deleted,
-              your app cannot be recovered.
+              ลบแอปพลิเคชั่นนี้ออกจากแพลทฟอร์มอย่างถาวร
             </Text>
           </Box>
           <IconButton
@@ -475,24 +500,23 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
       >
         <ModalOverlay />
         <ModalContent rounded={16}>
-          <ModalHeader>Are you sure about this? 🤔</ModalHeader>
+          <ModalHeader>คุณต้องการลบแอปพลิเคชั่นนี้จริงหรือ? 🤔</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Text>
-              You are about to permanently delete{" "}
+              คุณกำลังที่จะลบแอปพลิเคชั่น{" "}
               <Box as="span" fontWeight={700} color="blue.500">
                 {app.appName}
               </Box>{" "}
-              from our platform. This operation cannot be reverted once it is
-              executed.
+              ออกจากแพลทฟอร์มของเรา การกระทำครั้งนี้ไม่สามาถที่จะแก้ไขหรือย้อนกลับในภายหลังได้
             </Text>
             <Box my={4}>
               <Text mb={3}>
-                Please type{" "}
+                กรุณากรอก{" "}
                 <Box as="span" fontWeight={700} color="red.500">
                   delete/{noWhiteSpace(app.appName)}
                 </Box>{" "}
-                to continue the progress.
+                เพื่อดำเนินการลบแอปพลิเคชั่น
               </Text>
               <Input
                 rounded={6}
@@ -511,15 +535,17 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               onClick={() => setIsDeleteModalOpen(false)}
               size="sm"
             >
-              I changed my mind.
+              ไม่ ฉันเปลี่ยนใจแล้ว
             </Button>
             <Button
               colorScheme="red"
               size="sm"
               onClick={handleDeleteApp}
-              disabled={deleteInputValue !== `delete/${noWhiteSpace(app.appName)}`}
+              disabled={
+                deleteInputValue !== `delete/${noWhiteSpace(app.appName)}`
+              }
             >
-              Delete it 🚀
+              ลบเดี๋ยวนี้ 🚀
             </Button>
           </ModalFooter>
         </ModalContent>

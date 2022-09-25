@@ -3,7 +3,6 @@ import axios, { AxiosError } from "axios";
 import { useRouter } from "next/router";
 import test from "node:test";
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import { User } from "../../db/schema/user";
 import { authService } from "../services/authService";
 import { userService } from "../services/userService";
 import { getSigninUrl } from "../utils/path";
@@ -13,7 +12,7 @@ interface UserProviderProps {
 }
 
 interface UserContext {
-  user?: User;
+  user?: UserWithStudent;
   reload: () => void;
   signout: () => void;
   accessToken: () => string | null;
@@ -32,12 +31,13 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const router = useRouter();
   const [toggleState, setToggleState] = useState<boolean>(false);
   const [render, setRender] = useState<boolean>(false);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<UserWithStudent>();
   const reload = () => {
     setToggleState(!toggleState);
   };
 
   const handleRedirectToSigin = () => {
+
     const signinUrl = getSigninUrl({
       redirectPath: location.href,
     });
@@ -50,11 +50,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
 
   const getUser = async () => {
     setRender(false);
-    const accessToken = localStorage.getItem("access");
-    const refreshToken = localStorage.getItem("refresh");
-    if (!accessToken || !refreshToken) return handleRedirectToSigin();
     try {
-      const { data } = await userService.get(accessToken);
+      const { data } = await userService.get();
       if (data.payload === null) {
         return handleRedirectToSigin();
       }
@@ -63,35 +60,20 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
-          return refresh(accessToken, refreshToken);
-        }
-      } else {
-        console.error(error);
-      }
-    }
-  };
-
-  const refresh = async (access: string | null, refresh: string | null) => {
-    if (!access || !refresh) return alert("tokens not defined");
-    try {
-      const { data } = await authService.refresh(access, refresh);
-      localStorage.setItem("access", data.payload.accessToken);
-      await getUser();
-    } catch (error: unknown | AxiosError) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
           return handleRedirectToSigin();
         }
       } else {
         console.error(error);
+        return handleRedirectToSigin();
       }
     }
   };
 
-  const signout = () => {
-    localStorage.clear();
+  const signout = async () => {
+    await userService.signout();
     reload();
   };
+
 
   useEffect(() => {
     getUser();

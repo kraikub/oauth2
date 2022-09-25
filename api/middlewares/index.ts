@@ -1,4 +1,4 @@
-import { AccessTokenBody, RefreshTokenBody } from "../types/auth.response";
+import { AccessTokenBody, RefreshTokenBody } from "../types/auth";
 
 export interface MiddlewareOutput<type> {
   success: boolean;

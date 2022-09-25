@@ -1,41 +1,8 @@
-export interface ExtractFilter {
-  titleTh: string;
-  titleEn: string;
-  firstNameTh: string;
-  middleNameTh: PossibleEmptyField;
-  lastNameTh: string;
-  firstNameEn: string;
-  middleNameEn: PossibleEmptyField;
-  lastNameEn: string;
-  copenId: string;
-  copenNameTh: string;
-  copenNameEn: string;
-  campusCode: string;
-  campusNameTh: string;
-  campusNameEn: string;
-  facultyCode: string;
-  facultyNameTh: string;
-  facultyNameEn: string;
-  departmentCode: string;
-  departmentNameTh: string;
-  departmentNameEn: string;
-  majorCode: string;
-  majorNameTh: string;
-  majorNameEn: string;
-  nationalityNameTh: string;
-  nationalityNameEn: string;
-  studentStatusCode: string;
-  studentStatusNameTh: string;
-  studentStatusNameEn: string;
-  studentTypeCode: string;
-  studentTypeNameTh: string;
-  studentTypeNameEn: string;
-  edulevelCode: string;
-  edulevelNameTh: string;
-  edulevelNameEn: string;
-  studentYear: string;
-  advisorId: string;
-  advisorNameTh: string;
-  advisorNameEn: string;
-  positionTh: string;
+interface FullUserData extends User {
+  student: Student
+  educations: Education[]
+}
+
+interface UserWithStudent extends User {
+  student: Student
 }

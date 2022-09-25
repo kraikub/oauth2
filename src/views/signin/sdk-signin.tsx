@@ -16,24 +16,13 @@ import {
 import Head from "next/head";
 import { useRouter } from "next/router";
 import {
-  ChangeEvent,
   FC,
-  FormEvent,
   Fragment,
-  useEffect,
-  useState,
 } from "react";
-import { Application } from "../../../db/schema/application";
-import { authService } from "../../services/authService";
 import { Query } from "../../types/query";
-import { PrimaryInput } from "./PrimaryInput";
-import { MdPrivacyTip } from "react-icons/md";
 import bg3 from "../../../public/bg-3.png";
-import ogImage from "../../../public/og-image.png";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { InterWindLoader } from "../../layouts/Loader";
-import { ScopeBadge } from "./components/ScopeBadge";
-import { RiAccountCircleFill } from "react-icons/ri";
 import { DataTips } from "../../components/DataTips";
 import { SigninForm } from "./components/SigninForm";
 interface SigninPageProps {
@@ -41,7 +30,7 @@ interface SigninPageProps {
   app: Application | null;
   secret: string;
   isRecieveRequest: boolean;
-  onSigninComplete?: (access: string, refresh: string, u: PublicUserData) => void;
+  onSigninComplete?: (ctoken: string) => void;
 }
 
 const OnDeviceSigninPage: FC<SigninPageProps> = ({
@@ -51,56 +40,6 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
   secret,
   isRecieveRequest,
 }) => {
-  const router = useRouter();
-  const [pdpaAgreed, setPdpaAgreed] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
-
-  const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const bindStringToBoolean = (
-    text?: string | string[] | null | undefined
-  ): boolean | undefined => {
-    if (text === "true") return true;
-    else if (text === "false") return false;
-    return undefined;
-  };
-
-  const handleSigninEvent = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (app == null || query.scope === null) return;
-    setIsSigninLoading(true);
-    if (!username || !password) {
-      setIsSigninLoading(false);
-      return alert("Some field is missing.");
-    }
-    try {
-      const { data } = await authService.signin(
-        username,
-        password,
-        app.clientId,
-        query.scope as string,
-        query.ref as string,
-        bindStringToBoolean(query.dev),
-        secret
-      );
-      if (onSigninComplete) {
-        return onSigninComplete(data.payload.access, data.payload.refresh, data.payload.user);
-      }
-      return router.push(data.payload.url);
-    } catch (error) {
-      setIsSigninLoading(false);
-      console.error(error);
-      alert("Sign in failed, please try again.");
-    }
-  };
 
   if ((app === null || query.scope === null) && isRecieveRequest) {
     return (

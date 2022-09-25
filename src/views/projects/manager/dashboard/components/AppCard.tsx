@@ -1,7 +1,6 @@
 import { Badge, Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC } from "react";
-import { Application } from "../../../../../../db/schema/application";
 import background from "../../../../../../public/bg-1.png";
 
 interface AppCardProps {

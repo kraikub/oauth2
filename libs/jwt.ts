@@ -9,7 +9,7 @@ export const signAuthObject = (data: any, expires: string): string => {
 };
 
 
-export const verify = (token: string): [boolean, any, unknown | null] => {
+export const verify = (token: string): [boolean, any, any | null] => {
   try {
     const p = jwt.verify(token, process.env.JWT_SECRET as string);
     return [true, p, null];

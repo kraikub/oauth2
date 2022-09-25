@@ -8,9 +8,9 @@ interface ScopeBadgeProps {
 export const ScopeBadge: FC<ScopeBadgeProps> = ({ children }) => {
   return (
     <Badge
-      bg="gray.300"
+      bg="katrade.main"
       size="lg"
-      color="black"
+      color="white"
       display="flex"
       alignItems="center"
       gap={2}
