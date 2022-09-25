@@ -3,7 +3,6 @@ import {
   ApplicationResponse,
   CustomApiResponse,
 } from "../../api/types/response";
-import { Application } from "../../db/schema/application";
 
 interface CreateApp {
   appName: string;
@@ -16,64 +15,48 @@ interface CreateApp {
 
 class AppService {
   // User owned applications only.
-  public async getApplications(accessToken: string) {
+  public async getApplications() {
     const { data, status } = await nextApiBaseInstance.get<
       CustomApiResponse<Application[]>
-    >(`/api/app`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    >(`/api/app`);
     if (status === 200) {
       return data.payload;
     }
   }
 
-  public async getApplication(clientId: string, accessToken: string) {
-    const { data, status } = await nextApiBaseInstance.get<CustomApiResponse<Application>>(
-      `/api/app/${clientId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+  public async getApplication(clientId: string) {
+    const { data, status } = await nextApiBaseInstance.get<
+      CustomApiResponse<Application>
+    >(`/api/app/${clientId}`);
     if (status === 200 || status === 304) {
       return data.payload;
     }
   }
-  public async createApplication(a: any, accessToken: string) {
+  public async createApplication(a: any) {
     const { data, status } = await nextApiBaseInstance.post<
       CustomApiResponse<Application>
-    >(`/api/app`, a, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    >(`/api/app`, a);
     if (status === 200) {
       return data;
     }
   }
 
-  public async deleteApplication(clientId: string, accessToken: string) {
-    const { status, data } = await nextApiBaseInstance.delete<CustomApiResponse<any>>(`/api/app/${clientId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+  public async deleteApplication(clientId: string) {
+    const { status, data } = await nextApiBaseInstance.delete<
+      CustomApiResponse<any>
+    >(`/api/app/${clientId}`);
     if (status === 200) {
       return data;
     }
   }
 
-  public async updateAppplcation(clientId: string, accessToken: string, payload: any) {
+  public async updateAppplcation(
+    clientId: string,
+    payload: any
+  ) {
     const { data, status } = await nextApiBaseInstance.put<
       CustomApiResponse<Application>
-    >(`/api/app/${clientId}`, payload, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    >(`/api/app/${clientId}`, payload);
     if (status === 200) {
       return data;
     }

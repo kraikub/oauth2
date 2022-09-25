@@ -1,4 +1,4 @@
-import { extendTheme } from "@chakra-ui/react";
+import { ComponentStyleConfig, extendTheme } from "@chakra-ui/react";
 
 const config = {
   initialColorMode: "light",
@@ -42,14 +42,14 @@ export const colors = {
 };
 
 const fonts = {
-  body: `'Manrope', 'Sarabun', sans-serif`,
-  heading: `'Manrope','Sarabun', sans-serif`,
+  body: `'Manrope','Kanit',sans-serif`,
+  heading: `'Manrope','Kanit',sans-serif`,
 };
 
-const components = {
+const components: {[key: string]: ComponentStyleConfig} = {
   Text: {
     baseStyle: {
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: 500,
     }
   },
@@ -58,7 +58,7 @@ const components = {
       fontSize: 20,
       fontWeight: 600,
     }
-  }
+  },
 }
 
 const overrides = {

@@ -23,7 +23,6 @@ import {
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
-import { Application } from "../../../db/schema/application";
 import { authService } from "../../services/authService";
 import { Query } from "../../types/query";
 import { PrimaryInput } from "./PrimaryInput";
@@ -38,7 +37,7 @@ import { SigninForm } from "./components/SigninForm";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
-  onSigninComplete?: (access: string, refresh: string) => void;
+  onSigninComplete?: (access: string, u: PublicUserData) => void;
 }
 
 const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
@@ -47,51 +46,6 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
-
-  const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUsername(e.target.value);
-  };
-
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const bindStringToBoolean = (
-    text?: string | string[] | null | undefined
-  ): boolean | undefined => {
-    if (text === "true") return true;
-    else if (text === "false") return false;
-    return undefined;
-  };
-
-  const handleSigninEvent = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (app == null || query.scope === null) return;
-    setIsSigninLoading(true);
-    if (!username || !password) {
-      setIsSigninLoading(false);
-      return alert("Some field is missing.");
-    }
-    try {
-      const { data } = await authService.signin(
-        username,
-        password,
-        app.clientId,
-        query.scope as string,
-        query.ref as string,
-        bindStringToBoolean(query.dev),
-        query.secret as string | undefined
-      );
-      if (onSigninComplete) {
-        return onSigninComplete(data.payload.access, data.payload.refresh);
-      }
-      return router.push(data.payload.url);
-    } catch (error) {
-      setIsSigninLoading(false);
-      console.error(error);
-      alert("Sign in failed, please try again.");
-    }
-  };
 
   if (app === null || query.scope === null) {
     return (

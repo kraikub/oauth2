@@ -10,13 +10,24 @@ import {
   Text,
   Center,
   Image,
+  Slide,
+  CloseButton,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  FormControl,
+  DrawerFooter,
+  ButtonGroup,
+  Stack,
+  Link,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
 import { MdPrivacyTip } from "react-icons/md";
 import { RiAccountCircleFill } from "react-icons/ri";
-import { Application } from "../../../../db/schema/application";
 import { authService } from "../../../services/authService";
 import { Query } from "../../../types/query";
 import { PrimaryInput } from "../PrimaryInput";
@@ -26,11 +37,7 @@ interface SigninFormProps {
   query: Query;
   app: Application | null;
   secret?: string;
-  onSigninComplete?: (
-    access: string,
-    refresh: string,
-    u: PublicUserData
-  ) => void;
+  onSigninComplete?: (ctoken: string) => void;
 }
 
 export const SigninForm: FC<SigninFormProps> = ({
@@ -40,7 +47,7 @@ export const SigninForm: FC<SigninFormProps> = ({
   secret,
 }) => {
   const router = useRouter();
-  const [pdpaAgreed, setPdpaAgreed] = useState<boolean>(query.scope === "0");
+  const [pdpaPopup, setPdpaPopup] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
@@ -85,6 +92,9 @@ export const SigninForm: FC<SigninFormProps> = ({
       },
       signinText: "Sign in",
     },
+    pdpaFontOverride: {
+      fontFamily: `'Manrope','Sarabun', sans-serif !important`,
+    },
   };
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
@@ -106,8 +116,17 @@ export const SigninForm: FC<SigninFormProps> = ({
     return query.scope === "0" ? styles.anonymous : styles.regular;
   };
 
-  const handleSigninEvent = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const validateBeforeSignin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const { data: validateResponse } =
+      await authService.validateSigninSignature(username);
+    if (validateResponse.payload.validateResult) {
+      return await handleSigninEvent();
+    }
+    setPdpaPopup(true);
+  };
+
+  const handleSigninEvent = async () => {
     if (app == null || query.scope === null) return;
     setIsSigninLoading(true);
     if (!username || !password) {
@@ -125,11 +144,7 @@ export const SigninForm: FC<SigninFormProps> = ({
         secret || (query.secret as string | undefined)
       );
       if (onSigninComplete) {
-        return onSigninComplete(
-          data.payload.access,
-          data.payload.refresh,
-          data.payload.user
-        );
+        return onSigninComplete(data.payload.ctoken);
       }
       return router.push(data.payload.url);
     } catch (error) {
@@ -158,7 +173,7 @@ export const SigninForm: FC<SigninFormProps> = ({
             </Center>
           ) : null}
 
-          <form onSubmit={handleSigninEvent}>
+          <form onSubmit={validateBeforeSignin}>
             <Flex
               boxShadow="0 6px 30px 20px #00000010"
               rounded={16}
@@ -173,7 +188,7 @@ export const SigninForm: FC<SigninFormProps> = ({
               {...themeSelector(styles).card}
             >
               <Heading fontSize="22px" fontWeight={800} letterSpacing={-1}>
-                Sign in with KU Account
+                เข้าสู่ระบบด้วย KU
               </Heading>
               <Box mt="30px" w="full">
                 <Text fontSize={14}>
@@ -243,20 +258,6 @@ export const SigninForm: FC<SigninFormProps> = ({
                   </Flex>
                 )}
               </Box>
-              {query.scope === "0" ? null : (
-                <Checkbox
-                  colorScheme="katrade.scheme.fix"
-                  isChecked={pdpaAgreed}
-                  onChange={(e) => setPdpaAgreed(e.target.checked)}
-                >
-                  <Text fontSize={12} fontWeight={600}>
-                    I agree to share my data which is held by Kasetsart
-                    University with Kraikub and applications on Kraikub
-                    platform.
-                  </Text>
-                </Checkbox>
-              )}
-
               <Button
                 mt="5px"
                 h="70px"
@@ -270,7 +271,6 @@ export const SigninForm: FC<SigninFormProps> = ({
                   boxShadow: "0 0 10px #00000030",
                 }}
                 type="submit"
-                disabled={!pdpaAgreed}
               >
                 {themeSelector(styles).signinText}
               </Button>
@@ -278,6 +278,89 @@ export const SigninForm: FC<SigninFormProps> = ({
           </form>
         </Container>
       </Box>
+      <Drawer
+        placement={"bottom"}
+        onClose={() => setPdpaPopup(false)}
+        isOpen={pdpaPopup}
+      >
+        <DrawerOverlay />
+        <DrawerContent
+          position="relative"
+          minH="82vh"
+          maxH="96vh"
+          py={14}
+          borderRadius="20px 20px 0 0"
+        >
+          <Box position="absolute" right="20px" top="20px">
+            <CloseButton
+              color="gray.700"
+              bg="gray.50"
+              rounded="full"
+              onClick={() => setPdpaPopup(false)}
+            />
+          </Box>
+          <DrawerBody>
+            <Container maxW="container.lg" overflow="auto">
+              <Stack {...styles.pdpaFontOverride} spacing={10}>
+                <Heading size="md" {...styles.pdpaFontOverride}>
+                  นโยบายการคุ้มครองข้อมูลส่วนบุคคล (Privacy Policy)
+                </Heading>
+                <Text>
+                  PDPA คือ พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล
+                  ซึ่งเป็นกฎหมายที่ถูกสร้างมาเพื่อป้องกันการละเมิดข้อมูลส่วนบุคคลของทุกคน
+                  รวมถึงการจัดเก็บข้อมูลและนำไปใช้โดยไม่ได้แจ้งให้ทราบ
+                  และไม่ได้รับความยินยอมจากเจ้าของข้อมูลเสียก่อน
+                </Text>
+                <Text>
+                  พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (Personal Data
+                  Protection Act: PDPA)
+                  คือกฎหมายใหม่ที่ออกมาเพื่อแก้ไขปัญหาการถูกล่วงละเมิดข้อมูลส่วนบุคคลที่เพิ่มมากขึ้นเรื่อย
+                  ๆ ในปัจจุบัน เช่น
+                  การซื้อขายข้อมูลเบอร์โทรศัพท์และข้อมูลส่วนตัวอื่น ๆ
+                  โดยที่เจ้าของข้อมูลไม่ยินยอม
+                  ที่มักพบได้มากในรูปแบบการโทรมาโฆษณา หรือล่อลวง{" - "}
+                  <Link
+                    href="https://pdpa.pro/blogs/in-summary-what-is-pdpa"
+                    color="blue.600"
+                  >
+                    แหล่งที่มา
+                  </Link>
+                </Text>
+                <Text>
+                  Kraikub
+                  ได้เห็นถึงความสำคัญของข้อมูลส่วนบุคคลของผู้ใช้งานทุกท่านจึงได้จัดทำ
+                  นโยบายการคุ้มครองข้อมูลส่วนบุคคล (Privacy Policy)
+                  เพื่อแจ้งให้ผู้ใช้งานทราบก่อนเริ่มใช้บริการต่างจาก Kraikub
+                  โดยมีเนื้อหาดังนี้
+                </Text>
+                <Text>
+                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                  Sapiente laboriosam laborum iusto aliquam, impedit rem ea
+                  quod! Corrupti aliquam laborum, delectus, vero adipisci modi
+                  aspernatur ducimus velit voluptates, voluptas natus!
+                </Text>
+              </Stack>
+            </Container>
+          </DrawerBody>
+          <DrawerFooter>
+            <ButtonGroup>
+              <Button {...styles.pdpaFontOverride} size="md" rounded={14}>
+                ฉันไม่ยอมรับ
+              </Button>
+              <Button
+                {...styles.pdpaFontOverride}
+                size="md"
+                colorScheme="teal"
+                rounded={14}
+                onClick={handleSigninEvent}
+                isLoading={isSigninButtonLoading}
+              >
+                ฉันยอมรับ
+              </Button>
+            </ButtonGroup>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </Fragment>
   );
 };

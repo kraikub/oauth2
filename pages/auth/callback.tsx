@@ -3,42 +3,24 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { authService } from "../../src/services/authService";
 
 const Callback: NextPage = () => {
   const router = useRouter();
-  const [cont, setCont] = useState(false);
 
-  const handleStoreTokens = (accessToken: string, refreshToken: string) => {
-    localStorage.setItem("access", accessToken);
-    localStorage.setItem("refresh", refreshToken);
-    setCont(true);
-  };
-
-  const validateLocalStorage = () => {
-    if (
-      localStorage.getItem("access") &&
-      localStorage.getItem("refresh") &&
-      cont
-    ) {
-      if (router.query.ref && router.query.ref[0] as string === "/") {
-        return router.push(router.query.ref as string)
-      }
-      return router.push("/projects/manager");
+  const handleClaimAccessTokens = async (ctoken: string) => {
+    try {
+      const { data } = await authService.claimAccessToken(ctoken);
+      console.log(data);
+      router.push("/projects/manager/");
+    } catch {
+      router.push("/projects/manager/");
     }
   };
 
   useEffect(() => {
-    if (cont) {
-      validateLocalStorage();
-    }
-  }, [cont]);
-
-  useEffect(() => {
-    if (router.query.access && router.query.refresh) {
-      handleStoreTokens(
-        router.query.access as string,
-        router.query.refresh as string
-      );
+    if (router.query.ctoken) {
+      handleClaimAccessTokens(router.query.ctoken as string);
     }
   }, [router.query]);
 

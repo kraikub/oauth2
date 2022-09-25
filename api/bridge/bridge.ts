@@ -2,7 +2,7 @@ import { MyKUGradeResponse } from "../types/myku/grade";
 import { MyKUEducationResponse } from "../types/myku/education";
 import { MyKUPersonalResponse } from "../types/myku/student";
 import { mykuInstance } from "../../libs/axios";
-import { AuthenticationObject } from "../types/auth.response";
+import { AuthenticationObject } from "../types/auth";
 import { MyKULoginResponse, MyKURenewTokenResponse } from "../types/myku/auth";
 import { mapQueryStringToUrl } from "../utils/query";
 import { RSAEncryptionForMyKU } from "../utils/rsa";
@@ -50,8 +50,8 @@ class Bridge {
     const { status, data } = await mykuInstance.post<MyKULoginResponse>(
       "/auth/login",
       {
-        username: RSAEncryptionForMyKU(username),
-        password: RSAEncryptionForMyKU(password),
+        username: username,
+        password: password,
       },
       {
         headers: {

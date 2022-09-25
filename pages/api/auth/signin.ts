@@ -7,173 +7,80 @@ import { signAuthObject } from "../../../libs/jwt";
 import { redirectToAuthenticateCallback } from "../../../api/utils/callback";
 import { handleApiError } from "../../../api/error";
 import { MyKULoginResponse } from "../../../api/types/myku/auth";
-import { ExtractFilter } from "../../../api/types/data/user";
-import { User } from "../../../db/schema/user";
-import { createAnonymousIdentity } from "../../../api/utils/crypto";
-
-const extractFromSigninResponse = (obj: MyKULoginResponse): ExtractFilter => {
-  return obj.user.student;
-};
+import { calculateUid, createAnonymousIdentity } from "../../../api/utils/crypto";
+import { AuthResponse } from "../../../api/types/auth";
+import { publicUserFilter } from "../../../api/utils/filter/public_user";
+import { authUsecase } from "../../../api/usecases/auth";
 
 const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method !== "POST") {
       return res.status(400).send({});
     }
-    const { username, password, clientId, scope, ref, dev, secret } = req.body;
+    const { username, password, clientId, scope, ref, dev, secret, sig } = req.body;
 
     const app = await applicationUsecase.findOneApp({ clientId: clientId });
 
-    if (app === null || !app?.clientId) {
-      return res.status(400).send({});
+    if (app === null || !app?.clientId || !sig) {
+      return res.status(400).send(createResponse(false, "Bad request", null));
     }
 
-    const externalLoginResult = await bridge.externalLogin(
-      username,
-      password,
-      scope,
-      app.clientId
-    );
+    // login to myku
+    const authResponse = await bridge.login(username, password);
+    const { stdId, stdCode } = authResponse.data.user.student
+    let uid = calculateUid(stdId, stdCode)
 
-    if (externalLoginResult === null) {
-      const response = createResponse(
-        false,
-        "Failed connected with apimy.ku.th",
-        null
-      );
-      return res.status(400).send(response);
-    } else {
-      let user: User | null = await userUsecase.findOne({
-        stdId: externalLoginResult.stdId,
-        stdCode: externalLoginResult.stdCode,
-      });
-      const uid = crypto
-        .createHash("sha256")
-        .update(externalLoginResult.stdId + externalLoginResult.stdCode)
-        .digest("hex");
-      if (user === null) {
-        // handle new user
-        const { status, data: personal } = await bridge.getProfile(
-          externalLoginResult.stdId,
-          externalLoginResult.accessToken
-        );
-        if (status !== 200) {
-          const response = createResponse(
-            false,
-            `Create user failed: myapi.ku_status_${status}`,
-            null
-          );
-          return res.status(400).send(response);
-        }
-        const extracted = extractFromSigninResponse(
-          externalLoginResult.response
-        );
-        const {
-          genderCode,
-          genderTh,
-          genderEn,
-          nameTh,
-          nameEn,
-          birthDate,
-          nationCode,
-          nationNameTh,
-          nationNameEn,
-          religionTh,
-          religionEn,
-          phone,
-          email,
-        } = personal.results.stdPersonalModel;
-        user = await userUsecase.create({
-          ...extracted,
-          uid: uid,
-          appQuota: 3,
-          appOwned: 0,
-          stdId: externalLoginResult.stdId,
-          stdCode: externalLoginResult.stdCode,
-          genderCode,
-          genderTh,
-          genderEn,
-          nameTh,
-          nameEn,
-          birthDate,
-          nationCode,
-          nationNameTh,
-          nationNameEn,
-          religionTh,
-          religionEn,
-          phone,
-          email,
-        });
-      }
-      const { accessToken, refreshToken, scope, clientId, stdId, stdCode } =
-        externalLoginResult;
-      const signedAuthJwtToken = signAuthObject(
-        {
-          accessToken,
-          scope,
-          clientId,
-          stdId,
-          stdCode,
-          uid: user ? user.uid : uid,
-        },
-        "29m"
-      );
-      const signedRenewJwtToken = signAuthObject({ refreshToken }, "1h");
-      let selectedUrl = "";
-      if (dev) {
-        // verifySecret
-        if (app.secret === secret) {
-          selectedUrl = app.devCallbackUrl;
-        } else {
-          return res
-            .status(400)
-            .send(
-              createResponse(
-                false,
-                "Fail to authenticate development callbackUrl (devCallbackUrl)",
-                null
-              )
-            );
-        }
+    let user: User | null = await userUsecase.findOne({
+      uid: uid,
+    });
+
+    let student: Student | undefined;
+    let educations: Education[] | undefined;
+    if (user === null) {
+      // handle create new user
+      const { user: newUser, student: newStudent, educations: newEducations } = await userUsecase.initUserProfile(uid, stdId, sig, authResponse.data)
+      user = newUser
+    }
+    if (scope === "0") {
+      uid = createAnonymousIdentity(uid, clientId)
+    }
+    const ctoken = authUsecase.signCToken(uid, scope, clientId)
+    let selectedUrl = "";
+    if (dev) {
+      // verifySecret
+      if (app.secret === secret) {
+        selectedUrl = app.devCallbackUrl;
       } else {
-        selectedUrl = app.callbackUrl;
+        return res
+          .status(400)
+          .send(
+            createResponse(
+              false,
+              "Fail to authenticate development callbackUrl (devCallbackUrl)",
+              null
+            )
+          );
       }
-      const publicUser: PublicUserData = {
-        uid: user.uid,
-        firstNameEn: user.firstNameEn,
-        middleNameEn: user.middleNameEn,
-        lastNameEn: user.lastNameEn,
-        firstNameTh: user.firstNameTh,
-        middleNameTh: user.middleNameTh,
-        lastNameTh: user.lastNameTh,
-        appOwned: user.appOwned,
-        appQuota: user.appQuota,
-      };
-      const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
-        ref: ref,
-        access: signedAuthJwtToken,
-        refresh: signedRenewJwtToken,
-      });
-      const response =
-        scope === "0"
-          ? createResponse(true, "Authorized", {
-              access: signAuthObject(
-                { user: createAnonymousIdentity(uid, clientId) },
-                "1d"
-              ),
-              user: {
-                uid: createAnonymousIdentity(uid, clientId),
-              }
-            })
-          : createResponse(true, "Authorized", {
-              url: redirectUrl,
-              access: signedAuthJwtToken,
-              refresh: signedRenewJwtToken,
-              user: publicUser,
-            });
-      return res.status(200).send(response);
+    } else {
+      selectedUrl = app.callbackUrl;
     }
-  } catch (error) {
+    
+    
+
+    const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
+      ref: ref,
+      ctoken: ctoken,
+    });
+    console.log(redirectUrl)
+
+    let payload: AuthResponse = {
+      url: redirectUrl,
+      ctoken: ctoken,
+      user: publicUserFilter(user)
+    };
+    const response = createResponse(true, "Authorized", payload)
+    return res.status(200).send(response);
+  } catch (error: any) {
     console.error(error);
     handleApiError(res, error);
   }

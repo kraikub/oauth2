@@ -37,7 +37,7 @@ export const CreateProjectPage: NextPage = () => {
     <UserProvider>
       <Navbar />
       <Container maxW="container.md" py="100px">
-        <Heading letterSpacing={-1}>Tell us about your new app.</Heading>
+        <Heading letterSpacing={-1}>บอกเราเกี่ยวกับแอปพลิเคชันใหม่ของคุณสิ</Heading>
         <FormControl
           as="form"
           my={10}
@@ -58,7 +58,7 @@ export const CreateProjectPage: NextPage = () => {
               return;
             }
             try {
-              const res = await appService.createApplication(data, ac);
+              const res = await appService.createApplication(data);
               setLoading(false);
               router.push(`/projects/manager/${res?.payload.clientId}`);
             } catch (err) {
@@ -71,8 +71,8 @@ export const CreateProjectPage: NextPage = () => {
             mt={6}
             color={hasName ? "red.400" : "black"}
           >
-            Application name{" "}
-            {hasName ? "(This application name is not available!)" : null}
+            ชื่อแอปพลิเคชัน{" "}
+            {hasName ? "(ชื่อนี้ไม่สามารถใช้งานได้)" : null}
           </FormLabel>
           <Input
             id="app-name"
@@ -83,12 +83,12 @@ export const CreateProjectPage: NextPage = () => {
           />
 
           <FormLabel htmlFor="app-details" mt={6}>
-            Tell us more about your application
+            เกี่ยวกับแอปพลิเคชันของคุณ
           </FormLabel>
           <Textarea {...register("appDescription")} rounded={8} />
 
           <FormLabel htmlFor="app-creator" mt={6}>
-            Creator name
+            ผู้สร้าง
           </FormLabel>
           <Input
             id="app-creator"
@@ -98,7 +98,7 @@ export const CreateProjectPage: NextPage = () => {
           />
 
           <FormLabel htmlFor="app-type" mt={6}>
-            Application field
+            หมวดหมู่
           </FormLabel>
           <Select
             id="app-type"
@@ -115,7 +115,7 @@ export const CreateProjectPage: NextPage = () => {
           </Select>
           <ButtonGroup mt={10}>
             <Button type="submit" colorScheme="gray" rounded={14} size="lg" onClick={() => router.push("/projects/manager")}>
-              Cancel
+              ยกเลิก
             </Button>
             <Button
               type="submit"
@@ -124,7 +124,7 @@ export const CreateProjectPage: NextPage = () => {
               rounded={14}
               size="lg"
             >
-              Create
+              สร้างแอปพลิเคชันใหม่
             </Button>
           </ButtonGroup>
         </FormControl>

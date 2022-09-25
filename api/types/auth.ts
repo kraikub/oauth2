@@ -20,3 +20,13 @@ export interface AccessTokenBody {
 export interface RefreshTokenBody {
   refreshToken: string;
 }
+
+export type AuthResponse = {
+  url: string;
+  ctoken: string;
+  user: {
+    uid: string;
+    student?: Student;
+    educations?: Education[];
+  };
+};

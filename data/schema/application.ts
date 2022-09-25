@@ -1,17 +1,5 @@
 import { model, Schema } from "mongoose";
 
-export interface Application {
-    appName: string;
-    appDescription: string;
-    appType: string;
-    clientId: string;
-    ownerId: string;
-    creatorName: string;
-    callbackUrl: string;
-    devCallbackUrl: string;
-    secret: string;
-}
-
 export const applicationSchema = new Schema<Application>({
     appName: { type: String },
     appDescription: { type: String },

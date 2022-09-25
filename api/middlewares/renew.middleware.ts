@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareOutput, RenewMiddlewareOutput } from ".";
 import { verify } from "../../libs/jwt";
-import { AccessTokenBody, RefreshTokenBody } from "../types/auth.response";
+import { AccessTokenBody, RefreshTokenBody } from "../types/auth";
 import { createResponse } from "../types/response";
 
 export const RenewMiddleware = (
