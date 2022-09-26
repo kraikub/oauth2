@@ -107,7 +107,7 @@ const AppTable: FC = () => {
         rounded={10}
         color="white"
       >
-        <Heading size="xl">{user.student.nameTh}</Heading>
+        <Heading size="xl">{user.student.nameTh.split(" ").slice(1).join(" ")}</Heading>
         <Text fontWeight={600} fontSize={20} mt={4}>
           {user
             ? `คุณสามารถสร้างแอปได้อีก ${user.appQuota - user.appOwned} แอป`

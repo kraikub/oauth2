@@ -175,7 +175,7 @@ export const SigninForm: FC<SigninFormProps> = ({
 
           <form onSubmit={validateBeforeSignin}>
             <Flex
-              boxShadow="0 6px 30px 20px #00000010"
+              boxShadow={["none","0 6px 30px 20px #00000010"]}
               rounded={16}
               minH="60vh"
               h="auto"

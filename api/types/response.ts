@@ -6,6 +6,7 @@ export interface GlobalResponse {
   status: boolean;
   message: string;
   payload: any;
+  timestamp: Date;
 }
 
 export interface CustomApiResponse<type> {
@@ -19,5 +20,6 @@ export const createResponse = (status: boolean, message: string, payload: any): 
     status,
     message,
     payload,
+    timestamp: new Date(Date.now())
   }
 }
