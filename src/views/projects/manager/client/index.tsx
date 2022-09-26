@@ -17,7 +17,6 @@ const ClientPage: FC<ClientPageProps> = ({}) => {
     if (!clientId) return;
     try {
       const res = await appService.getApplication(clientId as string);
-      console.log(res);
       if (res) {
         setApp(res);
       }

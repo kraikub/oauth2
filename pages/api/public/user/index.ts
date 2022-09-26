@@ -18,8 +18,10 @@ const handleUserAPI = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
     if (req.method === "GET") {
-      const user = await userUsecase.publicData(payload.uid);
-      return res.status(200).send(createResponse(true, "", user));
+      const user = await userUsecase.computeDataOnScope(payload.uid, payload.scope, payload.clientId);
+      return res.status(200).send(createResponse(true, "", {
+        user: user
+      }));
     }
   } catch (error) {
     handleApiError(res, error);

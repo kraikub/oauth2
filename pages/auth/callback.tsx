@@ -10,16 +10,19 @@ const Callback: NextPage = () => {
 
   const handleClaimAccessTokens = async (ctoken: string) => {
     try {
-      const { data } = await authService.claimAccessToken(ctoken);
-      console.log(data);
-      router.push("/projects/manager/");
+      if (router.query.scope === "0") {
+        alert("Sign in scope not allowed.");
+        return router.push("/projects/manager/");
+      }
+      await authService.claimAccessToken(ctoken);
+      return router.push("/projects/manager/");
     } catch {
-      router.push("/projects/manager/");
+      return router.push("/projects/manager/");
     }
   };
 
   useEffect(() => {
-    if (router.query.ctoken) {
+    if (router.query.ctoken && router.query.scope) {
       handleClaimAccessTokens(router.query.ctoken as string);
     }
   }, [router.query]);

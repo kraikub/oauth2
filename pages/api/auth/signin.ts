@@ -70,6 +70,8 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
       ref: ref,
       ctoken: ctoken,
+      scope: scope,
+      clientId: clientId,
     });
     console.log(redirectUrl)
 

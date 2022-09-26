@@ -70,7 +70,7 @@ export const SigninForm: FC<SigninFormProps> = ({
         backgroundColor: "#252526",
         placeholderColor: "#4b4d4f",
       },
-      signinText: "Sign in Anonymously",
+      signinText: "เข้าสู่ระบบแบบไร้ตัวตน",
     },
     regular: {
       body: {
@@ -90,7 +90,7 @@ export const SigninForm: FC<SigninFormProps> = ({
         backgroundColor: "#00000008",
         placeholderColor: "#b0b3b8",
       },
-      signinText: "Sign in",
+      signinText: "เข้าสู่ระบบ",
     },
     pdpaFontOverride: {
       fontFamily: `'Manrope','Sarabun', sans-serif !important`,
@@ -117,7 +117,7 @@ export const SigninForm: FC<SigninFormProps> = ({
   };
 
   const validateBeforeSignin = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     const { data: validateResponse } =
       await authService.validateSigninSignature(username);
     if (validateResponse.payload.validateResult) {
@@ -192,6 +192,7 @@ export const SigninForm: FC<SigninFormProps> = ({
               </Heading>
               <Box mt="30px" w="full">
                 <Text fontSize={14}>
+                  {"คุณกำลังจะเข้าสู่ระบบกับแอป "}
                   <Box
                     as="span"
                     fontWeight={700}
@@ -199,24 +200,23 @@ export const SigninForm: FC<SigninFormProps> = ({
                   >
                     {app?.appName}
                   </Box>
-                  {" wants you to sign in to their app."}
                 </Text>
               </Box>
               <Box mt="10px" w="full">
-                <Text fontSize={12} fontWeight={700}>
-                  KU Username
+                <Text fontSize={12} fontWeight={500}>
+                  บัญชีผู้ใช้เครือข่ายนนทรี
                 </Text>
                 <PrimaryInput
-                  placeholder="Ex. b621050XXXX"
+                  placeholder="เช่น b621050XXXX"
                   onChange={handleUsernameChange}
                   value={username}
                   {...themeSelector(styles).input}
                 />
-                <Text fontSize={12} mt={5} fontWeight={700}>
-                  Password
+                <Text fontSize={12} mt={5} fontWeight={500}>
+                  รหัสผ่าน
                 </Text>
                 <PrimaryInput
-                  placeholder="Password"
+                  placeholder="รหัสผ่าน"
                   type="password"
                   onChange={handlePasswordChange}
                   value={password}
@@ -232,20 +232,20 @@ export const SigninForm: FC<SigninFormProps> = ({
               >
                 <HStack spacing={2}>
                   <Heading fontWeight={700} fontSize="14px">
-                    Data Protection
+                    ข้อมูลส่วนตัวของคุณ
                   </Heading>
                   <MdPrivacyTip size="20px" />
                 </HStack>
                 <Divider my="10px" />
-                <Text fontSize={12} fontWeight={700}>
+                <Text fontSize={12} fontWeight={500}>
                   {query.scope === "0" ? (
-                    `Your data won't be shared with ${app?.appName}`
+                    `ข้อมูลส่วนบุคคลของคุณจะไม่ถูกแชร์ให้กับ ${app?.appName}`
                   ) : (
                     <>
                       <Box as="span" {...themeSelector(styles).highlight}>
                         {app?.appName}
                       </Box>{" "}
-                      want to access these personal data.
+                      ต้องการเข้าถึงข้อมูลเหล่านี้
                     </>
                   )}
                 </Text>
@@ -253,8 +253,18 @@ export const SigninForm: FC<SigninFormProps> = ({
                   <Flex flexWrap="wrap" gap={3} my={4}>
                     <ScopeBadge>
                       <RiAccountCircleFill />
-                      Full Name
+                      ชื่อ นามสกุล
                     </ScopeBadge>
+                    <ScopeBadge>
+                      <RiAccountCircleFill />
+                      การศึกษา
+                    </ScopeBadge>
+                    {query.scope === "2" ? (
+                      <ScopeBadge>
+                        <RiAccountCircleFill />
+                        ผลการเรียน
+                      </ScopeBadge>
+                    ) : null}
                   </Flex>
                 )}
               </Box>
@@ -343,21 +353,23 @@ export const SigninForm: FC<SigninFormProps> = ({
             </Container>
           </DrawerBody>
           <DrawerFooter>
-            <ButtonGroup>
-              <Button {...styles.pdpaFontOverride} size="md" rounded={14}>
-                ฉันไม่ยอมรับ
-              </Button>
-              <Button
-                {...styles.pdpaFontOverride}
-                size="md"
-                colorScheme="teal"
-                rounded={14}
-                onClick={handleSigninEvent}
-                isLoading={isSigninButtonLoading}
-              >
-                ฉันยอมรับ
-              </Button>
-            </ButtonGroup>
+            <Container maxW="container.lg">
+              <ButtonGroup>
+                <Button {...styles.pdpaFontOverride} size="md" rounded={6}>
+                  ฉันไม่ยอมรับ
+                </Button>
+                <Button
+                  {...styles.pdpaFontOverride}
+                  size="md"
+                  colorScheme="katrade.scheme.fix"
+                  rounded={6}
+                  onClick={handleSigninEvent}
+                  isLoading={isSigninButtonLoading}
+                >
+                  ฉันยอมรับ
+                </Button>
+              </ButtonGroup>
+            </Container>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

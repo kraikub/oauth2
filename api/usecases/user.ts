@@ -9,6 +9,7 @@ import { MyKULoginResponse } from "../types/myku/auth";
 import { educationCoverter } from "../utils/converter/education";
 import { gradeConverter } from "../utils/converter/grade";
 import { studentConverter } from "../utils/converter/student";
+import { createAnonymousIdentity } from "../utils/crypto";
 
 export class UserUsecase {
   publicData = async (uid: string): Promise<PublicUserData | null> => {
@@ -78,10 +79,22 @@ export class UserUsecase {
     };
   };
 
-  computeDataOnScope = async (uid: string, scope: string) => {
-    const fullData = await userRepository.getFullUser(uid);
+  computeDataOnScope = async (
+    uid: string,
+    scope: string,
+    clientId: string
+  ): Promise<PossibleUser | null> => {
     if (scope === "0") {
-      return;
+      return {
+        uid: createAnonymousIdentity(uid, clientId),
+      };
+    } else {
+      // Not support scope=2 yet
+      const resUser = await userRepository.getFullUser(uid);
+      if (resUser.length) {
+        return resUser[0];
+      }
+      return null;
     }
   };
 

@@ -42,8 +42,8 @@ export const colors = {
 };
 
 const fonts = {
-  body: `'Manrope','Kanit',sans-serif`,
-  heading: `'Manrope','Kanit',sans-serif`,
+  body: `'Manrope','Noto Sans Thai',sans-serif`,
+  heading: `'Manrope','Noto Sans Thai',sans-serif`,
 };
 
 const components: {[key: string]: ComponentStyleConfig} = {

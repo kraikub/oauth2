@@ -25,6 +25,7 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { InterWindLoader } from "../../layouts/Loader";
 import { DataTips } from "../../components/DataTips";
 import { SigninForm } from "./components/SigninForm";
+import { isValideScope } from "./utils/scope";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
@@ -41,7 +42,7 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
   isRecieveRequest,
 }) => {
 
-  if ((app === null || query.scope === null) && isRecieveRequest) {
+  if ((app === null || !query.scope || !isValideScope(query.scope as string)) && isRecieveRequest) {
     return (
       <Fragment>
         <Head>
@@ -81,12 +82,12 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
                   <Box position="absolute" top="15px" right="15px">
                     <AiFillInfoCircle size="26px" />
                   </Box>
-                  <Heading size="md" mb={3}>
+                  <Heading size="sm" mb={3}>
                     What should I do next?
                   </Heading>
                   <Divider my={4} />
                   <Text fontSize={14} mb={3}>
-                    If you are the developers of this app, the On-device signin
+                    If you are the developers of this app, the SDK Sign in
                     is not working properly. Check your source code or contact
                     our admins.
                   </Text>
@@ -144,7 +145,7 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
                   <Box position="absolute" top="15px" right="15px">
                     <AiFillInfoCircle size="26px" />
                   </Box>
-                  <Heading size="md" mb={3}>
+                  <Heading size="sm" mb={3}>
                     {"What's hapenning?"}
                   </Heading>
                   <Divider my={4} />

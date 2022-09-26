@@ -34,6 +34,7 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import bg3 from "../../../public/bg-3.png";
 import { DataTips } from "../../components/DataTips";
 import { SigninForm } from "./components/SigninForm";
+import { isValideScope } from "./utils/scope";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
@@ -47,7 +48,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
   const [password, setPassword] = useState<string>("");
   const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
 
-  if (app === null || query.scope === null) {
+  if (app === null || !query.scope || !isValideScope(query.scope as string)) {
     return (
       <Fragment>
         <Head>
@@ -86,17 +87,16 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
                   <Box position="absolute" top="15px" right="15px">
                     <AiFillInfoCircle size="26px" />
                   </Box>
-                  <Heading size="md" mb={3}>
+                  <Heading size="sm" mb={3}>
                     What should I do next?
                   </Heading>
                   <Divider my={4} />
                   <Text fontSize={14} mb={3}>
-                    If you are the developers of this app, the On-device signin
-                    is not working properly. Check your source code or contact
-                    our admins.
+                    If you are the developers of this app, the sign in URL is
+                    invalid. Check your source code or contact our admins.
                   </Text>
                   <Text fontSize={14} mb={3}>
-                    If you are a user, the app that you are using is working
+                    If you are an app user, the app that you are using is working
                     wrong.
                   </Text>
                 </Box>
@@ -149,7 +149,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
                   <Box position="absolute" top="15px" right="15px">
                     <AiFillInfoCircle size="26px" />
                   </Box>
-                  <Heading size="md" mb={3}>
+                  <Heading size="sm" mb={3}>
                     {"What's hapenning?"}
                   </Heading>
                   <Divider my={4} />
@@ -171,8 +171,6 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
     );
   }
 
-  return (
-    <SigninForm app={app} query={query} />
-  );
+  return <SigninForm app={app} query={query} />;
 };
 export default SigninPage;

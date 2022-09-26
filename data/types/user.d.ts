@@ -9,6 +9,13 @@ interface PublicFullUser {
   grades: Grade[];
 }
 
+interface PossibleUser {
+  uid: string;
+  student?: Student;
+  educations?: Education[];
+  grades?: Grade[];
+}
+
 interface User {
   appQuota: number;
   appOwned: number;

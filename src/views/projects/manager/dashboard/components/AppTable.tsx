@@ -57,10 +57,10 @@ const AppTable: FC = () => {
     return (
       <VStack my={20} spacing={10}>
         <Heading fontWeight={600} letterSpacing={-1}>
-          Create your first app
+          สร้างแอปพลิเคชันแรกของคุณ
         </Heading>
         <Text fontSize={20} fontWeight={500}>
-          Make an idea comes true now!
+          ใครๆก็สามารถมาสร้างแอปพลิเคชันกับ Kraikub ได้
         </Text>
         <Button
           w="80px"
