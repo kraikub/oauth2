@@ -1,20 +1,3 @@
-# Kraikub 🦄
-Kraikub is a authentication service that integrates with Kasetsart University API (Unofficial Project).
-Kraikub adapts the core concept of OAuth2.0 standard and be as an API adapter that plugs in to **myapi.ku.th**
-which is a part of Kasetsart University APIs.
+# Open source Authentication Service for KU
 
-To understand Kraikub, you might be familiar with **Sign in with Google** buttons which can be found on most of today's websites or applications. These buttons bring you to Google's authentication page to identify who you are and send some of your allowed personal data back to the website or the application owners to process them for their purposes.
-
-Likewise, Kraikub is an (unofficial) authentication gateway for Kasetsart University API. It helps developers to identify their users with Kasetsart University easier.
-
-Kraikub is a middleman between you (as both developers and users) and Kasetsart University. Our goal is to make the user's authentication much easier than before. Once the authentication is proficient, developers can use most of their time to deal with their best ideas and features.
-
-## Try it now 🙋🏻‍♂️
-Check out [Kraikub](https://kraikub.netlify.app), Log in with your KU account and create your first app now!
-
-## Our Contributors 👩🏻‍💻
-- [NUTCHANON C.](https://github.com/nutchanonc) `Project Owner`
-- Special thanks to [NAPASIN S.](https://github.com/frankydesu) `Developer`
-
-
-
+Kraikub is a platform for KU developers that allows them to authenticate any KU students on their app with less than 10 lines of coding. Users can easily sign in to your app with their Nontsri account. Kraikub DOES NOT STORE any user's credentials like username and password. When users sign in to our platform, their username and password will be encrypted with the Asymmetric Encryption Algorithm (which is using RSA in this case) to secure their credentials while it was sent to Kasetsart University for authentication. Only Kasetsart University can read (decrypt) their credentials and not even Kraikub can read (decrypt) these.
