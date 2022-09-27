@@ -46,11 +46,6 @@ export const CreateProjectPage: NextPage = () => {
           onSubmit={handleSubmit(async (data) => {
             const ac = localStorage.getItem("access");
             setLoading(true);
-            if (!ac) {
-              alert("no access token!");
-              setLoading(false);
-              return reload();
-            }
             const hasNameResponse = await appService.hasName(data.appName);
             if (hasNameResponse?.payload !== false) {
               setHasName(true);
