@@ -9,7 +9,7 @@ export const ScopeBadge: FC<ScopeBadgeProps> = ({ children }) => {
   return (
     <Badge
       size="lg"
-      colorScheme="green"
+      colorScheme="gray"
       display="flex"
       alignItems="center"
       gap={2}
