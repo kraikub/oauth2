@@ -1,7 +1,8 @@
 import type { GetServerSideProps, NextPage } from "next";
-import { applicationRepository } from "../api/repositories/application";
-import { Query } from "../src/types/query";
-import SigninPage from "../src/views/signin";
+import { applicationRepository } from "../../../api/repositories/application";
+import { Query } from "../../../src/types/query";
+import SigninPage from "../../../src/views/signin";
+
 
 interface SigninPageProps {
   query: Query;

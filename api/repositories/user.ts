@@ -34,7 +34,7 @@ class UserRepository {
   }
   getUserWithStudent = async (uid: string) => {
     await mongodb.connect()
-    const users = await UserModel.aggregate<UserWithStudent>(studentAggr(uid))
+    const users: UserWithStudent[] = await UserModel.aggregate<UserWithStudent>(studentAggr(uid))
     if (!users.length) return null
     return users[0];
   }

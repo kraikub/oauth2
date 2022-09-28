@@ -10,12 +10,12 @@ class AuthUsecase {
   signCToken = (uid: string, scope: string, clientId: string): string => {
     const accessToken = signAuthObject(
       {
-        type: "ctoken",
+        type: "code",
         uid: uid,
         scope: scope,
         clientId: clientId,
       },
-      "1m"
+      "30s"
     );
     return accessToken;
   };
@@ -32,7 +32,7 @@ class AuthUsecase {
         .status(401)
         .send(createResponse(false, "Payload malformed", null));
     }
-    if (payload.type !== "ctoken") {
+    if (payload.type !== "code") {
       return res
         .status(422)
         .send(createResponse(false, "Token type is not allowed", null));
@@ -62,5 +62,48 @@ class AuthUsecase {
         })
       );
   };
+
+  exchangeOAuthToken = (res: NextApiResponse, authCode: string) => {
+    const [sucess, payload, error] = verify(authCode);
+    if (!sucess) {
+      return res
+        .status(401)
+        .send(createResponse(false, error.toString(), null));
+    }
+    if (!payload.uid || !payload.scope || !payload.clientId) {
+      return res
+        .status(401)
+        .send(createResponse(false, "Payload malformed", null));
+    }
+    if (payload.type !== "code") {
+      return res
+        .status(422)
+        .send(createResponse(false, "Token type is not allowed", null));
+    }
+    const accessToken = signAuthObject(
+      {
+        type: "access",
+        uid: payload.uid,
+        scope: payload.scope,
+        clientId: payload.clientId,
+      },
+      "60m"
+    );
+
+    const refreshToken = signAuthObject(
+      {
+        type: "refresh",
+        uid: payload.uid,
+        scope: payload.scope,
+        clientId: payload.clientId,
+      },
+      "4d"
+    )
+
+    return res.status(200).send(createResponse(true, "Token exchange success", {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+    }))
+  }
 }
 export const authUsecase = new AuthUsecase();

@@ -23,10 +23,5 @@ export interface RefreshTokenBody {
 
 export type AuthResponse = {
   url: string;
-  ctoken: string;
-  user: {
-    uid: string;
-    student?: Student;
-    educations?: Education[];
-  };
+  code: string;
 };
