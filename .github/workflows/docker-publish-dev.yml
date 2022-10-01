@@ -74,7 +74,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }},MONGODB_URL=${{ secrets.MONGODB_URL }}
+          build-args: NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }},MONGODB_URL_ARG=${{ secrets.MONGODB_URL }}
 
       # Remote
       - name: Deploy to dev.kraikub.com
