@@ -4,7 +4,9 @@ class MongoDB {
   private connectionString: string;
   private isConnected: number;
   constructor(_connectionString?: string) {
-    if (_connectionString === undefined) {
+    console.log(_connectionString)
+    console.log(process.env)
+    if (!_connectionString) {
       console.error("Require MONGODB_URL as an environment variable.");
       process.exit(1);
     }
@@ -13,7 +15,6 @@ class MongoDB {
   }
 
   public connect = async () => {
-    console.log(process.env)
     if (this.isConnected) return
     const db = await connect(this.connectionString).catch((err) => {
       console.error(err);
