@@ -94,13 +94,6 @@ jobs:
             docker image prune -f
             docker login -u $GIT_USERNAME -p $GITHUB_TOKEN ghcr.io
             docker pull ghcr.io/kraikub/kraikub-develop:latest
-            docker run ghcr.io/kraikub/kraikub-develop:latest --name kraikub-develop --restart=always -dit \
-            -p 3006:3006 \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-            -e IDENTITY_SECRET=${{ secrets.IDENTITY_SECRET }} \
-            -e MONGODB_URL=${{ secrets.MONGODB_URL }} \
-            -e MYKU_APPKEY=${{ secrets.MYKU_APPKEY }} \
-            -e MYKU_AUTH_URL=${{ secrets.MYKU_AUTH_URL }} \
-            -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
+            docker run ghcr.io/kraikub/kraikub-develop:latest --name kraikub-develop --restart=always -dit -p 3006:3006 -e JWT_SECRET=${{ secrets.JWT_SECRET }} -e IDENTITY_SECRET=${{ secrets.IDENTITY_SECRET }} -e MONGODB_URL=${{ secrets.MONGODB_URL }} -e MYKU_APPKEY=${{ secrets.MYKU_APPKEY }} -e MYKU_AUTH_URL=${{ secrets.MYKU_AUTH_URL }} -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
             echo "${{ github.repository }};production;${{ github.job }};$(date)" >> deployments.log
 
