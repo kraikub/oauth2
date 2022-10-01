@@ -25,5 +25,5 @@ COPY --from=builder /kraikub/.next ./.next
 COPY --from=builder /kraikub/node_modules ./node_modules
 COPY --from=builder /kraikub/package.json ./package.json
 
-EXPOSE 3001
-CMD ["yarn", "start -p 3001"]
+EXPOSE 3000
+CMD ["yarn", "start"]
