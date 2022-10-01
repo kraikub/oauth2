@@ -13,7 +13,7 @@ class MongoDB {
   }
 
   public connect = async () => {
-    console.log(this.connectionString)
+    console.log(process.env)
     if (this.isConnected) return
     const db = await connect(this.connectionString).catch((err) => {
       console.error(err);
