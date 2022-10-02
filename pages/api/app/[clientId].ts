@@ -36,7 +36,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "PUT") {
       const { appDescription, creatorName, callbackUrl, devCallbackUrl } =
         req.body;
-      console.log("UPDATE APP");
       const { success, status, application } =
         await applicationUsecase.updateApp(payload.uid, clientId as string, {
           appDescription,

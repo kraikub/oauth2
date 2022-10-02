@@ -27,16 +27,17 @@ import {
   Radio,
   Stack,
   RadioGroup,
+  Center,
 } from "@chakra-ui/react";
-import { MdDelete } from "react-icons/md";
-import { FaCopy } from "react-icons/fa";
+import { MdAdd, MdDelete } from "react-icons/md";
+import { FaCopy, FaTrash } from "react-icons/fa";
 import { FieldContainer } from "./FieldContainer";
 import bg1 from "../../../../../../public/bg-1.png";
 import bg3 from "../../../../../../public/bg-3.png";
 import bg4 from "../../../../../../public/bg-4.png";
 import bg5 from "../../../../../../public/bg-5.png";
 import { ChangeEvent, FC, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { appService } from "../../../../../services/appService";
 import { useRouter } from "next/router";
 import { useUser } from "../../../../../contexts/User";
@@ -54,8 +55,12 @@ const kraikubUrl = "https://kraikub.com/signin";
 export const AppForm: FC<AppFormProps> = ({ app }) => {
   const router = useRouter();
   const { reload } = useUser();
-  const { register, getValues, watch, reset, handleSubmit } = useForm({
+  const { register, getValues, watch, reset, handleSubmit, control } = useForm({
     defaultValues: app,
+  });
+  const { fields, append, remove } = useFieldArray<Application>({
+    control,
+    name: "redirects",
   });
   const [devToolsScope, setDevToolsScope] = useState<string>("1");
   const [hideSecret, setHideSecret] = useState(true);
@@ -68,10 +73,6 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
   };
 
   const handleDeleteApp = async () => {
-    const ac = localStorage.getItem("access");
-    if (!ac) {
-      return router.push("/projects/manager");
-    }
     const response = await appService.deleteApplication(app.clientId);
     if (!response?.status) {
       // do something
@@ -300,7 +301,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             color="white"
           >
             <Heading size="md" mb={4}>
-              Callbacks (optional)
+              Redirects (optional)
             </Heading>
             <Text fontSize={16} opacity={0.8}>
               ใช้สำหรับกรณีที่ต้องการให้ Kraikub ส่งข้อมูลกลับไปที่ URL ของคุณ
@@ -309,37 +310,58 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             </Text>
           </GridItem>
           <GridItem colSpan={[12, 8]}>
-            <FieldContainer title="Callback URL (Production)">
-              <Input
-                variant="unstyled"
-                fontSize={16}
-                fontWeight={700}
-                py={2}
-                borderWidth="0 0 1px 0"
-                size="md"
-                my={2}
-                rounded={0}
-                _focus={{ borderColor: "katrade.500" }}
-                {...register("callbackUrl")}
-              />
-            </FieldContainer>
-            <FieldContainer title="Callback URL (Development)">
-              <Text mt={6} color="gray.600">
-                *จำเป็นต้องใช้ secret ในการยืนยันให้ Kraikub ส่งข้อมูลกลับไปที่
-                Development Callback
+            <FieldContainer title="Redirect URLs">
+              <Text my={4} fontSize={12}>
+                Kraikub จะอนุญาติให้ส่งข้อมูลการเข้าสู่ระบบกลับไปที่ URL
+                เหล่านี้เท่านั้น, หากต้องการใช้ URL ที่ไม่เป็น HTTPs
+                คุณจำเป็นต้องแนบ Secret มาด้วยทุกครั้ง
               </Text>
-              <Input
-                variant="unstyled"
-                fontSize={16}
-                fontWeight={700}
-                py={2}
-                borderWidth="0 0 1px 0"
-                size="md"
-                my={2}
-                rounded={0}
-                _focus={{ borderColor: "katrade.500" }}
-                {...register("devCallbackUrl")}
-              />
+              {fields.map((item, index) => {
+                return (
+                  <HStack key={item.id} justifyContent="space-between">
+                    <Input
+                      defaultValue={item.url}
+                      variant="unstyled"
+                      fontSize={14}
+                      fontWeight={700}
+                      py={2}
+                      borderWidth="0 0 1px 0"
+                      size="md"
+                      my={2}
+                      rounded={0}
+                      placeholder="เช่น https://mydomain.com/redirect"
+                      _focus={{ borderColor: "katrade.500" }}
+                      {...register(`redirects.${index}.url`)}
+                    />
+                    <ButtonGroup>
+                      <IconButton
+                        aria-label="delete"
+                        size="sm"
+                        colorScheme="red"
+                        rounded="full"
+                        variant="ghost"
+                      >
+                        <FaTrash onClick={() => remove(index)} />
+                      </IconButton>
+                    </ButtonGroup>
+                  </HStack>
+                );
+              })}
+              <Center mt={3}>
+                <Button
+                  aria-label="append-url"
+                  gap={2}
+                  size="sm"
+                  variant="outline"
+                  onClick={() =>
+                    append({
+                      url: "",
+                    })
+                  }
+                >
+                  <MdAdd /> เพิ่ม URL
+                </Button>
+              </Center>
             </FieldContainer>
           </GridItem>
         </Grid>
@@ -563,21 +585,23 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             gap="5"
             display="flex"
             alignItems="center"
-            justifyContent="end"
+            justifyContent="space-between"
           >
+            <Text fontSize={14}>แอปมีการเปลี่ยนแปลง</Text>
             <Spacer />
-
-            <Button colorScheme="red" onClick={resetForm} rounded={12}>
-              ยกเลิก
-            </Button>
-            <Button
-              type="submit"
-              colorScheme="katrade.scheme.fix"
-              rounded={12}
-              isLoading={isUpdating}
-            >
-              บันทึก
-            </Button>
+            <ButtonGroup>
+              <Button colorScheme="red" onClick={resetForm} rounded={12}>
+                ยกเลิก
+              </Button>
+              <Button
+                type="submit"
+                colorScheme="katrade.scheme.fix"
+                rounded={12}
+                isLoading={isUpdating}
+              >
+                บันทึก
+              </Button>
+            </ButtonGroup>
           </Container>
         </Box>
       </Slide>

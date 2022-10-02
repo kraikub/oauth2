@@ -1,21 +1,8 @@
 import {
-  Avatar,
-  Box,
-  Button,
-  ButtonGroup,
-  Container,
-  Divider,
   Flex,
   Heading,
-  IconButton,
   Image,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
+} from "@chakra-ui/react"
 import { FC } from "react";
 import logo from "../../public/logo.png";
 

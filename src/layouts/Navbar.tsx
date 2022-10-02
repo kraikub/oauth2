@@ -39,9 +39,12 @@ const Navbar: FC = () => {
       justifyContent="space-between"
     >
       <Flex alignItems="center" gap={3}>
-        <Image src={logo.src} h="26px" alt="logo"/>
+        <Image src={logo.src} h="26px" alt="logo" />
         <Heading size="md" fontWeight={700} color="black">
           kraikub{" "}
+          <Box as="span" fontSize={12}>
+          for KU
+          </Box>
         </Heading>
       </Flex>
       {user ? (
@@ -49,12 +52,14 @@ const Navbar: FC = () => {
           <Button
             aria-label="home"
             variant="ghost"
-            colorScheme="teal"
+            colorScheme="gray"
+            size="sm"
             gap={1}
+            fontSize={14}
             onClick={() => router.push("/projects/manager")}
           >
             <MdDashboardCustomize size="20px" />
-            <Heading size="sm">แอปพลิเคชัน</Heading>
+            Apps
           </Button>
           <Menu>
             <MenuButton>
@@ -74,8 +79,6 @@ const Navbar: FC = () => {
             </MenuButton>
             <MenuList fontSize={14}>
               <Box px={4} py={3} fontSize={12} fontWeight={500}>
-                <Text>เข้าสู่ระบบด้วย</Text>
-
                 <Text fontWeight={600}>
                   {user.student.nameTh.split(" ").slice(1).join(" ")}
                 </Text>

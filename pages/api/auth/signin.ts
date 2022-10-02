@@ -17,7 +17,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "POST") {
       return res.status(400).send({});
     }
-    const { username, password, clientId, scope, ref, dev, secret, sig } = req.body;
+    const { username, password, clientId, scope, state, dev, secret, sig, redirect_uri } = req.body;
 
     const app = await applicationUsecase.findOneApp({ clientId: clientId });
 
@@ -46,29 +46,22 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     const ctoken = authUsecase.signCToken(uid, scope, clientId)
     let selectedUrl = "";
-    if (dev) {
-      // verifySecret
-      if (app.secret === secret) {
-        selectedUrl = app.devCallbackUrl;
-      } else {
-        return res
-          .status(400)
-          .send(
-            createResponse(
-              false,
-              "Fail to authenticate development callbackUrl (devCallbackUrl)",
-              null
-            )
-          );
-      }
-    } else {
-      selectedUrl = app.callbackUrl;
+    const httpRegex = new RegExp("^http?://")
+    const httpsRegex = new RegExp("^https?://")
+    if (httpsRegex.test(redirect_uri) && app.redirects.includes(redirect_uri)) {
+      selectedUrl = redirect_uri
+    }
+    else if (httpRegex.test(redirect_uri) && app.secret === secret) {
+      selectedUrl = redirect_uri
+    }
+    else {
+      return res.status(406).send(
+        createResponse(false, "redirect_uri not acceptable", null)
+      )
     }
     
-    
-
     const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
-      ref: ref,
+      state: state,
       ctoken: ctoken,
       scope: scope,
       clientId: clientId,

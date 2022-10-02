@@ -57,7 +57,7 @@ const Home: NextPage = () => {
                 colorScheme="katrade.scheme.fix"
                 onClick={() => router.push("/projects/manager")}
               >
-                เริ่มต้นงาน (ฟรี)
+                เริ่มต้นเลย (ฟรี)
               </Button>
             </Flex>
           </Box>
