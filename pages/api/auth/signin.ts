@@ -2,11 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { bridge } from "../../../api/bridge/bridge";
 import { createResponse } from "../../../api/types/response";
 import { applicationUsecase, userUsecase } from "../../../api/usecases";
-import * as crypto from "crypto";
-import { signAuthObject } from "../../../libs/jwt";
 import { redirectToAuthenticateCallback } from "../../../api/utils/callback";
 import { handleApiError } from "../../../api/error";
-import { MyKULoginResponse } from "../../../api/types/myku/auth";
 import { calculateUid, createAnonymousIdentity } from "../../../api/utils/crypto";
 import { AuthResponse } from "../../../api/types/auth";
 import { publicUserFilter } from "../../../api/utils/filter/public_user";
@@ -17,6 +14,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "POST") {
       return res.status(400).send({});
     }
+
     const { username, password, clientId, scope, state, dev, secret, sig, redirect_uri } = req.body;
 
     const app = await applicationUsecase.findOneApp({ clientId: clientId });
@@ -34,17 +32,15 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       uid: uid,
     });
 
-    let student: Student | undefined;
-    let educations: Education[] | undefined;
     if (user === null) {
       // handle create new user
-      const { user: newUser, student: newStudent, educations: newEducations } = await userUsecase.initUserProfile(uid, stdId, sig, authResponse.data)
+      const { user: newUser } = await userUsecase.initUserProfile(uid, stdId, sig, authResponse.data)
       user = newUser
     }
     if (scope === "0") {
       uid = createAnonymousIdentity(uid, clientId)
     }
-    const ctoken = authUsecase.signCToken(uid, scope, clientId)
+    const code = authUsecase.signCToken(uid, scope, clientId)
     let selectedUrl = "";
     const httpRegex = new RegExp("^http?://")
     const httpsRegex = new RegExp("^https?://")
@@ -62,16 +58,14 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     
     const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
       state: state,
-      ctoken: ctoken,
+      code: code,
       scope: scope,
       clientId: clientId,
     });
-    console.log(redirectUrl)
 
     let payload: AuthResponse = {
       url: redirectUrl,
-      ctoken: ctoken,
-      user: publicUserFilter(user)
+      code: code,
     };
     const response = createResponse(true, "Authorized", payload)
     return res.status(200).send(response);

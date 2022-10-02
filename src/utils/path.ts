@@ -10,7 +10,7 @@ export const getSigninUrl = (p: signinOptions) => {
       process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ||
       "ENV_CLIENT_ID_NOT_CONFIGURED",
     scope: "2",
-    ref: p.redirectPath ? p.redirectPath :"client-signin-kapis-auth",
+    state: p.redirectPath ? p.redirectPath :"client-signin-kapis-auth",
     dev:
       process.env.NEXT_PUBLIC_ACCOUNTS_API_CALLBACK_ENV === "development"
         ? "true"
