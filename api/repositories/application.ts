@@ -9,8 +9,7 @@ interface ApplicationFilter {
 interface ApplicationUpdatable {
   appDescription: string;
   creatorName: string;
-  callbackUrl: string;
-  devCallbackUrl: string;
+  redirects: { url: string }[];
 }
 
 export default class ApplicationRepository {

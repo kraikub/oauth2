@@ -10,8 +10,7 @@ interface ApplicationFilter {
 interface ApplicationUpdatable {
   appDescription: string;
   creatorName: string;
-  callbackUrl: string;
-  devCallbackUrl: string;
+  redirects: { url: string }[];
 }
 
 
@@ -84,7 +83,7 @@ export class ApplicationUsecase {
         application: null,
       };
     }
-    const { appDescription, creatorName, callbackUrl, devCallbackUrl } = a;
+    const { appDescription, creatorName, redirects } = a;
     if (!creatorName || !appDescription) {
       return {
         success: false,
@@ -95,8 +94,7 @@ export class ApplicationUsecase {
     const updatedApp = await applicationRepository.updateOne(clientId, {
       appDescription,
       creatorName,
-      callbackUrl,
-      devCallbackUrl,
+      redirects,
     });
     
     return {

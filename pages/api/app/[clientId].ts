@@ -34,14 +34,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     if (req.method === "PUT") {
-      const { appDescription, creatorName, callbackUrl, devCallbackUrl } =
+      const { appDescription, creatorName, redirects } =
         req.body;
       const { success, status, application } =
         await applicationUsecase.updateApp(payload.uid, clientId as string, {
           appDescription,
           creatorName,
-          callbackUrl,
-          devCallbackUrl,
+          redirects,
         });
       if (!success) {
         return handleErrResponse(res, status, "", null);
