@@ -38,8 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             clientId: app.clientId,
             ownerId: app.ownerId,
             creatorName: app.creatorName,
-            callbackUrl: app.callbackUrl,
-            devCallbackUrl: app.devCallbackUrl,
+            redirects: app.redirects,
             secret: app.secret,
           }
         : null,

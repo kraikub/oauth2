@@ -4,4 +4,5 @@ export interface Query {
   scope?: string | string[] | null;
   dev?: string | string[] | null;
   secret?: string | string[] | null;
+  redirect_uri?: string | string[] | null;
 }

@@ -11,7 +11,8 @@ class AuthService {
     scope: string,
     ref?: string,
     dev?: boolean,
-    secret?: string
+    secret?: string,
+    redirectUri?: string,
   ) => {
     const { status, data } = await nextApiBaseInstance.post<
       CustomApiResponse<{ url: string; ctoken: string }>
@@ -24,6 +25,7 @@ class AuthService {
       ref: ref,
       dev: dev,
       secret: secret,
+      redirect_uri: redirectUri,
     });
     return { status, data };
   };

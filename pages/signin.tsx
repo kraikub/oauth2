@@ -12,8 +12,12 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
   return <SigninPage app={app} query={query} />;
 };
 
+const serializable = (o: any) => {
+  return JSON.parse(JSON.stringify(o));
+};
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { client_id, state, scope, dev, secret } = context.query;
+  const { client_id, state, scope, dev, secret, redirect_uri } = context.query;
   let app: Application | null = null;
   if (client_id !== undefined) {
     app = await applicationRepository.findOneApp({
@@ -28,6 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         scope: scope ? scope : null,
         dev: dev ? dev : null,
         secret: secret ? secret : null,
+        redirect_uri: redirect_uri ? redirect_uri : null,
       },
       app: app
         ? {
@@ -37,8 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             clientId: app.clientId,
             ownerId: app.ownerId,
             creatorName: app.creatorName,
-            callbackUrl: app.callbackUrl,
-            devCallbackUrl: app.devCallbackUrl,
+            redirects: serializable([...app.redirects]),
             secret: app.secret,
           }
         : null,

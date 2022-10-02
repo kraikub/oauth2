@@ -42,13 +42,8 @@ interface SigninPageProps {
 }
 
 const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
-  const router = useRouter();
-  const [pdpaAgreed, setPdpaAgreed] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
-
-  if (app === null || !query.scope || !isValideScope(query.scope as string)) {
+  
+  if (app === null || !query.scope || !isValideScope(query.scope as string) || !query.redirect_uri) {
     return (
       <Fragment>
         <Head>

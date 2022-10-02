@@ -6,3 +6,12 @@ export const redirectToAuthenticateCallback = (
 ) => {
   return mapQueryStringToUrl(url, queryString);
 };
+
+export const hasRedirect = (target: string, redirects: { url: string }[]) => {
+  for (const each of redirects) {
+    if (target === each.url) {
+      return true;
+    }
+  }
+  return false;
+};

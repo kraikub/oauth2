@@ -139,9 +139,10 @@ export const SigninForm: FC<SigninFormProps> = ({
         password,
         app.clientId,
         query.scope as string,
-        query.ref as string,
+        query.state as string,
         bindStringToBoolean(query.dev),
-        secret || (query.secret as string | undefined)
+        secret || (query.secret as string | undefined),
+        query.redirect_uri as string,
       );
       if (onSigninComplete) {
         return onSigninComplete(data.payload.ctoken);
