@@ -5,7 +5,8 @@ interface Application {
   clientId: string;
   ownerId: string;
   creatorName: string;
-  callbackUrl: string;
-  devCallbackUrl: string;
+  redirects: {
+    url: string;
+  }[];
   secret: string;
 }

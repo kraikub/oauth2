@@ -4,7 +4,7 @@ class MongoDB {
   private connectionString: string;
   private isConnected: number;
   constructor(_connectionString?: string) {
-    if (_connectionString === undefined) {
+    if (!_connectionString) {
       console.error("Require MONGODB_URL as an environment variable.");
       process.exit(1);
     }

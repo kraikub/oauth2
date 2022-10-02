@@ -85,7 +85,7 @@ export class ApplicationUsecase {
       };
     }
     const { appDescription, creatorName, callbackUrl, devCallbackUrl } = a;
-    if (!callbackUrl || !devCallbackUrl || !creatorName || !appDescription) {
+    if (!creatorName || !appDescription) {
       return {
         success: false,
         status: 422,
