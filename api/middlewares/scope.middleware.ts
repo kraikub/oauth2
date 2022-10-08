@@ -11,5 +11,6 @@ export const scopeMiddleware = (res: NextApiResponse, scope: string | undefined,
       return true;
     }
   }
+  res.status(405).send(createResponse(false, "Unauthorizable scope", null))
   return false;
 }
