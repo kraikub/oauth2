@@ -51,7 +51,7 @@ class AuthUsecase {
     return res
       .status(200)
       .setHeader("Set-Cookie", [
-        `access=${accessToken}; HttpOnly; Max-Age=86100; Path=/`,
+        `access=${accessToken}; HttpOnly; SameSite=None; Max-Age=86100; Path=/; Secure`,
       ]) // Expire in almost 24 hr.
       .send(
         createResponse(true, "Authorized", null)
