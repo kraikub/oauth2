@@ -8,5 +8,9 @@ class AcademicRepository {
     await AcademicModel.insertMany(as)
     return as;
   }
+  useAggregationPipeline = async (pipeline: any[]) => {
+    await mongodb.connect();
+    return await AcademicModel.aggregate(pipeline);
+  };
 }
 export const academicRepository = new AcademicRepository();

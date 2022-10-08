@@ -54,12 +54,7 @@ class AuthUsecase {
         `access=${accessToken}; HttpOnly; Max-Age=86100; Path=/`,
       ]) // Expire in almost 24 hr.
       .send(
-        createResponse(true, "Authorized", {
-          user: { 
-            ...u,
-            uid: payload.uid,
-          },
-        })
+        createResponse(true, "Authorized", null)
       );
   };
 

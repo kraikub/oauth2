@@ -1,16 +1,10 @@
 import {
   Box,
-  Button,
   Center,
-  Checkbox,
   Container,
   Divider,
-  Flex,
   Heading,
-  HStack,
-  ListItem,
   Text,
-  UnorderedList,
   VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
@@ -31,7 +25,7 @@ interface SigninPageProps {
   app: Application | null;
   secret: string;
   isRecieveRequest: boolean;
-  onSigninComplete?: (ctoken: string) => void;
+  onSigninComplete?: (code: string) => void;
 }
 
 const OnDeviceSigninPage: FC<SigninPageProps> = ({
@@ -43,6 +37,7 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
 }) => {
 
   if ((app === null || !query.scope || !isValideScope(query.scope as string)) && isRecieveRequest) {
+    console.log(app, query.scope, isValideScope(query.scope as string), isRecieveRequest)
     return (
       <Fragment>
         <Head>
@@ -176,7 +171,7 @@ const OnDeviceSigninPage: FC<SigninPageProps> = ({
   }
 
   return (
-    <SigninForm query={query} app={app} secret={secret} onSigninComplete={onSigninComplete}/>
+    <SigninForm query={query} app={app} secret={secret} onSigninComplete={onSigninComplete} sdk/>
   );
 };
 export default OnDeviceSigninPage;

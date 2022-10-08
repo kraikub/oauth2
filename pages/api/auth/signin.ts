@@ -27,7 +27,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       clientId,
       scope,
       state,
-      dev,
+      sdk,
       secret,
       sig,
       redirect_uri,
@@ -61,7 +61,14 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (scope === "0") {
       uid = createAnonymousIdentity(uid, clientId);
     }
+
     const code = authUsecase.signCToken(uid, scope, clientId);
+
+    if (sdk === true) {
+      const response = createResponse(true, "Authorized", { code });
+      return res.status(200).send(response);
+    }
+
     let selectedUrl = "";
     const httpRegex = new RegExp("^http?://");
     const httpsRegex = new RegExp("^https?://");

@@ -13,9 +13,10 @@ class AuthService {
     dev?: boolean,
     secret?: string,
     redirectUri?: string,
+    sdk?: boolean
   ) => {
     const { status, data } = await nextApiBaseInstance.post<
-      CustomApiResponse<{ url: string; ctoken: string }>
+      CustomApiResponse<{ url: string; code: string }>
     >("/api/auth/signin", {
       username: RSAEncryptionForMyKU(username),
       password: RSAEncryptionForMyKU(password),
@@ -26,6 +27,7 @@ class AuthService {
       dev: dev,
       secret: secret,
       redirect_uri: redirectUri,
+      sdk: sdk || false,
     });
     return { status, data };
   };
@@ -60,7 +62,7 @@ class AuthService {
     console.log("claiming access token...")
     const { status, data } = await nextApiBaseInstance.get<
       CustomApiResponse<{ user: UserWithStudent }>
-    >(`/api/public/claim?ctoken=${ctoken}`);
+    >(`/api/public/claim?code=${ctoken}`);
     return { status, data };
   };
 }

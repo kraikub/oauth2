@@ -22,14 +22,14 @@ const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
   const [secret, setSecret] = useState("");
   const [isRecieveRequest, setIsRecieveRequest] = useState<boolean>(false);
   const pass = useRef<boolean>(false);
-  function msg(ctoken: string) {
+  function msg(code: string) {
     if (typeof window !== "undefined") {
       // Client-side-only code
       const msgBody = {
         ref: "kraikub-signin",
         type: "report",
         success: true,
-        ctoken: ctoken,
+        code: code,
       };
       window.opener.postMessage(msgBody, origin.current);
       setTimeout(() => window.close(), 1000);
