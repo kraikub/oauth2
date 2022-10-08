@@ -46,7 +46,6 @@ class AuthUsecase {
       },
       "1d"
     );
-    let u = await userRepository.getUserWithStudent(payload.uid);
 
     return res
       .status(200)

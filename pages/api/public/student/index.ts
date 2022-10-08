@@ -5,15 +5,17 @@ import { createResponse } from "../../../../api/types/response";
 import { userUsecase } from "../../../../api/usecases";
 import NextCors from "nextjs-cors";
 import { scopeMiddleware } from "../../../../api/middlewares/scope.middleware";
+import { AccessControlMiddleware } from "../../../../api/middlewares/access-control";
 
 const handleStudentAPI = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await NextCors(req, res, {
       // Options
       methods: ["GET"],
-      origin: "*",
+      origin: req.headers.origin,
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
+    AccessControlMiddleware(req, res);
     const { success, payload, error } = AuthMiddleware(req, res);
     if (!success) {
       return;
