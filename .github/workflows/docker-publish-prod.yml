@@ -1,0 +1,107 @@
+name: Build and Deploy (prod)
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+on:
+  push:
+    branches: [ "main" ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}-production
+
+jobs:
+  build-deploy:
+
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+      packages: write
+      # This is used to complete the identity challenge
+      # with sigstore/fulcio when running outside of PRs.
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Install the cosign tool except on PR
+      # https://github.com/sigstore/cosign-installer
+      - name: Install cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@7e0881f8fe90b25e305bbf0309761e9314607e25
+        with:
+          cosign-release: 'v1.9.0'
+
+
+      # Workaround: https://github.com/docker/build-push-action/issues/461
+      - name: Setup Docker buildx
+        uses: docker/setup-buildx-action@79abd3f86f79a9d68a23c75a09a9a85889262adf
+
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Extract metadata (tags, labels) for Docker
+      # https://github.com/docker/metadata-action
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      # Build and push Docker image with Buildx (don't push on PR)
+      # https://github.com/docker/build-push-action
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
+            MONGODB_URL_ARG=${{ secrets.MONGODB_URL }}
+
+      # Remote
+      - name: Deploy to app.kraikub.com
+        uses: appleboy/ssh-action@master
+        env:
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          IDENTITY_SECRET: ${{ secrets.IDENTITY_SECRET }}
+          MONGODB_URL: ${{ secrets.MONGODB_URL }}
+          MYKU_APPKEY: ${{ secrets.MYKU_APPKEY }}
+          MYKU_AUTH_URL: ${{ secrets.MYKU_AUTH_URL }}
+          NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
+          
+        with:
+          host: ${{ secrets.DO_HOST_IP }}
+          username: ${{ secrets.DO_USERNAME }}
+          password: ${{ secrets.DO_PASSWORD }}
+          envs: GIT_USERNAME, GITHUB_TOKEN, JWT_SECRET, IDENTITY_SECRET, MONGODB_URL, MONGODB_URL, MYKU_APPKEY, MYKU_AUTH_URL, NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID
+          script: |
+            docker stop kraikub-production
+            docker container prune -f 
+            docker image prune -f
+            docker login -u $GIT_USERNAME -p $GITHUB_TOKEN ghcr.io
+            docker pull ghcr.io/kraikub/kraikub-production:latest
+            docker run --name kraikub-production --network=kraikub_network --restart=always -dit -p 3006:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ghcr.io/kraikub/kraikub-develop:latest
+            echo "${{ github.repository }};production;${{ github.job }};$(date)" >> deployments.log
+
