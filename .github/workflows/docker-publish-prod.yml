@@ -102,6 +102,6 @@ jobs:
             docker image prune -f
             docker login -u $GIT_USERNAME -p $GITHUB_TOKEN ghcr.io
             docker pull ghcr.io/kraikub/kraikub-production:latest
-            docker run --name kraikub-production --network=kraikub_network --restart=always -dit -p 3006:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ghcr.io/kraikub/kraikub-develop:latest
+            docker run --name kraikub-production --network=kraikub_network --restart=always -dit -p 3006:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ghcr.io/kraikub/kraikub-production:latest
             echo "${{ github.repository }};production;${{ github.job }};$(date)" >> deployments.log
 
