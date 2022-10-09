@@ -80,6 +80,9 @@ export const studentAggr = (uid: string) => {
 };
 
 export const aggregations = {
+  private: {
+    user: onlyPrivateUser,
+  },
   public: {
     user: onlyPublicUser,
     student: onlyPublicStudent,
@@ -87,6 +90,25 @@ export const aggregations = {
     academic: onlyAcademic,
   },
 };
+
+function onlyPrivateUser(uid: string) {
+  return [
+    {
+      $match: {
+        uid: uid,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        __v: 0,
+        uid: 1,
+        appOwned: 1,
+        appQuota: 1,
+      },
+    },
+  ];
+}
 
 function onlyPublicUser(uid: string) {
   return [

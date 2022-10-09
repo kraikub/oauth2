@@ -100,6 +100,19 @@ export class UserUsecase {
     }
   };
 
+  getPrivateUserWithStudent = async (uid: string) => {
+    const res = await userRepository.useAggregationPipeline([
+      ...aggregations.private.user(uid),
+      ...aggregations.public.student(),
+      ...aggregations.public.education(),
+    ]);
+    if (res.length) {
+      return res[0];
+    } else {
+      return null;
+    }
+  }
+
   getUserWithStudent = async (uid: string) => {
     const res = await userRepository.useAggregationPipeline([
       ...aggregations.public.user(uid),

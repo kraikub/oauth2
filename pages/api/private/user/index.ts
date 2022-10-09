@@ -11,7 +11,7 @@ const handleUserAPI = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
     if (req.method === "GET") {
-      const user = await userUsecase.getUserWithStudent(payload.uid);
+      const user = await userUsecase.getPrivateUserWithStudent(payload.uid);
       return res.status(200).send(createResponse(true, "", user));
     }
   } catch (error) {
