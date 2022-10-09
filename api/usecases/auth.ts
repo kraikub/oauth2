@@ -1,4 +1,4 @@
-import { NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import { signAuthObject, verify } from "../../libs/jwt";
 import { userRepository } from "../repositories/user";
 import { createResponse } from "../types/response";
@@ -46,20 +46,16 @@ class AuthUsecase {
       },
       "1d"
     );
-    let u = await userRepository.getUserWithStudent(payload.uid);
 
     return res
       .status(200)
       .setHeader("Set-Cookie", [
-        `access=${accessToken}; HttpOnly; Max-Age=86100; Path=/`,
+        `access=${accessToken}; HttpOnly; SameSite=None; Max-Age=86100; Path=/; Secure`,
       ]) // Expire in almost 24 hr.
+      .setHeader("Access-Control-Allow-Credentials", "true")
+      .setHeader("Access-Control-Allow-Headers", "Set-Cookie")
       .send(
-        createResponse(true, "Authorized", {
-          user: { 
-            ...u,
-            uid: payload.uid,
-          },
-        })
+        createResponse(true, "Authorized", null)
       );
   };
 

@@ -1,3 +1,4 @@
+import { aggregations } from "../../data/aggregations";
 import { bridge } from "../bridge/bridge";
 import { appConfig } from "../config/app";
 import { academicRepository } from "../repositories/academic";
@@ -89,8 +90,9 @@ export class UserUsecase {
         uid: createAnonymousIdentity(uid, clientId),
       };
     } else {
-      // Not support scope=2 yet
-      const resUser = await userRepository.getFullUser(uid);
+      const resUser = await userRepository.useAggregationPipeline([
+        aggregations.public.user(uid),
+      ]);
       if (resUser.length) {
         return resUser[0];
       }
@@ -99,7 +101,23 @@ export class UserUsecase {
   };
 
   getUserWithStudent = async (uid: string) => {
-    return await userRepository.getUserWithStudent(uid);
+    const res = await userRepository.useAggregationPipeline([
+      ...aggregations.public.user(uid),
+      ...aggregations.public.student(),
+      ...aggregations.public.education(),
+    ]);
+    if (res.length) {
+      return res[0];
+    } else {
+      return null;
+    }
+  };
+
+  getUserGrades = async (uid: string) => {
+    const res = await academicRepository.useAggregationPipeline([
+      ...aggregations.public.academic(uid),
+    ]);
+    return res;
   };
 }
 

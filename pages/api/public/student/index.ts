@@ -4,9 +4,10 @@ import { AuthMiddleware } from "../../../../api/middlewares/auth.middleware";
 import { createResponse } from "../../../../api/types/response";
 import { userUsecase } from "../../../../api/usecases";
 import NextCors from "nextjs-cors";
+import { scopeMiddleware } from "../../../../api/middlewares/scope.middleware";
 import { AccessControlMiddleware } from "../../../../api/middlewares/access-control";
 
-const handleUserAPI = async (req: NextApiRequest, res: NextApiResponse) => {
+const handleStudentAPI = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await NextCors(req, res, {
       // Options
@@ -19,13 +20,18 @@ const handleUserAPI = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!success) {
       return;
     }
+    const allowedScope = scopeMiddleware(res, payload.scope, ["1", "2"]);
+    if (!allowedScope) {
+      return;
+    }
+
     if (req.method === "GET") {
-      const user = await userUsecase.computeDataOnScope(payload.uid, payload.scope, payload.clientId);
-      return res.status(200).send(createResponse(true, "", user));
+      const out = await userUsecase.getUserWithStudent(payload.uid);
+      return res.status(200).send(createResponse(true, "", out));
     }
   } catch (error) {
     handleApiError(res, error);
   }
 };
 
-export default handleUserAPI;
+export default handleStudentAPI;

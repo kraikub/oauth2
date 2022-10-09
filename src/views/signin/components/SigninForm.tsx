@@ -4,20 +4,16 @@ import {
   Heading,
   HStack,
   Divider,
-  Checkbox,
   Button,
   Box,
   Text,
   Center,
   Image,
-  Slide,
   CloseButton,
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerHeader,
   DrawerOverlay,
-  FormControl,
   DrawerFooter,
   ButtonGroup,
   Stack,
@@ -37,7 +33,8 @@ interface SigninFormProps {
   query: Query;
   app: Application | null;
   secret?: string;
-  onSigninComplete?: (ctoken: string) => void;
+  sdk?: boolean;
+  onSigninComplete?: (code: string) => void;
 }
 
 export const SigninForm: FC<SigninFormProps> = ({
@@ -45,6 +42,7 @@ export const SigninForm: FC<SigninFormProps> = ({
   app,
   onSigninComplete,
   secret,
+  sdk,
 }) => {
   const router = useRouter();
   const [pdpaPopup, setPdpaPopup] = useState<boolean>(false);
@@ -143,9 +141,10 @@ export const SigninForm: FC<SigninFormProps> = ({
         bindStringToBoolean(query.dev),
         secret || (query.secret as string | undefined),
         query.redirect_uri as string,
+        sdk,
       );
       if (onSigninComplete) {
-        return onSigninComplete(data.payload.ctoken);
+        return onSigninComplete(data.payload.code);
       }
       return router.push(data.payload.url);
     } catch (error) {

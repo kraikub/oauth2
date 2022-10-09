@@ -9,17 +9,17 @@ const handleClaimAPI = async (req: NextApiRequest, res: NextApiResponse) => {
     await NextCors(req, res, {
       // Options
       methods: ["GET"],
-      origin: "*",
+      origin: req.headers.origin,
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
     if (req.method === "GET") {
-      const { ctoken } = req.query;
-      if (!ctoken) {
+      const { code } = req.query;
+      if (!code) {
         return res
           .status(400)
-          .send(createResponse(false, "Require CToken", null));
+          .send(createResponse(false, "Require ctoken (code)", null));
       }
-      return authUsecase.claimAccessToken(res, ctoken as string);
+      return authUsecase.claimAccessToken(res, code as string);
     }
   } catch (error) {
     handleApiError(res, error);
