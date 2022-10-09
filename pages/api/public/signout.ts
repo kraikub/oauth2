@@ -15,7 +15,7 @@ const handleSignoutAPI = async (req: NextApiRequest, res: NextApiResponse) => {
       return res
       .status(200)
       .setHeader("Set-Cookie", [
-        `access=deleted; HttpOnly; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+        `access=deleted; HttpOnly; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=None; Secure`,
       ]) // Expire in almost 24 hr.
       .setHeader("Access-Control-Allow-Credentials", "true")
       .setHeader("Access-Control-Allow-Headers", "Set-Cookie")
