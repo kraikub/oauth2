@@ -13,8 +13,9 @@ Kraikub is a middleman between you (as both developers and users) and Kasetsart 
 Check out [Kraikub](https://kraikub.netlify.app), Log in with your KU account and create your first app now!
 
 ## Our Contributors 👩🏻‍💻
-- [NUTCHANON C.](https://github.com/nutchanonc) `Project Owner`
-- Special thanks to [NAPASIN S.](https://github.com/frankydesu) `Developer`
+- [NUTCHANON C.](https://github.com/nutchanonc) 
+- Special thanks to [NAPASIN S.](https://github.com/frankydesu) 
+
 
 
 
