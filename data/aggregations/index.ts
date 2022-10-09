@@ -91,6 +91,7 @@ export const aggregations = {
   },
 };
 
+
 function onlyPrivateUser(uid: string) {
   return [
     {
