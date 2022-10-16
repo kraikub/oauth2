@@ -42,14 +42,19 @@ export const colors = {
 };
 
 const fonts = {
-  body: `'Manrope','Noto Sans Thai',sans-serif`,
-  heading: `'Manrope','Noto Sans Thai',sans-serif`,
+  body: `'Sarabun', sans-serif`,
+  heading: `'Sarabun', sans-serif`,
 };
 
 const components: {[key: string]: ComponentStyleConfig} = {
   Text: {
     baseStyle: {
       fontSize: 16,
+      fontWeight: 400,
+    }
+  },
+  Heading: {
+    baseStyle: {
       fontWeight: 500,
     }
   },

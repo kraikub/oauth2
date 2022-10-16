@@ -40,10 +40,10 @@ const Navbar: FC = () => {
     >
       <Flex alignItems="center" gap={3}>
         <Image src={logo.src} h="26px" alt="logo" />
-        <Heading size="md" fontWeight={700} color="black">
+        <Heading size="md" fontWeight={600} color="black" fontFamily={`'Manrope', sans-serif`}>
           kraikub{" "}
-          <Box as="span" fontSize={12}>
-          for KU
+          <Box as="span" fontSize={12} color="gray.500">
+          for developers
           </Box>
         </Heading>
       </Flex>
