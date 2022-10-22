@@ -28,10 +28,18 @@ const consentDataList: ConsentData[] = [
   },
   {
     label: "ผลการเรียน",
-    requires: ["1", "2"],
-    disableBorder: true,
+    requires: ["2"],
   },
 ];
+
+const dataListWithScope = (scope: string) => {
+  let result = consentDataList.filter((consent) =>
+    consent.requires.includes(scope)
+  );
+  if (!result.length) return [];
+  result[result.length - 1].disableBorder = true;
+  return result;
+};
 
 export const ConsentForm: FC<ConsentFormProps> = ({
   scope,
@@ -67,7 +75,7 @@ export const ConsentForm: FC<ConsentFormProps> = ({
               scope={scope}
             />
           ) : null}
-          {consentDataList.map((data: ConsentData, index: number) => {
+          {dataListWithScope(scope).map((data: ConsentData, index: number) => {
             return <Each scope={scope} {...data} key={`consent-${index}`} />;
           })}
         </Box>

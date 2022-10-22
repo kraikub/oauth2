@@ -2,13 +2,9 @@ import {
   Container,
   Flex,
   Heading,
-  HStack,
-  Divider,
   Button,
   Box,
   Text,
-  Center,
-  Image,
   CloseButton,
   Drawer,
   DrawerBody,
@@ -19,20 +15,20 @@ import {
   Stack,
   Link,
   Progress,
-  IconButton,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
-import { MdPrivacyTip } from "react-icons/md";
-import { RiAccountCircleFill } from "react-icons/ri";
+import {
+  ChangeEvent,
+  FC,
+  FormEvent,
+  Fragment,
+  useState,
+} from "react";
 import { authService } from "../../../services/authService";
-import { Query } from "../../../types/query";
 import { PrimaryInput } from "../PrimaryInput";
-import { ScopeBadge } from "./ScopeBadge";
 import { ConsentForm } from "./ConsentForm";
-import { SimpleFadeInRight } from "../../../components/animations/SimpleFadeInRight";
-import { FaArrowRight } from "react-icons/fa";
+import { SimpleFadeInLeft } from "../../../components/animations/SimpleFadeInLeft";
 interface SigninFormProps {
   query: {
     client_id: string;
@@ -61,6 +57,7 @@ export const SigninForm: FC<SigninFormProps> = ({
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
+
   const styles = {
     layout: {
       container: {
@@ -166,6 +163,7 @@ export const SigninForm: FC<SigninFormProps> = ({
       alert("Sign in failed, please try again.");
     }
   };
+
   return (
     <Fragment>
       <Head>
@@ -189,7 +187,7 @@ export const SigninForm: FC<SigninFormProps> = ({
             />
           ) : (
             <Box w="100%" overflow="hidden">
-              <SimpleFadeInRight>
+              <SimpleFadeInLeft>
                 <form onSubmit={toConsent}>
                   <Flex
                     minH="60vh"
@@ -271,7 +269,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                     </IconButton> */}
                   </Flex>
                 </form>
-              </SimpleFadeInRight>
+              </SimpleFadeInLeft>
             </Box>
           )}
         </Container>
