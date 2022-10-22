@@ -18,6 +18,7 @@ import {
   ButtonGroup,
   Stack,
   Link,
+  Progress,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -28,10 +29,17 @@ import { authService } from "../../../services/authService";
 import { Query } from "../../../types/query";
 import { PrimaryInput } from "../PrimaryInput";
 import { ScopeBadge } from "./ScopeBadge";
-import anonymous from "../../../../public/anonymous.png";
+import { ConsentForm } from "./ConsentForm";
 interface SigninFormProps {
-  query: Query;
-  app: Application | null;
+  query: {
+    client_id: string;
+    state?: string | string[] | null;
+    scope: string;
+    dev?: string | string[] | null;
+    secret?: string | string[] | null;
+    redirect_uri: string;
+  };
+  app: Application;
   secret?: string;
   sdk?: boolean;
   onSigninComplete?: (code: string) => void;
@@ -46,29 +54,17 @@ export const SigninForm: FC<SigninFormProps> = ({
 }) => {
   const router = useRouter();
   const [pdpaPopup, setPdpaPopup] = useState<boolean>(false);
+  const [step, setStep] = useState(0);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
   const styles = {
-    anonymous: {
-      body: {
-        bg: "#000",
+    layout: {
+      container: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       },
-      card: {
-        bg: "#1b1c1c",
-        color: "white",
-      },
-      dataControl: {
-        bg: "#ffffff10",
-      },
-      highlight: {
-        color: "katrade.400",
-      },
-      input: {
-        backgroundColor: "#252526",
-        placeholderColor: "#4b4d4f",
-      },
-      signinText: "เข้าสู่ระบบแบบไร้ตัวตน",
     },
     regular: {
       body: {
@@ -85,10 +81,11 @@ export const SigninForm: FC<SigninFormProps> = ({
         color: "katrade.600",
       },
       input: {
-        backgroundColor: "#00000008",
+        backgroundColor: "#FAFAFA",
+        backgroundColorOnHover: "#00000010",
         placeholderColor: "#b0b3b8",
       },
-      signinText: "เข้าสู่ระบบ",
+      signinText: "ดำเนินการต่อ",
     },
     pdpaFontOverride: {
       fontFamily: `'Manrope','Sarabun', sans-serif !important`,
@@ -110,12 +107,23 @@ export const SigninForm: FC<SigninFormProps> = ({
     return undefined;
   };
 
-  const themeSelector = (styles: { regular: any; anonymous: any }) => {
-    return query.scope === "0" ? styles.anonymous : styles.regular;
+  const themeSelector = (styles: { regular: any }) => {
+    return query.scope === "0" ? styles.regular : styles.regular;
   };
 
-  const validateBeforeSignin = async (e: FormEvent<HTMLFormElement>) => {
+  const toConsent = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSigninLoading(true);
+    setTimeout(() => {
+      setStep(1);
+      setIsSigninLoading(false);
+    }, 1000);
+  };
+  const backToSigninForm = () => {
+    setStep(0);
+  };
+
+  const validateBeforeSignin = async () => {
     const { data: validateResponse } =
       await authService.validateSigninSignature(username);
     if (validateResponse.payload.validateResult) {
@@ -141,7 +149,7 @@ export const SigninForm: FC<SigninFormProps> = ({
         bindStringToBoolean(query.dev),
         secret || (query.secret as string | undefined),
         query.redirect_uri as string,
-        sdk,
+        sdk
       );
       if (onSigninComplete) {
         return onSigninComplete(data.payload.code);
@@ -150,6 +158,8 @@ export const SigninForm: FC<SigninFormProps> = ({
     } catch (error) {
       setIsSigninLoading(false);
       console.error(error);
+      setPdpaPopup(false);
+      backToSigninForm();
       alert("Sign in failed, please try again.");
     }
   };
@@ -163,129 +173,87 @@ export const SigninForm: FC<SigninFormProps> = ({
           content={`Sign in to ${app?.appName} with your Kasetsart Account.`}
         />
       </Head>
-      <Box {...themeSelector(styles).body}>
-        <Container maxW={500} minH="100vh" py="4%">
-          {query.scope === "0" ? (
-            <Center mb={4}>
-              <Box p={2} bg="white" rounded="full">
-                <Image src={anonymous.src} alt="data-icon" h="40px" />
-              </Box>
-            </Center>
-          ) : null}
+      <Progress
+        size="xs"
+        isIndeterminate
+        colorScheme="green"
+        opacity={isSigninButtonLoading ? 1 : 0}
+      />
 
-          <form onSubmit={validateBeforeSignin}>
-            <Flex
-              boxShadow={["none","0 6px 30px 20px #00000010"]}
-              rounded={16}
-              minH="60vh"
-              h="auto"
-              px="30px"
-              py="40px"
-              direction="column"
-              alignItems="center"
-              gap="20px"
-              justifyContent="space-between !important"
-              {...themeSelector(styles).card}
-            >
-              <Heading fontSize="22px" fontWeight={800} letterSpacing={-1}>
-                เข้าสู่ระบบด้วย KU
-              </Heading>
-              <Box mt="30px" w="full">
-                <Text fontSize={14}>
-                  {"คุณกำลังจะเข้าสู่ระบบกับแอป "}
-                  <Box
-                    as="span"
-                    fontWeight={700}
-                    {...themeSelector(styles).highlight}
-                  >
-                    {app?.appName}
-                  </Box>
-                </Text>
-              </Box>
-              <Box mt="10px" w="full">
-                <Text fontSize={12} fontWeight={500}>
-                  บัญชีผู้ใช้เครือข่ายนนทรี
-                </Text>
-                <PrimaryInput
-                  placeholder="เช่น b621050XXXX"
-                  onChange={handleUsernameChange}
-                  value={username}
-                  {...themeSelector(styles).input}
-                />
-                <Text fontSize={12} mt={5} fontWeight={500}>
-                  รหัสผ่าน
-                </Text>
-                <PrimaryInput
-                  placeholder="รหัสผ่าน"
-                  type="password"
-                  onChange={handlePasswordChange}
-                  value={password}
-                  {...themeSelector(styles).input}
-                />
-              </Box>
-              <Box
-                px="20px"
-                py="12px"
-                rounded={10}
-                w="full"
-                {...themeSelector(styles).dataControl}
+      <Box {...themeSelector(styles).body}>
+        <Container maxW={500} minH="100vh" py="4%" {...styles.layout.container}>
+          {step === 1 ? (
+            <ConsentForm
+              scope={query.scope}
+              appName={app?.appName}
+              handleSignin={validateBeforeSignin}
+              handleReject={backToSigninForm}
+              loading={isSigninButtonLoading}
+            />
+          ) : (
+            <form onSubmit={toConsent}>
+              <Flex
+                minH="60vh"
+                h="auto"
+                px="30px"
+                py="40px"
+                direction="column"
+                alignItems="center"
+                gap="20px"
+                {...themeSelector(styles).card}
               >
-                <HStack spacing={2}>
-                  <Heading fontWeight={700} fontSize="14px">
-                    ข้อมูลส่วนตัวของคุณ
-                  </Heading>
-                  <MdPrivacyTip size="20px" />
-                </HStack>
-                <Divider my="10px" />
-                <Text fontSize={12} fontWeight={500}>
-                  {query.scope === "0" ? (
-                    `ข้อมูลส่วนบุคคลของคุณจะไม่ถูกแชร์ให้กับ ${app?.appName}`
-                  ) : (
-                    <>
-                      <Box as="span" {...themeSelector(styles).highlight}>
-                        {app?.appName}
-                      </Box>{" "}
-                      ต้องการเข้าถึงข้อมูลเหล่านี้
-                    </>
-                  )}
-                </Text>
-                {query.scope === "0" ? null : (
-                  <Flex flexWrap="wrap" gap={3} my={4}>
-                    <ScopeBadge>
-                      <RiAccountCircleFill />
-                      ชื่อ นามสกุล
-                    </ScopeBadge>
-                    <ScopeBadge>
-                      <RiAccountCircleFill />
-                      การศึกษา
-                    </ScopeBadge>
-                    {query.scope === "2" ? (
-                      <ScopeBadge>
-                        <RiAccountCircleFill />
-                        ผลการเรียน
-                      </ScopeBadge>
-                    ) : null}
-                  </Flex>
-                )}
-              </Box>
-              <Button
-                mt="5px"
-                h="70px"
-                w="full"
-                colorScheme="katrade.scheme.fix"
-                fontSize="1rem"
-                fontWeight={700}
-                rounded={6}
-                isLoading={isSigninButtonLoading}
-                _hover={{
-                  boxShadow: "0 0 10px #00000030",
-                }}
-                type="submit"
-              >
-                {themeSelector(styles).signinText}
-              </Button>
-            </Flex>
-          </form>
+                <Heading size="lg" letterSpacing="-1.5px" lang="en">
+                  Sign in
+                </Heading>
+                <Box mt="30px" w="full">
+                  <Text fontSize={14}>
+                    {"คุณกำลังจะเข้าสู่ระบบกับแอป "}
+                    <Box
+                      as="span"
+                      fontWeight={700}
+                      {...themeSelector(styles).highlight}
+                    >
+                      {app?.appName}
+                    </Box>
+                  </Text>
+                </Box>
+                <Box mt="10px" w="full">
+                  <PrimaryInput
+                    borderRadius="top"
+                    placeholder="บัญชีผู้ใช้เครือข่ายนนทรี"
+                    onChange={handleUsernameChange}
+                    value={username}
+                    {...themeSelector(styles).input}
+                  />
+                  <PrimaryInput
+                    borderRadius="bottom"
+                    placeholder="รหัสผ่าน"
+                    type="password"
+                    onChange={handlePasswordChange}
+                    value={password}
+                    {...themeSelector(styles).input}
+                  />
+                </Box>
+
+                <Button
+                  mt="5px"
+                  h="70px"
+                  w="full"
+                  colorScheme="katrade.scheme.fix"
+                  fontSize="1rem"
+                  fontWeight={700}
+                  _hover={{
+                    boxShadow: "0 0 10px #00000030",
+                  }}
+                  isLoading={isSigninButtonLoading}
+                  type="submit"
+                  disabled={!username || !password}
+                >
+                  {themeSelector(styles).signinText}
+                </Button>
+              </Flex>
+            </form>
+          )}
         </Container>
       </Box>
       <Drawer
