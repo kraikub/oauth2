@@ -19,6 +19,7 @@ import {
   Stack,
   Link,
   Progress,
+  IconButton,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -31,6 +32,7 @@ import { PrimaryInput } from "../PrimaryInput";
 import { ScopeBadge } from "./ScopeBadge";
 import { ConsentForm } from "./ConsentForm";
 import { SimpleFadeInRight } from "../../../components/animations/SimpleFadeInRight";
+import { FaArrowRight } from "react-icons/fa";
 interface SigninFormProps {
   query: {
     client_id: string;
@@ -255,6 +257,18 @@ export const SigninForm: FC<SigninFormProps> = ({
                     >
                       {themeSelector(styles).signinText}
                     </Button>
+                    {/* <IconButton
+                      aria-label="sign-in-button"
+                      color="#00000060"
+                      rounded="full"
+                      bgColor="transparent"
+                      border="1px solid #00000030"
+                      _hover={{
+                        bgColor: "#00000010"
+                      }}
+                    >
+                      <FaArrowRight color="inherit" />
+                    </IconButton> */}
                   </Flex>
                 </form>
               </SimpleFadeInRight>
