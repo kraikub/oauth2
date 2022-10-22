@@ -21,14 +21,14 @@ const borderRadius: { [key: string]: string } = {
 type WrappedPrimaryInputProps = StyledComponent<"input", PrimaryInputProps>
 
 export const PrimaryInput: WrappedPrimaryInputProps= styled.input`
-    height: 50px;
     width: ${(props: WrappedPrimaryInputProps) => props.width ? props.width : "100%"};
+    color: ${(props: WrappedPrimaryInputProps) => props.color ? props.color : "#000000c0"};
     background: ${(props: WrappedPrimaryInputProps) => props.backgroundColor ? props.backgroundColor : "transparent"};
     border-radius: ${(props: WrappedPrimaryInputProps) => borderRadius[props.borderRadius] || borderRadius["all"]};
-    padding: 0 10px 0 10px;
+    padding: 16px 14px 16px 14px;
     border: solid #00000020 1px;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 18px;
     outline: none;
     &:focus {
         background-color: ${(props: WrappedPrimaryInputProps) => props.backgroundColorOnHover || props.backgroundColor || "#00000014"}

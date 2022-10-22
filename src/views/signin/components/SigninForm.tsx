@@ -30,6 +30,7 @@ import { Query } from "../../../types/query";
 import { PrimaryInput } from "../PrimaryInput";
 import { ScopeBadge } from "./ScopeBadge";
 import { ConsentForm } from "./ConsentForm";
+import { SimpleFadeInRight } from "../../../components/animations/SimpleFadeInRight";
 interface SigninFormProps {
   query: {
     client_id: string;
@@ -81,8 +82,8 @@ export const SigninForm: FC<SigninFormProps> = ({
         color: "katrade.600",
       },
       input: {
-        backgroundColor: "#FAFAFA",
-        backgroundColorOnHover: "#00000010",
+        backgroundColor: "transparent",
+        backgroundColorOnHover: "transparent",
         placeholderColor: "#b0b3b8",
       },
       signinText: "ดำเนินการต่อ",
@@ -173,12 +174,6 @@ export const SigninForm: FC<SigninFormProps> = ({
           content={`Sign in to ${app?.appName} with your Kasetsart Account.`}
         />
       </Head>
-      <Progress
-        size="xs"
-        isIndeterminate
-        colorScheme="green"
-        opacity={isSigninButtonLoading ? 1 : 0}
-      />
 
       <Box {...themeSelector(styles).body}>
         <Container maxW={500} minH="100vh" py="4%" {...styles.layout.container}>
@@ -191,68 +186,79 @@ export const SigninForm: FC<SigninFormProps> = ({
               loading={isSigninButtonLoading}
             />
           ) : (
-            <form onSubmit={toConsent}>
-              <Flex
-                minH="60vh"
-                h="auto"
-                px="30px"
-                py="40px"
-                direction="column"
-                alignItems="center"
-                gap="20px"
-                {...themeSelector(styles).card}
-              >
-                <Heading size="lg" letterSpacing="-1.5px" lang="en">
-                  Sign in
-                </Heading>
-                <Box mt="30px" w="full">
-                  <Text fontSize={14}>
-                    {"คุณกำลังจะเข้าสู่ระบบกับแอป "}
-                    <Box
-                      as="span"
-                      fontWeight={700}
-                      {...themeSelector(styles).highlight}
-                    >
-                      {app?.appName}
+            <Box w="100%" overflow="hidden">
+              <SimpleFadeInRight>
+                <form onSubmit={toConsent}>
+                  <Flex
+                    minH="60vh"
+                    h="auto"
+                    px="30px"
+                    py="40px"
+                    direction="column"
+                    alignItems="center"
+                    gap="20px"
+                    {...themeSelector(styles).card}
+                  >
+                    <Heading size="lg" letterSpacing="-1.5px" lang="en">
+                      Sign in
+                    </Heading>
+                    <Box mt="30px" w="full">
+                      <Text fontSize={14}>
+                        {"คุณกำลังจะเข้าสู่ระบบกับแอป "}
+                        <Box
+                          as="span"
+                          fontWeight={700}
+                          {...themeSelector(styles).highlight}
+                        >
+                          {app?.appName}
+                        </Box>
+                      </Text>
                     </Box>
-                  </Text>
-                </Box>
-                <Box mt="10px" w="full">
-                  <PrimaryInput
-                    borderRadius="top"
-                    placeholder="บัญชีผู้ใช้เครือข่ายนนทรี"
-                    onChange={handleUsernameChange}
-                    value={username}
-                    {...themeSelector(styles).input}
-                  />
-                  <PrimaryInput
-                    borderRadius="bottom"
-                    placeholder="รหัสผ่าน"
-                    type="password"
-                    onChange={handlePasswordChange}
-                    value={password}
-                    {...themeSelector(styles).input}
-                  />
-                </Box>
+                    <Box mt="10px" w="full">
+                      <Progress
+                        size="xs"
+                        isIndeterminate
+                        colorScheme="green"
+                        background="transparent"
+                        opacity={isSigninButtonLoading ? 1 : 0}
+                      />
+                      <PrimaryInput
+                        borderRadius="top"
+                        placeholder="บัญชีผู้ใช้เครือข่ายนนทรี"
+                        onChange={handleUsernameChange}
+                        value={username}
+                        {...themeSelector(styles).input}
+                      />
+                      <PrimaryInput
+                        borderRadius="bottom"
+                        placeholder="รหัสผ่าน"
+                        type="password"
+                        onChange={handlePasswordChange}
+                        value={password}
+                        {...themeSelector(styles).input}
+                      />
+                    </Box>
 
-                <Button
-                  mt="5px"
-                  h="70px"
-                  w="full"
-                  colorScheme="katrade.scheme.fix"
-                  fontSize="1rem"
-                  fontWeight={700}
-                  _hover={{
-                    boxShadow: "0 0 10px #00000030",
-                  }}
-                  isLoading={isSigninButtonLoading}
-                  type="submit"
-                  disabled={!username || !password}
-                >
-                  {themeSelector(styles).signinText}
-                </Button>
-              </Flex>
-            </form>
+                    <Button
+                      mt="5px"
+                      h="70px"
+                      w="full"
+                      colorScheme="katrade.scheme.fix"
+                      fontSize="1rem"
+                      fontWeight={700}
+                      _hover={{
+                        boxShadow: "0 0 10px #00000030",
+                      }}
+                      isLoading={isSigninButtonLoading}
+                      type="submit"
+                      disabled={!username || !password}
+                    >
+                      {themeSelector(styles).signinText}
+                    </Button>
+                  </Flex>
+                </form>
+              </SimpleFadeInRight>
+            </Box>
           )}
         </Container>
       </Box>

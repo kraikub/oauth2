@@ -41,8 +41,8 @@ export const ConsentForm: FC<ConsentFormProps> = ({
   loading,
 }) => {
   return (
-    <SimpleFadeInRight>
-      <Box>
+    <Box overflow="hidden" w="100%">
+      <SimpleFadeInRight>
         <Heading size="lg" mb={6}>
           <Box as="span" lang="en" color="green">
             {appName}
@@ -60,8 +60,13 @@ export const ConsentForm: FC<ConsentFormProps> = ({
           border="1px solid #00000020"
         >
           {scope === "0" ? (
-            <Each label="ไม่มีการเปิดเผยข้อมูล" requires={["0"]} disableBorder={true} scope={scope}/>
-          ): null}
+            <Each
+              label="ไม่มีการเปิดเผยข้อมูล"
+              requires={["0"]}
+              disableBorder={true}
+              scope={scope}
+            />
+          ) : null}
           {consentDataList.map((data: ConsentData, index: number) => {
             return <Each scope={scope} {...data} key={`consent-${index}`} />;
           })}
@@ -84,8 +89,8 @@ export const ConsentForm: FC<ConsentFormProps> = ({
             อนุญาต
           </Button>
         </Flex>
-      </Box>
-    </SimpleFadeInRight>
+      </SimpleFadeInRight>
+    </Box>
   );
 };
 
