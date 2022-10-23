@@ -19,7 +19,7 @@ import { useRouter } from "next/router";
 import { FC } from "react";
 import { useUser } from "../contexts/User";
 import { MdDashboardCustomize } from "react-icons/md";
-import logo from "../../public/logo.png";
+import logo from "../../public/logo-min.png";
 const Navbar: FC = () => {
   const router = useRouter();
   const { user, signout } = useUser();
@@ -32,19 +32,23 @@ const Navbar: FC = () => {
       py="12px"
       bg="white"
       zIndex={35}
-      boxShadow="0 10px 10px #00000010"
+      border="solid #00000020"
+      borderWidth="0 0 1px 0"
       px="20px"
       minH="60px"
       alignItems="center"
       justifyContent="space-between"
     >
-      <Flex alignItems="center" gap={3}>
+      <Flex alignItems="center" gap={2}>
         <Image src={logo.src} h="26px" alt="logo" />
-        <Heading size="md" fontWeight={700} color="black">
+        <Heading
+          size="md"
+          fontWeight={600}
+          fontFamily={`'Manrope', sans-serif`}
+          background="linear-gradient(121deg, rgba(0,111,79,1) 0%, rgba(0,74,106,1) 100%)"
+          backgroundClip="text"
+        >
           kraikub{" "}
-          <Box as="span" fontSize={12}>
-          for KU
-          </Box>
         </Heading>
       </Flex>
       {user ? (

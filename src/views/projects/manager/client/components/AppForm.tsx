@@ -34,7 +34,6 @@ import { FaCopy, FaTrash } from "react-icons/fa";
 import { FieldContainer } from "./FieldContainer";
 import bg1 from "../../../../../../public/bg-1.png";
 import bg3 from "../../../../../../public/bg-3.png";
-import bg4 from "../../../../../../public/bg-4.png";
 import bg5 from "../../../../../../public/bg-5.png";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -109,7 +108,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           alignItems="center"
         >
           <Box>
-            <Heading fontWeight={700} fontSize="44px" letterSpacing="-2px">
+            <Heading fontWeight={500} fontSize="44px" letterSpacing="-2px">
               {app?.appName}
             </Heading>
             <Heading fontWeight={600} fontSize="20px" opacity={0.6}>
@@ -144,7 +143,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               <Input
                 variant="unstyled"
                 fontSize={22}
-                fontWeight={700}
+                fontWeight={500}
                 color="gray.800"
                 py={2}
                 borderWidth="0 0 1px 0"
@@ -164,7 +163,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               <Input
                 variant="unstyled"
                 fontSize={22}
-                fontWeight={700}
+                fontWeight={500}
                 color="gray.800"
                 py={2}
                 borderWidth="0 0 1px 0"
@@ -184,7 +183,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 width="100%"
                 variant="unstyled"
                 fontSize={16}
-                fontWeight={700}
+                fontWeight={500}
                 color="gray.800"
                 py={2}
                 borderWidth="0 0 1px 0"
@@ -224,7 +223,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 <Input
                   variant="unstyled"
                   fontSize={16}
-                  fontWeight={700}
+                  fontWeight={500}
                   color="gray.800"
                   py={2}
                   borderWidth="0 0 1px 0"
@@ -248,7 +247,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                     color="red.400"
                     variant="unstyled"
                     fontSize={16}
-                    fontWeight={700}
+                    fontWeight={500}
                     py={2}
                     borderWidth="0 0 1px 0"
                     size="md"
@@ -323,7 +322,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                       defaultValue={item.url}
                       variant="unstyled"
                       fontSize={14}
-                      fontWeight={700}
+                      fontWeight={500}
                       py={2}
                       borderWidth="0 0 1px 0"
                       size="md"
@@ -393,138 +392,6 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           boxShadow="0 2px 5px 2px #00000020"
           rounded={10}
         >
-          <Box mb={8}>
-            <Heading size="md" mb={2}>
-              SDK
-            </Heading>
-            <Divider />
-          </Box>
-          <Box my={4}>
-            <Box py={3} mb={10} bg="white" rounded={8}>
-              <Heading size="sm">เลือกประเภทการเข้าสู่ระบบ</Heading>
-              <Stack my={6} spacing={4}>
-                <Choice
-                  set={setDevToolsScope}
-                  value="0"
-                  currentValue={devToolsScope}
-                  title={"Anonymous Sign in"}
-                  description={
-                    "เมื่อผู้ใช้งานของคุณเข้าสู่ระบบ, Kraikub จะไม่ส่งข้อมูลส่วนบุคคลของผู้ใช้งานกลับไปให้คุณ ยกเว้น ID สำหรับใช้ระบุตัวตนของผู้ใช้งาน"
-                  }
-                />
-                <Choice
-                  set={setDevToolsScope}
-                  value="1"
-                  currentValue={devToolsScope}
-                  title={"Sign in with KU"}
-                  description={
-                    "เมื่อผู้ใช้งานของคุณเข้าสู่ระบบ, Kraikub จะให้ข้อมูลทั่วไปเกี่ยวกับนิสิต/นักศึกษา เช่นชื่อ หรือ คณะที่เรียน"
-                  }
-                />
-                <Choice
-                  set={setDevToolsScope}
-                  value="2"
-                  currentValue={devToolsScope}
-                  title={"Sign in with KU Plus"}
-                  description={
-                    "เมื่อผู้ใช้งานของคุณเข้าสู่ระบบ, Kraikub จะให้ข้อมูลทั่วไปและข้อมูลเชิงลึกเกี่ยวกับนิสิต/นักศึกษา เช่น ผลการเรียน"
-                  }
-                />
-              </Stack>
-            </Box>
-            <SyntaxHighlighter
-              language="javascript"
-              style={materialOceanic}
-              showLineNumbers
-              customStyle={{
-                borderRadius: "10px",
-                backgroundColor: "#2c3036",
-              }}
-            >
-              {`const app = createInstance({\n\tclientId: "${app.clientId}",\n\tsecret: "${app.secret}"\n})`}
-            </SyntaxHighlighter>
-          </Box>
-        </Box>
-        <Box
-          mt={4}
-          p={8}
-          bg="white"
-          boxShadow="0 2px 5px 2px #00000020"
-          rounded={10}
-        >
-          <Box mb={8}>
-            <Heading size="md" mb={2}>
-              URL สำหรับใช้งาน Sign in with KU ด้วย Callback
-            </Heading>
-            <Divider />
-          </Box>
-          <Box my={4}>
-            <Text my={4}>
-              ไม่จำเป็นต้องใช้ URL เหล่านี้ในการณีที่คุณใช้ Kraikub SDK
-            </Text>
-            <Box py={3} mb={10} bg="white" rounded={8}>
-              <Heading size="sm">เลือกประเภทการเข้าสู่ระบบ</Heading>
-              <Stack my={6} spacing={4}>
-                <Choice
-                  set={setDevToolsScope}
-                  value="0"
-                  currentValue={devToolsScope}
-                  title={"Anonymous Sign in"}
-                  description={
-                    "เมื่อผู้ใช้งานของคุณเข้าสู่ระบบ, Kraikub จะไม่ส่งข้อมูลส่วนบุคคลของผู้ใช้งานกลับไปให้คุณ ยกเว้น ID สำหรับใช้ระบุตัวตนของผู้ใช้งาน"
-                  }
-                />
-                <Choice
-                  set={setDevToolsScope}
-                  value="1"
-                  currentValue={devToolsScope}
-                  title={"Sign in with KU"}
-                  description={
-                    "เมื่อผู้ใช้งานของคุณเข้าสู่ระบบ, Kraikub จะให้ข้อมูลทั่วไปเกี่ยวกับนิสิต/นักศึกษา เช่นชื่อ หรือ คณะที่เรียน"
-                  }
-                />
-                <Choice
-                  set={setDevToolsScope}
-                  value="2"
-                  currentValue={devToolsScope}
-                  title={"Sign in with KU Plus"}
-                  description={
-                    "เมื่อผู้ใช้งานของคุณเข้าสู่ระบบ, Kraikub จะให้ข้อมูลทั่วไปและข้อมูลเชิงลึกเกี่ยวกับนิสิต/นักศึกษา เช่น ผลการเรียน"
-                  }
-                />
-              </Stack>
-            </Box>
-            <Heading size="sm" mb={4}>
-              สำหรับส่งกลับไปที่ Production URL
-            </Heading>
-            <Box px={5} py={3} bg="gray.700" rounded={6}>
-              <Text
-                fontWeight={400}
-                fontSize={14}
-                color="gray.300"
-                fontFamily="'Roboto Mono'"
-              >
-                {kraikubUrl +
-                  `?client_id=${app.clientId}&scope=${devToolsScope}`}
-              </Text>
-            </Box>
-          </Box>
-          <Box my={4}>
-            <Heading size="sm" mb={4}>
-              สำหรับส่งกลับไปที่ Development URL
-            </Heading>
-            <Box px={5} py={3} bg="gray.700" rounded={6}>
-              <Text
-                fontWeight={400}
-                fontSize={14}
-                color="gray.300"
-                fontFamily="'Roboto Mono'"
-              >
-                {kraikubUrl +
-                  `?client_id=${app.clientId}&scope=${devToolsScope}&dev=true&secret=${app.secret}`}
-              </Text>
-            </Box>
-          </Box>
         </Box>
       </Container>
       <Divider my={10} />
@@ -618,7 +485,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           <ModalBody>
             <Text>
               คุณกำลังที่จะลบแอปพลิเคชั่น{" "}
-              <Box as="span" fontWeight={700} color="blue.500">
+              <Box as="span" fontWeight={500} color="blue.500">
                 {app.appName}
               </Box>{" "}
               ออกจากแพลทฟอร์มของเรา
@@ -627,7 +494,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             <Box my={4}>
               <Text mb={3}>
                 กรุณากรอก{" "}
-                <Box as="span" fontWeight={700} color="red.500">
+                <Box as="span" fontWeight={500} color="red.500">
                   delete/{noWhiteSpace(app.appName)}
                 </Box>{" "}
                 เพื่อดำเนินการลบแอปพลิเคชั่น

@@ -4,7 +4,7 @@ import {
   Image,
 } from "@chakra-ui/react"
 import { FC } from "react";
-import logo from "../../public/logo.png";
+import logo from "../../public/logo-min.png";
 
 const StaticNavbar: FC = () => {
   return (
@@ -16,7 +16,8 @@ const StaticNavbar: FC = () => {
       py="12px"
       bg="white"
       zIndex={35}
-      boxShadow="0 10px 10px #00000010"
+      border="solid #00000020"
+      borderWidth="0 0 1px 0"
       px="20px"
       minH="70px"
       alignItems="center"

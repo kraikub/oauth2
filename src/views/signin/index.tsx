@@ -12,29 +12,17 @@ import {
   Divider,
   Flex,
   Heading,
-  HStack,
-  Image,
-  Input,
-  ListItem,
   Text,
-  UnorderedList,
   VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
-import { authService } from "../../services/authService";
 import { Query } from "../../types/query";
-import { PrimaryInput } from "./PrimaryInput";
-import { MdPrivacyTip } from "react-icons/md";
-import ogImage from "../../../public/og-image.png";
-import { RiAccountCircleFill } from "react-icons/ri";
-import { ScopeBadge } from "./components/ScopeBadge";
-import { AiFillInfoCircle } from "react-icons/ai";
 import bg3 from "../../../public/bg-3.png";
-import { DataTips } from "../../components/DataTips";
 import { SigninForm } from "./components/SigninForm";
 import { isValideScope } from "./utils/scope";
+import { AiFillInfoCircle } from "react-icons/ai";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
@@ -43,7 +31,7 @@ interface SigninPageProps {
 
 const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
   
-  if (app === null || !query.scope || !isValideScope(query.scope as string) || !query.redirect_uri) {
+  if (app === null || !query.scope || !isValideScope(query.scope as string) || !query.redirect_uri || !query.client_id) {
     return (
       <Fragment>
         <Head>
@@ -166,6 +154,11 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
     );
   }
 
-  return <SigninForm app={app} query={query} />;
+  return <SigninForm app={app} query={{
+    ...query,
+    scope: query.scope as string,
+    client_id: query.client_id as string,
+    redirect_uri: query.redirect_uri as string,
+  }} />;
 };
 export default SigninPage;

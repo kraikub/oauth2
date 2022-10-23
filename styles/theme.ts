@@ -42,24 +42,45 @@ export const colors = {
 };
 
 const fonts = {
-  body: `'Manrope','Noto Sans Thai',sans-serif`,
-  heading: `'Manrope','Noto Sans Thai',sans-serif`,
+  body: `'Inter', sans-serif`,
+  heading: `'Inter', sans-serif`,
 };
 
-const components: {[key: string]: ComponentStyleConfig} = {
+const components: { [key: string]: ComponentStyleConfig } = {
   Text: {
     baseStyle: {
       fontSize: 16,
+      fontWeight: 400,
+    },
+  },
+  Heading: {
+    baseStyle: {
       fontWeight: 500,
-    }
+    },
+    sizes: {
+      xl: {
+        fontSize: "3rem",
+      },
+    },
   },
   Input: {
     defaultProps: {
       fontSize: 20,
       fontWeight: 600,
-    }
+    },
   },
-}
+  Button: {
+    baseStyle: {
+      rounded: 10,
+      fontWeight: 400,
+    },
+    sizes: {
+      lg: {
+        fontSize: 16,
+      },
+    },
+  },
+};
 
 const overrides = {
   config,

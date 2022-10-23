@@ -11,7 +11,7 @@ export const FieldContainer: FC<FieldContainerProps> = ({
   children,
 }) => {
   return (
-    <Box bg="white" boxShadow="0 2px 5px 2px #00000020" p={6} rounded={18} mb={6}>
+    <Box bg="white" boxShadow="0 0px 3px 1px #00000020" p={6} rounded={18} mb={6}>
       <Heading size="sm" mb={1} color="katrade.main">{ title }</Heading>
       { children }
     </Box>
