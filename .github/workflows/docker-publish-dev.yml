@@ -97,11 +97,11 @@ jobs:
           password: ${{ secrets.DO_PASSWORD }}
           envs: GIT_USERNAME, GITHUB_TOKEN, JWT_SECRET, IDENTITY_SECRET, MONGODB_URL, MONGODB_URL, MYKU_APPKEY, MYKU_AUTH_URL, NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID
           script: |
-            docker stop kraikub-develop
+            docker stop ${{ github.repository }}-develop
             docker container prune -f 
             docker image prune -f
             docker login -u $GIT_USERNAME -p $GITHUB_TOKEN ghcr.io
-            docker pull ghcr.io/kraikub/kraikub-develop:latest
-            docker run --name kraikub-develop --network=kraikub_network --restart=always -dit -p 3006:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ghcr.io/kraikub/kraikub-develop:latest
+            docker pull ghcr.io/kraikub/${{ github.repository }}-develop:latest
+            docker run --name ${{ github.repository }}-develop --network=kraikub_network --restart=always -dit -p 3006:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ghcr.io/kraikub/${{ github.repository }}-develop:latest
             echo "${{ github.repository }};develop;${{ github.job }};$(date)" >> deployments.log
 
