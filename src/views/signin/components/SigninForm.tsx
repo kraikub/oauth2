@@ -15,20 +15,17 @@ import {
   Stack,
   Link,
   Progress,
+  IconButton,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import {
-  ChangeEvent,
-  FC,
-  FormEvent,
-  Fragment,
-  useState,
-} from "react";
+import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
 import { authService } from "../../../services/authService";
 import { PrimaryInput } from "../PrimaryInput";
 import { ConsentForm } from "./ConsentForm";
 import { SimpleFadeInLeft } from "../../../components/animations/SimpleFadeInLeft";
+import { FaArrowRight } from "react-icons/fa";
+import { FooterShort } from "../../../layouts/FooterShort";
 interface SigninFormProps {
   query: {
     client_id: string;
@@ -174,9 +171,13 @@ export const SigninForm: FC<SigninFormProps> = ({
           content={`Sign in to ${app?.appName} with your Kasetsart Account.`}
         />
       </Head>
-
       <Box {...themeSelector(styles).body}>
-        <Container maxW={500} minH="100vh" py="4%" {...styles.layout.container}>
+        <Container
+          maxW={500}
+          height="100vh"
+          py="4%"
+          {...styles.layout.container}
+        >
           {step === 1 ? (
             <ConsentForm
               scope={query.scope}
@@ -239,7 +240,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                       />
                     </Box>
 
-                    <Button
+                    {/* <Button
                       mt="5px"
                       h="70px"
                       w="full"
@@ -254,26 +255,31 @@ export const SigninForm: FC<SigninFormProps> = ({
                       disabled={!username || !password}
                     >
                       {themeSelector(styles).signinText}
-                    </Button>
-                    {/* <IconButton
+                    </Button> */}
+                    <IconButton
+                      isLoading={isSigninButtonLoading}
+                      type="submit"
+                      disabled={!username || !password}
                       aria-label="sign-in-button"
-                      color="#00000060"
+                      // color="#00000060"
                       rounded="full"
-                      bgColor="transparent"
-                      border="1px solid #00000030"
+                      colorScheme="katrade.scheme.fix"
+                      // border="1px solid #00000030"
                       _hover={{
-                        bgColor: "#00000010"
+                        bgColor: "#000000",
                       }}
                     >
                       <FaArrowRight color="inherit" />
-                    </IconButton> */}
+                    </IconButton>
                   </Flex>
                 </form>
               </SimpleFadeInLeft>
             </Box>
           )}
         </Container>
+        <FooterShort />
       </Box>
+
       <Drawer
         placement={"bottom"}
         onClose={() => setPdpaPopup(false)}
