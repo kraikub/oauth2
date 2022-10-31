@@ -203,6 +203,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                     <Heading size="lg" letterSpacing="-1.5px" lang="en">
                       Sign in
                     </Heading>
+                    <Text>เข้าสู่ระบบด้วย KU</Text>
                     <Box mt="30px" w="full">
                       <Text fontSize={14}>
                         {"คุณกำลังจะเข้าสู่ระบบกับแอป "}

@@ -24,9 +24,8 @@ const StaticNavbar: FC = () => {
       justifyContent="space-between"
     >
       <Flex alignItems="center" gap={3}>
-        <Image src={logo.src} h="26px" alt="logo"/>
-        <Heading size="md" fontWeight={700} color="black">
-          kraikub{" "}
+        <Heading size="md" fontWeight={600} color="black" letterSpacing={-1}>
+          kraikub.
         </Heading>
       </Flex>
     </Flex>

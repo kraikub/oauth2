@@ -40,15 +40,8 @@ const Navbar: FC = () => {
       justifyContent="space-between"
     >
       <Flex alignItems="center" gap={2}>
-        <Image src={logo.src} h="26px" alt="logo" />
-        <Heading
-          size="md"
-          fontWeight={600}
-          fontFamily={`'Manrope', sans-serif`}
-          background="linear-gradient(121deg, rgba(0,111,79,1) 0%, rgba(0,74,106,1) 100%)"
-          backgroundClip="text"
-        >
-          kraikub{" "}
+      <Heading size="md" fontWeight={600} color="black" letterSpacing={-1}>
+          kraikub.
         </Heading>
       </Flex>
       {user ? (

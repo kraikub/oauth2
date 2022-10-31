@@ -42,8 +42,8 @@ export const colors = {
 };
 
 const fonts = {
-  body: `'Inter', sans-serif`,
-  heading: `'Inter', sans-serif`,
+  body: `'Inter','Kanit', sans-serif`,
+  heading: `'Inter','Kanit', sans-serif`,
 };
 
 const components: { [key: string]: ComponentStyleConfig } = {
@@ -55,7 +55,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
   },
   Heading: {
     baseStyle: {
-      fontWeight: 500,
+      fontWeight: 600,
     },
     sizes: {
       xl: {

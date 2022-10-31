@@ -72,11 +72,15 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
   };
 
   const handleDeleteApp = async () => {
-    const response = await appService.deleteApplication(app.clientId);
-    if (!response?.status) {
-      // do something
-    } else {
-      return router.push("/projects/manager");
+    try {
+      const response = await appService.deleteApplication(app.clientId);
+      if (!response?.status) {
+        // do something
+      } else {
+        return router.push("/projects/manager");
+      }
+    } catch(error) {
+      alert("Operation fails");
     }
   };
 
@@ -391,8 +395,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           bg="white"
           boxShadow="0 2px 5px 2px #00000020"
           rounded={10}
-        >
-        </Box>
+        ></Box>
       </Container>
       <Divider my={10} />
       <Container maxW="container.xl">
@@ -423,24 +426,37 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           rounded={10}
           justifyContent="space-between"
         >
-          <Box>
-            <Heading size="md" mb={2}>
-              ลบแอปพลิเคชันนี้
-            </Heading>
-            <Text>ลบแอปพลิเคชั่นนี้ออกจากแพลทฟอร์มอย่างถาวร</Text>
-          </Box>
-          <IconButton
-            aria-label="delete-app"
-            rounded="full"
-            bg="red.500"
-            onClick={() => setIsDeleteModalOpen(true)}
-            _hover={{
-              bg: undefined,
-              transform: "scale(1.1)",
-            }}
-          >
-            <MdDelete size="22px" color="#fff" />
-          </IconButton>
+          {app.clientId === process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ? (
+            <>
+              <Box>
+                <Heading size="md" mb={2}>
+                  เสียใจด้วย คุณไม่สามารถลบแอปพลิเคชันนี้ได้
+                </Heading>
+                <Text>คุณกำลังคิดจะสร้างหายนะให้กับแพลทฟอร์มอย่างนั่นหรือ โปรดโทรหา {`"BEAM"`} 092-437-3999</Text>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Box>
+                <Heading size="md" mb={2}>
+                  ลบแอปพลิเคชันนี้
+                </Heading>
+                <Text>ลบแอปพลิเคชั่นนี้ออกจากแพลทฟอร์มอย่างถาวร</Text>
+              </Box>
+              <IconButton
+                aria-label="delete-app"
+                rounded="full"
+                bg="red.500"
+                onClick={() => setIsDeleteModalOpen(true)}
+                _hover={{
+                  bg: undefined,
+                  transform: "scale(1.1)",
+                }}
+              >
+                <MdDelete size="22px" color="#fff" />
+              </IconButton>
+            </>
+          )}
         </Flex>
       </Container>
       <Box my={20}></Box>

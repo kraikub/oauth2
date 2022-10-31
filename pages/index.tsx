@@ -38,7 +38,7 @@ const Home: NextPage = () => {
           alignItems="center"
         >
           <Box w="full" maxW="600px" p={6} rounded={10}>
-            <Heading size="lg">kraikub</Heading>
+            <Heading size="lg" letterSpacing="-1px">Developer Console</Heading>
             <VStack alignItems="start" my={6}>
               <Text fontSize={18} color="gray.600">
                 สร้างเว็บแอปพลิเคชั่นเกี่ยวกับ KU ได้เร็วยิ่งขึ้น
