@@ -117,6 +117,7 @@ export const SigninForm: FC<SigninFormProps> = ({
     }, 1000);
   };
   const backToSigninForm = () => {
+    setPdpaPopup(false)
     setStep(0);
   };
 
@@ -348,7 +349,7 @@ export const SigninForm: FC<SigninFormProps> = ({
           <DrawerFooter>
             <Container maxW="container.lg">
               <ButtonGroup>
-                <Button {...styles.pdpaFontOverride} size="md" rounded={6}>
+                <Button {...styles.pdpaFontOverride} size="md" rounded={6} onClick={backToSigninForm}>
                   ฉันไม่ยอมรับ
                 </Button>
                 <Button

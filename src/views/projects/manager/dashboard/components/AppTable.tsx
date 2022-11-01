@@ -17,6 +17,7 @@ import AppCard from "./AppCard";
 import background from "../../../../../../public/bg-1.png";
 import { InterWindLoader } from "../../../../../layouts/Loader";
 import { MdOutlineAdd } from "react-icons/md";
+import { AiOutlinePlus } from "react-icons/ai";
 interface RowProps {
   app: Application;
 }
@@ -59,21 +60,21 @@ const AppTable: FC = () => {
         <Heading fontWeight={600} letterSpacing={-1}>
           สร้างแอปพลิเคชันแรกของคุณ
         </Heading>
-        <Text fontSize={20} fontWeight={500}>
-          ใครๆก็สามารถมาสร้างแอปพลิเคชันกับ Kraikub ได้
+        <Text fontSize={20} fontWeight={400}>
+          ใครๆก็สามารถมาเชื่อมต่อแอปพลิเคชันกับ Kraikub ได้
         </Text>
         <Button
           w="80px"
           h="80px"
           rounded="full"
           fontWeight={300}
-          fontSize="50px"
+          fontSize="30px"
           bg="katrade.main"
           color="white"
           _hover={{ bg: undefined, transform: "scale(1.1)" }}
           onClick={() => router.push("/projects/manager/create")}
         >
-          +
+          <AiOutlinePlus />
         </Button>
       </VStack>
     );
@@ -107,7 +108,7 @@ const AppTable: FC = () => {
         rounded={10}
         color="white"
       >
-        <Heading size="xl">{user.student.nameTh.split(" ").slice(1).join(" ")}</Heading>
+        <Heading size="lg">{user.student.nameTh.split(" ").slice(1).join(" ")}</Heading>
         <Text fontWeight={600} fontSize={20} mt={4}>
           {user
             ? `คุณสามารถสร้างแอปได้อีก ${user.appQuota - user.appOwned} แอป`
