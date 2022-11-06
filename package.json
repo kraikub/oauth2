@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "production": "next build && next start",
-    "build-image": "docker build -t katrade-accounts-service ."
+    "build-image": "docker build -t kraikub-oauth2 ."
   },
   "dependencies": {
     "@chakra-ui/react": "^2.2.1",
