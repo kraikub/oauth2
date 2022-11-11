@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleApiError } from "../../../../api/error";
 import { AuthMiddleware } from "../../../../api/middlewares/auth.middleware";
-import { createResponse } from "../../../../api/types/response";
+import { createResponse } from "../../../../api/utils/response";
 import { userUsecase } from "../../../../api/usecases";
 import NextCors from "nextjs-cors";
 import { scopeMiddleware } from "../../../../api/middlewares/scope.middleware";

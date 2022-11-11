@@ -79,7 +79,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
       } else {
         return router.push("/projects/manager");
       }
-    } catch(error) {
+    } catch (error) {
       alert("Operation fails");
     }
   };
@@ -106,18 +106,23 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
       <Box bgImage={`url(${bg1.src})`} bgSize="cover" bgPosition="center">
         <Container
           maxW="container.xl"
-          h="200px"
+          h="400px"
           color="white"
           display="flex"
           alignItems="center"
+          justifyContent="center"
+          position="relative"
         >
-          <Box>
+          <Box textAlign="center">
             <Heading fontWeight={500} fontSize="44px" letterSpacing="-2px">
               {app?.appName}
             </Heading>
             <Heading fontWeight={600} fontSize="20px" opacity={0.6}>
               {app?.appDescription}
             </Heading>
+          </Box>
+          <Box position="absolute" bottom="20px" left={0} right={0} textAlign="center">
+            <Text fontWeight={500} opacity={0.5}>By {app.creatorName}</Text>
           </Box>
         </Container>
       </Box>
@@ -395,7 +400,9 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           bg="white"
           boxShadow="0 2px 5px 2px #00000020"
           rounded={10}
-        ></Box>
+        >
+          <Text>เร็วๆนี้</Text>
+        </Box>
       </Container>
       <Divider my={10} />
       <Container maxW="container.xl">
@@ -432,7 +439,10 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 <Heading size="md" mb={2}>
                   เสียใจด้วย คุณไม่สามารถลบแอปพลิเคชันนี้ได้
                 </Heading>
-                <Text>คุณกำลังคิดจะสร้างหายนะให้กับแพลทฟอร์มอย่างนั่นหรือ โปรดโทรหา {`"BEAM"`} 092-437-3999</Text>
+                <Text>
+                  หากคุณกำลังคิดจะสร้างหายนะให้กับ Kraikub โปรดโทรหา {`"BEAM"`}{" "}
+                  092-437-3999
+                </Text>
               </Box>
             </>
           ) : (

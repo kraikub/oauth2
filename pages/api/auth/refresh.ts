@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { bridge } from "../../../api/bridge/bridge";
 import { RenewMiddleware } from "../../../api/middlewares/renew.middleware";
-import { createResponse } from "../../../api/types/response";
+import { createResponse } from "../../../api/utils/response";
 import { signAuthObject } from "../../../libs/jwt";
 
 const refreshHandler = async (req: NextApiRequest, res: NextApiResponse) => {

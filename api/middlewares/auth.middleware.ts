@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { MiddlewareOutput } from ".";
 import { verify } from "../../libs/jwt";
 import { AccessTokenBody, AuthenticationObject } from "../types/auth";
-import { createResponse } from "../types/response";
+import { createResponse } from "../utils/response";
 import { jsonCookie } from "../utils/cookie";
 
 export const AuthMiddleware = (

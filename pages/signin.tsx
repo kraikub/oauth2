@@ -1,6 +1,5 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { applicationRepository } from "../api/repositories/application";
-import { Query } from "../src/types/query";
 import SigninPage from "../src/views/signin";
 
 interface SigninPageProps {
@@ -17,7 +16,17 @@ const serializable = (o: any) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { client_id, state, scope, dev, secret, redirect_uri } = context.query;
+  const {
+    client_id,
+    state,
+    scope,
+    dev,
+    secret,
+    redirect_uri,
+    response_type,
+    code_challenge,
+    code_challenge_method,
+  } = context.query;
   let app: Application | null = null;
   if (client_id !== undefined) {
     app = await applicationRepository.findOneApp({
@@ -33,6 +42,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         dev: dev ? dev : null,
         secret: secret ? secret : null,
         redirect_uri: redirect_uri ? redirect_uri : null,
+        response_type: response_type ? response_type : null,
+        code_challenge: code_challenge ? code_challenge : null,
+        code_challenge_method: code_challenge_method ? code_challenge_method : null,
       },
       app: app
         ? {

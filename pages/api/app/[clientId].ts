@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleApiError, handleErrResponse } from "../../../api/error";
 import { AuthMiddleware } from "../../../api/middlewares/auth.middleware";
-import { createResponse } from "../../../api/types/response";
+import { createResponse } from "../../../api/utils/response";
 import { applicationUsecase } from "../../../api/usecases";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

@@ -16,9 +16,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { ChangeEvent, FC, FormEvent, Fragment, useState } from "react";
-import { Query } from "../../types/query";
+import { FC, Fragment } from "react";
 import bg3 from "../../../public/bg-3.png";
 import { SigninForm } from "./components/SigninForm";
 import { isValideScope } from "./utils/scope";
@@ -29,9 +27,15 @@ interface SigninPageProps {
   onSigninComplete?: (access: string, u: PublicUserData) => void;
 }
 
-const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
-  
-  if (app === null || !query.scope || !isValideScope(query.scope as string) || !query.redirect_uri || !query.client_id) {
+const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
+  if (
+    app === null ||
+    !query.scope ||
+    !isValideScope(query.scope as string) ||
+    !query.redirect_uri ||
+    !query.client_id ||
+    !query.response_type
+  ) {
     return (
       <Fragment>
         <Head>
@@ -79,8 +83,8 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
                     invalid. Check your source code or contact our admins.
                   </Text>
                   <Text fontSize={14} mb={3}>
-                    If you are an app user, the app that you are using is working
-                    wrong.
+                    If you are an app user, the app that you are using is
+                    working wrong.
                   </Text>
                 </Box>
               </VStack>
@@ -153,12 +157,17 @@ const SigninPage: FC<SigninPageProps> = ({ app, query, onSigninComplete }) => {
       </Fragment>
     );
   }
-
-  return <SigninForm app={app} query={{
-    ...query,
-    scope: query.scope as string,
-    client_id: query.client_id as string,
-    redirect_uri: query.redirect_uri as string,
-  }} />;
+  return (
+    <SigninForm
+      app={app}
+      query={{
+        ...query,
+        scope: query.scope as string,
+        client_id: query.client_id as string,
+        redirect_uri: query.redirect_uri as string,
+        response_type: query.response_type as string,
+      }}
+    />
+  );
 };
 export default SigninPage;
