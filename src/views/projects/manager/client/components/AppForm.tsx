@@ -114,7 +114,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           position="relative"
         >
           <Box textAlign="center">
-            <Heading fontWeight={500} fontSize="44px" letterSpacing="-2px">
+            <Heading fontWeight={700} fontSize={["28px", "40px", "50px"]} mb={2} letterSpacing="-2px">
               {app?.appName}
             </Heading>
             <Heading fontWeight={600} fontSize="20px" opacity={0.6}>
