@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { AuthMiddleware } from "../../../api/middlewares/auth.middleware";
-import { createResponse } from "../../../api/types/response";
+import { createResponse } from "../../../api/utils/response";
 import * as crypto from "crypto";
 import { applicationUsecase } from "../../../api/usecases";
 import { handleApiError } from "../../../api/error";

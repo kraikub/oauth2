@@ -51,7 +51,7 @@ export const ConsentForm: FC<ConsentFormProps> = ({
   return (
     <Box overflow="hidden" w="100%">
       <SimpleFadeInRight>
-        <Heading size="lg" mb={6}>
+        <Heading size="md" mb={6}>
           <Box as="span" lang="en" color="green">
             {appName}
           </Box>{" "}

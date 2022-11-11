@@ -1,4 +1,3 @@
-import { CustomApiResponse } from "../../api/types/response";
 import { nextApiBaseInstance } from "../../libs/axios";
 
 class UserService {

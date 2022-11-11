@@ -26,6 +26,7 @@ import { ConsentForm } from "./ConsentForm";
 import { SimpleFadeInLeft } from "../../../components/animations/SimpleFadeInLeft";
 import { FaArrowRight } from "react-icons/fa";
 import { FooterShort } from "../../../layouts/FooterShort";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 interface SigninFormProps {
   query: {
     client_id: string;
@@ -34,6 +35,9 @@ interface SigninFormProps {
     dev?: string | string[] | null;
     secret?: string | string[] | null;
     redirect_uri: string;
+    response_type: string;
+    code_challenge: string | string[] | null;
+    code_challenge_method: string | string[] | null;
   };
   app: Application;
   secret?: string;
@@ -54,6 +58,7 @@ export const SigninForm: FC<SigninFormProps> = ({
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const styles = {
     layout: {
@@ -96,14 +101,6 @@ export const SigninForm: FC<SigninFormProps> = ({
     setPassword(e.target.value);
   };
 
-  const bindStringToBoolean = (
-    text?: string | string[] | null | undefined
-  ): boolean | undefined => {
-    if (text === "true") return true;
-    else if (text === "false") return false;
-    return undefined;
-  };
-
   const themeSelector = (styles: { regular: any }) => {
     return query.scope === "0" ? styles.regular : styles.regular;
   };
@@ -117,7 +114,7 @@ export const SigninForm: FC<SigninFormProps> = ({
     }, 1000);
   };
   const backToSigninForm = () => {
-    setPdpaPopup(false)
+    setPdpaPopup(false);
     setStep(0);
   };
 
@@ -138,17 +135,18 @@ export const SigninForm: FC<SigninFormProps> = ({
       return alert("Some field is missing.");
     }
     try {
-      const { data } = await authService.signin(
+      const { data } = await authService.signin({
         username,
         password,
-        app.clientId,
-        query.scope as string,
-        query.state as string,
-        bindStringToBoolean(query.dev),
-        secret || (query.secret as string | undefined),
-        query.redirect_uri as string,
-        sdk
-      );
+        clientId: app.clientId,
+        scope: query.scope as string,
+        state: query.state as string,
+        secret: secret || (query.secret as string | undefined),
+        redirectUri: query.redirect_uri as string,
+        response_type: query.response_type,
+        code_challenge: query.code_challenge as string,
+        code_challenge_method: query.code_challenge_method as string,
+      });
       if (onSigninComplete) {
         return onSigninComplete(data.payload.code);
       }
@@ -232,14 +230,29 @@ export const SigninForm: FC<SigninFormProps> = ({
                         value={username}
                         {...themeSelector(styles).input}
                       />
-                      <PrimaryInput
-                        borderRadius="bottom"
-                        placeholder="รหัสผ่าน"
-                        type="password"
-                        onChange={handlePasswordChange}
-                        value={password}
-                        {...themeSelector(styles).input}
-                      />
+                      <Box position="relative">
+                        <PrimaryInput
+                          borderRadius="bottom"
+                          placeholder="รหัสผ่าน"
+                          type={showPassword ? "text" : "password"}
+                          onChange={handlePasswordChange}
+                          value={password}
+                          {...themeSelector(styles).input}
+                        />
+                        <IconButton
+                          aria-label="toggle-password"
+                          onClick={() => setShowPassword(!showPassword)}
+                          position="absolute"
+                          top="50%"
+                          right="10px"
+                          transform="translate(0,-50%);"
+                          fontSize={20}
+                          variant="outline"
+                          size="sm"
+                        >
+                          {!showPassword ? <IoIosEye /> : <IoIosEyeOff />}
+                        </IconButton>
+                      </Box>
                     </Box>
 
                     {/* <Button
@@ -349,7 +362,12 @@ export const SigninForm: FC<SigninFormProps> = ({
           <DrawerFooter>
             <Container maxW="container.lg">
               <ButtonGroup>
-                <Button {...styles.pdpaFontOverride} size="md" rounded={6} onClick={backToSigninForm}>
+                <Button
+                  {...styles.pdpaFontOverride}
+                  size="md"
+                  rounded={6}
+                  onClick={backToSigninForm}
+                >
                   ฉันไม่ยอมรับ
                 </Button>
                 <Button

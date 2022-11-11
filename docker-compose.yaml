@@ -13,3 +13,12 @@ services:
     volumes:
       - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
       - ./db:/data/db
+
+  redis:
+    image: redis:7.0.5-alpine
+    command: redis-server --requirepass local.kraikub.redis
+    restart: always
+    ports:
+      - '6379:6379'
+    
+

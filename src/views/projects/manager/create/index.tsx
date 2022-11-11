@@ -37,7 +37,9 @@ export const CreateProjectPage: NextPage = () => {
     <UserProvider>
       <Navbar />
       <Container maxW="container.md" py="100px">
-        <Heading letterSpacing={-1}>บอกเราเกี่ยวกับแอปพลิเคชันใหม่ของคุณสิ</Heading>
+        <Heading letterSpacing={-1} size="lg">
+          บอกเราเกี่ยวกับแอปพลิเคชันใหม่ของคุณสิ
+        </Heading>
         <FormControl
           as="form"
           my={10}
@@ -66,8 +68,7 @@ export const CreateProjectPage: NextPage = () => {
             mt={6}
             color={hasName ? "red.400" : "black"}
           >
-            ชื่อแอปพลิเคชัน{" "}
-            {hasName ? "(ชื่อนี้ไม่สามารถใช้งานได้)" : null}
+            ชื่อแอปพลิเคชัน {hasName ? "(ชื่อนี้ไม่สามารถใช้งานได้)" : null}
           </FormLabel>
           <Input
             id="app-name"
@@ -109,7 +110,13 @@ export const CreateProjectPage: NextPage = () => {
             ))}
           </Select>
           <ButtonGroup mt={10}>
-            <Button type="submit" colorScheme="gray" rounded={14} size="lg" onClick={() => router.push("/projects/manager")}>
+            <Button
+              type="submit"
+              colorScheme="gray"
+              rounded={14}
+              size="lg"
+              onClick={() => router.push("/projects/manager")}
+            >
               ยกเลิก
             </Button>
             <Button

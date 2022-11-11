@@ -1,6 +1,7 @@
 import axios from "axios";
 import { NextApiResponse } from "next";
-import { createResponse } from "../types/response";
+import { createResponse } from "../utils/response";
+
 
 export const handleErrResponse = (
   res: NextApiResponse,

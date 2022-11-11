@@ -13,14 +13,17 @@ const AppCard: FC<AppCardProps> = ({ app }) => {
     <Box
       w="full"
       maxW={["full", "320px"]}
-      boxShadow="0 0 6px 1px #00000040"
+      borderStyle="solid"
+      borderWidth={1}
+      borderColor="gray.300"
+      bg="white"
       rounded={6}
       overflow="hidden"
       cursor="pointer"
       onClick={() => router.push(`/projects/manager/${app.clientId}`)}
       transition="300ms ease"
       _hover={{
-        bg: "#00000010",
+        boxShadow: "0px 3px 7px 2px #00000020"
       }}
     >
       <Box

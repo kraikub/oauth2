@@ -1,8 +1,4 @@
 import { nextApiBaseInstance } from "../../libs/axios";
-import {
-  ApplicationResponse,
-  CustomApiResponse,
-} from "../../api/types/response";
 
 interface CreateApp {
   appName: string;

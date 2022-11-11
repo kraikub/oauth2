@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleApiError } from "../../../api/error";
-import { createResponse } from "../../../api/types/response";
+import { createResponse } from "../../../api/utils/response";
 import { applicationUsecase } from "../../../api/usecases";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {

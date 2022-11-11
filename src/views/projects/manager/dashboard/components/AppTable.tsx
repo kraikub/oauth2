@@ -108,6 +108,7 @@ const AppTable: FC = () => {
         rounded={10}
         color="white"
       >
+        <Text fontSize={16} mb={2}>บัญชี</Text>
         <Heading size="lg">{user.student.nameTh.split(" ").slice(1).join(" ")}</Heading>
         <Text fontWeight={600} fontSize={20} mt={4}>
           {user
