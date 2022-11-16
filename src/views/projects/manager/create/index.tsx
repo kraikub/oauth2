@@ -121,7 +121,7 @@ export const CreateProjectPage: NextPage = () => {
             </Button>
             <Button
               type="submit"
-              colorScheme="katrade.scheme.fix"
+              colorScheme="katrade"
               isLoading={loading}
               rounded={14}
               size="lg"

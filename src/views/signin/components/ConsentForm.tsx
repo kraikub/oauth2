@@ -90,7 +90,7 @@ export const ConsentForm: FC<ConsentFormProps> = ({
           </Button>
           <Button
             size="lg"
-            colorScheme="katrade.scheme.fix"
+            colorScheme="katrade"
             onClick={handleSignin}
             isLoading={loading}
           >

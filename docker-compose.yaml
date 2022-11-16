@@ -16,7 +16,7 @@ services:
 
   redis:
     image: redis:7.0.5-alpine
-    command: redis-server --requirepass local.kraikub.redis
+    command: redis-server --requirepass @kraikub.redis
     restart: always
     ports:
       - '6379:6379'

@@ -1,6 +1,3 @@
-import { MyKULoginResponse } from "../../types/myku/auth";
-import { MyKUPersonalResponse } from "../../types/myku/student";
-
 export const studentConverter = (
   uid: string,
   personal: MyKUPersonalResponse,

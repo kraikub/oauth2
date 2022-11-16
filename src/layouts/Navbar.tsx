@@ -20,6 +20,7 @@ import { FC } from "react";
 import { useUser } from "../contexts/User";
 import { MdDashboardCustomize } from "react-icons/md";
 import logo from "../../public/logo-min.png";
+import { appConfig } from "../../api/config/app";
 const Navbar: FC = () => {
   const router = useRouter();
   const { user, signout } = useUser();
@@ -40,7 +41,7 @@ const Navbar: FC = () => {
       justifyContent="space-between"
     >
       <Flex alignItems="center" gap={2}>
-      <Heading size="md" fontWeight={600} color="black" letterSpacing={-1}>
+        <Heading size="md" fontWeight={600} color="black" letterSpacing={-1}>
           kraikub.
         </Heading>
       </Flex>
@@ -53,10 +54,11 @@ const Navbar: FC = () => {
             size="sm"
             gap={1}
             fontSize={14}
+            fontWeight={600}
             onClick={() => router.push("/projects/manager")}
           >
             <MdDashboardCustomize size="20px" />
-            Apps
+            APPS
           </Button>
           <Menu>
             <MenuButton>
@@ -68,6 +70,7 @@ const Navbar: FC = () => {
                   _active={{ bg: undefined }}
                 >
                   <Avatar
+                    src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
                     name={user.student.nameEn.split(" ").slice(1).join(" ")}
                     size="sm"
                   />

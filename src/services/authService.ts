@@ -14,6 +14,7 @@ interface SigninParams {
   ref?: string;
   secret?: string;
   redirectUri?: string;
+  options?: SigninOptions;
 }
 
 class AuthService {
@@ -32,6 +33,7 @@ class AuthService {
       response_type: params.response_type,
       code_challenge: params.code_challenge,
       code_challenge_method: params.code_challenge_method,
+      ...params.options
     });
     return { status, data };
   };

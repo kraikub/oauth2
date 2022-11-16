@@ -16,17 +16,17 @@ const handleStudentAPI = async (req: NextApiRequest, res: NextApiResponse) => {
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
     AccessControlMiddleware(req, res);
-    const { success, payload, error } = AuthMiddleware(req, res);
-    if (!success) {
+    const { success, session, error } = await AuthMiddleware(req, res);
+    if (!success || !session) {
       return;
     }
-    const allowedScope = scopeMiddleware(res, payload.scope, ["1", "2"]);
+    const allowedScope = scopeMiddleware(res, session.scope, ["1", "2"]);
     if (!allowedScope) {
       return;
     }
 
     if (req.method === "GET") {
-      const out = await userUsecase.getUserWithStudent(payload.uid);
+      const out = await userUsecase.getUserWithStudent(session.uid);
       return res.status(200).send(createResponse(true, "", out));
     }
   } catch (error) {

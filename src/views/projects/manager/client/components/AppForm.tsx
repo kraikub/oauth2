@@ -30,9 +30,9 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { MdAdd, MdDelete } from "react-icons/md";
-import { FaCopy, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { FieldContainer } from "./FieldContainer";
-import bg1 from "../../../../../../public/bg-1.png";
+import bg1 from "../../../../../../public/bg-1b.png";
 import bg3 from "../../../../../../public/bg-3.png";
 import bg5 from "../../../../../../public/bg-5.png";
 import { ChangeEvent, FC, useEffect, useState } from "react";
@@ -41,9 +41,6 @@ import { appService } from "../../../../../services/appService";
 import { useRouter } from "next/router";
 import { useUser } from "../../../../../contexts/User";
 import { noWhiteSpace } from "../../../../../utils/string";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { materialOceanic } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { Choice } from "./Choice";
 
 interface AppFormProps {
   app: Application;
@@ -103,28 +100,49 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
         router.reload();
       })}
     >
-      <Box bgImage={`url(${bg1.src})`} bgSize="cover" bgPosition="center">
-        <Container
-          maxW="container.xl"
-          h="400px"
-          color="white"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          position="relative"
-        >
-          <Box textAlign="center">
-            <Heading fontWeight={700} fontSize={["28px", "40px", "50px"]} mb={2} letterSpacing="-2px">
-              {app?.appName}
-            </Heading>
-            <Heading fontWeight={600} fontSize="20px" opacity={0.6}>
-              {app?.appDescription}
-            </Heading>
-          </Box>
-          <Box position="absolute" bottom="20px" left={0} right={0} textAlign="center">
-            <Text fontWeight={500} opacity={0.5}>By {app.creatorName}</Text>
-          </Box>
-        </Container>
+      <Box
+        bgImage={`url(${bg1.src})`}
+        bgSize="cover"
+        bgPosition="center"
+        position="relative"
+        h="400px"
+      >
+        <Box position="absolute" top={0} bottom={0} left={0} right={0} bg="#00000060" backdropFilter="blur(20px)">
+          <Container
+            maxW="container.xl"
+            height="full"
+            color="white"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            position="relative"
+          >
+            <Box textAlign="center">
+              <Heading
+                fontWeight={700}
+                fontSize={["28px", "40px", "50px"]}
+                mb={2}
+                letterSpacing="-2px"
+              >
+                {app?.appName}
+              </Heading>
+              <Heading fontWeight={600} fontSize="20px" opacity={0.8}>
+                {app?.appDescription}
+              </Heading>
+            </Box>
+            <Box
+              position="absolute"
+              bottom="20px"
+              left={0}
+              right={0}
+              textAlign="center"
+            >
+              <Text fontWeight={500} opacity={0.8}>
+                By {app.creatorName}
+              </Text>
+            </Box>
+          </Container>
+        </Box>
       </Box>
 
       <Container maxW="container.xl" py="10vh">
@@ -134,15 +152,16 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
         >
           <GridItem
             colSpan={[12, 4]}
-            bgImage={bg1.src}
+            bgColor="gray.100"
             rounded={20}
             px={5}
             py={8}
-            color="white"
+            color="black"
           >
             <Heading size="md" mb={4}>
               ข้อมูลแอปพลิเคชัน
             </Heading>
+            <Divider borderColor="gray.300" my="20px"/>
             <Text fontSize={16} opacity={0.8}>
               ข้อมูลโดยทั่วไปเกี่ยวกับแอปพลิเคชันของคุณ
             </Text>
@@ -211,16 +230,17 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
         >
           <GridItem
             colSpan={[12, 4]}
-            bgImage={bg1.src}
+            bgColor="gray.100"
             rounded={20}
             px={5}
             py={8}
-            color="white"
+            color="black"
             w="full"
           >
             <Heading size="md" mb={4}>
               ข้อมูลสำคัญ
             </Heading>
+            <Divider borderColor="gray.300" my="20px"/>
             <Text fontSize={16} opacity={0.8}>
               ข้อมูลเกี่ยวกับการยืนยันตัวตนของแอปพลิเคชันคุณรวมถึงเป็นรหัสสำหรับใช้งาน
               Kraikub ดังนั้นห้ามให้ใครเห็น secret ของคุณ!
@@ -302,15 +322,16 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
         >
           <GridItem
             colSpan={[12, 4]}
-            bgImage={bg1.src}
+            bgColor="gray.100"
             rounded={20}
             px={5}
             py={8}
-            color="white"
+            color="black"
           >
             <Heading size="md" mb={4}>
               Redirects (optional)
             </Heading>
+            <Divider borderColor="gray.300" my="20px"/>
             <Text fontSize={16} opacity={0.8}>
               ใช้สำหรับกรณีที่ต้องการให้ Kraikub ส่งข้อมูลกลับไปที่ URL ของคุณ
               ไม่จำเป็นต้องกรอกหากคุณใช้ Kraikub SDK
@@ -488,7 +509,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               </Button>
               <Button
                 type="submit"
-                colorScheme="katrade.scheme.fix"
+                colorScheme="katrade"
                 rounded={12}
                 isLoading={isUpdating}
               >

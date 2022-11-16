@@ -100,9 +100,8 @@ function onlyPrivateUser(uid: string) {
     },
     {
       $project: {
-        uid: 1,
-        appOwned: 1,
-        appQuota: 1,
+        _id: 0,
+        __v: 0
       },
     },
   ];

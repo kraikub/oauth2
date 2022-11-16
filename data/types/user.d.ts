@@ -21,5 +21,8 @@ interface User {
   appOwned: number;
   uid: string;
   signinSignature: string;
+  universityEmail: string;
+  personalEmail: string;
+  profileImageUrl: string;
   shouldUpdate: boolean;
 }

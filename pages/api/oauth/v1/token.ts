@@ -1,3 +1,4 @@
+import { applicationUsecase } from "./../../../../api/usecases/application";
 import { appConfig } from "./../../../../api/config/app";
 import { NextApiRequest, NextApiResponse } from "next";
 import NextCors from "nextjs-cors";
@@ -17,38 +18,44 @@ const handleOAuthExchangeAPI = async (
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
     if (req.method === "POST") {
-      const { code, client_id, client_secret, grant_type, payload_type } =
-        req.body;
+      const {
+        code,
+        client_id,
+        client_secret,
+        grant_type,
+        code_verifier,
+        refresh_token,
+      } = req.body;
+      const app = await applicationUsecase.findOneApp({ clientId: client_id });
+      if (!app || app.secret !== client_secret) {
+        res
+          .status(401)
+          .send(createResponse(false, "Invalid requested app.", null));
+        return false;
+      }
+      if (grant_type === "authorization_code") {
+        if (!code) {
+          return res
+            .status(400)
+            .send(createResponse(false, "Require authorization_code", null));
+        }
 
-      if (grant_type !== "authorization_code") {
+        return await authUsecase.exchangeOAuthToken(req, res, code as string, {
+          code_verifier,
+          client_id,
+          client_secret,
+        });
+      } else if (grant_type === "refresh_token") {
+        if (!refresh_token) {
+          return res
+            .status(400)
+            .send(createResponse(false, "Require refresh_token", null));
+        }
+      } else {
         return res
           .status(400)
-          .send(
-            createResponse(
-              false,
-              "grant_type allow only authorization_code",
-              null
-            )
-          );
+          .send(createResponse(false, "Invalid grant_type", null));
       }
-
-      if (!code) {
-        return res
-          .status(400)
-          .send(createResponse(false, "Require authorization code", null));
-      }
-
-      if (payload_type && !appConfig.tokenPayloadTypes.includes(payload_type)) {
-        return res
-          .status(400)
-          .send(createResponse(false, "invalid payload_type", null));
-      }
-
-      return authUsecase.exchangeOAuthToken(
-        res,
-        code as string,
-        payload_type === "http_cookie"
-      );
     }
   } catch (error) {
     handleApiError(res, error);

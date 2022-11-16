@@ -20,4 +20,5 @@ export const handleApiError = (res: NextApiResponse, error: any) => {
   } else {
     res.status(500).send(createResponse(false, error.toString() as string, {}));
   }
+  console.error(error)
 };

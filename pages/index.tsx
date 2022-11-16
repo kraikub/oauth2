@@ -54,7 +54,7 @@ const Home: NextPage = () => {
               </a>
               <Button
                 size="lg"
-                colorScheme="katrade.scheme.fix"
+                colorScheme="katrade"
                 onClick={() => router.push("/projects/manager")}
               >
                 เริ่มต้นเลย (ฟรี)
