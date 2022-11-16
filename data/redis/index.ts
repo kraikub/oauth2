@@ -6,6 +6,7 @@ class Redis {
     this.client = createClient({
       password: process.env.REDIS_PASSWORD,
     });
+    console.log(process.env.REDIS_PASSWORD)
     this.client.on("error", (err) => console.error("Redis | ", err));
     this.connect();
   }
