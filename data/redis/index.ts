@@ -4,6 +4,7 @@ class Redis {
   private client;
   constructor() {
     this.client = createClient({
+      legacyMode: true,
       password: process.env.REDIS_PASSWORD,
     });
     this.client.on("error", (err) => console.error("Redis | ", err, process.env.REDIS_PASSWORD));
