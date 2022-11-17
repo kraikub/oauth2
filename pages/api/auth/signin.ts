@@ -158,7 +158,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res
       .status(200)
       .setHeader("Set-Cookie", [
-        `access=${internalServiceAccessToken}; HttpOnly; SameSite=None; Max-Age=604100; Path=/; Secure`,
+        `access=${internalServiceAccessToken}; HttpOnly; Domain=${process.env.SHARE_ACCESS_DOMAIN || req.headers.origin}; Max-Age=604100; Path=/; Secure`,
       ]) // Expire in almost 7 days.
       .setHeader("Access-Control-Allow-Credentials", "true")
       .setHeader("Access-Control-Allow-Headers", "Set-Cookie")
