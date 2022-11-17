@@ -5,6 +5,7 @@ class Redis {
   constructor() {
     this.client = createClient({
       legacyMode: true,
+
       socket: {
         host: process.env.REDIS_HOST,
         port: 6379,
@@ -23,17 +24,17 @@ class Redis {
 
   public async get(key: string) {
     await this.connect();
-    return await this.client.get(key);
+    return await this.client.v4.GET(key);
   }
 
   public async delete(key: string) {
     await this.connect();
-    return await this.client.del(key);
+    return await this.client.v4.DEL(key);
   }
 
   public async set(key: string, value: string, expire?: number) {
     await this.connect();
-    await this.client.set(key, value);
+    await this.client.v4.SET(key, value);
     if (expire) {
       this.client.expire(key, expire);
     }

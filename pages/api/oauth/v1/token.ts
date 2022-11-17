@@ -51,6 +51,7 @@ const handleOAuthExchangeAPI = async (
             .status(400)
             .send(createResponse(false, "Require refresh_token", null));
         }
+        return await authUsecase.refreshAccessToken(res, refresh_token);
       } else {
         return res
           .status(400)
