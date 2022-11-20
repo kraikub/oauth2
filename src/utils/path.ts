@@ -2,8 +2,8 @@ import { mapQueryStringToUrl } from "../../api/utils/query";
 
 interface signinOptions {
   redirectPath?: string;
-  codeChallenge: string;
-  codeChallengeMethod: string;
+  codeChallenge?: string;
+  codeChallengeMethod?: string;
 }
 
 export const getSigninUrl = (p: signinOptions) => {

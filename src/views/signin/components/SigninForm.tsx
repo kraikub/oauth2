@@ -279,7 +279,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                             right="10px"
                             transform="translate(0,-50%);"
                             fontSize={20}
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
                           >
                             {!showPassword ? <IoIosEye /> : <IoIosEyeOff />}
