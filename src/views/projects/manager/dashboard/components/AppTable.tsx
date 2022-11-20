@@ -6,7 +6,6 @@ import {
   VStack,
   Text,
   Center,
-  Image,
   IconButton,
   Divider,
 } from "@chakra-ui/react";
@@ -15,14 +14,8 @@ import { FC, useEffect, useState } from "react";
 import { useUser } from "../../../../../contexts/User";
 import { appService } from "../../../../../services/appService";
 import AppCard from "./AppCard";
-import background from "../../../../../../public/bg-1.png";
 import { InterWindLoader } from "../../../../../layouts/Loader";
 import { MdOutlineAdd } from "react-icons/md";
-import { AiOutlinePlus } from "react-icons/ai";
-import { contrastPrimaryButtonStyles } from "../../../../../../styles/custom/contrast-primary-button";
-interface RowProps {
-  app: Application;
-}
 
 const AppTable: FC = () => {
   const router = useRouter();
@@ -59,10 +52,20 @@ const AppTable: FC = () => {
     // No app found
     return (
       <VStack py={20} spacing={10}>
-        <Heading fontWeight={600} letterSpacing={-1} color="white" textShadow="0 0 20px #00000080">
+        <Heading
+          fontWeight={600}
+          letterSpacing={-1}
+          color="white"
+          textShadow="0 0 20px #00000080"
+        >
           สร้างแอปพลิเคชันแรกของคุณ
         </Heading>
-        <Text fontSize={20} fontWeight={500} color="white" textShadow="0 0 20px #00000080">
+        <Text
+          fontSize={20}
+          fontWeight={500}
+          color="white"
+          textShadow="0 0 20px #00000080"
+        >
           ใครๆก็สามารถมาเชื่อมต่อแอปพลิเคชันกับ Kraikub ได้
         </Text>
         <Button
@@ -84,41 +87,46 @@ const AppTable: FC = () => {
 
   return (
     <Box py={20}>
-      <Flex justifyContent="space-between" my={8}>
-        <Heading size="lg" mb={10} letterSpacing={-1}>
-          แอปพลิเคชันของคุณ
-        </Heading>
-        {user.appOwned >= user.appQuota ? (
-          <Button
-            colorScheme="red"
-            onClick={() => handleCreateAppClick(user.appOwned >= user.appQuota)}
-          >
-            คุณใช้สิทธิหมดแล้ว
-          </Button>
-        ) : (
-          <Button
-            {...contrastPrimaryButtonStyles}
-            rounded="full"
-            onClick={() => handleCreateAppClick(user.appOwned >= user.appQuota)}
-          >
-            สร้างแอป +
-          </Button>
-        )}
-      </Flex>
-      <Box
-        bg="white"
-        p="20px"
-        minHeight="700px"
-        rounded={20}
-        boxShadow="0 2px 8px 4px #00000020"
-      >
+      <Box my={8}>
+        <Flex justifyContent="space-between">
+          <Heading size="lg" mb={2} letterSpacing={-1}>
+            Welcome to your apps library
+          </Heading>
+          {user.appOwned >= user.appQuota ? (
+            <Button
+              colorScheme="red"
+              onClick={() =>
+                handleCreateAppClick(user.appOwned >= user.appQuota)
+              }
+            >
+              คุณใช้สิทธิหมดแล้ว
+            </Button>
+          ) : (
+            <Button
+              colorScheme="katrade"
+              color="black"
+              fontWeight={600}
+              rounded="full"
+              onClick={() =>
+                handleCreateAppClick(user.appOwned >= user.appQuota)
+              }
+            >
+              สร้างแอป +
+            </Button>
+          )}
+        </Flex>
+        <Box>
+          <Text fontSize={14}>ยินดีต้อนรับสู่คลังแอปพลิเคชันของคุณ สร้างแอปพลิเคชันใหม่เพื่อเชื่อต่อแอปพลิเคชั่นของคุณกับ Kraikub ได้เลย</Text>
+        </Box>
+      </Box>
+      <Box py="20px">
         {/* <Text fontWeight={600} fontSize={20}>{user.student.nameTh.split(" ").slice(1).join(" ")}</Text> */}
         <Text fontWeight={600} fontSize={20} mt={4}>
           {user
             ? `คุณสามารถสร้างแอปได้อีก ${user.appQuota - user.appOwned} แอป`
             : ""}
         </Text>
-        <Divider my={4}/>
+        <Divider my={4} />
         {isLoading ? (
           <Center gap={3} py="40px">
             <InterWindLoader />

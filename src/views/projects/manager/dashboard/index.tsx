@@ -10,7 +10,7 @@ export const ProjectManagerDashboard: NextPage = () => {
     <>
       <UserProvider>
         <Navbar />
-        <Box bgColor="kraikub.blue.500" bgImage={`url(/bg-1b.svg)`} minH="100vh">
+        <Box minH="100vh">
           <Container maxW="container.xl">
             <AppTable />
           </Container>

@@ -95,8 +95,9 @@ export const SigninForm: FC<SigninFormProps> = ({
         color: "katrade.600",
       },
       input: {
-        backgroundColor: "transparent",
-        backgroundColorOnHover: "transparent",
+        backgroundColor: "#EDF2F7",
+        backgroundColorOnHover: "#E2E8F0",
+        borderColor: "#E2E8F0",
         placeholderColor: "#b0b3b8",
       },
       signinText: "ดำเนินการต่อ",
@@ -254,6 +255,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                         />
                         <PrimaryInput
                           borderRadius="top"
+                          borderWidth="bottom"
                           placeholder="บัญชีผู้ใช้เครือข่ายนนทรี"
                           onChange={handleUsernameChange}
                           value={username}
@@ -262,6 +264,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                         <Box position="relative">
                           <PrimaryInput
                             borderRadius="bottom"
+                            borderWidth="top"
                             placeholder="รหัสผ่าน"
                             type={showPassword ? "text" : "password"}
                             onChange={handlePasswordChange}

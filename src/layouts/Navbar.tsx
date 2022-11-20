@@ -41,25 +41,12 @@ const Navbar: FC = () => {
       justifyContent="space-between"
     >
       <Flex alignItems="center" gap={2}>
-        <Heading size="md" fontWeight={600} color="black" letterSpacing={-1}>
-          kraikub.
+        <Heading size="sm" fontWeight={600} color="black">
+          KRAIKUB <Text as="span" fontWeight={300} color="gray.600">DEVELOPERS</Text>
         </Heading>
       </Flex>
       {user ? (
         <Flex alignItems="center" gap={4}>
-          <Button
-            aria-label="home"
-            variant="ghost"
-            colorScheme="gray"
-            size="sm"
-            gap={1}
-            fontSize={14}
-            fontWeight={600}
-            onClick={() => router.push("/projects/manager")}
-          >
-            <MdDashboardCustomize size="20px" />
-            APPS
-          </Button>
           <Menu>
             <MenuButton>
               <ButtonGroup>

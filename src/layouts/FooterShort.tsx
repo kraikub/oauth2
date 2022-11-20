@@ -2,7 +2,7 @@ import { Box, Container, Flex, Link, Text } from "@chakra-ui/react";
 
 export const FooterShort = () => {
   return (
-    <Box bg="#f5f5f7">
+    <Box bg="gray.50">
       <Container maxW={700}>
         <Box py={6} fontSize={12} color="#00000050">
           <Text fontSize={12} color="#00000090">Kraikub | All of Kasetsart, in one account.</Text>
