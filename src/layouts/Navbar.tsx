@@ -18,8 +18,6 @@ import {
 import { useRouter } from "next/router";
 import { FC } from "react";
 import { useUser } from "../contexts/User";
-import { MdDashboardCustomize } from "react-icons/md";
-import logo from "../../public/logo-min.png";
 import { appConfig } from "../../api/config/app";
 const Navbar: FC = () => {
   const router = useRouter();
@@ -41,8 +39,11 @@ const Navbar: FC = () => {
       justifyContent="space-between"
     >
       <Flex alignItems="center" gap={2}>
-        <Heading size="sm" fontWeight={600} color="black">
-          KRAIKUB <Text as="span" fontWeight={300} color="gray.600">DEVELOPERS</Text>
+        <Heading size="sm" fontWeight={700} color="black">
+          KRAIKUB{" "}
+          <Text as="span" fontWeight={300} color="gray.600">
+            DEVELOPERS
+          </Text>
         </Heading>
       </Flex>
       {user ? (
@@ -57,7 +58,9 @@ const Navbar: FC = () => {
                   _active={{ bg: undefined }}
                 >
                   <Avatar
-                    src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
+                    src={
+                      user.profileImageUrl || appConfig.defaultProfileImageUrl
+                    }
                     name={user.student.nameEn.split(" ").slice(1).join(" ")}
                     size="sm"
                   />
@@ -66,7 +69,10 @@ const Navbar: FC = () => {
             </MenuButton>
             <MenuList fontSize={14}>
               <Box px={4} py={3} fontSize={12} fontWeight={500}>
-                <Text fontWeight={600}>
+                <Text fontWeight={500} fontSize={14}>
+                  {user.student.nameEn.split(" ").slice(1).join(" ")}
+                </Text>
+                <Text fontWeight={400} fontSize={12} color="gray.600">
                   {user.student.nameTh.split(" ").slice(1).join(" ")}
                 </Text>
               </Box>
@@ -75,7 +81,7 @@ const Navbar: FC = () => {
                 fontWeight={500}
                 onClick={() => router.push("/projects/manager")}
               >
-                แอป
+                App Library
               </MenuItem>
               <MenuItem
                 color="red.600"
@@ -83,7 +89,7 @@ const Navbar: FC = () => {
                 fontWeight={500}
                 onClick={signout}
               >
-                ออกจากระบบ
+                Sign out
               </MenuItem>
             </MenuList>
           </Menu>

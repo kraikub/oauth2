@@ -232,10 +232,10 @@ export const SigninForm: FC<SigninFormProps> = ({
                       <Heading size="lg" letterSpacing="-1.5px" lang="en">
                         Sign in
                       </Heading>
-                      <Text>เข้าสู่ระบบด้วย KU</Text>
+                      <Text>Login with KU Account</Text>
                       <Box mt="30px" w="full">
                         <Text fontSize={14}>
-                          {"คุณกำลังจะเข้าสู่ระบบกับแอป "}
+                          {"You are logging in to "}
                           <Box
                             as="span"
                             fontWeight={700}
@@ -256,7 +256,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                         <PrimaryInput
                           borderRadius="top"
                           borderWidth="bottom"
-                          placeholder="บัญชีผู้ใช้เครือข่ายนนทรี"
+                          placeholder="Nontsri Account"
                           onChange={handleUsernameChange}
                           value={username}
                           {...themeSelector(styles).input}
@@ -265,7 +265,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                           <PrimaryInput
                             borderRadius="bottom"
                             borderWidth="top"
-                            placeholder="รหัสผ่าน"
+                            placeholder="Password"
                             type={showPassword ? "text" : "password"}
                             onChange={handlePasswordChange}
                             value={password}

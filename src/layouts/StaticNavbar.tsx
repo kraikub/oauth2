@@ -1,31 +1,34 @@
-import {
-  Flex,
-  Heading,
-  Image,
-} from "@chakra-ui/react"
+import { Flex, Heading, Text } from "@chakra-ui/react";
 import { FC } from "react";
-import logo from "../../public/logo-min.png";
 
-const StaticNavbar: FC = () => {
+interface NavbarOptions {
+  sticky?: boolean;
+  color?: string;
+  bgColor?: string;
+}
+
+const StaticNavbar: FC<NavbarOptions> = (props) => {
   return (
     <Flex
-      position="sticky"
+      position={props.sticky ? "sticky" : "relative"}
+      color={props.color || "black"}
       top={0}
       left={0}
       right={0}
       py="12px"
-      bg="white"
+      bgColor={props.bgColor || "white"}
       zIndex={35}
-      border="solid #00000020"
-      borderWidth="0 0 1px 0"
       px="20px"
       minH="70px"
       alignItems="center"
       justifyContent="space-between"
     >
       <Flex alignItems="center" gap={3}>
-        <Heading size="md" fontWeight={600} color="black" letterSpacing={-1}>
-          kraikub.
+        <Heading size="sm" fontWeight={700}>
+          KRAIKUB{" "}
+          <Text as="span" fontWeight={300} opacity={0.8}>
+            DEVELOPERS
+          </Text>
         </Heading>
       </Flex>
     </Flex>

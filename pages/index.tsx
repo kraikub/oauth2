@@ -10,59 +10,60 @@ import {
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { BsArrowUpRight } from "react-icons/bs";
+import { FooterShort } from "../src/layouts/FooterShort";
 import StaticNavbar from "../src/layouts/StaticNavbar";
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const outlineButtonStyles = {
-    bg: "transparent",
-    color: "gray.500",
-    border: "1px solid",
-    borderColor: "#0000001e",
-    _hover: {
-      bg: undefined,
-    },
-  };
   return (
     <>
       <Head>
         <title>Kraikub - Authenticate any KU students.</title>
       </Head>
-      <StaticNavbar />
-      <Box>
-        <Container
-          maxW="container.lg"
-          minH="80vh"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Box w="full" maxW="600px" p={6} rounded={10}>
-            <Heading size="lg" letterSpacing="-1px">Developer Console</Heading>
-            <VStack alignItems="start" my={6}>
-              <Text fontSize={18} color="gray.600">
-                สร้างเว็บแอปพลิเคชั่นเกี่ยวกับ KU ได้เร็วยิ่งขึ้น
-                ด้วยระบบยืนยันตัวตน นิสิต/นักศึกษา มหาวิทยาลัยเกษตรศาสตร์ และ
-                API เกี่ยวกับข้อมูลของผู้ใช้งาน และฟีเจอร์ความปลอดภัยของข้อมูล
-              </Text>
-            </VStack>
-            <Flex justifyContent="start" gap={2} mt="60px">
-              <a href="https://www.kraikub.com">
-                <Button {...outlineButtonStyles} size="lg">
-                  เรียนรู้เพิ่มเติม
+      <Box bg="linear-gradient(121deg, rgba(0,111,79,1) 0%, rgba(0,74,106,1) 100%)">
+        <StaticNavbar color="white" bgColor="transparent" />
+        <Box minH="100vh">
+          <Container
+            maxW="container.xl"
+            minH="80vh"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            color="white"
+          >
+            <Box w="full" maxW={1400} p={6} rounded={10} textAlign="center">
+              <Heading fontSize={50} letterSpacing="-2px" fontWeight={500}>
+                <Box as="span" fontWeight={700}>
+                  KRAIKUB
+                </Box>{" "}
+                Developer Console
+              </Heading>
+              <VStack alignItems="center" my={6}>
+                <Text fontSize={18}>
+                  Integrate any applications with our Kasetsart University
+                  Authentication Service.
+                </Text>
+              </VStack>
+              <Flex justifyContent="center" gap={2} mt="60px">
+                <Button
+                  size="lg"
+                  height="60px"
+                  bg="#ffffff40"
+                  _hover={{
+                    bg: "#ffffff80",
+                  }}
+                  onClick={() => router.push("/projects/manager")}
+                  gap={2}
+                >
+                  Try now for free <BsArrowUpRight />
                 </Button>
-              </a>
-              <Button
-                size="lg"
-                colorScheme="katrade"
-                onClick={() => router.push("/projects/manager")}
-              >
-                เริ่มต้นเลย (ฟรี)
-              </Button>
-            </Flex>
-          </Box>
-        </Container>
+              </Flex>
+            </Box>
+          </Container>
+        </Box>
       </Box>
+      <FooterShort contentSize="container.xl" />
     </>
   );
 };

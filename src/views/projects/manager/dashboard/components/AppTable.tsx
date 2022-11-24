@@ -53,29 +53,24 @@ const AppTable: FC = () => {
     return (
       <VStack py={20} spacing={10}>
         <Heading
-          fontWeight={600}
+          fontWeight={500}
           letterSpacing={-1}
-          color="white"
-          textShadow="0 0 20px #00000080"
         >
           สร้างแอปพลิเคชันแรกของคุณ
         </Heading>
         <Text
           fontSize={20}
           fontWeight={500}
-          color="white"
-          textShadow="0 0 20px #00000080"
         >
-          ใครๆก็สามารถมาเชื่อมต่อแอปพลิเคชันกับ Kraikub ได้
+          สร้างแอปพลิเคชันเพื่อใช้งาน Sign in with KU
         </Text>
         <Button
           px="40px"
-          h="100px"
+          h="60px"
           rounded="full"
           fontWeight={300}
           fontSize="20px"
-          bg="white"
-          color="black"
+          colorScheme="katrade"
           _hover={{ bg: undefined, transform: "scale(1.1)" }}
           onClick={() => router.push("/projects/manager/create")}
         >
@@ -89,8 +84,8 @@ const AppTable: FC = () => {
     <Box py={20}>
       <Box my={8}>
         <Flex justifyContent="space-between">
-          <Heading size="lg" mb={2} letterSpacing={-1}>
-            Welcome to your apps library
+          <Heading size="lg" mb={4} letterSpacing={-1}>
+            Welcome to your App Library
           </Heading>
           {user.appOwned >= user.appQuota ? (
             <Button
@@ -99,7 +94,7 @@ const AppTable: FC = () => {
                 handleCreateAppClick(user.appOwned >= user.appQuota)
               }
             >
-              คุณใช้สิทธิหมดแล้ว
+              {"You've used all of your quotas."}
             </Button>
           ) : (
             <Button
@@ -111,19 +106,19 @@ const AppTable: FC = () => {
                 handleCreateAppClick(user.appOwned >= user.appQuota)
               }
             >
-              สร้างแอป +
+              Create +
             </Button>
           )}
         </Flex>
         <Box>
-          <Text fontSize={14}>ยินดีต้อนรับสู่คลังแอปพลิเคชันของคุณ สร้างแอปพลิเคชันใหม่เพื่อเชื่อต่อแอปพลิเคชั่นของคุณกับ Kraikub ได้เลย</Text>
+          <Text fontSize={14}>Your registered apps will be listed here. Create a new one if you are developing your new app.</Text>
         </Box>
       </Box>
       <Box py="20px">
         {/* <Text fontWeight={600} fontSize={20}>{user.student.nameTh.split(" ").slice(1).join(" ")}</Text> */}
         <Text fontWeight={600} fontSize={20} mt={4}>
           {user
-            ? `คุณสามารถสร้างแอปได้อีก ${user.appQuota - user.appOwned} แอป`
+            ? `You have  ${user.appQuota - user.appOwned} remaining free app(s).`
             : ""}
         </Text>
         <Divider my={4} />
@@ -142,6 +137,7 @@ const AppTable: FC = () => {
                 size="lg"
                 fontSize={24}
                 rounded="full"
+                colorScheme="katrade"
                 onClick={() =>
                   handleCreateAppClick(user.appOwned >= user.appQuota)
                 }

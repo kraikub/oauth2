@@ -38,7 +38,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
   },
   Heading: {
     baseStyle: {
-      fontWeight: 600,
+      fontWeight: 500,
     },
     sizes: {
       xl: {
@@ -55,7 +55,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
   Button: {
     baseStyle: {
       rounded: 10,
-      fontWeight: 400,
+      fontWeight: 500,
     },
     sizes: {
       lg: {

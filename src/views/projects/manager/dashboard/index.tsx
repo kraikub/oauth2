@@ -15,7 +15,7 @@ export const ProjectManagerDashboard: NextPage = () => {
             <AppTable />
           </Container>
         </Box>
-        <FooterShort />
+        <FooterShort contentSize="container.xl"/>
       </UserProvider>
     </>
   );

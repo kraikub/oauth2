@@ -101,48 +101,44 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
       })}
     >
       <Box
-        bgImage={`url(${bg1.src})`}
-        bgSize="cover"
-        bgPosition="center"
+        bg="linear-gradient(121deg, rgba(0,111,79,1) 0%, rgba(0,74,106,1) 100%)"
         position="relative"
         h="400px"
       >
-        <Box position="absolute" top={0} bottom={0} left={0} right={0} bg="#00000060" backdropFilter="blur(20px)">
-          <Container
-            maxW="container.xl"
-            height="full"
-            color="white"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            position="relative"
-          >
-            <Box textAlign="center">
-              <Heading
-                fontWeight={700}
-                fontSize={["28px", "40px", "50px"]}
-                mb={2}
-                letterSpacing="-2px"
-              >
-                {app?.appName}
-              </Heading>
-              <Heading fontWeight={600} fontSize="20px" opacity={0.8}>
-                {app?.appDescription}
-              </Heading>
-            </Box>
-            <Box
-              position="absolute"
-              bottom="20px"
-              left={0}
-              right={0}
-              textAlign="center"
+        <Container
+          maxW="container.xl"
+          height="full"
+          color="white"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          position="relative"
+        >
+          <Box textAlign="center">
+            <Heading
+              fontWeight={700}
+              fontSize={["28px", "40px", "50px"]}
+              mb={2}
+              letterSpacing="-2px"
             >
-              <Text fontWeight={500} opacity={0.8}>
-                By {app.creatorName}
-              </Text>
-            </Box>
-          </Container>
-        </Box>
+              {app?.appName}
+            </Heading>
+            <Heading fontWeight={600} fontSize="20px" opacity={0.8}>
+              {app?.appDescription}
+            </Heading>
+          </Box>
+          <Box
+            position="absolute"
+            bottom="20px"
+            left={0}
+            right={0}
+            textAlign="center"
+          >
+            <Text fontWeight={500} opacity={0.8}>
+              By {app.creatorName}
+            </Text>
+          </Box>
+        </Container>
       </Box>
 
       <Container maxW="container.xl" py="10vh">
@@ -159,15 +155,15 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             color="black"
           >
             <Heading size="md" mb={4}>
-              ข้อมูลแอปพลิเคชัน
+              App Information
             </Heading>
-            <Divider borderColor="gray.300" my="20px"/>
+            <Divider borderColor="gray.300" my="20px" />
             <Text fontSize={16} opacity={0.8}>
-              ข้อมูลโดยทั่วไปเกี่ยวกับแอปพลิเคชันของคุณ
+              {"Your app's general information"}
             </Text>
           </GridItem>
           <GridItem colSpan={[12, 8]}>
-            <FieldContainer title="ชื่อแอปพลิเคชั่น">
+            <FieldContainer title="App name">
               <Input
                 variant="unstyled"
                 fontSize={22}
@@ -184,9 +180,9 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 disabled
               />
             </FieldContainer>
-            <FieldContainer title="ผู้สร้าง">
+            <FieldContainer title="Creator">
               <Text fontSize={12} color="gray.600">
-                สามารถแก้ไขได้
+                Editable
               </Text>
               <Input
                 variant="unstyled"
@@ -202,9 +198,9 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 {...register("creatorName")}
               />
             </FieldContainer>
-            <FieldContainer title="เกี่ยวกับแอปพลิเคชัน">
+            <FieldContainer title="Description">
               <Text fontSize={12} color="gray.600">
-                สามารถแก้ไขได้
+                Editable
               </Text>
               <Textarea
                 my={2}
@@ -238,12 +234,11 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             w="full"
           >
             <Heading size="md" mb={4}>
-              ข้อมูลสำคัญ
+              Credentials
             </Heading>
-            <Divider borderColor="gray.300" my="20px"/>
+            <Divider borderColor="gray.300" my="20px" />
             <Text fontSize={16} opacity={0.8}>
-              ข้อมูลเกี่ยวกับการยืนยันตัวตนของแอปพลิเคชันคุณรวมถึงเป็นรหัสสำหรับใช้งาน
-              Kraikub ดังนั้นห้ามให้ใครเห็น secret ของคุณ!
+              Your app identity and some important keys and credentials.
             </Text>
           </GridItem>
           <GridItem colSpan={[12, 8]}>
@@ -300,7 +295,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                   mt={2}
                   onClick={() => setHideSecret(!hideSecret)}
                 >
-                  {hideSecret ? "แสดง" : "ซ่อน"}
+                  {hideSecret ? "SHOW" : "HIDE"}
                 </Button>
                 {/* <Button
                   rounded="full"
@@ -329,21 +324,20 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             color="black"
           >
             <Heading size="md" mb={4}>
-              Redirects (optional)
+              Redirects
             </Heading>
-            <Divider borderColor="gray.300" my="20px"/>
+            <Divider borderColor="gray.300" my="20px" />
             <Text fontSize={16} opacity={0.8}>
-              ใช้สำหรับกรณีที่ต้องการให้ Kraikub ส่งข้อมูลกลับไปที่ URL ของคุณ
-              ไม่จำเป็นต้องกรอกหากคุณใช้ Kraikub SDK
-              ในการพัฒนาแอปพลิเคชั่นของคุณ
+              URL for redirecting an authorization responses when your users
+              sign in to your application with <strong>SIGN IN WITH KU.</strong>
             </Text>
           </GridItem>
           <GridItem colSpan={[12, 8]}>
             <FieldContainer title="Redirect URLs">
               <Text my={4} fontSize={12}>
-                Kraikub จะอนุญาติให้ส่งข้อมูลการเข้าสู่ระบบกลับไปที่ URL
-                เหล่านี้เท่านั้น, หากต้องการใช้ URL ที่ไม่เป็น HTTPs
-                คุณจำเป็นต้องแนบ Secret มาด้วยทุกครั้ง
+                Kraikub will only allow any authentication to be redirected to
+                these URLs. Please make sure that you have owned these URLs. We
+                are not recommended you to use a non-HTTPS URLs.
               </Text>
               {fields.map((item, index) => {
                 return (
@@ -388,7 +382,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                     })
                   }
                 >
-                  <MdAdd /> เพิ่ม URL
+                  <MdAdd /> Add an URL
                 </Button>
               </Center>
             </FieldContainer>
@@ -411,9 +405,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           <Heading size="md" mb={3}>
             Shortcuts
           </Heading>
-          <Text>
-            เครื่องมือเหล่านี้จะช่วยให้คุณพัฒนาแอปพลิเคชันได้รวดเร็วยิ่งขึ้น
-          </Text>
+          <Text>Speed up your development time.</Text>
         </Box>
         <Box
           mt={4}
@@ -422,7 +414,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           boxShadow="0 2px 5px 2px #00000020"
           rounded={10}
         >
-          <Text>เร็วๆนี้</Text>
+          <Text>Temporary Unavailable</Text>
         </Box>
       </Container>
       <Divider my={10} />
@@ -439,11 +431,13 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           bgPos="center"
         >
           <Heading size="md" mb={3}>
-            โซนอันตราย
+            Danger Zone
           </Heading>
           <Text>
-            การตั้งค่าเหล่านี้อาจมีผลกระทบกับแอปพลิเคชั่นของคุณ
-            โปรดตรวจสอบความถูกต้องก่อนกระทำการใดๆในโซนนี้
+            These operations will create a serious effects to your application.
+          </Text>
+          <Text fontWeight={600} mt={4}>
+            {'"With great power comes great responsibility" - Uncle Ben'}
           </Text>
         </Box>
         <Flex
@@ -458,11 +452,10 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             <>
               <Box>
                 <Heading size="md" mb={2}>
-                  เสียใจด้วย คุณไม่สามารถลบแอปพลิเคชันนี้ได้
+                  You better not delete this
                 </Heading>
                 <Text>
-                  หากคุณกำลังคิดจะสร้างหายนะให้กับ Kraikub โปรดโทรหา {`"BEAM"`}{" "}
-                  092-437-3999
+                  Sorry, but god said this application should be existed.
                 </Text>
               </Box>
             </>
@@ -470,9 +463,9 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             <>
               <Box>
                 <Heading size="md" mb={2}>
-                  ลบแอปพลิเคชันนี้
+                  Delete this app
                 </Heading>
-                <Text>ลบแอปพลิเคชั่นนี้ออกจากแพลทฟอร์มอย่างถาวร</Text>
+                <Text>Permanently delete this application from Kraikub service.</Text>
               </Box>
               <IconButton
                 aria-label="delete-app"
