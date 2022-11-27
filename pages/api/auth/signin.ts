@@ -1,6 +1,8 @@
+import { PrivateAuthMiddleware } from './../../../api/middlewares/private.middleware';
+import { appConfig } from "./../../../api/config/app";
 import { NextApiRequest, NextApiResponse } from "next";
 import { bridge } from "../../../api/bridge/bridge";
-import { createResponse } from "../../../api/types/response";
+import { createResponse } from "../../../api/utils/response";
 import { applicationUsecase, userUsecase } from "../../../api/usecases";
 import {
   hasRedirect,
@@ -11,8 +13,6 @@ import {
   calculateUid,
   createAnonymousIdentity,
 } from "../../../api/utils/crypto";
-import { AuthResponse } from "../../../api/types/auth";
-import { publicUserFilter } from "../../../api/utils/filter/public_user";
 import { authUsecase } from "../../../api/usecases/auth";
 
 const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -22,52 +22,100 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const {
+      signin_method,
       username,
       password,
       clientId,
       scope,
       state,
-      sdk,
       secret,
       sig,
       redirect_uri,
+      response_type,
+      /// These below are used for PKCE
+      code_challenge,
+      code_challenge_method, // SHA256
     } = req.body;
 
     const app = await applicationUsecase.findOneApp({ clientId: clientId });
 
-    if (app === null || !app?.clientId || !sig) {
+    // Please handles method's params and query before doing any operation.
+
+    if (
+      // No App matched
+      app === null ||
+      // No App's Client ID
+      !app?.clientId ||
+      // No user's signature
+      !sig ||
+      // Grant type not allowed
+      !appConfig.grantTypes.includes(response_type)
+    ) {
       return res.status(400).send(createResponse(false, "Bad request", null));
     }
 
-    // login to myku
-    const authResponse = await bridge.login(username, password);
-    const { stdId, stdCode } = authResponse.data.user.student;
-    let uid = calculateUid(stdId, stdCode);
-
-    let user: User | null = await userUsecase.findOne({
-      uid: uid,
-    });
-
-    if (user === null) {
-      // handle create new user
-      const { user: newUser } = await userUsecase.initUserProfile(
-        uid,
-        stdId,
-        sig,
-        authResponse.data
-      );
-      user = newUser;
+    // For handling PKCE
+    if (
+      response_type === "authorization_code" &&
+      code_challenge &&
+      !appConfig.codeChallengeMethod.includes(code_challenge_method)
+    ) {
+      return res
+        .status(400)
+        .send(
+          createResponse(false, "Bad request, Invalid code challenge", null)
+        );
     }
+
+    let uid: string;
+    let user: User | null;
+
+    if (signin_method === "credential") {
+      const { success, payload, error } = PrivateAuthMiddleware(req, res);
+      if (!success || !payload) {
+        return;
+      }
+      uid = payload.uid;
+    } else {
+      // Login to myku
+      const authResponse = await bridge.login(username, password);
+      const { stdId, stdCode } = authResponse.data.user.student;
+      uid = calculateUid(stdId, stdCode);
+
+      // Check if user is existed or not.
+      user = await userUsecase.findOne({
+        uid: uid,
+      });
+
+      if (user === null) {
+        // Handle create new user.
+        const { user: newUser } = await userUsecase.initUserProfile(
+          uid,
+          stdId,
+          sig,
+          authResponse.data
+        );
+        user = newUser;
+      }
+    }
+
+    // If anonymous sign in.
     if (scope === "0") {
+      // Recalculate uid for hiding user's identity.
       uid = createAnonymousIdentity(uid, clientId);
     }
 
-    const code = authUsecase.signCToken(uid, scope, clientId);
+    // Sign the authorization code for each auth method.
 
-    if (sdk === true) {
-      const response = createResponse(true, "Authorized", { code });
-      return res.status(200).send(response);
-    }
+    const code = authUsecase.signAuthCode({
+      uid,
+      scope,
+      client_id: clientId,
+      response_type: response_type,
+      pkce: code_challenge && code_challenge_method,
+      code_challenge,
+      code_challenge_method,
+    });
 
     let selectedUrl = "";
     const httpRegex = new RegExp("^http?://");
@@ -97,14 +145,25 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       clientId: clientId,
     });
 
-    let payload: AuthResponse = {
+    let payload = {
       url: redirectUrl,
       code: code,
     };
+
+    const internalServiceAccessToken = authUsecase.signInternalAccessToken({
+      uid,
+    });
+
     const response = createResponse(true, "Authorized", payload);
-    return res.status(200).send(response);
+    return res
+      .status(200)
+      .setHeader("Set-Cookie", [
+        `access=${internalServiceAccessToken}; HttpOnly; Domain=${process.env.SHARE_ACCESS_DOMAIN || req.headers.origin}; Max-Age=604100; Path=/; Secure`,
+      ]) // Expire in almost 7 days.
+      .setHeader("Access-Control-Allow-Credentials", "true")
+      .setHeader("Access-Control-Allow-Headers", "Set-Cookie")
+      .send(response);
   } catch (error: any) {
-    console.error(error);
     handleApiError(res, error);
   }
 };

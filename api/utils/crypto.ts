@@ -29,3 +29,7 @@ export const sha256 = (payload: string) => {
 export const calculateAcademicHash = (uid: string, year: string) => {
   return sha256(uid + year);
 };
+
+export const random = (length: number) => {
+  return crypto.randomBytes(length).toString("hex");
+}

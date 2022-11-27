@@ -1,4 +1,4 @@
-export default interface Client {
+interface Client {
     appName: string
     appId: string
     clientId: string

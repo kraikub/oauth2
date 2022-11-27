@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import NextCors from "nextjs-cors";
 import { handleApiError } from "../../../api/error";
-import { createResponse } from "../../../api/types/response";
+import { createResponse } from "../../../api/utils/response";
 
 const handleSignoutAPI = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

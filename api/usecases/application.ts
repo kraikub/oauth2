@@ -48,6 +48,14 @@ export class ApplicationUsecase {
     uid: string,
     clientId: string
   ): Promise<{ success: boolean; status: number }> => {
+
+    if (clientId === process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID) {
+      return {
+        success: false,
+        status: 403,
+      };
+    }
+
     if (!(await this.isOwned(uid, clientId))) {
       return {
         success: false,

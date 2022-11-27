@@ -37,12 +37,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   };
 
   const handleRedirectToSigin = () => {
-
-    const signinUrl = getSigninUrl({
-      redirectPath: location.href,
-    });
-    router.push(signinUrl);
-  };
+    router.push("/auth")
+  }
 
   const accessToken = () => {
     return localStorage.getItem("access");
@@ -84,7 +80,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   }, []);
 
   if (!render) {
-    return <Progress size="xs" isIndeterminate colorScheme="katrade.scheme.fix" />;
+    return <Progress size="xs" isIndeterminate colorScheme="katrade" />;
   }
   return (
     <userContext.Provider

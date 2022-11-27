@@ -1,84 +1,35 @@
+import { redis } from "./../../data/redis/index";
 import { NextApiRequest, NextApiResponse } from "next";
-import { MiddlewareOutput } from ".";
 import { verify } from "../../libs/jwt";
-import { AccessTokenBody, AuthenticationObject } from "../types/auth";
-import { createResponse } from "../types/response";
-import { jsonCookie } from "../utils/cookie";
+import { createResponse } from "../utils/response";
 
-export const AuthMiddleware = (
+export const AuthMiddleware = async (
   req: NextApiRequest,
   res: NextApiResponse
-): MiddlewareOutput<AccessTokenBody> => {
-  const { cookie, authorization } = req.headers;
+): Promise<AuthMiddleWare> => {
+  const { authorization } = req.headers;
   if (authorization) {
     const accessToken = authorization.split("Bearer ")[1];
-    return verifyAccessTokenFromAuthorizationHeader(accessToken, res);
-  } else if (cookie) {
-    return verifyAccessTokenFromCookieHeader(cookie, res);
+    return await verifyAccessTokenFromAuthorizationHeader(accessToken, res);
   } else {
     res.status(401).send(createResponse(false, `No access token provided`, {}));
     return {
       success: false,
-      payload: { accessToken: "", scope: "", clientId: "", uid: "" },
-      error: "Unauthorized: No cookie provided",
+      session: undefined,
+      error: "Unauthorized",
     };
   }
 };
 
-function verifyAccessTokenFromCookieHeader(
-  cookie: string,
-  res: NextApiResponse
-) {
-  const c = jsonCookie(cookie);
-  if (!c.access) {
-    res.status(401).send(createResponse(false, "Unauthorized", {}));
-    return {
-      success: false,
-      payload: { accessToken: "", scope: "", clientId: "", uid: "" },
-    };
-  }
-
-  const [success, payload, error] = verify(c.access);
-  if (!success) {
-    res.status(401).send(createResponse(false, `${error}`, {}));
-    return {
-      success: false,
-      payload: { accessToken: "", scope: "", clientId: "", uid: "" },
-      error: error,
-    };
-  }
-
-  if (payload.type !== "access") {
-    res
-      .status(401)
-      .send(createResponse(false, `Unauthorized: Invalid token type`, {}));
-    return {
-      success: false,
-      payload: { accessToken: "", scope: "", clientId: "", uid: "" },
-      error: "Invalid token type",
-    };
-  }
-  let output: AccessTokenBody = {
-    accessToken: "",
-    scope: "",
-    clientId: "",
-    uid: "",
-  };
-  output.scope = payload?.scope;
-  output.clientId = payload?.clientId;
-  output.uid = payload?.uid;
-  return { success: true, payload: output, error };
-}
-
-function verifyAccessTokenFromAuthorizationHeader(
+async function verifyAccessTokenFromAuthorizationHeader(
   token: string,
   res: NextApiResponse
-) {
+): Promise<AuthMiddleWare> {
   if (!token) {
     res.status(401).send(createResponse(false, "Unauthorized", {}));
     return {
       success: false,
-      payload: { accessToken: "", scope: "", clientId: "", uid: "" },
+      session: undefined,
     };
   }
 
@@ -87,29 +38,40 @@ function verifyAccessTokenFromAuthorizationHeader(
     res.status(401).send(createResponse(false, `${error}`, {}));
     return {
       success: false,
-      payload: { accessToken: "", scope: "", clientId: "", uid: "" },
+      session: undefined,
       error: error,
     };
   }
 
-  if (payload.type !== "access") {
+  if (payload.token_type !== "access_token") {
     res
       .status(401)
       .send(createResponse(false, `Unauthorized: Invalid token type`, {}));
     return {
       success: false,
-      payload: { accessToken: "", scope: "", clientId: "", uid: "" },
+      session: undefined,
       error: "Invalid token type",
     };
   }
-  let output: AccessTokenBody = {
-    accessToken: "",
-    scope: "",
-    clientId: "",
-    uid: "",
-  };
-  output.scope = payload?.scope;
-  output.clientId = payload?.clientId;
-  output.uid = payload?.uid;
-  return { success: true, payload: output, error };
+
+  // Check session status
+  const session = await redis.get(payload.ssid);
+  if (!session) {
+    res
+      .status(401)
+      .send(
+        createResponse(
+          false,
+          `Unauthorized: Invalid session or session exipred`,
+          null
+        )
+      );
+    return {
+      success: false,
+      session: undefined,
+      error: "Invalid session or session exipred",
+    };
+  }
+
+  return { success: true, session: JSON.parse(session), error };
 }

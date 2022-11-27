@@ -1,13 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleApiError } from "../../../../api/error";
-import { AuthMiddleware } from "../../../../api/middlewares/auth.middleware";
-import { createResponse } from "../../../../api/types/response";
+import { createResponse } from "../../../../api/utils/response";
 import { userUsecase } from "../../../../api/usecases";
+import { PrivateAuthMiddleware } from "../../../../api/middlewares/private.middleware";
 
 const handleUserAPI = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { success, payload, error } = AuthMiddleware(req, res);
-    if (!success) {
+    const { success, payload, error } = PrivateAuthMiddleware(req, res);
+    if (!success || !payload) {
       return;
     }
     if (req.method === "GET") {

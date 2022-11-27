@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleApiError } from "../../../../api/error";
 import { AuthMiddleware } from "../../../../api/middlewares/auth.middleware";
-import { createResponse } from "../../../../api/types/response";
+import { createResponse } from "../../../../api/utils/response";
 import { userUsecase } from "../../../../api/usecases";
 import NextCors from "nextjs-cors";
 import { scopeMiddleware } from "../../../../api/middlewares/scope.middleware";
@@ -16,17 +16,17 @@ const handleGradeAPI = async (req: NextApiRequest, res: NextApiResponse) => {
       optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
     });
     AccessControlMiddleware(req, res);
-    const { success, payload, error } = AuthMiddleware(req, res);
-    if (!success) {
+    const { success, session, error } = await AuthMiddleware(req, res);
+    if (!success || !session) {
       return;
     }
-    const allowedScope = scopeMiddleware(res, payload.scope, ["2"]);
+    const allowedScope = scopeMiddleware(res, session.scope, ["2"]);
     if (!allowedScope) {
       return;
     }
 
     if (req.method === "GET") {
-      const out = await userUsecase.getUserGrades(payload.uid);
+      const out = await userUsecase.getUserGrades(session.uid);
       return res.status(200).send(createResponse(true, "", out));
     }
   } catch (error) {

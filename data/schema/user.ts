@@ -7,6 +7,9 @@ export const userSchema = new Schema<User>(
     signinSignature: { type: String },
     uid: { type: String },
     shouldUpdate: { type: Boolean },
+    profileImageUrl: { type: String },
+    universityEmail: { type: String },
+    personalEmail: { type: String },
   },
   { timestamps: true }
 );

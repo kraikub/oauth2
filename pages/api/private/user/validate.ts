@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleApiError } from "../../../../api/error";
-import { AuthMiddleware } from "../../../../api/middlewares/auth.middleware";
-import { createResponse } from "../../../../api/types/response";
+import { createResponse } from "../../../../api/utils/response";
 import { userUsecase } from "../../../../api/usecases";
 
 const handleValidateSigninSignatureAPI = async (req: NextApiRequest, res: NextApiResponse) => {

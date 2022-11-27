@@ -1,17 +1,21 @@
-import { Container, Heading } from "@chakra-ui/react";
+import { Box, Container, Heading } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Navbar from "../../../../layouts/Navbar";
 import { UserProvider } from "../../../../contexts/User";
 import AppTable from "./components/AppTable";
+import { FooterShort } from "../../../../layouts/FooterShort";
 
 export const ProjectManagerDashboard: NextPage = () => {
   return (
     <>
       <UserProvider>
         <Navbar />
-        <Container maxW="container.lg">
-          <AppTable />
-        </Container>
+        <Box minH="100vh">
+          <Container maxW="container.xl">
+            <AppTable />
+          </Container>
+        </Box>
+        <FooterShort contentSize="container.xl"/>
       </UserProvider>
     </>
   );

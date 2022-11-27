@@ -1,4 +1,3 @@
-import { MyKUGradeResponse } from "../../types/myku/grade";
 import { calculateAcademicHash } from "../crypto";
 
 export const gradeConverter = (

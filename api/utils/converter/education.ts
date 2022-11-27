@@ -1,5 +1,3 @@
-import { MyKUEducationResponse } from "../../types/myku/education";
-
 export const educationCoverter = (
   uid: string,
   educationResponse: MyKUEducationResponse,

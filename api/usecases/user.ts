@@ -6,7 +6,6 @@ import { educationRepository } from "../repositories/education";
 import { gradeRepository } from "../repositories/grade";
 import { studentRepository } from "../repositories/student";
 import { userRepository } from "../repositories/user";
-import { MyKULoginResponse } from "../types/myku/auth";
 import { educationCoverter } from "../utils/converter/education";
 import { gradeConverter } from "../utils/converter/grade";
 import { studentConverter } from "../utils/converter/student";
@@ -48,6 +47,9 @@ export class UserUsecase {
       uid: uid,
       appQuota: appConfig.INIT_MAX_APP_QUOTA,
       signinSignature: signinSignature,
+      personalEmail: "",
+      universityEmail: "",
+      profileImageUrl: appConfig.defaultProfileImageUrl,
       appOwned: 0,
       shouldUpdate: false,
     };

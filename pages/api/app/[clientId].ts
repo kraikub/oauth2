@@ -1,17 +1,18 @@
+import { PrivateAuthMiddleware } from '../../../api/middlewares/private.middleware';
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleApiError, handleErrResponse } from "../../../api/error";
-import { AuthMiddleware } from "../../../api/middlewares/auth.middleware";
-import { createResponse } from "../../../api/types/response";
+import { createResponse } from "../../../api/utils/response";
 import { applicationUsecase } from "../../../api/usecases";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { success, payload, error } = AuthMiddleware(req, res);
-    if (!success) {
+    const { success, payload, error } = PrivateAuthMiddleware(req, res);
+    if (!success || !payload) {
       return;
     }
 
     const { clientId } = req.query;
+
     if (!clientId) {
       return res
         .status(400)

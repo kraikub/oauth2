@@ -37,7 +37,9 @@ export const CreateProjectPage: NextPage = () => {
     <UserProvider>
       <Navbar />
       <Container maxW="container.md" py="100px">
-        <Heading letterSpacing={-1}>บอกเราเกี่ยวกับแอปพลิเคชันใหม่ของคุณสิ</Heading>
+        <Heading letterSpacing={-1} size="lg">
+          Tell us about your app
+        </Heading>
         <FormControl
           as="form"
           my={10}
@@ -66,8 +68,7 @@ export const CreateProjectPage: NextPage = () => {
             mt={6}
             color={hasName ? "red.400" : "black"}
           >
-            ชื่อแอปพลิเคชัน{" "}
-            {hasName ? "(ชื่อนี้ไม่สามารถใช้งานได้)" : null}
+            App name {hasName ? "(Cannot use this name)" : null}
           </FormLabel>
           <Input
             id="app-name"
@@ -78,12 +79,12 @@ export const CreateProjectPage: NextPage = () => {
           />
 
           <FormLabel htmlFor="app-details" mt={6}>
-            เกี่ยวกับแอปพลิเคชันของคุณ
+            Describe your app
           </FormLabel>
           <Textarea {...register("appDescription")} rounded={8} />
 
           <FormLabel htmlFor="app-creator" mt={6}>
-            ผู้สร้าง
+            Creator name
           </FormLabel>
           <Input
             id="app-creator"
@@ -93,7 +94,7 @@ export const CreateProjectPage: NextPage = () => {
           />
 
           <FormLabel htmlFor="app-type" mt={6}>
-            หมวดหมู่
+            Categories
           </FormLabel>
           <Select
             id="app-type"
@@ -109,17 +110,23 @@ export const CreateProjectPage: NextPage = () => {
             ))}
           </Select>
           <ButtonGroup mt={10}>
-            <Button type="submit" colorScheme="gray" rounded={14} size="lg" onClick={() => router.push("/projects/manager")}>
-              ยกเลิก
+            <Button
+              type="submit"
+              colorScheme="gray"
+              rounded={14}
+              size="lg"
+              onClick={() => router.push("/projects/manager")}
+            >
+              Cancel
             </Button>
             <Button
               type="submit"
-              colorScheme="katrade.scheme.fix"
+              colorScheme="katrade"
               isLoading={loading}
               rounded={14}
               size="lg"
             >
-              สร้างแอปพลิเคชันใหม่
+              Create new app
             </Button>
           </ButtonGroup>
         </FormControl>

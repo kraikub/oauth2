@@ -7,43 +7,26 @@ const config = {
 
 export const colors = {
   katrade: {
-    main: "#0E552F",
-    scheme: {
-      fix: {
-        100: "#0E552F",
-        200: "#0E552F",
-        300: "#0E552F",
-        400: "#0E552F",
-        500: "#0E552F",
-        600: "#0E552F",
-        700: "#0E552F",
-        800: "#0E552F",
-        900: "#0E552F",
-      },
-      dynamic: {
-        100: "#0E552F",
-        200: "#0E552F",
-        300: "#0E552F",
-        400: "#0E552F",
-        500: "#0E552F",
-        600: "#0E552F",
-        700: "#0E552F",
-        800: "#0E552F",
-        900: "#0E552F",
-      },
-    },
     100: "#c7ffd6",
     200: "#7dffa0",
     300: "#2eff66",
-    400: "#00db3a",
-    500: "#00b530",
+    400: "#00D861",
+    500: "#00D861",
     600: "#009127",
   },
+  kraikub: {
+    blue: {
+      200: "#7B65FF",
+      300: "#644AFC",
+      400: "#5238EC",
+      500: "#2D19A6",
+    }
+  }
 };
 
 const fonts = {
-  body: `'Inter', sans-serif`,
-  heading: `'Inter', sans-serif`,
+  body: `'Inter','Kanit', sans-serif`,
+  heading: `'Inter','Kanit', sans-serif`,
 };
 
 const components: { [key: string]: ComponentStyleConfig } = {
@@ -72,7 +55,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
   Button: {
     baseStyle: {
       rounded: 10,
-      fontWeight: 400,
+      fontWeight: 500,
     },
     sizes: {
       lg: {

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { NextApiResponse } from "next";
-import { createResponse } from "../types/response";
+import { createResponse } from "../utils/response";
+
 
 export const handleErrResponse = (
   res: NextApiResponse,
@@ -19,4 +20,5 @@ export const handleApiError = (res: NextApiResponse, error: any) => {
   } else {
     res.status(500).send(createResponse(false, error.toString() as string, {}));
   }
+  console.error(error)
 };

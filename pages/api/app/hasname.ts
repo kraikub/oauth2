@@ -1,10 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { handleApiError } from "../../../api/error";
-import { createResponse } from "../../../api/types/response";
+import { createResponse } from "../../../api/utils/response";
 import { applicationUsecase } from "../../../api/usecases";
+import { PrivateAuthMiddleware } from "../../../api/middlewares/private.middleware";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
+    const { success, payload, error } = PrivateAuthMiddleware(req, res);
+    if (!success) {
+      return;
+    }
     if (req.method === "GET") {
       const { name } = req.query;
       if (!name) {
@@ -16,5 +21,5 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (error: unknown) {
     return handleApiError(res, error);
   }
-}
-export default handler; 
+};
+export default handler;

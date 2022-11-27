@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { createResponse } from "../types/response";
+import { createResponse } from "../utils/response";
 import { Scope } from "../types/scope";
 export const scopeMiddleware = (res: NextApiResponse, scope: string | undefined, allowedScopes: Scope[]): boolean => {
   if (!scope) {

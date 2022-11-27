@@ -19,15 +19,15 @@ type ConsentData = {
 
 const consentDataList: ConsentData[] = [
   {
-    label: "ชื่อ-นามสกุล",
+    label: "See your firstname, lastname and email",
     requires: ["1", "2"],
   },
   {
-    label: "การศึกษา เช่น รหัสนิสิต คณะ ชั้นปี",
+    label: "See your educational profile under Kasetsart University",
     requires: ["1", "2"],
   },
   {
-    label: "ผลการเรียน",
+    label: "See your grades",
     requires: ["2"],
   },
 ];
@@ -51,15 +51,15 @@ export const ConsentForm: FC<ConsentFormProps> = ({
   return (
     <Box overflow="hidden" w="100%">
       <SimpleFadeInRight>
-        <Heading size="lg" mb={6}>
+        <Heading size="md" mb={6}>
           <Box as="span" lang="en" color="green">
             {appName}
           </Box>{" "}
-          ต้องการเข้าถึงข้อมูลของคุณ
+          wants to
         </Heading>
         <Text mb={3} color="#000000a0" fontSize={14}>
-          เราต้องแจ้งให้ท่านทราบว่าแอปพลิเคชัน {appName}{" "}
-          ให้คุณเข้าสู่ระบบของพวกเขาโดยต้องการข้อมูลส่วนตัวเหล่านี้
+          This application named {appName} want to access your personal
+          information.
         </Text>
         <Box
           my={6}
@@ -86,15 +86,15 @@ export const ConsentForm: FC<ConsentFormProps> = ({
             colorScheme="green"
             onClick={handleReject}
           >
-            ไม่อนุญาต
+            Cancel
           </Button>
           <Button
             size="lg"
-            colorScheme="katrade.scheme.fix"
+            colorScheme="katrade"
             onClick={handleSignin}
             isLoading={loading}
           >
-            อนุญาต
+            Allow
           </Button>
         </Flex>
       </SimpleFadeInRight>
@@ -121,7 +121,7 @@ const Each: FC<EachProps> = ({ label, requires, disableBorder, scope }) => {
       alignItems="center"
     >
       <BsFillCheckCircleFill color="green" />
-      <Text>{label}</Text>
+      <Text fontSize={14}>{label}</Text>
     </Flex>
   );
 };
