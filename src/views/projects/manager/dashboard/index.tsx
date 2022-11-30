@@ -4,6 +4,7 @@ import Navbar from "../../../../layouts/Navbar";
 import { UserProvider } from "../../../../contexts/User";
 import AppTable from "./components/AppTable";
 import { FooterShort } from "../../../../layouts/FooterShort";
+import { OAuthSuggestion } from "./components/OAuthSuggestion";
 
 export const ProjectManagerDashboard: NextPage = () => {
   return (
@@ -13,6 +14,7 @@ export const ProjectManagerDashboard: NextPage = () => {
         <Box minH="100vh">
           <Container maxW="container.xl">
             <AppTable />
+            <OAuthSuggestion />
           </Container>
         </Box>
         <FooterShort contentSize="container.xl"/>

@@ -39,10 +39,10 @@ const Navbar: FC = () => {
       justifyContent="space-between"
     >
       <Flex alignItems="center" gap={2}>
-        <Heading size="sm" fontWeight={700} color="black">
+        <Heading size="sm" fontWeight={600} color="black">
           KRAIKUB{" "}
-          <Text as="span" fontWeight={300} color="gray.600">
-            DEVELOPERS
+          <Text as="span" fontWeight={400} color="gray.600">
+            Developers
           </Text>
         </Heading>
       </Flex>

@@ -256,7 +256,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                         <PrimaryInput
                           borderRadius="top"
                           borderWidth="bottom"
-                          placeholder="Nontsri Account"
+                          placeholder="Nontri Account"
                           onChange={handleUsernameChange}
                           value={username}
                           {...themeSelector(styles).input}
