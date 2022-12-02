@@ -159,7 +159,7 @@ class AuthUsecase {
         sub: `openid:${payload.uid}`,
         ...result[0],
       });
-      responsePayload.idtoken = idtoken;
+      responsePayload.id_token = idtoken;
 
       return res
         .status(200)
@@ -220,7 +220,7 @@ class AuthUsecase {
     session.refreshToken = ref;
     (session.refreshedAt = Math.floor(Date.now() / 1000)),
       // Save new session info.
-      await redis.set(payload.ssid, JSON.stringify(session), 60 * 60 * 24 * 14);
+      await redis.set(payload.ssid, JSON.stringify(session), appConfig.expirations.refreshToken.s);
 
     return res.status(200).send(
       createResponse(true, "Token exchange success", {
