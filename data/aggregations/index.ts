@@ -85,11 +85,13 @@ export const aggregations = {
   },
   public: {
     user: onlyPublicUser,
+    userWith: onlyPublicUserWith,
     student: onlyPublicStudent,
     education: onlyEducation,
     academic: onlyAcademic,
   },
 };
+
 
 function onlyPrivateUser(uid: string) {
   return [
@@ -107,6 +109,12 @@ function onlyPrivateUser(uid: string) {
   ];
 }
 
+// interface OptionalUserKeys {
+//   universityEmail?: 0 | 1;
+//   personalEmail?: 0 | 1;
+//   profileImageUrl?: 0 | 1;
+// }
+
 function onlyPublicUser(uid: string) {
   return [
     {
@@ -120,6 +128,26 @@ function onlyPublicUser(uid: string) {
         uid: 1,
       },
     },
+  ];
+}
+
+function onlyPublicUserWith(uid: string, includeKeys: string[]) {
+  const projection: any = {
+    $project: {
+      _id: 0,
+      uid: 1,
+    },
+  }
+  for (const key of includeKeys) {
+    projection.$project[key] = 1
+  }
+  return [
+    {
+      $match: {
+        uid: uid,
+      },
+    },
+    projection,
   ];
 }
 
