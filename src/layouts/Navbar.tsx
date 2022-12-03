@@ -21,7 +21,7 @@ import { useUser } from "../contexts/User";
 import { appConfig } from "../../api/config/app";
 const Navbar: FC = () => {
   const router = useRouter();
-  const { user, signout } = useUser();
+  const { user, signout, isLoading } = useUser();
   return (
     <Flex
       position="sticky"
@@ -88,6 +88,7 @@ const Navbar: FC = () => {
                 _hover={{ bg: "red.50" }}
                 fontWeight={500}
                 onClick={signout}
+                isDisabled={isLoading}
               >
                 Sign out
               </MenuItem>

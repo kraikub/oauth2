@@ -16,6 +16,7 @@ interface UserContext {
   reload: () => void;
   signout: () => void;
   accessToken: () => string | null;
+  isLoading: boolean;
 }
 
 const defaultUserContextValue = {
@@ -23,6 +24,7 @@ const defaultUserContextValue = {
   reload: () => {},
   signout: () => {},
   accessToken: () => null,
+  isLoading: true,
 };
 
 export const userContext = createContext<UserContext>(defaultUserContextValue);
@@ -32,13 +34,14 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const [toggleState, setToggleState] = useState<boolean>(false);
   const [render, setRender] = useState<boolean>(false);
   const [user, setUser] = useState<UserWithStudent>();
+  const [isLoading, setIsLoading] = useState(true);
   const reload = () => {
     setToggleState(!toggleState);
   };
 
   const handleRedirectToSigin = () => {
-    router.push("/auth")
-  }
+    router.push("/auth");
+  };
 
   const accessToken = () => {
     return localStorage.getItem("access");
@@ -47,12 +50,14 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const getUser = async () => {
     setRender(false);
     try {
+      setIsLoading(true);
       const { data } = await userService.get();
       if (data.payload === null) {
         return handleRedirectToSigin();
       }
       setUser(data.payload);
       setRender(true);
+      setIsLoading(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -66,10 +71,13 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   };
 
   const signout = async () => {
+    setIsLoading(true);
     await userService.signout();
-    reload();
+    setTimeout(() => {
+      setIsLoading(false);
+      reload();
+    }, 500);
   };
-
 
   useEffect(() => {
     getUser();
@@ -89,6 +97,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
         reload,
         accessToken,
         signout,
+        isLoading
       }}
     >
       {children}
