@@ -1,3 +1,4 @@
+import { logRepository } from './../repositories/log';
 import { userRepository } from "./../repositories/user";
 import { redis } from "./../../data/redis/index";
 import { applicationRepository } from "./../repositories/application";
@@ -37,6 +38,10 @@ class AuthUsecase {
     } else {
       return true;
     }
+  }
+
+  async saveLog(uid: string, clientId: string, scope: string) {
+    return logRepository.newLog(uid, clientId, scope);
   }
 
   signInternalAccessToken(authObject: { uid: string }) {

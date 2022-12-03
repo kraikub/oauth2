@@ -19,16 +19,20 @@ type ConsentData = {
 
 const consentDataList: ConsentData[] = [
   {
-    label: "See your firstname, lastname and email",
-    requires: ["1", "2"],
+    label: "See your firstname, lastname and some personal information",
+    requires: ["provider", "student"],
+  },
+  {
+    label: "See your registered university email (if available)",
+    requires: ["provider", "university_email"],
+  },
+  {
+    label: "See your verified personal email (if available)",
+    requires: ["provider", "personal_email"],
   },
   {
     label: "See your educational profile under Kasetsart University",
-    requires: ["1", "2"],
-  },
-  {
-    label: "See your grades",
-    requires: ["2"],
+    requires: ["provider", "education"],
   },
 ];
 
@@ -120,7 +124,9 @@ const Each: FC<EachProps> = ({ label, requires, disableBorder, scope }) => {
       gap={3}
       alignItems="center"
     >
-      <BsFillCheckCircleFill color="green" />
+      <Box>
+        <BsFillCheckCircleFill color="green" fontSize={20} />
+      </Box>
       <Text fontSize={14}>{label}</Text>
     </Flex>
   );

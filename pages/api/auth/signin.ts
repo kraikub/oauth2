@@ -150,6 +150,9 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       code: code,
     };
 
+    const logResult = await authUsecase.saveLog(uid, clientId, scope);
+    console.log(logResult)
+
     const internalServiceAccessToken = authUsecase.signInternalAccessToken({
       uid,
     });

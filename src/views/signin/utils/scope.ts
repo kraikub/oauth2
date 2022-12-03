@@ -1,7 +1,5 @@
 export const validScope = [
-  "0",
-  "1",
-  "2",
+  "provider",
   "openid",
   "university_email",
   "personal_email",

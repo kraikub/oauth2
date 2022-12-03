@@ -12,7 +12,7 @@ import { BsArrowUpRight } from "react-icons/bs";
 
 export const OAuthSuggestion: FC = () => {
   return (
-    <SimpleGrid columns={[1, 2]} spacing={2} my="90px">
+    <SimpleGrid columns={[1, 1, 2]} spacing={2} my="90px">
       <Box>
         <Heading>Explore more about OAuth 2.0 Protocol</Heading>
         <Text my={4}>
