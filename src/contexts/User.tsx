@@ -1,9 +1,7 @@
 import { Progress } from "@chakra-ui/react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useRouter } from "next/router";
-import test from "node:test";
 import { createContext, FC, useContext, useEffect, useState } from "react";
-import { authService } from "../services/authService";
 import { userService } from "../services/userService";
 import { getSigninUrl } from "../utils/path";
 
@@ -40,7 +38,7 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   };
 
   const handleRedirectToSigin = () => {
-    router.push("/auth");
+    router.push(getSigninUrl({}));
   };
 
   const accessToken = () => {
@@ -73,10 +71,8 @@ export const UserProvider: FC<UserProviderProps> = ({ children }) => {
   const signout = async () => {
     setIsLoading(true);
     await userService.signout();
-    setTimeout(() => {
-      setIsLoading(false);
-      reload();
-    }, 500);
+    setIsLoading(false);
+    reload();
   };
 
   useEffect(() => {
