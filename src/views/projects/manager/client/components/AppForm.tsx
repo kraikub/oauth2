@@ -116,10 +116,10 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
         >
           <Box textAlign="center">
             <Heading
-              fontWeight={700}
+              fontWeight={600}
               fontSize={["28px", "40px", "50px"]}
               mb={2}
-              letterSpacing="-2px"
+              letterSpacing="-1px"
             >
               {app?.appName}
             </Heading>
@@ -465,7 +465,9 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 <Heading size="md" mb={2}>
                   Delete this app
                 </Heading>
-                <Text>Permanently delete this application from Kraikub service.</Text>
+                <Text>
+                  Permanently delete this application from Kraikub service.
+                </Text>
               </Box>
               <IconButton
                 aria-label="delete-app"
@@ -494,11 +496,13 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Text fontSize={14}>แอปมีการเปลี่ยนแปลง</Text>
+            <Text fontSize={14} fontWeight={500}>
+              Some information have been changed
+            </Text>
             <Spacer />
             <ButtonGroup>
               <Button colorScheme="red" onClick={resetForm} rounded={12}>
-                ยกเลิก
+                Undo
               </Button>
               <Button
                 type="submit"
@@ -506,7 +510,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 rounded={12}
                 isLoading={isUpdating}
               >
-                บันทึก
+                Save
               </Button>
             </ButtonGroup>
           </Container>
@@ -520,24 +524,24 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
       >
         <ModalOverlay />
         <ModalContent rounded={16}>
-          <ModalHeader>คุณต้องการลบแอปพลิเคชั่นนี้จริงหรือ? 🤔</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>
-              คุณกำลังที่จะลบแอปพลิเคชั่น{" "}
-              <Box as="span" fontWeight={500} color="blue.500">
+          <ModalHeader py={4}>
+            <Text fontWeight={600} fontSize={16}>
+              Permanently delete{" "}
+              <Box as="span" fontWeight={700} color="green.600">
                 {app.appName}
               </Box>{" "}
-              ออกจากแพลทฟอร์มของเรา
-              การกระทำครั้งนี้ไม่สามาถที่จะแก้ไขหรือย้อนกลับในภายหลังได้
+              from Kraikub?
             </Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
             <Box my={4}>
-              <Text mb={3}>
-                กรุณากรอก{" "}
+              <Text mb={3} fontSize={14}>
+                Type{" "}
                 <Box as="span" fontWeight={500} color="red.500">
                   delete/{noWhiteSpace(app.appName)}
                 </Box>{" "}
-                เพื่อดำเนินการลบแอปพลิเคชั่น
+                To continue the deletion.
               </Text>
               <Input
                 rounded={6}
@@ -556,7 +560,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               onClick={() => setIsDeleteModalOpen(false)}
               size="sm"
             >
-              ไม่ ฉันเปลี่ยนใจแล้ว
+              Nope, I changed my mind.
             </Button>
             <Button
               colorScheme="red"
@@ -566,7 +570,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 deleteInputValue !== `delete/${noWhiteSpace(app.appName)}`
               }
             >
-              ลบเดี๋ยวนี้ 🚀
+              Delete 🚀
             </Button>
           </ModalFooter>
         </ModalContent>

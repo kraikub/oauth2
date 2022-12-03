@@ -21,7 +21,7 @@ import { useUser } from "../contexts/User";
 import { appConfig } from "../../api/config/app";
 const Navbar: FC = () => {
   const router = useRouter();
-  const { user, signout } = useUser();
+  const { user, signout, isLoading } = useUser();
   return (
     <Flex
       position="sticky"
@@ -39,10 +39,10 @@ const Navbar: FC = () => {
       justifyContent="space-between"
     >
       <Flex alignItems="center" gap={2}>
-        <Heading size="sm" fontWeight={700} color="black">
+        <Heading size="sm" fontWeight={600} color="black">
           KRAIKUB{" "}
-          <Text as="span" fontWeight={300} color="gray.600">
-            DEVELOPERS
+          <Text as="span" fontWeight={400} color="gray.600">
+            Developers
           </Text>
         </Heading>
       </Flex>
@@ -88,6 +88,7 @@ const Navbar: FC = () => {
                 _hover={{ bg: "red.50" }}
                 fontWeight={500}
                 onClick={signout}
+                isDisabled={isLoading}
               >
                 Sign out
               </MenuItem>

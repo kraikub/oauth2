@@ -25,8 +25,8 @@ export const colors = {
 };
 
 const fonts = {
-  body: `'Inter','Kanit', sans-serif`,
-  heading: `'Inter','Kanit', sans-serif`,
+  body: `'Poppins','Kanit', sans-serif`,
+  heading: `'Poppins','Kanit', sans-serif`,
 };
 
 const components: { [key: string]: ComponentStyleConfig } = {

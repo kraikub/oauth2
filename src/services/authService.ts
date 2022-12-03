@@ -65,7 +65,6 @@ class AuthService {
   };
 
   public claimAccessToken = async (code: string) => {
-    console.log("claiming access token...");
     const { status, data } = await nextApiBaseInstance.post<
       CustomApiResponse<{ user: UserWithStudent }>
     >(`/api/oauth/v1/token`, {
