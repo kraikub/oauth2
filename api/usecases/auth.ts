@@ -1,3 +1,4 @@
+import { userRepository } from "./../repositories/user";
 import { redis } from "./../../data/redis/index";
 import { applicationRepository } from "./../repositories/application";
 import { appConfig } from "./../config/app";
@@ -6,6 +7,7 @@ import { signAuthObject, verify } from "../../libs/jwt";
 
 import { createResponse } from "../utils/response";
 import { random, sha256 } from "../utils/crypto";
+import { Scope } from "../../data/models/scope";
 
 interface ExchangeOAuthTokenExtraParams {
   code_verifier?: string;
@@ -127,13 +129,42 @@ class AuthUsecase {
       60 * 60 * 24 * 14
     );
 
-    return res.status(200).send(
-      createResponse(true, "Token exchange success", {
-        access_token: accessToken,
-        refresh_token: refreshToken,
-        expires_in: appConfig.expirations.accessToken.s - 2,
-      })
-    );
+    const responsePayload: any = {
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      expires_in: appConfig.expirations.accessToken.s - 2,
+    };
+
+    const requestScope = new Scope(payload.uid, payload.scope);
+
+    if (requestScope.isOpenIDConnect) {
+      const result = await userRepository.useAggregationPipeline(
+        requestScope.baseAggregation
+      );
+      if (!result.length) {
+        return res
+          .status(409)
+          .send(
+            createResponse(
+              false,
+              "JWT state not matched with the server state.",
+              {}
+            )
+          );
+      }
+      const idtoken = this.signNewIdtoken({
+        iss: appConfig.openid.iss,
+        iat: Math.round(Date.now() / 1000),
+        aud: payload.client_id,
+        sub: `openid:${payload.uid}`,
+        ...result[0],
+      });
+      responsePayload.id_token = idtoken;
+
+      return res
+        .status(200)
+        .send(createResponse(true, "Token exchange success", responsePayload));
+    }
   };
 
   public async refreshAccessToken(res: NextApiResponse, refreshToken: string) {
@@ -166,11 +197,17 @@ class AuthUsecase {
     const session: Session = JSON.parse(s);
 
     if (!session) {
-      // Kill session due to the abnormal opreations in Redis DB. 
-      await redis.delete(payload.ssid)
+      // Kill session due to the abnormal opreations in Redis DB.
+      await redis.delete(payload.ssid);
       return res
         .status(401)
-        .send(createResponse(false, "Session has been killed due to the abnormal operation.", null));
+        .send(
+          createResponse(
+            false,
+            "Session has been killed due to the abnormal operation.",
+            null
+          )
+        );
     }
 
     if (session.refreshToken !== refreshToken) {
@@ -181,14 +218,9 @@ class AuthUsecase {
 
     // Assign new refresh token to the session info.
     session.refreshToken = ref;
-    session.refreshedAt = Math.floor(Date.now() / 1000),
-
-    // Save new session info.
-    await redis.set(
-      payload.ssid,
-      JSON.stringify(session),
-      60 * 60 * 24 * 14
-    );
+    (session.refreshedAt = Math.floor(Date.now() / 1000)),
+      // Save new session info.
+      await redis.set(payload.ssid, JSON.stringify(session), appConfig.expirations.refreshToken.s);
 
     return res.status(200).send(
       createResponse(true, "Token exchange success", {
@@ -197,7 +229,10 @@ class AuthUsecase {
         expires_in: appConfig.expirations.accessToken.s - 2,
       })
     );
+  }
 
+  public signNewIdtoken(payload: any) {
+    return signAuthObject(payload, appConfig.expirations.idtoken.str);
   }
 
   public newTokenPair(ssid: string) {
