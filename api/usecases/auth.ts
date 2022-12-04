@@ -1,4 +1,4 @@
-import { logRepository } from './../repositories/log';
+import { logRepository } from "./../repositories/log";
 import { userRepository } from "./../repositories/user";
 import { redis } from "./../../data/redis/index";
 import { applicationRepository } from "./../repositories/application";
@@ -40,8 +40,22 @@ class AuthUsecase {
     }
   }
 
-  async saveLog(uid: string, clientId: string, scope: string) {
-    return logRepository.newLog(uid, clientId, scope);
+  async saveLog(
+    uid: string,
+    clientId: string,
+    scope: string,
+    ua?: string,
+    uaPlatform?: string,
+    uaMobile?: string
+  ) {
+    return logRepository.newLog(
+      uid,
+      clientId,
+      scope,
+      ua || "",
+      uaPlatform || "",
+      uaMobile || ""
+    );
   }
 
   signInternalAccessToken(authObject: { uid: string }) {
@@ -225,7 +239,11 @@ class AuthUsecase {
     session.refreshToken = ref;
     (session.refreshedAt = Math.floor(Date.now() / 1000)),
       // Save new session info.
-      await redis.set(payload.ssid, JSON.stringify(session), appConfig.expirations.refreshToken.s);
+      await redis.set(
+        payload.ssid,
+        JSON.stringify(session),
+        appConfig.expirations.refreshToken.s
+      );
 
     return res.status(200).send(
       createResponse(true, "Token exchange success", {
