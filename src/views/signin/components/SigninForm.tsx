@@ -95,9 +95,9 @@ export const SigninForm: FC<SigninFormProps> = ({
         color: "katrade.600",
       },
       input: {
-        backgroundColor: "#EDF2F7",
-        backgroundColorOnHover: "#E2E8F0",
-        borderColor: "#E2E8F0",
+        backgroundColor: "#F7FAFC",
+        backgroundColorOnHover: "#EDF2F7",
+        borderColor: "#CBD5E0",
         placeholderColor: "#b0b3b8",
       },
       signinText: "ดำเนินการต่อ",
