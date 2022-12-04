@@ -1,4 +1,4 @@
-import { PrivateAuthMiddleware } from './../../../api/middlewares/private.middleware';
+import { PrivateAuthMiddleware } from "./../../../api/middlewares/private.middleware";
 import { appConfig } from "./../../../api/config/app";
 import { NextApiRequest, NextApiResponse } from "next";
 import { bridge } from "../../../api/bridge/bridge";
@@ -20,6 +20,13 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method !== "POST") {
       return res.status(400).send({});
     }
+
+    const uaPlatform = req.headers["sec-ch-ua-platform"];
+    const uaMobile = req.headers["sec-ch-ua-mobile"];
+    const ua = req.headers["user-agent"];
+    console.log(uaPlatform);
+    console.log(uaMobile);
+    console.log(ua);
 
     const {
       signin_method,
@@ -150,6 +157,16 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       code: code,
     };
 
+    const logResult = await authUsecase.saveLog(
+      uid,
+      clientId,
+      scope,
+      ua,
+      Array.isArray(uaPlatform) ? uaPlatform.join(" ") : uaPlatform,
+      Array.isArray(uaMobile) ? uaMobile.join(" ") : uaMobile
+    );
+    console.log(logResult);
+
     const internalServiceAccessToken = authUsecase.signInternalAccessToken({
       uid,
     });
@@ -164,6 +181,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       .setHeader("Access-Control-Allow-Headers", "Set-Cookie")
       .send(response);
   } catch (error: any) {
+    console.error(error);
     handleApiError(res, error);
   }
 };

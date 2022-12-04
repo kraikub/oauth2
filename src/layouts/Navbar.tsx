@@ -67,7 +67,14 @@ const Navbar: FC = () => {
                 </IconButton>
               </ButtonGroup>
             </MenuButton>
-            <MenuList fontSize={14}>
+            <MenuList
+              fontSize={14}
+              borderStyle="none"
+              boxShadow="0px 1px 10px #00000030"
+              rounded={14}
+              pb={0}
+              overflow="hidden"
+            >
               <Box px={4} py={3} fontSize={12} fontWeight={500}>
                 <Text fontWeight={500} fontSize={14}>
                   {user.student.nameEn.split(" ").slice(1).join(" ")}
@@ -76,14 +83,25 @@ const Navbar: FC = () => {
                   {user.student.nameTh.split(" ").slice(1).join(" ")}
                 </Text>
               </Box>
-              <Divider mb={4} />
+              <Divider />
               <MenuItem
+                py={3}
                 fontWeight={500}
                 onClick={() => router.push("/projects/manager")}
               >
                 App Library
               </MenuItem>
+              <Divider />
               <MenuItem
+                py={3}
+                fontWeight={500}
+                onClick={() => router.push("/projects/manager")}
+              >
+                Kraikub ID
+              </MenuItem>
+              <Divider />
+              <MenuItem
+                py={3}
                 color="red.600"
                 _hover={{ bg: "red.50" }}
                 fontWeight={500}
