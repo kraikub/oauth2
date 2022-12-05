@@ -9,6 +9,7 @@ export const logSchema = new Schema<Log>(
     userAgentPlatform: { type: String },
     userAgentMobile: { type: String },
     userAgent: { type: String },
+    ip: { type: String },
   },
   { timestamps: true }
 );

@@ -14,19 +14,17 @@ import {
   createAnonymousIdentity,
 } from "../../../api/utils/crypto";
 import { authUsecase } from "../../../api/usecases/auth";
+import requestIp from 'request-ip';
 
 const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method !== "POST") {
       return res.status(400).send({});
     }
-
+    const detectedIp = requestIp.getClientIp(req)
     const uaPlatform = req.headers["sec-ch-ua-platform"];
     const uaMobile = req.headers["sec-ch-ua-mobile"];
     const ua = req.headers["user-agent"];
-    console.log(uaPlatform);
-    console.log(uaMobile);
-    console.log(ua);
 
     const {
       signin_method,
@@ -163,9 +161,9 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       scope,
       ua,
       Array.isArray(uaPlatform) ? uaPlatform.join(" ") : uaPlatform,
-      Array.isArray(uaMobile) ? uaMobile.join(" ") : uaMobile
+      Array.isArray(uaMobile) ? uaMobile.join(" ") : uaMobile,
+      detectedIp || "",
     );
-    console.log(logResult);
 
     const internalServiceAccessToken = authUsecase.signInternalAccessToken({
       uid,
