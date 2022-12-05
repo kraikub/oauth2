@@ -46,7 +46,8 @@ class AuthUsecase {
     scope: string,
     ua?: string,
     uaPlatform?: string,
-    uaMobile?: string
+    uaMobile?: string,
+    ip?: string,
   ) {
     return logRepository.newLog(
       uid,
@@ -54,7 +55,8 @@ class AuthUsecase {
       scope,
       ua || "",
       uaPlatform || "",
-      uaMobile || ""
+      uaMobile || "",
+      ip || "",
     );
   }
 

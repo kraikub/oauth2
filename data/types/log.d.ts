@@ -6,4 +6,5 @@ interface Log {
   userAgentPlatform: string;
   userAgentMobile: string;
   userAgent: string;
+  ip: string;
 }
