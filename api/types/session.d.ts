@@ -1,4 +1,4 @@
-type Session = {
+type SessionCache = {
   uid: string;
   scope: string;
   createdAt: number;
