@@ -1,3 +1,5 @@
+import { accessRepository } from "./../repositories/access";
+import { sessionRepository } from "./../repositories/session";
 import { logRepository } from "./../repositories/log";
 import { userRepository } from "./../repositories/user";
 import { redis } from "./../../data/redis/index";
@@ -41,13 +43,14 @@ class AuthUsecase {
   }
 
   async saveLog(
+    ssid: string,
     uid: string,
     clientId: string,
     scope: string,
     ua?: string,
     uaPlatform?: string,
     uaMobile?: string,
-    ip?: string,
+    ip?: string
   ) {
     return logRepository.newLog(
       uid,
@@ -57,6 +60,7 @@ class AuthUsecase {
       uaPlatform || "",
       uaMobile || "",
       ip || "",
+      ssid
     );
   }
 
@@ -96,7 +100,7 @@ class AuthUsecase {
         code_challenge,
         code_challenge_method,
       },
-      "100m"
+      appConfig.expirations.authorizationCode.str
     );
     return authorizationCode;
   };
@@ -147,9 +151,23 @@ class AuthUsecase {
         refreshedAt: 0,
         refreshToken: refreshToken,
       }),
-      60 * 60 * 24 * 14
+      appConfig.expirations.refreshToken.s
     );
 
+    await accessRepository.addAccess({
+      accessId: sha256(payload.uid + payload.clientId),
+      uid: payload.uid,
+      clientId: payload.client_id,
+    });
+
+    await sessionRepository.newSession({
+      ssid,
+      uid: payload.uid,
+      scope: payload.scope,
+      clientId: payload.client_id,
+      expireAt: new Date(Date.now() + appConfig.expirations.refreshToken.ms),
+      accessId: sha256(payload.uid + payload.clientId),
+    });
     const responsePayload: any = {
       access_token: accessToken,
       refresh_token: refreshToken,
@@ -215,7 +233,7 @@ class AuthUsecase {
         .send(createResponse(false, "Session not existed", null));
     }
 
-    const session: Session = JSON.parse(s);
+    const session: SessionCache = JSON.parse(s);
 
     if (!session) {
       // Kill session due to the abnormal opreations in Redis DB.

@@ -9,6 +9,6 @@ interface PrivateAuthMiddleWare {
 
 interface AuthMiddleWare {
   success: boolean;
-  session?: Session;
+  session?: SessionCache;
   error?: any;
 }

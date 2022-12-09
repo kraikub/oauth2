@@ -10,6 +10,7 @@ class LogRepository {
     uaPlatform: string,
     uaMobile: string,
     ip: string,
+    ssid: string,
   ) {
     await mongodb.connect();
     return await LogModel.create<Log>({
@@ -20,6 +21,7 @@ class LogRepository {
       userAgentPlatform: uaPlatform,
       userAgentMobile: uaMobile,
       ip,
+      ssid,
       timestamp: new Date(Date.now()),
     });
   }

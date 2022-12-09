@@ -1,3 +1,4 @@
+import { sha256 } from "./../../../api/utils/crypto";
 import { PrivateAuthMiddleware } from "./../../../api/middlewares/private.middleware";
 import { appConfig } from "./../../../api/config/app";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -14,14 +15,14 @@ import {
   createAnonymousIdentity,
 } from "../../../api/utils/crypto";
 import { authUsecase } from "../../../api/usecases/auth";
-import requestIp from 'request-ip';
+import requestIp from "request-ip";
 
 const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method !== "POST") {
       return res.status(400).send({});
     }
-    const detectedIp = requestIp.getClientIp(req)
+    const detectedIp = requestIp.getClientIp(req);
     const uaPlatform = req.headers["sec-ch-ua-platform"];
     const uaMobile = req.headers["sec-ch-ua-mobile"];
     const ua = req.headers["user-agent"];
@@ -155,14 +156,15 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       code: code,
     };
 
-    const logResult = await authUsecase.saveLog(
+    await authUsecase.saveLog(
+      sha256(code),
       uid,
       clientId,
       scope,
       ua,
       Array.isArray(uaPlatform) ? uaPlatform.join(" ") : uaPlatform,
       Array.isArray(uaMobile) ? uaMobile.join(" ") : uaMobile,
-      detectedIp || "",
+      detectedIp || ""
     );
 
     const internalServiceAccessToken = authUsecase.signInternalAccessToken({
@@ -173,7 +175,9 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     return res
       .status(200)
       .setHeader("Set-Cookie", [
-        `access=${internalServiceAccessToken}; HttpOnly; Domain=${process.env.SHARE_ACCESS_DOMAIN || req.headers.origin}; Max-Age=604100; Path=/; Secure`,
+        `access=${internalServiceAccessToken}; HttpOnly; Domain=${
+          process.env.SHARE_ACCESS_DOMAIN || req.headers.origin
+        }; Max-Age=604100; Path=/; Secure`,
       ]) // Expire in almost 7 days.
       .setHeader("Access-Control-Allow-Credentials", "true")
       .setHeader("Access-Control-Allow-Headers", "Set-Cookie")
