@@ -79,20 +79,6 @@ export const studentAggr = (uid: string) => {
   ];
 };
 
-export const aggregations = {
-  private: {
-    user: onlyPrivateUser,
-  },
-  public: {
-    user: onlyPublicUser,
-    userWith: onlyPublicUserWith,
-    student: onlyPublicStudent,
-    education: onlyEducation,
-    academic: onlyAcademic,
-  },
-};
-
-
 function onlyPrivateUser(uid: string) {
   return [
     {
@@ -108,6 +94,17 @@ function onlyPrivateUser(uid: string) {
     },
   ];
 }
+
+const privateApplication = [
+  {
+    $lookup: {
+      from: "applications",
+      localField: "uid",
+      foreignField: "ownerId",
+      as: "applications"
+    },
+  }
+]
 
 // interface OptionalUserKeys {
 //   universityEmail?: 0 | 1;
@@ -151,7 +148,7 @@ function onlyPublicUserWith(uid: string, includeKeys: string[]) {
   ];
 }
 
-function onlyPublicStudent() {
+function onlyPrivateStudent() {
   return [
     {
       $lookup: {
@@ -239,3 +236,22 @@ function onlyAcademic(uid: string) {
     },
   ];
 }
+
+
+// Main export aggrs. ///////////////////////////////////
+/////////////////////////////////////////////////////////
+
+export const aggregations = {
+  private: {
+    user: onlyPrivateUser,
+    apps: privateApplication,
+    student: onlyPrivateStudent,
+  },
+  public: {
+    user: onlyPublicUser,
+    userWith: onlyPublicUserWith,
+    education: onlyEducation,
+    academic: onlyAcademic,
+    student: onlyPrivateStudent,
+  },
+};

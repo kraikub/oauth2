@@ -17,24 +17,13 @@ import AppCard from "./AppCard";
 import { InterWindLoader } from "../../../../../layouts/Loader";
 import { MdOutlineAdd } from "react-icons/md";
 
-const AppTable: FC = () => {
+interface AppTableProps {
+  apps: Application[];
+}
+
+const AppTable: FC<AppTableProps> = ({ apps }) => {
   const router = useRouter();
   const { user } = useUser();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  const [apps, setApps] = useState<Application[]>([]);
-
-  const getApps = async () => {
-    setIsLoading(true);
-    const a = await appService.getApplications();
-    if (!a) return alert("Fetch apps failed!");
-    setApps(a);
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    getApps();
-  }, []);
 
   const handleCreateAppClick = (limit: boolean) => {
     if (!limit) {
@@ -48,20 +37,14 @@ const AppTable: FC = () => {
     return <InterWindLoader />;
   }
 
-  if (!apps.length && !isLoading) {
+  if (!apps.length) {
     // No app found
     return (
       <VStack py={20} spacing={10}>
-        <Heading
-          fontWeight={500}
-          letterSpacing={-1}
-        >
+        <Heading fontWeight={500} letterSpacing={-1}>
           สร้างแอปพลิเคชันแรกของคุณ
         </Heading>
-        <Text
-          fontSize={20}
-          fontWeight={500}
-        >
+        <Text fontSize={20} fontWeight={500}>
           สร้างแอปพลิเคชันเพื่อใช้งาน Sign in with KU
         </Text>
         <Button
@@ -111,42 +94,42 @@ const AppTable: FC = () => {
           )}
         </Flex>
         <Box>
-          <Text fontSize={14}>Your registered apps will be listed here. Create a new one if you are developing your new app.</Text>
+          <Text fontSize={14}>
+            Your registered apps will be listed here. Create a new one if you
+            are developing your new app.
+          </Text>
         </Box>
       </Box>
       <Box py="20px">
         {/* <Text fontWeight={600} fontSize={20}>{user.student.nameTh.split(" ").slice(1).join(" ")}</Text> */}
         <Text fontWeight={600} fontSize={20} mt={4}>
           {user
-            ? `You have  ${user.appQuota - user.appOwned} remaining free app(s).`
+            ? `You have  ${
+                user.appQuota - user.appOwned
+              } remaining free app(s).`
             : ""}
         </Text>
         <Divider my={4} />
-        {isLoading ? (
-          <Center gap={3} py="40px">
-            <InterWindLoader />
+
+        <Flex flexWrap="wrap" gap={4} my={10}>
+          {apps.map((app, index) => (
+            <AppCard app={app} key={`app-${app.clientId}`} />
+          ))}
+          <Center display={["none", "flex"]}>
+            <IconButton
+              aria-label="add-button"
+              size="lg"
+              fontSize={24}
+              rounded="full"
+              colorScheme="katrade"
+              onClick={() =>
+                handleCreateAppClick(user.appOwned >= user.appQuota)
+              }
+            >
+              <MdOutlineAdd />
+            </IconButton>
           </Center>
-        ) : (
-          <Flex flexWrap="wrap" gap={4} my={10}>
-            {apps.map((app, index) => (
-              <AppCard app={app} key={`app-${app.clientId}`} />
-            ))}
-            <Center display={["none", "flex"]}>
-              <IconButton
-                aria-label="add-button"
-                size="lg"
-                fontSize={24}
-                rounded="full"
-                colorScheme="katrade"
-                onClick={() =>
-                  handleCreateAppClick(user.appOwned >= user.appQuota)
-                }
-              >
-                <MdOutlineAdd />
-              </IconButton>
-            </Center>
-          </Flex>
-        )}
+        </Flex>
       </Box>
     </Box>
   );

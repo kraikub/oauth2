@@ -21,7 +21,10 @@ import { useUser } from "../contexts/User";
 import { appConfig } from "../../api/config/app";
 const Navbar: FC = () => {
   const router = useRouter();
-  const { user, signout, isLoading } = useUser();
+  const { user, isLoading, signout } = useUser();
+  if (!user) {
+    return null;
+  }
   return (
     <Flex
       position="sticky"
@@ -46,74 +49,61 @@ const Navbar: FC = () => {
           </Text>
         </Heading>
       </Flex>
-      {user ? (
-        <Flex alignItems="center" gap={4}>
-          <Menu>
-            <MenuButton>
-              <ButtonGroup>
-                <IconButton
-                  aria-label="profile-icon"
-                  bg="transparent"
-                  _hover={{ bg: undefined }}
-                  _active={{ bg: undefined }}
-                >
-                  <Avatar
-                    src={
-                      user.profileImageUrl || appConfig.defaultProfileImageUrl
-                    }
-                    name={user.student.nameEn.split(" ").slice(1).join(" ")}
-                    size="sm"
-                  />
-                </IconButton>
-              </ButtonGroup>
-            </MenuButton>
-            <MenuList
-              fontSize={14}
-              borderStyle="none"
-              boxShadow="0px 1px 10px #00000030"
-              rounded={14}
-              pb={0}
-              overflow="hidden"
+      <Flex alignItems="center" gap={4}>
+        <Menu>
+          <MenuButton>
+            <Avatar
+              src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
+              name={user.student.nameEn.split(" ").slice(1).join(" ")}
+              size="sm"
+            />
+          </MenuButton>
+          <MenuList
+            fontSize={14}
+            borderStyle="none"
+            boxShadow="0px 1px 10px #00000030"
+            rounded={14}
+            pb={0}
+            overflow="hidden"
+          >
+            <Box px={4} py={3} fontSize={12} fontWeight={500}>
+              <Text fontWeight={500} fontSize={14}>
+                {user.student.nameEn.split(" ").slice(1).join(" ")}
+              </Text>
+              <Text fontWeight={400} fontSize={12} color="gray.600">
+                {user.student.nameTh.split(" ").slice(1).join(" ")}
+              </Text>
+            </Box>
+            <Divider />
+            <MenuItem
+              py={3}
+              fontWeight={500}
+              onClick={() => router.push("/projects/manager")}
             >
-              <Box px={4} py={3} fontSize={12} fontWeight={500}>
-                <Text fontWeight={500} fontSize={14}>
-                  {user.student.nameEn.split(" ").slice(1).join(" ")}
-                </Text>
-                <Text fontWeight={400} fontSize={12} color="gray.600">
-                  {user.student.nameTh.split(" ").slice(1).join(" ")}
-                </Text>
-              </Box>
-              <Divider />
-              <MenuItem
-                py={3}
-                fontWeight={500}
-                onClick={() => router.push("/projects/manager")}
-              >
-                App Library
-              </MenuItem>
-              <Divider />
-              <MenuItem
-                py={3}
-                fontWeight={500}
-                onClick={() => router.push("/projects/manager")}
-              >
-                Kraikub ID
-              </MenuItem>
-              <Divider />
-              <MenuItem
-                py={3}
-                color="red.600"
-                _hover={{ bg: "red.50" }}
-                fontWeight={500}
-                onClick={signout}
-                isDisabled={isLoading}
-              >
-                Sign out
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        </Flex>
-      ) : null}
+              App Library
+            </MenuItem>
+            <Divider />
+            <MenuItem
+              py={3}
+              fontWeight={500}
+              onClick={() => router.push("/projects/manager")}
+            >
+              Soon
+            </MenuItem>
+            <Divider />
+            <MenuItem
+              py={3}
+              color="red.600"
+              _hover={{ bg: "red.100", color: "red.600", fontWeight: 600 }}
+              fontWeight={500}
+              onClick={signout}
+              isDisabled={isLoading}
+            >
+              Sign out
+            </MenuItem>
+          </MenuList>
+        </Menu>
+      </Flex>
     </Flex>
   );
 };
