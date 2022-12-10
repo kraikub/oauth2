@@ -25,8 +25,8 @@ export const colors = {
 };
 
 const fonts = {
-  body: `'Inter','Kanit', sans-serif`,
-  heading: `'Inter','Kanit', sans-serif`,
+  body: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  heading: `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
 };
 
 const components: { [key: string]: ComponentStyleConfig } = {

@@ -6,18 +6,24 @@ import AppTable from "./components/AppTable";
 import { FooterShort } from "../../../../layouts/FooterShort";
 import { OAuthSuggestion } from "./components/OAuthSuggestion";
 
-export const ProjectManagerDashboard: NextPage = () => {
+interface ProjectManagerDashboardProps {
+  data: UserWithApplication;
+}
+
+export const ProjectManagerDashboard: NextPage<ProjectManagerDashboardProps> = (
+  props
+) => {
   return (
     <>
-      <UserProvider>
+      <UserProvider user={props.data}>
         <Navbar />
         <Box minH="100vh">
           <Container maxW="container.xl">
-            <AppTable />
+            <AppTable apps={props.data.applications}/>
             <OAuthSuggestion />
           </Container>
         </Box>
-        <FooterShort contentSize="container.xl"/>
+        <FooterShort contentSize="container.xl" />
       </UserProvider>
     </>
   );

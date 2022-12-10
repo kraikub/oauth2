@@ -68,13 +68,13 @@ export class UserUsecase {
       authResponse.user.student.stdCode,
       accessToken
     );
-    const { academics, grades } = gradeConverter(uid, gradesResponse.data);
+    // const { academics, grades } = gradeConverter(uid, gradesResponse.data);
 
     // Save data in db
     await studentRepository.create(student);
     await educationRepository.createMany(educations);
-    await academicRepository.createMany(academics);
-    await gradeRepository.createMany(grades);
+    // await academicRepository.createMany(academics);
+    // await gradeRepository.createMany(grades);
     return {
       user: newUser,
       student: student,
@@ -119,7 +119,6 @@ export class UserUsecase {
     const res = await userRepository.useAggregationPipeline([
       ...aggregations.public.user(uid),
       ...aggregations.public.student(),
-      ...aggregations.public.education(),
     ]);
     if (res.length) {
       return res[0];
