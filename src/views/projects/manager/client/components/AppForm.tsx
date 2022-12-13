@@ -50,7 +50,6 @@ const kraikubUrl = "https://kraikub.com/signin";
 
 export const AppForm: FC<AppFormProps> = ({ app }) => {
   const router = useRouter();
-  const { reload } = useUser();
   const { register, getValues, watch, reset, handleSubmit, control } = useForm({
     defaultValues: app,
   });
