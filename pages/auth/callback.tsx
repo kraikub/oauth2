@@ -9,25 +9,9 @@ import { userService } from "../../src/services/userService";
 const Callback: NextPage = () => {
   const router = useRouter();
 
-  const handleClaimAccessTokens = async (code: string) => {
-    try {
-      const { status, data } = await userService.get();
-      if (!data.payload || status >= 400) {
-        return router.push("/auth");
-      }
-      else {
-        return router.push("/projects/manager");
-      }
-    } catch {
-      return router.push("/auth");
-    }
-  };
-
   useEffect(() => {
-    if (router.query.code && router.query.scope) {
-      handleClaimAccessTokens(router.query.code as string);
-    }
-  }, [router.query]);
+    router.push("/projects/manager")
+  }, []);
 
   return (
     <>
