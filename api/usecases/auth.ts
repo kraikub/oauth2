@@ -109,6 +109,7 @@ class AuthUsecase {
     req: NextApiRequest,
     res: NextApiResponse,
     authCode: string,
+    clientId: string,
     extraParams: ExchangeOAuthTokenExtraParams
   ) => {
     const [success, payload, error] = verify(authCode);
@@ -123,6 +124,18 @@ class AuthUsecase {
 
     if (!verified) {
       return;
+    }
+
+    if (clientId !== payload.client_id) {
+      return res
+      .status(401)
+      .send(
+        createResponse(
+          false,
+          "Clients not match",
+          null
+        )
+      );
     }
 
     const ssid = sha256(authCode);
@@ -152,10 +165,9 @@ class AuthUsecase {
         refreshToken: refreshToken,
       }),
       appConfig.expirations.refreshToken.s
-    );
-
+    ); 
     await accessRepository.addAccess({
-      accessId: sha256(payload.uid + payload.clientId),
+      accessId: sha256(payload.uid + payload.client_id),
       uid: payload.uid,
       clientId: payload.client_id,
     });

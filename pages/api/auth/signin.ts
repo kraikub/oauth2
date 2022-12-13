@@ -46,7 +46,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const app = await applicationUsecase.findOneApp({ clientId: clientId });
 
     // Please handles method's params and query before doing any operation.
-
     if (
       // No App matched
       app === null ||
@@ -59,7 +58,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     ) {
       return res.status(400).send(createResponse(false, "Bad request", null));
     }
-
     // For handling PKCE
     if (
       response_type === "authorization_code" &&
@@ -72,7 +70,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           createResponse(false, "Bad request, Invalid code challenge", null)
         );
     }
-
     let uid: string;
     let user: User | null;
 
@@ -104,7 +101,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         user = newUser;
       }
     }
-
     // If anonymous sign in.
     if (scope === "0") {
       // Recalculate uid for hiding user's identity.
@@ -126,7 +122,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     let selectedUrl = "";
     const httpRegex = new RegExp("^http?://");
     const httpsRegex = new RegExp("^https?://");
-
+    
     if (
       httpsRegex.test(redirect_uri) &&
       hasRedirect(redirect_uri, app.redirects)
@@ -143,7 +139,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         .status(406)
         .send(createResponse(false, "redirect_uri not acceptable", null));
     }
-
+    
     const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
       state: state,
       code: code,
@@ -172,6 +168,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const response = createResponse(true, "Authorized", payload);
+    
     return res
       .status(200)
       .setHeader("Set-Cookie", [
@@ -182,6 +179,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       .setHeader("Access-Control-Allow-Credentials", "true")
       .setHeader("Access-Control-Allow-Headers", "Set-Cookie")
       .send(response);
+      
   } catch (error: any) {
     console.error(error);
     handleApiError(res, error);

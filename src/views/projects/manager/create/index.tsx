@@ -26,15 +26,18 @@ const typeOptions = [
   { name: "Business Development", value: "web-application" },
 ];
 
-export const CreateProjectPage: NextPage = () => {
+interface CreateProjectPageProps {
+  data: UserWithStudent | null
+}
+
+export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({ data }) => {
   const router = useRouter();
   const { register, handleSubmit, getValues } = useForm();
-  const { reload } = useUser();
   const [hasName, setHasName] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
 
   return (
-    <UserProvider>
+    <UserProvider user={data}>
       <Navbar />
       <Container maxW="container.md" py="100px">
         <Heading letterSpacing={-1} size="lg">

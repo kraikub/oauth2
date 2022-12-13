@@ -40,7 +40,7 @@ const handleOAuthExchangeAPI = async (
             .send(createResponse(false, "Require authorization_code", null));
         }
 
-        return await authUsecase.exchangeOAuthToken(req, res, code as string, {
+        return await authUsecase.exchangeOAuthToken(req, res, code as string, client_id, {
           code_verifier,
           client_id,
           client_secret,

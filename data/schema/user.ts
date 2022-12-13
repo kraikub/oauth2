@@ -10,6 +10,15 @@ export const userSchema = new Schema<User>(
     profileImageUrl: { type: String },
     universityEmail: { type: String },
     personalEmail: { type: String },
+    settings: {
+      email: {
+        signin: { type: Boolean },
+        news: { type: Boolean },
+      },
+      tfa: {
+        enable: { type: Boolean },
+      },
+    },
   },
   { timestamps: true }
 );

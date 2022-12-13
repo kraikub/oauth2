@@ -52,6 +52,15 @@ export class UserUsecase {
       profileImageUrl: appConfig.defaultProfileImageUrl,
       appOwned: 0,
       shouldUpdate: false,
+      settings: {
+        email: {
+          signin: true,
+          news: true,
+        },
+        tfa: {
+          enable: false,
+        }
+      }
     };
     await userRepository.create(newUser);
     const accessToken = authResponse.accesstoken;
