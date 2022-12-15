@@ -78,6 +78,7 @@ jobs:
             NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
             MONGODB_URL_ARG=${{ secrets.MONGODB_URL }}
             MYKU_APPKEY_ARG=${{ secrets.MYKU_APPKEY }}
+            SERVER_DOMAIN_ARG=${{ secrets.SERVER_DOMAIN }}
 
       # Remote
       - name: Deploy to dev.kraikub.com
