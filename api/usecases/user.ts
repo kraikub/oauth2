@@ -73,10 +73,10 @@ export class UserUsecase {
     const educations = educationCoverter(uid, educationResponse.data);
 
     // Query grades from myapi.ku.th
-    const gradesResponse = await bridge.getGrades(
-      authResponse.user.student.stdCode,
-      accessToken
-    );
+    // const gradesResponse = await bridge.getGrades(
+    //   authResponse.user.student.stdCode,
+    //   accessToken
+    // );
     // const { academics, grades } = gradeConverter(uid, gradesResponse.data);
 
     // Save data in db

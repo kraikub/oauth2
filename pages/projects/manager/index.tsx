@@ -12,10 +12,14 @@ export const getServerSideProps: GetServerSideProps<
   DashboardServerSideProps
 > = async (context) => {
   const { uid, error } = PageAuthMiddleware(context.req.cookies.access);
+
   if (!uid) {
     return {
       props: {
         data: null,
+      },
+      redirect: {
+        destination: getSigninUrl({}),
       },
     };
   }
@@ -25,6 +29,17 @@ export const getServerSideProps: GetServerSideProps<
     ...aggregations.private.student(),
   ]);
 
+  if (!u.length) {
+    return {
+      props: {
+        data: null,
+      },
+      redirect: {
+        destination: getSigninUrl({}),
+      },
+    };
+  }
+
   return {
     props: {
       data: u.length ? (jsonSerialize(u[0]) as UserWithApplication) : null,
@@ -33,11 +48,7 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 const Dashboard: NextPage<DashboardServerSideProps> = (props) => {
-  const router = useRouter();
-  if (!props.data) {
-    router.push(getSigninUrl({}));
-    return null;
-  }
+  if (!props.data) return null;
   return <ProjectManagerDashboard data={props.data} />;
 };
 

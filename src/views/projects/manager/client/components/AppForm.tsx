@@ -57,7 +57,6 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
     control,
     name: "redirects",
   });
-  const [devToolsScope, setDevToolsScope] = useState<string>("1");
   const [hideSecret, setHideSecret] = useState(true);
   const [hasChanged, setHasChanged] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
