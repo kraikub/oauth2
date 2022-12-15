@@ -77,6 +77,7 @@ jobs:
           build-args: |
             NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
             MONGODB_URL_ARG=${{ secrets.MONGODB_URL }}
+            MYKU_APPKEY_ARG=${{ secrets.MYKU_APPKEY }}
 
       # Remote
       - name: Deploy to dev.kraikub.com
