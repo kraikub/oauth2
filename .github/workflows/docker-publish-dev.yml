@@ -78,7 +78,7 @@ jobs:
             NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
             MONGODB_URL_ARG=${{ secrets.MONGODB_URL }}
             MYKU_APPKEY_ARG=${{ secrets.MYKU_APPKEY }}
-            SERVER_DOMAIN_ARG=${{ secrets.SERVER_DOMAIN }}
+            NEXT_PUBLIC_SERVER_DOMAIN_ARG=${{ secrets.NEXT_PUBLIC_SERVER_DOMAIN }}
 
       # Remote
       - name: Deploy to dev.kraikub.com
@@ -95,7 +95,7 @@ jobs:
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
           REDIS_HOST: ${{ secrets.REDIS_HOST }}
           SHARE_ACCESS_DOMAIN: ${{ secrets.SHARE_ACCESS_DOMAIN }}
-          SERVER_DOMAIN:  ${{ secrets.SERVER_DOMAIN }}
+          NEXT_PUBLIC_SERVER_DOMAIN:  ${{ secrets.NEXT_PUBLIC_SERVER_DOMAIN }}
           
         with:
           host: ${{ secrets.DO_HOST_IP }}
