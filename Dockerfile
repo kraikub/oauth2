@@ -26,6 +26,7 @@ FROM node:18.4.0-alpine as runner
 WORKDIR /kraikub
 
 COPY --from=builder /kraikub/next.config.js ./
+COPY --from=builder /kraikub/next-i18next.config.js ./
 COPY --from=builder /kraikub/public ./public
 COPY --from=builder /kraikub/.next ./.next
 COPY --from=builder /kraikub/node_modules ./node_modules
