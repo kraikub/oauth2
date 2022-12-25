@@ -1,0 +1,56 @@
+export const appFormComponentDict: Dictionary = {
+  en: {
+    "section-redirect-header": "ADD/EDIT REDIRECT URLS",
+    "secion-redirtect-description":
+      "Kraikub will only allow any authentication to be redirected to these urls. Please make sure that you have owned these urls. For your safety, these urls SHOULD BE HTTPS url.",
+    "section-redirect-btn-add": "Add an URL",
+    "section-info-header": "APP INFORMATION",
+    "section-info-description": "Your app's general information",
+    "app-name": "App name",
+    "app-description": "Description",
+    "app-creator": "Creator",
+    editable: "Editable",
+    "section-danger-better-not-delete": "You better not delete this",
+    "section-danger-better-not-delete-description":
+      "Sorry, but god said this application should stay exist.",
+    "section-danger-delete-header": "DELETE THIS APP",
+    "section-danger-delete-description":
+      "Permanently delete this application from Kraikub.",
+    "toast-information-change": "Some information have been changed",
+    "btn-undo": "Undo",
+    "btn-save": "Save",
+    "delete-popup-msg-1": "Permanently delete",
+    "delete-popup-msg-2": "from Kraikub?",
+    "delete-popup-msg-3": "Type",
+    "delete-popup-msg-4": "to continue the deletion.",
+    "delete-popup-btn-no": "Nope, I changed my mind.",
+    "delete-popup-btn-yes": "Delete 🚀",
+  },
+  th: {
+    "section-redirect-header": "เพิ่ม/แก้ไข REDIRECT URLS",
+    "secion-redirtect-description":
+      "Kraikub จะอนุญาตให้เปลี่ยนเส้นทางการยืนยันตัวตนไปที่ URL เหล่านี้เท่านั้น โปรดตรวจสอบว่าคุณเป็นเจ้าของ URL เหล่านี้และเพื่อความปลอดภัยของคุณ URL เหล่านี้ควรเป็น HTTPS",
+    "section-redirect-btn-add": "เพิ่ม URL",
+    "section-info-header": "ข้อมูลแอปพลิเคชัน",
+    "section-info-description": "ข้อมูลโดยทั่วไปเกี่ยวกับแอปพลิเคชันของคุณ",
+    "app-name": "ชื่อแอปพลิเคชัน",
+    "app-description": "เกี่ยวกับแอปพลิเคชัน",
+    "app-creator": "ผู้สร้าง",
+    editable: "แก้ไขได้",
+    "section-danger-better-not-delete": "คุณไม่สามารถลบแอปพลิเคชันนี้ได้",
+    "section-danger-better-not-delete-description":
+      "ขอโทษด้วย คุณยังอ่อนหัดเกินจะลบแอปพลิเคชันนี้ได้.",
+    "section-danger-delete-header": "ลบแอปพลิเคชันนี้",
+    "section-danger-delete-description":
+      "ลบแอปพลิเคชันนี้ออกจาก Kraikub อย่างถาวร",
+    "toast-information-change": "ข้อมูลมีการเปลี่ยนแปลง",
+    "btn-undo": "ย้อนกลับ",
+    "btn-save": "บันทึก",
+    "delete-popup-msg-1": "ต้องการลบ",
+    "delete-popup-msg-2": "ออกจาก Kraikub อย่างถาวร",
+    "delete-popup-msg-3": "พิมพ์",
+    "delete-popup-msg-4": "เพื่อดำเนินการต่อ",
+    "delete-popup-btn-no": "ไม่ ฉันเปลี่ยนใจแล้ว",
+    "delete-popup-btn-yes": "ลบเลย 🚀",
+  },
+};

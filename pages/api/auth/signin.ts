@@ -16,6 +16,7 @@ import {
 } from "../../../api/utils/crypto";
 import { authUsecase } from "../../../api/usecases/auth";
 import requestIp from "request-ip";
+import axios from "axios";
 
 const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -181,7 +182,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       .send(response);
       
   } catch (error: any) {
-    console.error(error);
     handleApiError(res, error);
   }
 };

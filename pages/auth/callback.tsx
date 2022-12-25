@@ -5,12 +5,13 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { authService } from "../../src/services/authService";
 import { userService } from "../../src/services/userService";
+import { p } from "../../src/utils/path";
 
 const Callback: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/projects/manager")
+    router.push(p.projects)
   }, []);
 
   return (
@@ -18,7 +19,7 @@ const Callback: NextPage = () => {
       <Head>
         <title>Signing in, please wait...</title>
       </Head>
-      <Progress size="xs" isIndeterminate colorScheme="katrade" />
+      <Progress size="xs" isIndeterminate colorScheme="teal" />
     </>
   );
 };

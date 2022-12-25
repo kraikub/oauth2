@@ -1,0 +1,7 @@
+{
+  "page-header": "Your Applications",
+  "page-quota-msg-1": "You have used",
+  "page-quota-msg-2": "of your quota.",
+  "page-btn-create": "Create new app",
+  "page-btn-quota-exceed": "You've reached your quota limit"
+}

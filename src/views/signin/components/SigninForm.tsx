@@ -16,6 +16,9 @@ import {
   Link,
   Progress,
   IconButton,
+  useColorModeValue,
+  Input,
+  Divider,
 } from "@chakra-ui/react";
 import * as crypto from "crypto";
 import Head from "next/head";
@@ -26,6 +29,7 @@ import {
   FormEvent,
   Fragment,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { authService } from "../../../services/authService";
@@ -37,6 +41,11 @@ import { FooterShort } from "../../../layouts/FooterShort";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { userService } from "../../../services/userService";
 import { UserSelector } from "./UserSelector";
+import { useCookies } from "react-cookie";
+import { LangSetup } from "./LangSetup";
+import { CookieConsentScreen } from "./CookieConsentScreen";
+import { Setup } from "./Setup";
+import { useTranslation } from "react-i18next";
 
 interface SigninFormProps {
   query: {
@@ -63,14 +72,18 @@ export const SigninForm: FC<SigninFormProps> = ({
   secret,
   sdk,
 }) => {
+  const { t } = useTranslation("signin");
   const router = useRouter();
   const [pdpaPopup, setPdpaPopup] = useState<boolean>(false);
   const [step, setStep] = useState(0);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
+  const [deviceConfigCheck, setDeviceConfigCheck] = useState<boolean>(false);
+  const deviceConfigRef = useRef<any>({});
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [activeUser, setActiveUser] = useState<FullUserData | null>();
+  const [cookies] = useCookies(["LANG", "ACCEPT_COOKIES"]);
 
   const styles = {
     layout: {
@@ -81,29 +94,24 @@ export const SigninForm: FC<SigninFormProps> = ({
       },
     },
     regular: {
-      body: {
-        bg: "#fff",
-      },
-      card: {
-        bg: "#fff",
-        color: "black",
-      },
+      body: {},
+      card: {},
       dataControl: {
         bg: "#00000008",
       },
       highlight: {
-        color: "katrade.600",
-      },
-      input: {
-        backgroundColor: "#F7FAFC",
-        backgroundColorOnHover: "#EDF2F7",
-        borderColor: "#CBD5E0",
-        placeholderColor: "#b0b3b8",
+        color: useColorModeValue("teal.400", "teal.200"),
       },
       signinText: "ดำเนินการต่อ",
     },
-    pdpaFontOverride: {
-      fontFamily: `'Manrope','Sarabun', sans-serif !important`,
+    pdpaOverride: {
+      container: {
+        borderStyle: "solid",
+        borderWidth: "1px",
+        borderColor: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
+        bg: useColorModeValue("whiteAlpha.100", "blackAlpha.500"),
+        backdropFilter: "blur(30px)",
+      },
     },
   };
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -183,9 +191,27 @@ export const SigninForm: FC<SigninFormProps> = ({
     }
   };
 
+  const initDeviceCheck = () => {
+    deviceConfigRef.current = {
+      cookieConsent: cookies.ACCEPT_COOKIES ? true : false,
+      lang: cookies.LANG ? true : false,
+    };
+    setDeviceConfigCheck(true);
+  };
+
   useEffect(() => {
+    initDeviceCheck();
     checkActiveUser();
   }, []);
+
+  if (!deviceConfigCheck) return null;
+
+  if (
+    deviceConfigCheck &&
+    (!deviceConfigRef.current.lang || !deviceConfigRef.current.cookieConsent)
+  ) {
+    return <Setup />;
+  }
 
   if (activeUser === undefined) {
     return null;
@@ -230,17 +256,18 @@ export const SigninForm: FC<SigninFormProps> = ({
                       {...themeSelector(styles).card}
                     >
                       <Heading size="lg" letterSpacing="-1.5px" lang="en">
-                        Sign in
+                        {t("form-title")}
                       </Heading>
-                      <Text>Login with KU Account</Text>
+                      <Text>{t("form-description")}</Text>
                       <Box mt="30px" w="full">
                         <Text fontSize={14}>
-                          {"You are logging in to "}
+                          {t("form-app-text")}
                           <Box
                             as="span"
                             fontWeight={700}
                             {...themeSelector(styles).highlight}
                           >
+                            {" "}
                             {app?.appName}
                           </Box>
                         </Text>
@@ -249,23 +276,26 @@ export const SigninForm: FC<SigninFormProps> = ({
                         <Progress
                           size="xs"
                           isIndeterminate
-                          colorScheme="green"
+                          colorScheme="teal"
                           background="transparent"
                           opacity={isSigninButtonLoading ? 1 : 0}
                         />
-                        <PrimaryInput
-                          borderRadius="top"
-                          borderWidth="bottom"
-                          placeholder="Nontri Account"
+                        <Input
+                          variant="filled"
+                          borderRadius="8px 8px 0 0"
+                          size="lg"
+                          placeholder={t("form-input-username")}
                           onChange={handleUsernameChange}
                           value={username}
                           {...themeSelector(styles).input}
                         />
+                        <Divider />
                         <Box position="relative">
-                          <PrimaryInput
-                            borderRadius="bottom"
-                            borderWidth="top"
-                            placeholder="Password"
+                          <Input
+                            variant="filled"
+                            size="lg"
+                            placeholder={t("form-input-password")}
+                            borderRadius="0 0 8px 8px"
                             type={showPassword ? "text" : "password"}
                             onChange={handlePasswordChange}
                             value={password}
@@ -286,23 +316,6 @@ export const SigninForm: FC<SigninFormProps> = ({
                           </IconButton>
                         </Box>
                       </Box>
-
-                      {/* <Button
-                        mt="5px"
-                        h="70px"
-                        w="full"
-                        colorScheme="katrade"
-                        fontSize="1rem"
-                        fontWeight={700}
-                        _hover={{
-                          boxShadow: "0 0 10px #00000030",
-                        }}
-                        isLoading={isSigninButtonLoading}
-                        type="submit"
-                        disabled={!username || !password}
-                      >
-                        {themeSelector(styles).signinText}
-                      </Button> */}
                       <IconButton
                         isLoading={isSigninButtonLoading}
                         type="submit"
@@ -310,11 +323,8 @@ export const SigninForm: FC<SigninFormProps> = ({
                         aria-label="sign-in-button"
                         // color="#00000060"
                         rounded="full"
-                        colorScheme="katrade"
+                        colorScheme="teal"
                         // border="1px solid #00000030"
-                        _hover={{
-                          bgColor: "#000000",
-                        }}
                       >
                         <FaArrowRight color="inherit" />
                       </IconButton>
@@ -332,13 +342,13 @@ export const SigninForm: FC<SigninFormProps> = ({
           onClose={() => setPdpaPopup(false)}
           isOpen={pdpaPopup}
         >
-          <DrawerOverlay />
           <DrawerContent
             position="relative"
             minH="82vh"
             maxH="96vh"
             py={14}
-            borderRadius="20px 20px 0 0"
+            borderRadius="8px 8px 0 0"
+            {...styles.pdpaOverride.container}
           >
             <Box position="absolute" right="20px" top="20px">
               <CloseButton
@@ -350,67 +360,28 @@ export const SigninForm: FC<SigninFormProps> = ({
             </Box>
             <DrawerBody>
               <Container maxW="container.lg" overflow="auto">
-                <Stack {...styles.pdpaFontOverride} spacing={10}>
-                  <Heading size="md" {...styles.pdpaFontOverride}>
-                    นโยบายการคุ้มครองข้อมูลส่วนบุคคล (Privacy Policy)
+                <Stack spacing={10}>
+                  <Heading size="md">
+                    Sorry, PDPA Agreement will comming soon. 🙁
                   </Heading>
-                  <Text>
-                    PDPA คือ พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล
-                    ซึ่งเป็นกฎหมายที่ถูกสร้างมาเพื่อป้องกันการละเมิดข้อมูลส่วนบุคคลของทุกคน
-                    รวมถึงการจัดเก็บข้อมูลและนำไปใช้โดยไม่ได้แจ้งให้ทราบ
-                    และไม่ได้รับความยินยอมจากเจ้าของข้อมูลเสียก่อน
-                  </Text>
-                  <Text>
-                    พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (Personal
-                    Data Protection Act: PDPA)
-                    คือกฎหมายใหม่ที่ออกมาเพื่อแก้ไขปัญหาการถูกล่วงละเมิดข้อมูลส่วนบุคคลที่เพิ่มมากขึ้นเรื่อย
-                    ๆ ในปัจจุบัน เช่น
-                    การซื้อขายข้อมูลเบอร์โทรศัพท์และข้อมูลส่วนตัวอื่น ๆ
-                    โดยที่เจ้าของข้อมูลไม่ยินยอม
-                    ที่มักพบได้มากในรูปแบบการโทรมาโฆษณา หรือล่อลวง{" - "}
-                    <Link
-                      href="https://pdpa.pro/blogs/in-summary-what-is-pdpa"
-                      color="blue.600"
-                    >
-                      แหล่งที่มา
-                    </Link>
-                  </Text>
-                  <Text>
-                    Kraikub
-                    ได้เห็นถึงความสำคัญของข้อมูลส่วนบุคคลของผู้ใช้งานทุกท่านจึงได้จัดทำ
-                    นโยบายการคุ้มครองข้อมูลส่วนบุคคล (Privacy Policy)
-                    เพื่อแจ้งให้ผู้ใช้งานทราบก่อนเริ่มใช้บริการต่างจาก Kraikub
-                    โดยมีเนื้อหาดังนี้
-                  </Text>
-                  <Text>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                    Sapiente laboriosam laborum iusto aliquam, impedit rem ea
-                    quod! Corrupti aliquam laborum, delectus, vero adipisci modi
-                    aspernatur ducimus velit voluptates, voluptas natus!
-                  </Text>
+                  <Text>Agree a PDPA with the button below</Text>
                 </Stack>
               </Container>
             </DrawerBody>
             <DrawerFooter>
               <Container maxW="container.lg">
-                <ButtonGroup>
-                  <Button
-                    {...styles.pdpaFontOverride}
-                    size="md"
-                    rounded={6}
-                    onClick={backToSigninForm}
-                  >
-                    ฉันไม่ยอมรับ
+                <ButtonGroup justifyContent="end" w="full">
+                  <Button size="lg" rounded={6} onClick={backToSigninForm}>
+                    Disagree
                   </Button>
                   <Button
-                    {...styles.pdpaFontOverride}
-                    size="md"
-                    colorScheme="katrade"
+                    size="lg"
+                    colorScheme="teal"
                     rounded={6}
                     onClick={() => handleSigninEvent()}
                     isLoading={isSigninButtonLoading}
                   >
-                    ฉันยอมรับ
+                    Agree
                   </Button>
                 </ButtonGroup>
               </Container>
@@ -419,9 +390,14 @@ export const SigninForm: FC<SigninFormProps> = ({
         </Drawer>
       </Fragment>
     );
-  }
-
-  else {
-    return <UserSelector user={activeUser} reject={() => setActiveUser(null)} handleSignin={handleSigninEvent} loading={isSigninButtonLoading}/>
+  } else {
+    return (
+      <UserSelector
+        user={activeUser}
+        reject={() => setActiveUser(null)}
+        handleSignin={handleSigninEvent}
+        loading={isSigninButtonLoading}
+      />
+    );
   }
 };

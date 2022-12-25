@@ -8,129 +8,132 @@ import {
   Center,
   IconButton,
   Divider,
+  Container,
+  Grid,
+  GridItem,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import { useUser } from "../../../../../contexts/User";
-import { appService } from "../../../../../services/appService";
 import AppCard from "./AppCard";
-import { InterWindLoader } from "../../../../../layouts/Loader";
 import { MdOutlineAdd } from "react-icons/md";
+import AppCard2 from "./AppCard2";
+import Link from "next/link";
+import { OAuthSuggestion } from "./OAuthSuggestion";
+import { useTranslation } from "react-i18next";
+import { useClientTranslation } from "../../../../../hooks/client-translation";
+import { dashboardDict } from "../../../../../translate/dashboard";
+import { useCookies } from "react-cookie";
+import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
+import { Card } from "../../../../../components/Card";
+import { p } from "../../../../../utils/path";
 
 interface AppTableProps {
   apps: Application[];
 }
 
-const AppTable: FC<AppTableProps> = ({ apps }) => {
-  const router = useRouter();
-  const { user } = useUser();
+const isLimit = (limit: boolean, v1: any, v2: any) => {
+  if (!limit) {
+    return v1;
+  } else {
+    return v2;
+  }
+};
 
-  const handleCreateAppClick = (limit: boolean) => {
-    if (!limit) {
-      router.push("/projects/manager/create");
-    } else {
-      router.push("/pricing");
-    }
+const AppTable: FC<AppTableProps> = ({ apps }) => {
+  const { user } = useUser();
+  const [c] = useCookies(["LANG"]);
+
+  const { t, ready } = useClientTranslation(dashboardDict);
+
+  const styles = {
+    appsContainer: {
+      bg: useColorModeValue("white", "gray.700"),
+    },
   };
 
   if (!user) {
-    return <InterWindLoader />;
+    return null;
   }
 
-  if (!apps.length) {
-    // No app found
-    return (
-      <VStack py={20} spacing={10}>
-        <Heading fontWeight={500} letterSpacing={-1}>
-          สร้างแอปพลิเคชันแรกของคุณ
-        </Heading>
-        <Text fontSize={20} fontWeight={500}>
-          สร้างแอปพลิเคชันเพื่อใช้งาน Sign in with KU
-        </Text>
-        <Button
-          px="40px"
-          h="60px"
-          rounded="full"
-          fontWeight={300}
-          fontSize="20px"
-          colorScheme="katrade"
-          _hover={{ bg: undefined, transform: "scale(1.1)" }}
-          onClick={() => router.push("/projects/manager/create")}
-        >
-          เริ่มต้นเลย
-        </Button>
-      </VStack>
-    );
+  if (!ready) {
+    return null;
   }
 
   return (
-    <Box py={20}>
-      <Box my={8}>
-        <Flex justifyContent="space-between">
-          <Heading size="lg" mb={4} letterSpacing={-1}>
-            Welcome to your App Library
-          </Heading>
-          {user.appOwned >= user.appQuota ? (
-            <Button
-              colorScheme="red"
-              onClick={() =>
-                handleCreateAppClick(user.appOwned >= user.appQuota)
-              }
+    <Box>
+      <Grid templateColumns="repeat(12, 1fr)">
+        <GridItem colSpan={[12, 12, 8]} minH="100vh">
+          <Container maxW="container.md" py="40px">
+            <Heading size="lg">{t("page-header")}</Heading>
+            <Text mt={2} fontWeight={500} opacity={0.7} fontSize={14}>
+              {t("page-quota-msg-1")} {user.appOwned}/{user.appQuota}{" "}
+              {t("page-quota-msg-2")}
+            </Text>
+            <Card
+              props={{
+                my: 5,
+              }}
             >
-              {"You've used all of your quotas."}
-            </Button>
-          ) : (
-            <Button
-              colorScheme="katrade"
-              color="black"
-              fontWeight={600}
-              rounded="full"
-              onClick={() =>
-                handleCreateAppClick(user.appOwned >= user.appQuota)
-              }
-            >
-              Create +
-            </Button>
-          )}
-        </Flex>
-        <Box>
-          <Text fontSize={14}>
-            Your registered apps will be listed here. Create a new one if you
-            are developing your new app.
-          </Text>
-        </Box>
-      </Box>
-      <Box py="20px">
-        {/* <Text fontWeight={600} fontSize={20}>{user.student.nameTh.split(" ").slice(1).join(" ")}</Text> */}
-        <Text fontWeight={600} fontSize={20} mt={4}>
-          {user
-            ? `You have  ${
-                user.appQuota - user.appOwned
-              } remaining free app(s).`
-            : ""}
-        </Text>
-        <Divider my={4} />
-
-        <Flex flexWrap="wrap" gap={4} my={10}>
-          {apps.map((app, index) => (
-            <AppCard app={app} key={`app-${app.clientId}`} />
-          ))}
-          <Center display={["none", "flex"]}>
-            <IconButton
-              aria-label="add-button"
-              size="lg"
-              fontSize={24}
-              rounded="full"
-              colorScheme="katrade"
-              onClick={() =>
-                handleCreateAppClick(user.appOwned >= user.appQuota)
-              }
-            >
-              <MdOutlineAdd />
-            </IconButton>
-          </Center>
-        </Flex>
-      </Box>
+              <VStack spacing={1}>
+                {apps.map((app, index) => (
+                  <Box key={`rendered-app-${index}`} w="full">
+                    <AppCard2 app={app} key={`app-${app.clientId}`} />
+                    {index === apps.length - 1 ? null : <Divider my={2} />}
+                  </Box>
+                ))}
+                <Box mt="40px !important">
+                  <Link
+                    href={isLimit(
+                      user.appOwned >= user.appQuota,
+                      `${p.projects}/create`,
+                      "quotas"
+                    )}
+                  >
+                    <a>
+                      <Button
+                        variant="solid"
+                        size="lg"
+                        gap={2}
+                        colorScheme={isLimit(
+                          user.appOwned >= user.appQuota,
+                          "teal",
+                          "red"
+                        )}
+                        w="full"
+                      >
+                        {isLimit(
+                          user.appOwned >= user.appQuota,
+                          <IoIosAddCircle size="22px" />,
+                          <IoIosRemoveCircle size="22px" />
+                        )}
+                        {isLimit(
+                          user.appOwned >= user.appQuota,
+                          t("page-btn-create"),
+                          t("page-btn-quota-exceed")
+                        )}
+                      </Button>
+                    </a>
+                  </Link>
+                </Box>
+              </VStack>
+            </Card>
+          </Container>
+        </GridItem>
+        {/* <GridItem
+          colSpan={[12, 12, 4]}
+          minH="100vh"
+          bgColor="gray.800"
+          color="white"
+        >
+          <Container maxW="460px">
+            <VStack spacing={8}>
+              <OAuthSuggestion />
+            </VStack>
+          </Container>
+        </GridItem> */}
+      </Grid>
     </Box>
   );
 };

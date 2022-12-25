@@ -26,3 +26,10 @@ export const getSigninUrl = (p: signinOptions) => {
     response_type: "code",
   });
 };
+
+
+export const p = {
+  projects: "/a",
+  kraikubId: "/id",
+  settings: "/settings",
+}

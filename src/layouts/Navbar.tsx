@@ -3,108 +3,297 @@ import {
   Box,
   Button,
   ButtonGroup,
+  ColorMode,
   Container,
   Divider,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   Flex,
   Heading,
+  HStack,
   IconButton,
-  Image,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Switch,
   Text,
+  useColorMode,
+  useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useUser } from "../contexts/User";
+import { SmartLanguageToggler } from "../components/SmartLanguageToggler";
+import { useOnClient } from "../hooks/on-client";
+import { IoIosArrowDown, IoIosMenu } from "react-icons/io";
+import { Card } from "../components/Card";
+import Link from "next/link";
+import { ThemeToggler } from "../components/ThemeToggler";
+import { p } from "../utils/path";
 import { appConfig } from "../../api/config/app";
-const Navbar: FC = () => {
+import { MdLogout } from "react-icons/md";
+import { useClientTranslation } from "../hooks/client-translation";
+import { navbarDict } from "../translate/navbar";
+import { LinkWrap } from "../components/LinkWrap";
+
+interface TabProps {
+  href?: string;
+  onClick?: () => void;
+  text: string;
+}
+
+const Tab: FC<TabProps> = (props) => {
   const router = useRouter();
-  const { user, isLoading, signout } = useUser();
-  if (!user) {
+  const tabHighlightBg = useColorModeValue("teal.500", "teal.200");
+  const tabButtonStyles = {
+    rounded: 6,
+    variant: "ghost",
+    fontSize: 16,
+    opacity: router.asPath === props.href ? 1 : 0.6,
+  };
+  return (
+    <Box>
+      <LinkWrap href={props.href}>
+        <Button {...tabButtonStyles} onClick={props.onClick}>
+          {props.text}
+        </Button>
+      </LinkWrap>
+      {router.asPath === props.href ? (
+        <Box h="2px" bg={tabHighlightBg} />
+      ) : null}
+    </Box>
+  );
+};
+
+const Navbar: FC = () => {
+  const { user, signout } = useUser();
+  const { t } = useClientTranslation(navbarDict);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [navModal, setNavModal] = useState(false);
+  const ready = useOnClient();
+
+  const onNavModalClose = () => {
+    setNavModal(false);
+  };
+
+  const onUserModalClose = () => {
+    setShowUserModal(false);
+  };
+
+  const onUserModalOpen = () => {
+    setShowUserModal(true);
+  };
+
+  const gridBorderDividerColor = useColorModeValue(
+    "blackAlpha.100",
+    "whiteAlpha.200"
+  );
+
+  const navModalMenuButtonStyles = {
+    width: "full",
+    variant: "ghost",
+    rounded: 10,
+    justifyContent: "start",
+    fontSize: 20,
+    size: "lg",
+    w: "full",
+  };
+
+  const navStyles = {
+    bg: useColorModeValue("whiteAlpha.700", "blackAlpha.700"),
+  };
+
+  const modalStyles = {
+    bg: useColorModeValue("white", "whiteAlpha.100"),
+    backdropFilter: "blur(50px)",
+  };
+
+  if (!user || !ready) {
     return null;
   }
+
+  const tabs = [
+    {
+      text: t("menu-apps"),
+      href: p.projects,
+    },
+    {
+      text: t("menu-user"),
+      onClick: onUserModalOpen,
+      href: "",
+    },
+    {
+      text: t("menu-id"),
+      href: p.kraikubId,
+    },
+    {
+      text: t("menu-settings"),
+      href: p.settings,
+    },
+  ];
+
   return (
-    <Flex
-      position="sticky"
-      top={0}
-      left={0}
-      right={0}
-      py="12px"
-      bg="white"
-      zIndex={35}
-      border="solid #00000020"
-      borderWidth="0 0 1px 0"
-      px="20px"
-      minH="60px"
-      alignItems="center"
-      justifyContent="space-between"
-    >
-      <Flex alignItems="center" gap={2}>
-        <Heading size="sm" fontWeight={600} color="black">
-          KRAIKUB{" "}
-          <Text as="span" fontWeight={400} color="gray.600">
-            Developers
-          </Text>
-        </Heading>
-      </Flex>
-      <Flex alignItems="center" gap={4}>
-        <Menu>
-          <MenuButton>
+    <Box position="relative" top={0} left={0} right={0} py="12px" zIndex={35}>
+      <Container
+        maxW="container.xl"
+        minH="50px"
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <HStack alignItems="center" spacing={6}>
+          <LinkWrap href="/">
+            <Heading size="sm" fontWeight={700} letterSpacing="-0.04em">
+              KRAIKUB{" "}
+            </Heading>
+          </LinkWrap>
+        </HStack>
+        <Flex alignItems="center" gap={4}>
+          <HStack spacing={3}>
+            <ThemeToggler />
+            <Box display={["none", "flex"]}>
+              <SmartLanguageToggler />
+            </Box>
             <Avatar
               src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
               name={user.student.nameEn.split(" ").slice(1).join(" ")}
-              size="sm"
+              w="34px"
+              h="34px"
+              onClick={onUserModalOpen}
+              cursor="pointer"
+              transition="300ms ease"
+              _hover={{
+                boxShadow: "0 0 0 2px #00CED1",
+              }}
             />
-          </MenuButton>
-          <MenuList
-            fontSize={14}
-            borderStyle="none"
-            boxShadow="0px 1px 10px #00000030"
-            rounded={14}
-            pb={0}
-            overflow="hidden"
-          >
-            <Box px={4} py={3} fontSize={12} fontWeight={500}>
-              <Text fontWeight={500} fontSize={14}>
-                {user.student.nameEn.split(" ").slice(1).join(" ")}
-              </Text>
-              <Text fontWeight={400} fontSize={12} color="gray.600">
-                {user.student.nameTh.split(" ").slice(1).join(" ")}
-              </Text>
-            </Box>
-            <Divider />
-            <MenuItem
-              py={3}
-              fontWeight={500}
-              onClick={() => router.push("/projects/manager")}
+
+            <IconButton
+              aria-label="mobile-nav-menu"
+              display={["flex", "none"]}
+              onClick={() => setNavModal(true)}
+              rounded={8}
             >
-              App Library
-            </MenuItem>
-            <Divider />
-            <MenuItem
-              py={3}
+              <IoIosMenu size="24px" />
+            </IconButton>
+          </HStack>
+        </Flex>
+      </Container>
+      <Drawer
+        isOpen={navModal}
+        placement="right"
+        onClose={onNavModalClose}
+        size="full"
+      >
+        <DrawerContent p={4} bg={navStyles.bg} backdropFilter="blur(20px)">
+          <DrawerCloseButton />
+          <DrawerHeader>
+            <Text
+              opacity={0.6}
               fontWeight={500}
-              onClick={() => router.push("/projects/manager")}
+              fontSize={14}
+              textTransform="uppercase"
+              fontFamily={`'Rubik', sans-serif`}
+              letterSpacing={0.5}
             >
-              Soon
-            </MenuItem>
-            <Divider />
-            <MenuItem
-              py={3}
-              color="red.600"
-              _hover={{ bg: "red.100", color: "red.600", fontWeight: 600 }}
-              fontWeight={500}
-              onClick={signout}
-              isDisabled={isLoading}
-            >
-              Sign out
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </Flex>
-    </Flex>
+              {t("mobile-nav-title")}
+            </Text>
+          </DrawerHeader>
+
+          <DrawerBody>
+            <VStack spacing={3}>
+              {tabs.map((e, i) => {
+                return (
+                  <Box key={`mobile-menu-${i}`} w="full">
+                    <Link href={e.href || ""}>
+                      <a>
+                        <Button
+                          {...navModalMenuButtonStyles}
+                          onClick={e.onClick}
+                        >
+                          {e.text}
+                        </Button>
+                      </a>
+                    </Link>
+                  </Box>
+                );
+              })}
+              <SmartLanguageToggler sx={{ width: "full" }} />
+            </VStack>
+          </DrawerBody>
+
+          <DrawerFooter></DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <Modal isOpen={showUserModal} onClose={onUserModalClose} isCentered>
+        <ModalOverlay />
+        <ModalContent {...modalStyles}>
+          <ModalHeader fontSize={14}>{t("signed-in-as")}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text fontWeight={700}>{user.student.nameEn}</Text>
+            <Text fontSize={14} opacity={0.6}>
+              {user.student.nameTh}
+            </Text>
+            <VStack mt={10} spacing={3}>
+              <Link href={p.kraikubId}>
+                <a style={{ display: "block", width: "100%" }}>
+                  <Button
+                    variant="solid"
+                    size="lg"
+                    w="full"
+                    rounded={8}
+                    justifyContent="start"
+                  >
+                    {t("menu-id")}
+                  </Button>
+                </a>
+              </Link>
+              <Button
+                variant="solid"
+                w="full"
+                size="lg"
+                rounded={8}
+                colorScheme="teal"
+                justifyContent="start"
+                onClick={signout}
+                gap={2}
+              >
+                {t("menu-logout")} <MdLogout size="20px" />
+              </Button>
+            </VStack>
+          </ModalBody>
+
+          <ModalFooter></ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Container
+        maxW="container.xl"
+        h="60px"
+        alignItems="end"
+        display={["none", "flex"]}
+      >
+        <ButtonGroup
+          w="full"
+          borderStyle="solid"
+          borderWidth="0 0 1px 0"
+          borderColor={gridBorderDividerColor}
+        >
+          {tabs.map((e, i) => {
+            return <Tab key={`tab-${i}`} {...e} />;
+          })}
+        </ButtonGroup>
+      </Container>
+    </Box>
   );
 };
 export default Navbar;

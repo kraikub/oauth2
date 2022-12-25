@@ -9,7 +9,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { appConfig } from "../../../../api/config/app";
+import { Card } from "../../../components/Card";
 import { FooterShort } from "../../../layouts/FooterShort";
 
 interface UserSelectorProps {
@@ -25,6 +27,7 @@ export const UserSelector: FC<UserSelectorProps> = ({
   handleSignin,
   loading,
 }) => {
+  const { t } = useTranslation("signin");
   return (
     <>
       <Container
@@ -34,28 +37,36 @@ export const UserSelector: FC<UserSelectorProps> = ({
         alignItems="center"
       >
         <Box width="full">
-          <Heading size="md" mb="30px" letterSpacing={-1}>
-            Continue with KU Account
+          <Heading size="md" mb="30px">
+            {t("account-header")}
           </Heading>
-          <Text fontSize={14}>This device was signed in with this account</Text>
-          <Flex my={3} bg="gray.100" width="full" p={5} rounded={14} gap={4}>
-            <Box>
-              <Image
-                src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
-                alt="account-owner-profile-image"
-                w={50}
-                rounded="full"
-              ></Image>
-            </Box>
-            <Box>
-              <Text fontWeight={600}>
-                {user.student.nameEn.split(" ").splice(1).join(" ")}
-              </Text>
-              <Text fontWeight={400} fontSize={14} opacity={0.7}>
-                {user.universityEmail || "ยังไม่ยืนยันอีเมล"}
-              </Text>
-            </Box>
-          </Flex>
+          <Text fontSize={14}>{t("account-description")}</Text>
+          <Card
+            props={{
+              my: 3,
+              rounded: 16,
+              boxShadow: "none",
+            }}
+          >
+            <Flex width="full" gap={4}>
+              <Box>
+                <Image
+                  src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
+                  alt="account-owner-profile-image"
+                  w={50}
+                  rounded="full"
+                ></Image>
+              </Box>
+              <Box>
+                <Text fontWeight={600}>
+                  {user.student.nameEn.split(" ").splice(1).join(" ")}
+                </Text>
+                <Text fontWeight={400} fontSize={14} opacity={0.7}>
+                  {user.student.nameTh.split(" ").splice(1).join(" ")}
+                </Text>
+              </Box>
+            </Flex>
+          </Card>
           <ButtonGroup
             justifyContent="end"
             width="full"
@@ -65,19 +76,17 @@ export const UserSelector: FC<UserSelectorProps> = ({
             <Button
               variant="ghost"
               fontSize={14}
-              rounded="full"
               onClick={reject}
             >
-              Use another
+              {t("account-btn-no")}
             </Button>
             <Button
-              colorScheme="katrade"
-              rounded="full"
+              colorScheme="teal"
               fontWeight={600}
               onClick={() => handleSignin({ signin_method: "credential" })}
               isLoading={loading}
             >
-              Continue
+              {t("account-btn-yes")}
             </Button>
           </ButtonGroup>
         </Box>

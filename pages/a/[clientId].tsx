@@ -1,10 +1,10 @@
 import { GetServerSideProps, NextPage } from "next";
-import { PageAuthMiddleware } from "../../../api/middlewares/auth.middleware";
-import { applicationUsecase, userUsecase } from "../../../api/usecases";
+import { PageAuthMiddleware } from "../../api/middlewares/auth.middleware";
+import { applicationUsecase, userUsecase } from "../../api/usecases";
 
-import { UserProvider } from "../../../src/contexts/User";
-import { jsonSerialize } from "../../../src/utils/json";
-import ClientPage from "../../../src/views/projects/manager/client";
+import { UserProvider } from "../../src/contexts/User";
+import { jsonSerialize } from "../../src/utils/json";
+import ClientPage from "../../src/views/projects/manager/client";
 
 export const getServerSideProps: GetServerSideProps<ClientPageServerSideProps> = async (context) => {
   const { uid } = PageAuthMiddleware(context.req.cookies.access);

@@ -13,6 +13,19 @@ export const handleErrResponse = (
 };
 
 export const handleApiError = (res: NextApiResponse, error: any) => {
+  // logging
+  if (axios.isAxiosError(error)) {
+    console.error({
+      type: "axios_error",
+      body: error.response?.data,
+      status: error.response?.status,
+    });
+  }
+  else {
+    console.error(error.toString())
+  }
+
+  // API reply
   if (axios.isAxiosError(error)) {
     res
       .status(error.response?.status as number)
@@ -20,5 +33,4 @@ export const handleApiError = (res: NextApiResponse, error: any) => {
   } else {
     res.status(500).send(createResponse(false, error.toString() as string, {}));
   }
-  console.error(error)
 };

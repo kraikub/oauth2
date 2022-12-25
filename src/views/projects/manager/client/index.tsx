@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { AppForm } from "./components/AppForm";
 import { Center } from "@chakra-ui/react";
 import { InterWindLoader } from "../../../../layouts/Loader";
+import { ConnectSection } from "./components/ConnectSection";
 
 const ClientPage: FC<ClientPageServerSideProps> = ({ app, permission }) => {
   const router = useRouter();
@@ -12,7 +13,11 @@ const ClientPage: FC<ClientPageServerSideProps> = ({ app, permission }) => {
   return (
     <>
       <Navbar />
-      {app ? <AppForm app={app} /> : (
+      {app ? (
+        <>
+          <AppForm app={app} />
+        </>
+      ) : (
         <Center my="100px">
           <InterWindLoader />
         </Center>
