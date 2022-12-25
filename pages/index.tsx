@@ -3,16 +3,62 @@ import {
   Button,
   Container,
   Flex,
+  Grid,
+  GridItem,
   Heading,
+  SimpleGrid,
   Text,
+  useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
 import type { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { FC, ReactNode } from "react";
 import { BsArrowUpRight } from "react-icons/bs";
+import { SiAuth0 } from "react-icons/si";
+import { AiOutlineSafety } from "react-icons/ai";
+import { HiIdentification } from "react-icons/hi";
+import { Card } from "../src/components/Card";
 import { FooterShort } from "../src/layouts/FooterShort";
 import StaticNavbar from "../src/layouts/StaticNavbar";
+import { p } from "../src/utils/path";
+
+interface EachCardProps {
+  title: string;
+  description: string;
+  icon?: ReactNode;
+}
+
+const EachCard: FC<EachCardProps> = ({ title, description, icon }) => {
+  const iconContainerStyles = {
+    bg: useColorModeValue("blackAlpha.100", "whiteAlpha.100"),
+    rounded: "full",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+  return (
+    <Card>
+      <Grid templateColumns="repeat(12, 1fr)">
+        <GridItem colSpan={4}>
+          {icon ? (
+            <Flex w="58px" h="58px" {...iconContainerStyles}>
+              {icon}
+            </Flex>
+          ) : null}
+        </GridItem>
+        <GridItem colSpan={8}>
+          <Heading size="md" fontWeight={700}>
+            {title}
+          </Heading>
+          <Text mt={4} fontWeight={500} opacity={0.6}>
+            {description}
+          </Text>
+        </GridItem>
+      </Grid>
+    </Card>
+  );
+};
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -21,39 +67,55 @@ const Home: NextPage = () => {
       <Head>
         <title>Kraikub - Authenticate any KU students.</title>
       </Head>
-      <Box bg="linear-gradient(121deg, rgba(0,111,79,1) 0%, rgba(0,74,106,1) 100%)">
-        <StaticNavbar color="white" bgColor="transparent" />
+      <Box>
+        <StaticNavbar hideLanguageSelector/>
         <Box minH="100vh">
           <Container
+            py="15vh"
             maxW="container.xl"
             minH="80vh"
             display="flex"
-            justifyContent="center"
             alignItems="center"
-            color="white"
           >
-            <Box w="full" maxW={1400} p={6} rounded={10} textAlign="center">
-              <Heading fontSize={50} letterSpacing="-2px" fontWeight={500}>
-                <Box as="span" fontWeight={700}>
-                  KRAIKUB
-                </Box>{" "}
-                Developer Console
-              </Heading>
-              <VStack alignItems="center" my={6}>
-                <Text fontSize={18}>
-                  Integrate any applications with our Kasetsart University
-                  Authentication Service.
-                </Text>
-              </VStack>
-              <Flex justifyContent="center" gap={2} mt="60px">
+            <Box w="full">
+              <Box maxW={900}>
+                <Heading
+                  fontSize={[42, 48, 60, 80]}
+                  letterSpacing="-2px"
+                  fontWeight={500}
+                >
+                  {"Let's see what you can do with "}
+                  <Box
+                    as="span"
+                    fontWeight={700}
+                    color={useColorModeValue("teal.400", "teal.200")}
+                  >
+                    KRAIKUB
+                  </Box>
+                </Heading>
+              </Box>
+              <SimpleGrid columns={[1, 2, 3]} w="full" columnGap={4} my={20} rowGap={4}>
+                <EachCard
+                  title="Sign in with KU"
+                  description="Claim your users identity with OpenID Connect standard on our OAuth server."
+                  icon={<SiAuth0 size="24px" />}
+                />
+                <EachCard
+                  title="Secure & Private"
+                  description="Claim your users identity with OpenID Connect standard on our OAuth server."
+                  icon={<AiOutlineSafety size="30px" />}
+                />
+                <EachCard
+                  title="OpenID Connect"
+                  description="Claim your users identity with OpenID Connect standard on our OAuth server."
+                  icon={<HiIdentification size="30px" />}
+                />
+              </SimpleGrid>
+              <Flex gap={2} mt="60px">
                 <Button
                   size="lg"
                   height="60px"
-                  bg="#ffffff40"
-                  _hover={{
-                    bg: "#ffffff80",
-                  }}
-                  onClick={() => router.push("/projects/manager")}
+                  onClick={() => router.push(p.projects)}
                   gap={2}
                 >
                   Try now for free <BsArrowUpRight />

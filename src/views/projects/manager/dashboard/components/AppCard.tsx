@@ -2,6 +2,7 @@ import { Badge, Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FC } from "react";
 import background from "../../../../../../public/bg-1.png";
+import { p } from "../../../../../utils/path";
 
 interface AppCardProps {
   app: Application;
@@ -16,7 +17,7 @@ const AppCard: FC<AppCardProps> = ({ app }) => {
       rounded={6}
       overflow="hidden"
       cursor="pointer"
-      onClick={() => router.push(`/projects/manager/${app.clientId}`)}
+      onClick={() => router.push(`${p.projects}/${app.clientId}`)}
       transition="300ms ease"
       borderStyle="solid"
       borderWidth="1px"

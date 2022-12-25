@@ -1,6 +1,8 @@
 import type { GetServerSideProps, NextPage } from "next";
 import { applicationRepository } from "../api/repositories/application";
 import SigninPage from "../src/views/signin";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from "react-i18next";
 
 interface SigninPageProps {
   query: Query;
@@ -8,6 +10,7 @@ interface SigninPageProps {
 }
 
 const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
+  const {ready} = useTranslation()
   return <SigninPage app={app} query={query} />;
 };
 
@@ -35,6 +38,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
   return {
     props: {
+      ...(await serverSideTranslations(context.req.cookies.LANG || "th", [
+        'signin',
+      ])),
       query: {
         client_id: client_id ? client_id : null,
         state: state ? state : null,

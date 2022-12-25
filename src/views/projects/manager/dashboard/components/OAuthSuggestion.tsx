@@ -12,31 +12,22 @@ import { BsArrowUpRight } from "react-icons/bs";
 
 export const OAuthSuggestion: FC = () => {
   return (
-    <SimpleGrid columns={[1, 1, 2]} spacing={2} my="90px">
+    <SimpleGrid columns={[1]} spacing={2} my="90px">
       <Box>
-        <Heading>Explore more about OAuth 2.0 Protocol</Heading>
+        <Heading size="md">Explore more about OAuth 2.0 Protocol</Heading>
         <Text my={4}>
           Visit the official website of{" "}
-          <Link href="https://oauth.net/2/" color="kraikub.blue.400">
+          <Link href="https://oauth.net/2/" color="kraikub.blue.200">
             oauth.net
           </Link>{" "}
           and dive in to OAuth2 standards and explanation
         </Text>
         <Link href="https://oauth.net/2/" _hover={{ textDecoration: "none" }}>
-          <Button my={4} size="lg" gap={2}>
+          <Button my={4} size="sm" gap={2} variant="outline">
             Explore now <BsArrowUpRight />
           </Button>
         </Link>
       </Box>
-      <Flex
-        justifyContent="center"
-        alignItems="space-between"
-        bgColor="#1c223d"
-        h="400px"
-        rounded={20}
-      >
-        <img src="/Oauth_logo.svg" width="300px"></img>
-      </Flex>
     </SimpleGrid>
   );
 };

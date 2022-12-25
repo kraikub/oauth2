@@ -12,15 +12,17 @@ import {
   Divider,
   Flex,
   Heading,
+  Switch,
   Text,
+  useColorMode,
   VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { FC, Fragment } from "react";
-import bg3 from "../../../public/bg-3.png";
 import { SigninForm } from "./components/SigninForm";
 import { isValideScope } from "./utils/scope";
 import { AiFillInfoCircle } from "react-icons/ai";
+import { useOnClient } from "../../hooks/on-client";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
@@ -28,6 +30,11 @@ interface SigninPageProps {
 }
 
 const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
+  const { toggleColorMode, colorMode } = useColorMode();
+  const client = useOnClient();
+
+  if (!client) return null;
+
   if (
     app === null ||
     !query.scope ||
@@ -51,13 +58,14 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
             content="width=device-width, initial-scale=1.0"
           />
         </Head>
-        <Box bgImage={bg3.src}>
+        <Box bg="gray.50">
           <Container maxW={500} minH="100vh">
-            <Center h="100vh" color="white">
+            <Center h="100vh">
               <VStack gap={5} textAlign="center">
-                <Heading fontWeight={500}>🤔</Heading>
-                <Heading>Invalid sign in URL</Heading>
-                <Text fontSize={20}>
+                <Box px="20px" py="6px" bgColor="gray.200" rounded={8}>
+                  <Heading size="md">Invalid sign in URL</Heading>
+                </Box>
+                <Text fontSize={14}>
                   We cannot validate your sign in request.
                 </Text>
                 <Box
@@ -70,6 +78,9 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
                   rounded={10}
                   my="30px !important"
                   position="relative"
+                  borderStyle="solid"
+                  borderWidth="1px"
+                  borderColor="gray.200"
                 >
                   <Box position="absolute" top="15px" right="15px">
                     <AiFillInfoCircle size="26px" />
@@ -78,11 +89,11 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
                     What should I do next?
                   </Heading>
                   <Divider my={4} />
-                  <Text fontSize={14} mb={3}>
+                  <Text fontSize={12} mb={3}>
                     If you are the developers of this app, the sign in URL is
                     invalid. Check your source code or contact our admins.
                   </Text>
-                  <Text fontSize={14} mb={3}>
+                  <Text fontSize={12} mb={3}>
                     If you are an app user, the app that you are using is
                     working wrong.
                   </Text>
@@ -111,7 +122,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
             content="width=device-width, initial-scale=1.0"
           />
         </Head>
-        <Box bgImage={bg3.src}>
+        <Box>
           <Container maxW={500} minH="100vh">
             <Center h="100vh" color="white">
               <VStack gap={5} textAlign="center">
@@ -157,17 +168,28 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
       </Fragment>
     );
   }
+
   return (
-    <SigninForm
-      app={app}
-      query={{
-        ...query,
-        scope: query.scope as string,
-        client_id: query.client_id as string,
-        redirect_uri: query.redirect_uri as string,
-        response_type: query.response_type as string,
-      }}
-    />
+    <>
+      <Box position="fixed" top="22px" right="22px">
+        <Switch
+          size="lg"
+          colorScheme="teal"
+          defaultChecked={colorMode === "dark"}
+          onChange={toggleColorMode}
+        />
+      </Box>
+      <SigninForm
+        app={app}
+        query={{
+          ...query,
+          scope: query.scope as string,
+          client_id: query.client_id as string,
+          redirect_uri: query.redirect_uri as string,
+          response_type: query.response_type as string,
+        }}
+      />
+    </>
   );
 };
 export default SigninPage;

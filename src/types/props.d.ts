@@ -1,15 +1,20 @@
-type UserVariant = UserWithStudent | UserWithApplication
+interface PageWithTranslation {
+  lang: string;
+}
+
+type UserVariant = UserWithStudent | UserWithApplication;
 
 interface BasePageProps {
-  user: UserWithStudent | null
+  user: UserWithStudent | null;
 }
 
 interface UserWithApplication extends UserWithStudent {
-  applications: Application[]
+  applications: Application[];
 }
 
-interface DashboardServerSideProps  {
-  data: UserWithApplication | null
+interface DashboardServerSideProps extends PageWithTranslation {
+  data: UserWithApplication;
+  lang: string;
 }
 
 interface ClientPageServerSideProps extends BasePageProps {

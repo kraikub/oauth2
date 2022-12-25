@@ -1,37 +1,36 @@
-import { Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, HStack, Text } from "@chakra-ui/react";
 import { FC } from "react";
+import { LinkWrap } from "../components/LinkWrap";
+import { SmartLanguageToggler } from "../components/SmartLanguageToggler";
+import { ThemeToggler } from "../components/ThemeToggler";
 
 interface NavbarOptions {
-  sticky?: boolean;
-  color?: string;
-  bgColor?: string;
+  hideLanguageSelector?: boolean;
 }
 
 const StaticNavbar: FC<NavbarOptions> = (props) => {
   return (
-    <Flex
-      position={props.sticky ? "sticky" : "relative"}
-      color={props.color || "black"}
-      top={0}
-      left={0}
-      right={0}
-      py="12px"
-      bgColor={props.bgColor || "white"}
-      zIndex={35}
-      px="20px"
-      minH="70px"
-      alignItems="center"
-      justifyContent="space-between"
-    >
-      <Flex alignItems="center" gap={3}>
-        <Heading size="sm" fontWeight={700}>
-          KRAIKUB{" "}
-          <Text as="span" fontWeight={300} opacity={0.8}>
-            DEVELOPERS
-          </Text>
-        </Heading>
+    <Container maxW="container.xl">
+      <Flex
+        py="12px"
+        zIndex={35}
+        minH="70px"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Flex alignItems="center" gap={3}>
+          <LinkWrap href="/">
+            <Heading size="sm" fontWeight={700} letterSpacing={-1}>
+              KRAIKUB{" "}
+            </Heading>
+          </LinkWrap>
+        </Flex>
+        <HStack spacing={3}>
+          <ThemeToggler />
+          {props.hideLanguageSelector ? null : <SmartLanguageToggler />}
+        </HStack>
       </Flex>
-    </Flex>
+    </Container>
   );
 };
 export default StaticNavbar;
