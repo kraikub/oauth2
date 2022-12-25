@@ -12,7 +12,7 @@ export const ThemeToggler = () => {
     <Switch
       size="lg"
       colorScheme="teal"
-      defaultChecked={colorMode === "dark"}
+      isChecked={colorMode === "dark"}
       onChange={toggleColorMode}
     />
   );

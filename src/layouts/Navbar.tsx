@@ -231,7 +231,11 @@ const Navbar: FC = () => {
             </VStack>
           </DrawerBody>
 
-          <DrawerFooter></DrawerFooter>
+          <DrawerFooter>
+            <Button w="full" size="lg" gap={3}>
+              {t("menu-logout")} <MdLogout size="20px" />
+            </Button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
       <Modal isOpen={showUserModal} onClose={onUserModalClose} isCentered>

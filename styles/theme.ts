@@ -2,7 +2,7 @@ import { ComponentStyleConfig, extendTheme } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 
 const config = {
-  initialColorMode: "light",
+  initialColorMode: "system",
   useSystemColorMode: true,
 };
 

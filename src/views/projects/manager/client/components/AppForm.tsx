@@ -321,7 +321,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               <ButtonGroup>
                 <Button onClick={resetForm}>{t("btn-undo")}</Button>
                 <Button type="submit" colorScheme="teal" isLoading={isUpdating}>
-                  {t("btn-undo")}
+                  {t("btn-save")}
                 </Button>
               </ButtonGroup>
             </Flex>
