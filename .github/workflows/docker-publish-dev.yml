@@ -96,7 +96,7 @@ jobs:
           REDIS_HOST: ${{ secrets.REDIS_HOST }}
           SHARE_ACCESS_DOMAIN: ${{ secrets.SHARE_ACCESS_DOMAIN }}
           NEXT_PUBLIC_SERVER_DOMAIN:  ${{ secrets.NEXT_PUBLIC_SERVER_DOMAIN }}
-          MAIL_SERVICE_HOST: ${{ secret.MAIL_SERVICE_HOST }}
+          MAIL_SERVICE_HOST: ${{ secrets.MAIL_SERVICE_HOST }}
           
         with:
           host: ${{ secrets.DO_HOST_IP }}
