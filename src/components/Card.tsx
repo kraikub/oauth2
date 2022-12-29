@@ -9,13 +9,13 @@ interface CardProps {
 export const Card: FC<CardProps> = (props) => {
   return (
     <Box
-      bg={useColorModeValue("whiteAlpha.800", "whiteAlpha.100")}
+      bg={useColorModeValue("#ebedf060", "whiteAlpha.200")}
       p={6}
-      rounded={8}
+      rounded={10}
       borderStyle="solid"
-      borderWidth="1px"
+      borderWidth="0px"
       borderColor={useColorModeValue("blackAlpha.100", "whiteAlpha.50")}
-      boxShadow={`0 3px 8px #0000001a`}
+      // boxShadow={`0 3px 8px #0000001a`}
       {...props.props}
     >
       {props.children}

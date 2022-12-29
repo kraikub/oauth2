@@ -114,7 +114,7 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
           />
 
           <FormLabel htmlFor="app-creator" mt={6}>
-            {t("describe")}
+            {t("creator-name")}
           </FormLabel>
           <Input
             id="app-creator"

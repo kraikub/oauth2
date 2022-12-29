@@ -140,7 +140,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         .status(406)
         .send(createResponse(false, "redirect_uri not acceptable", null));
     }
-    
+  
     const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
       state: state,
       code: code,

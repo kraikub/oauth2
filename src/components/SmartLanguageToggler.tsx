@@ -52,6 +52,7 @@ export const SmartLanguageToggler: FC<SmartLanguageTogglerProps> = (props) => {
   return (
     <Button
       variant="outline"
+      rounded="full"
       onClick={() => setLang(toggleLangValue())}
       borderColor={borderColor}
       {...props.sx}

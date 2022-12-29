@@ -37,6 +37,10 @@ export class UserUsecase {
     return await userRepository.create(u);
   };
 
+  newPersonalEmail = async (uid: string, newEmail: string) => {
+    return await userRepository.update(uid, { personalEmail: newEmail})
+  }
+
   initUserProfile = async (
     uid: string,
     stdId: string,
@@ -111,14 +115,14 @@ export class UserUsecase {
     }
   };
 
-  getPrivateUserWithStudent = async (uid: string) => {
+  getPrivateUserWithStudent = async (uid: string): Promise<UserWithStudent | null> => {
     const res = await userRepository.useAggregationPipeline([
       ...aggregations.private.user(uid),
       ...aggregations.public.student(),
       ...aggregations.public.education(),
     ]);
     if (res.length) {
-      return res[0];
+      return res[0] as UserWithStudent;
     } else {
       return null;
     }

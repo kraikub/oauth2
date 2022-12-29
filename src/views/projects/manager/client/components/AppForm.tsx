@@ -190,6 +190,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               size="lg"
               variant="solid"
               colorScheme="teal"
+              rounded="full"
               onClick={() =>
                 append({
                   url: "",

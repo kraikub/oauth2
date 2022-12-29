@@ -86,6 +86,12 @@ export const SigninForm: FC<SigninFormProps> = ({
   const [cookies] = useCookies(["LANG", "ACCEPT_COOKIES"]);
 
   const styles = {
+    input: {
+      bg: useColorModeValue("blackAlpha.100", "whiteAlpha.200"),
+      _hover: {
+        bg: useColorModeValue("blackAlpha.300", "whiteAlpha.400"),
+      }
+    },
     layout: {
       container: {
         display: "flex",
@@ -93,17 +99,11 @@ export const SigninForm: FC<SigninFormProps> = ({
         alignItems: "center",
       },
     },
-    regular: {
-      body: {},
-      card: {},
-      dataControl: {
-        bg: "#00000008",
-      },
-      highlight: {
-        color: useColorModeValue("teal.400", "teal.200"),
-      },
-      signinText: "ดำเนินการต่อ",
+
+    highlight: {
+      color: useColorModeValue("teal.400", "teal.200"),
     },
+
     pdpaOverride: {
       container: {
         borderStyle: "solid",
@@ -120,10 +120,6 @@ export const SigninForm: FC<SigninFormProps> = ({
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-  };
-
-  const themeSelector = (styles: { regular: any }) => {
-    return query.scope === "0" ? styles.regular : styles.regular;
   };
 
   const toConsent = (e: FormEvent<HTMLFormElement>) => {
@@ -226,7 +222,7 @@ export const SigninForm: FC<SigninFormProps> = ({
             content={`Sign in to ${app?.appName} with your Kasetsart Account.`}
           />
         </Head>
-        <Box {...themeSelector(styles).body}>
+        <Box>
           <Container
             maxW={500}
             height="100vh"
@@ -253,7 +249,6 @@ export const SigninForm: FC<SigninFormProps> = ({
                       direction="column"
                       alignItems="center"
                       gap="20px"
-                      {...themeSelector(styles).card}
                     >
                       <Heading size="lg" letterSpacing="-1.5px" lang="en">
                         {t("form-title")}
@@ -262,11 +257,7 @@ export const SigninForm: FC<SigninFormProps> = ({
                       <Box mt="30px" w="full">
                         <Text fontSize={14}>
                           {t("form-app-text")}
-                          <Box
-                            as="span"
-                            fontWeight={700}
-                            {...themeSelector(styles).highlight}
-                          >
+                          <Box as="span" fontWeight={700} {...styles.highlight}>
                             {" "}
                             {app?.appName}
                           </Box>
@@ -284,22 +275,22 @@ export const SigninForm: FC<SigninFormProps> = ({
                           variant="filled"
                           borderRadius="8px 8px 0 0"
                           size="lg"
-                          placeholder={t("form-input-username")}
+                          placeholder={t("form-input-username") as string}
                           onChange={handleUsernameChange}
                           value={username}
-                          {...themeSelector(styles).input}
+                          {...styles.input}
                         />
                         <Divider />
                         <Box position="relative">
                           <Input
                             variant="filled"
                             size="lg"
-                            placeholder={t("form-input-password")}
+                            placeholder={t("form-input-password") as string}
                             borderRadius="0 0 8px 8px"
                             type={showPassword ? "text" : "password"}
                             onChange={handlePasswordChange}
                             value={password}
-                            {...themeSelector(styles).input}
+                            {...styles.input}
                           />
                           <IconButton
                             aria-label="toggle-password"

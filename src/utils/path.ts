@@ -32,4 +32,5 @@ export const p = {
   projects: "/a",
   kraikubId: "/id",
   settings: "/settings",
+  emailVerification: "/id/kraikubid-activation"
 }
