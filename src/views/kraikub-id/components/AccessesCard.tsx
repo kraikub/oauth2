@@ -44,7 +44,7 @@ const Each: FC<EachProps> = ({ access }) => {
           {access.application[0].appName[0]}
         </Center>
         <Box>
-          <Heading size="sm">{access.application[0].appName}</Heading>
+          <Heading size="sm">{access.application.length ? access.application[0].appName : "Unknown"}</Heading>
           <Text fontSize={12} fontWeight={600} opacity={0.6} mt={2}>
             {t("at-time")} {new Date(access.createdAt).toString()}
           </Text>
