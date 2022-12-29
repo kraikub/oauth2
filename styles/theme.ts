@@ -23,6 +23,14 @@ export const colors = {
       500: "#2D19A6",
     },
   },
+  bg: {
+    light: "#ffffff",
+    dark: "#000000",
+  },
+  color: {
+    light: "#262626",
+    dark: "#e6e9ea",
+  },
 };
 
 const fonts = {
@@ -50,7 +58,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
         letterSpacing: "-0.03em",
       },
       md: {
-        letterSpacing: "-0.03em",
+        letterSpacing: "-0.015em",
       },
     },
   },
@@ -83,7 +91,8 @@ const components: { [key: string]: ComponentStyleConfig } = {
 const styles = {
   global: (props: any) => ({
     body: {
-      bg: mode("#ffffff", "#070b0e")(props),
+      bg: mode(colors.bg.light, colors.bg.dark)(props),
+      color: mode(colors.color.light, colors.color.dark)(props),
     },
   }),
 };

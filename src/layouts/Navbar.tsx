@@ -80,6 +80,7 @@ const Navbar: FC = () => {
   const { t } = useClientTranslation(navbarDict);
   const [showUserModal, setShowUserModal] = useState(false);
   const [navModal, setNavModal] = useState(false);
+  const menuBarBg = useColorModeValue("bg.light", "bg.dark");
   const ready = useOnClient();
 
   const onNavModalClose = () => {
@@ -95,8 +96,8 @@ const Navbar: FC = () => {
   };
 
   const gridBorderDividerColor = useColorModeValue(
-    "blackAlpha.100",
-    "whiteAlpha.200"
+    "blackAlpha.300",
+    "whiteAlpha.300"
   );
 
   const navModalMenuButtonStyles = {
@@ -124,6 +125,10 @@ const Navbar: FC = () => {
 
   const tabs = [
     {
+      text: t("menu-id"),
+      href: p.kraikubId,
+    },
+    {
       text: t("menu-apps"),
       href: p.projects,
     },
@@ -133,20 +138,16 @@ const Navbar: FC = () => {
       href: "",
     },
     {
-      text: t("menu-id"),
-      href: p.kraikubId,
-    },
-    {
       text: t("menu-settings"),
       href: p.settings,
     },
   ];
 
   return (
-    <Box position="relative" top={0} left={0} right={0} py="12px" zIndex={35}>
+    <>
       <Container
         maxW="container.xl"
-        minH="50px"
+        minH="58px"
         display="flex"
         justifyContent="space-between"
         alignItems="center"
@@ -280,24 +281,28 @@ const Navbar: FC = () => {
           <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
-      <Container
-        maxW="container.xl"
-        h="60px"
-        alignItems="end"
-        display={["none", "flex"]}
-      >
-        <ButtonGroup
-          w="full"
-          borderStyle="solid"
-          borderWidth="0 0 1px 0"
-          borderColor={gridBorderDividerColor}
+      <Box position="sticky" top={0} bg={menuBarBg} zIndex={59}>
+        <Container
+          maxW="container.xl"
+          h="64px"
+          alignItems="end"
+          display={["flex", "flex"]}
+          overflowX="auto"
         >
-          {tabs.map((e, i) => {
-            return <Tab key={`tab-${i}`} {...e} />;
-          })}
-        </ButtonGroup>
-      </Container>
-    </Box>
+          <ButtonGroup
+            w="full"
+            borderStyle="solid"
+            borderWidth="0 0 1px 0"
+            
+            borderColor={gridBorderDividerColor}
+          >
+            {tabs.map((e, i) => {
+              return <Tab key={`tab-${i}`} {...e} />;
+            })}
+          </ButtonGroup>
+        </Container>
+      </Box>
+    </>
   );
 };
 export default Navbar;

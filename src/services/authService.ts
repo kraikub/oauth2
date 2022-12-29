@@ -27,6 +27,7 @@ class AuthService {
       sig: sha256(params.username),
       clientId: params.clientId,
       scope: params.scope,
+      state: params.state,
       ref: params.ref,
       secret: params.secret,
       redirect_uri: params.redirectUri,

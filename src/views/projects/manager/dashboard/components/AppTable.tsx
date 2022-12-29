@@ -13,21 +13,17 @@ import {
   GridItem,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { useUser } from "../../../../../contexts/User";
-import AppCard from "./AppCard";
-import { MdOutlineAdd } from "react-icons/md";
 import AppCard2 from "./AppCard2";
 import Link from "next/link";
-import { OAuthSuggestion } from "./OAuthSuggestion";
-import { useTranslation } from "react-i18next";
 import { useClientTranslation } from "../../../../../hooks/client-translation";
 import { dashboardDict } from "../../../../../translate/dashboard";
 import { useCookies } from "react-cookie";
 import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
 import { Card } from "../../../../../components/Card";
 import { p } from "../../../../../utils/path";
+import { CustomDivider } from "../../../../../components/CustomDivider";
 
 interface AppTableProps {
   apps: Application[];
@@ -76,11 +72,11 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
                 my: 5,
               }}
             >
-              <VStack spacing={1}>
+              <VStack spacing={0}>
                 {apps.map((app, index) => (
                   <Box key={`rendered-app-${index}`} w="full">
                     <AppCard2 app={app} key={`app-${app.clientId}`} />
-                    {index === apps.length - 1 ? null : <Divider my={2} />}
+                    {index === apps.length - 1 ? null : <CustomDivider sx={{ my: 0 }}/>}
                   </Box>
                 ))}
                 <Box mt="40px !important">
@@ -102,6 +98,7 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
                           "red"
                         )}
                         w="full"
+                        rounded="full"
                       >
                         {isLimit(
                           user.appOwned >= user.appQuota,

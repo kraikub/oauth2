@@ -27,6 +27,11 @@ export const appConfig = {
       str: "90d",
       ms: 60 * 60 * 24 * 90,
       s: 60 * 24 * 90,
+    },
+    verificationEmail: {
+      str: "5m",
+      ms: 1000 * 60 * 5,
+      s: 60 * 5,
     }
   }
 
