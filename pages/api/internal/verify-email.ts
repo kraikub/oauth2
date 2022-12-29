@@ -19,8 +19,8 @@ const handleEmailVerificationApi = async (req: NextApiRequest, res: NextApiRespo
       }
       const mailRes = await kraikubIdUsecase.verifyEmail(email, user, req.cookies.LANG || "en")
       return res.status(200).send(createResponse(true, "Operation success", {
-        mailServiceResponseStatus: mailRes.status,
-        mailServiceResponseBody: mailRes.data
+        mailServiceResponseStatus: mailRes?.status,
+        mailServiceResponseBody: mailRes?.data
       }));
     }
   } catch (error) {
