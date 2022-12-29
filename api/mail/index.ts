@@ -9,7 +9,6 @@ class MailService {
   public host: string;
 
   constructor(mailServiceHost: string | undefined) {
-    console.log(process.env);
     if (!mailServiceHost) {
       this.host = "";
       return;
@@ -18,8 +17,6 @@ class MailService {
   }
 
   async sendVerificationEmail(to: string, lang: string, args: MailArgs) {
-    console.debug("POST HOST", this.host);
-    console.log("POST HOST", this.host);
     try {
       const res = await axios.post(`${this.host}/api/v1/verify-email`, {
         to,
