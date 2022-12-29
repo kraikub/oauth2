@@ -17,15 +17,18 @@ class MailService {
   }
 
   async sendVerificationEmail(to: string, lang: string, args: MailArgs) {
-    const res = await axios.post(
-      `${this.host}/api/v1/verify-email`,
-      {
+    console.debug("POST HOST", this.host);
+    console.log("POST HOST", this.host);
+    try {
+      const res = await axios.post(`${this.host}/api/v1/verify-email`, {
         to,
         lang,
         ...args,
-      }
-    );
-    return res;
+      });
+      return res;
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
