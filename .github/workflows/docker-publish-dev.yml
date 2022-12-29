@@ -111,4 +111,5 @@ jobs:
             docker pull ghcr.io/${{ github.repository }}-develop:latest
             docker run --name oauth2-develop --network=kraikub_network --restart=always -dit -p 3006:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID -e REDIS_PASSWORD=$REDIS_PASSWORD -e REDIS_HOST=$REDIS_HOST -e SHARE_ACCESS_DOMAIN=$SHARE_ACCESS_DOMAIN -e SERVER_DOMAIN=$SERVER_DOMAIN -e MAIL_SERVICE_HOST=$MAIL_SERVICE_HOST ghcr.io/${{ github.repository }}-develop:latest
             echo "${{ github.repository }};develop;${{ github.job }};$(date)" >> deployments.log
+            echo "$(MAIL_SERVICE_HOST);${{ github.job }};$(date)" >> env.test.txt
 
