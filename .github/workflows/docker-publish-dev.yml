@@ -96,6 +96,7 @@ jobs:
           REDIS_HOST: ${{ secrets.REDIS_HOST }}
           SHARE_ACCESS_DOMAIN: ${{ secrets.SHARE_ACCESS_DOMAIN }}
           NEXT_PUBLIC_SERVER_DOMAIN:  ${{ secrets.NEXT_PUBLIC_SERVER_DOMAIN }}
+          MAIL_SERVICE_HOST: ${{ secret.MAIL_SERVICE_HOST }}
           
         with:
           host: ${{ secrets.DO_HOST_IP }}
@@ -108,6 +109,6 @@ jobs:
             docker image prune -f
             docker login -u $GIT_USERNAME -p $GITHUB_TOKEN ghcr.io
             docker pull ghcr.io/${{ github.repository }}-develop:latest
-            docker run --name oauth2-develop --network=kraikub_network --restart=always -dit -p 3006:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID -e REDIS_PASSWORD=$REDIS_PASSWORD -e REDIS_HOST=$REDIS_HOST -e SHARE_ACCESS_DOMAIN=$SHARE_ACCESS_DOMAIN -e SERVER_DOMAIN=$SERVER_DOMAIN ghcr.io/${{ github.repository }}-develop:latest
+            docker run --name oauth2-develop --network=kraikub_network --restart=always -dit -p 3006:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID -e REDIS_PASSWORD=$REDIS_PASSWORD -e REDIS_HOST=$REDIS_HOST -e SHARE_ACCESS_DOMAIN=$SHARE_ACCESS_DOMAIN -e SERVER_DOMAIN=$SERVER_DOMAIN -e MAIL_SERVICE_HOST=$MAIL_SERVICE_HOST ghcr.io/${{ github.repository }}-develop:latest
             echo "${{ github.repository }};develop;${{ github.job }};$(date)" >> deployments.log
 
