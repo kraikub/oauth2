@@ -41,7 +41,7 @@ const Each: FC<EachProps> = ({ access }) => {
           fontSize={20}
           rounded={8}
         >
-          {access.application[0].appName[0]}
+          {access.application.length ? "-": access.application[0].appName[0]}
         </Center>
         <Box>
           <Heading size="sm">{access.application.length ? access.application[0].appName : "Unknown"}</Heading>
