@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 interface MailArgs {
   code?: string;
   name?: string;
@@ -18,8 +18,6 @@ class MailService {
 
   async sendVerificationEmail(to: string, lang: string, args: MailArgs) {
     try {
-      const health = await axios.get(`${this.host}/api/v1/`);
-      console.log(health.data)
       const res = await axios.post(`${this.host}/api/v1/verify-email`, {
         to,
         lang,
@@ -27,7 +25,15 @@ class MailService {
       });
       return res;
     } catch (error) {
-      console.error(error);
+      if (axios.isAxiosError(error)) {
+        console.error(error.code, error.message, error.status, {
+          to,
+          lang,
+          ...args,
+        });
+      } else {
+        console.error(error);
+      }
     }
   }
 }

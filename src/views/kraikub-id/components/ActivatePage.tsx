@@ -42,7 +42,6 @@ const Page1: FC<SubpageProps> = ({ next, lastPage, page }) => {
     e.preventDefault();
     setLoading(true);
     const res = await internalServiceApi.verifyEmail(email);
-    console.log(res);
     next();
     setLoading(false);
   };

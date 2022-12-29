@@ -12,7 +12,6 @@ const handleEmailVerificationApi = async (req: NextApiRequest, res: NextApiRespo
       return;
     }
     if (req.method === "POST") {
-      console.log(req.method, req.body)
       const { email } = req.body;
       const user = await userUsecase.getPrivateUserWithStudent(payload.uid);
       if (!user) {
