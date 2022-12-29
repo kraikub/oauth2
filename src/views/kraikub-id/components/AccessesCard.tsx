@@ -1,11 +1,5 @@
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Box,
-  Button,
   Center,
   Heading,
   HStack,
@@ -41,10 +35,10 @@ const Each: FC<EachProps> = ({ access }) => {
           fontSize={20}
           rounded={8}
         >
-          {access.application.length ? "-": access.application[0].appName[0]}
+          {access.app.length ? "-": access.app[0].appName[0]}
         </Center>
         <Box>
-          <Heading size="sm">{access.application.length ? access.application[0].appName : "Unknown"}</Heading>
+          <Heading size="sm">{access.app.length ? access.app[0].appName : "Unknown"}</Heading>
           <Text fontSize={12} fontWeight={600} opacity={0.6} mt={2}>
             {t("at-time")} {new Date(access.createdAt).toString()}
           </Text>

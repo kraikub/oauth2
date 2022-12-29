@@ -41,7 +41,7 @@ interface ReducedAccess {
   createdAt: string;
   uid: string;
   updatedAt: string;
-  application: {
+  app: {
     appName: string;
     appDescription: string;
     appType: string;

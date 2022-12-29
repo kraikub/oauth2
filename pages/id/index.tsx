@@ -46,55 +46,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         localField: "uid",
         foreignField: "uid",
         as: "accesses",
-      },
-    },
-    {
-      $unwind: {
-        path: "$accesses",
-        preserveNullAndEmptyArrays: true,
-      },
-    },
-    {
-      $lookup: {
-        from: "applications",
-        localField: "accesses.clientId",
-        foreignField: "clientId",
-        as: "accesses.application",
-      },
-    },
-    {
-      $group: {
-        _id: "$_id",
-        logs: {
-          $push: "$logs",
-        },
-        accesses: {
-          $push: "$accesses",
-        },
-      },
-    },
-    {
-      $set: {
-        logs: {
-          $first: "$logs",
-        },
-      },
-    },
-    {
-      $project: {
-        accesses: {
-          _id: 0,
-          __v: 0,
-          application: {
-            clientId: 0,
-            secret: 0,
-            redirect: 0,
-            ownerId: 0,
+        pipeline: [
+          {
+            $lookup: {
+              from: "clientId",
+              localField: "clientId",
+              foreignField: "clientId",
+              as: "app",
+            },
           },
-        },
-        logs: {
-          uid: 0,
-        },
+        ],
       },
     },
   ];

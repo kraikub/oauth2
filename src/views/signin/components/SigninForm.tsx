@@ -90,7 +90,7 @@ export const SigninForm: FC<SigninFormProps> = ({
       bg: useColorModeValue("blackAlpha.100", "whiteAlpha.200"),
       _hover: {
         bg: useColorModeValue("blackAlpha.300", "whiteAlpha.400"),
-      }
+      },
     },
     layout: {
       container: {
@@ -109,7 +109,7 @@ export const SigninForm: FC<SigninFormProps> = ({
         borderStyle: "solid",
         borderWidth: "1px",
         borderColor: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
-        bg: useColorModeValue("whiteAlpha.100", "blackAlpha.500"),
+        bg: useColorModeValue("blackAlpha.50", "whiteAlpha.100"),
         backdropFilter: "blur(30px)",
       },
     },
@@ -362,7 +362,12 @@ export const SigninForm: FC<SigninFormProps> = ({
             <DrawerFooter>
               <Container maxW="container.lg">
                 <ButtonGroup justifyContent="end" w="full">
-                  <Button size="lg" rounded={6} onClick={backToSigninForm}>
+                  <Button
+                    size="lg"
+                    rounded={6}
+                    onClick={backToSigninForm}
+                    variant="ghost"
+                  >
                     Disagree
                   </Button>
                   <Button

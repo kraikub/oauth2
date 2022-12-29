@@ -31,33 +31,33 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
 
   if (!user.personalEmail) {
     return (
-        <Container
-          maxW="container.xl"
-          h="50vh"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-        >
-          <Box textAlign="center">
-            <Heading>{t("header")}</Heading>
-            <Text fontSize={18} fontWeight={600} opacity={0.6} mt={4}>
-              {t("description")}
-            </Text>
-            <LinkWrap href="/id/activate">
-              <Button
-                height="80px"
-                fontSize={20}
-                fontWeight={600}
-                mt={16}
-                px={14}
-                rounded={18}
-                colorScheme="teal"
-              >
-                {t("btn-activate")}
-              </Button>
-            </LinkWrap>
-          </Box>
-        </Container>
+      <Container
+        maxW="container.xl"
+        h="50vh"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Box textAlign="center">
+          <Heading>{t("header")}</Heading>
+          <Text fontSize={18} fontWeight={600} opacity={0.6} mt={4}>
+            {t("description")}
+          </Text>
+          <LinkWrap href="/id/activate">
+            <Button
+              height="80px"
+              fontSize={20}
+              fontWeight={600}
+              mt={16}
+              px={14}
+              rounded={18}
+              colorScheme="teal"
+            >
+              {t("btn-activate")}
+            </Button>
+          </LinkWrap>
+        </Box>
+      </Container>
     );
   }
 
@@ -71,10 +71,10 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
           rowGap={6}
           w="full"
         >
-          <GridItem colSpan={[12, 5]}>
+          <GridItem colSpan={[12, 12, 5]}>
             <NotificationCard user={user} />
           </GridItem>
-          <GridItem colSpan={[12, 7]}>
+          <GridItem colSpan={[12, 12, 7]}>
             <DevicesCard logs={props.logs} />
           </GridItem>
         </Grid>

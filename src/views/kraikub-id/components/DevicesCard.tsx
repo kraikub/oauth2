@@ -106,9 +106,10 @@ interface EachProps {
     timestamp: number;
     ip: string;
   };
+  last: boolean;
 }
 
-const Each: FC<EachProps> = ({ keyName, device }) => {
+const Each: FC<EachProps> = ({ keyName, device, last }) => {
   const { t } = useClientTranslation(dictDeviceCard);
   const deviceIconBg = useColorModeValue("blackAlpha.100", "whiteAlpha.100");
   const [expand, setExpand] = useState(false);
@@ -165,6 +166,7 @@ const Each: FC<EachProps> = ({ keyName, device }) => {
               </Button>
             </Box>
           </Box>
+          {last ? null : <CustomDivider sx={{ opacity: 0.6 }} />}
         </GridItem>
       </Grid>
     </Box>
@@ -172,6 +174,7 @@ const Each: FC<EachProps> = ({ keyName, device }) => {
 };
 
 export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
+  console.log(logs);
   const { t } = useClientTranslation(dictDeviceCard);
   const catMap = categorize(logs);
   return (
@@ -187,7 +190,13 @@ export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
             const keyName = k.replaceAll(`"`, "");
             const device = catMap[k];
             return (
-              <Each key={`device-list-${index}`} {...{ keyName, device }} />
+              <>
+                <Each
+                  key={`device-list-${index}`}
+                  {...{ keyName, device }}
+                  last={index === Object.keys(catMap).length - 1}
+                />
+              </>
             );
           })}
         </VStack>
