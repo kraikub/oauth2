@@ -12,10 +12,11 @@ const handleEmailVerificationApi = async (req: NextApiRequest, res: NextApiRespo
       return;
     }
     if (req.method === "POST") {
+      console.log(req.method, req.body)
       const { email } = req.body;
       const user = await userUsecase.getPrivateUserWithStudent(payload.uid);
       if (!user) {
-        return
+        return;
       }
       const mailRes = await kraikubIdUsecase.verifyEmail(email, user, req.cookies.LANG || "en")
       return res.status(200).send(createResponse(true, "Operation success", {

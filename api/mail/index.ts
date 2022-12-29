@@ -9,9 +9,10 @@ class MailService {
   public host: string;
 
   constructor(mailServiceHost: string | undefined) {
+    console.log(process.env);
     if (!mailServiceHost) {
       this.host = "";
-      return process.exit(1);
+      return;
     }
     this.host = mailServiceHost;
   }
