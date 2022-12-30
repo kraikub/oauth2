@@ -20,7 +20,7 @@ interface SigninParams {
 class AuthService {
   public signin = async (params: SigninParams) => {
     const { status, data } = await nextApiBaseInstance.post<
-      CustomApiResponse<{ url: string; code: string }>
+      CustomApiResponse<{ url?: string; code?: string; otp_ref?: string; email?: string}>
     >("/api/auth/signin", {
       username: RSAEncryptionForMyKU(params.username),
       password: RSAEncryptionForMyKU(params.password),

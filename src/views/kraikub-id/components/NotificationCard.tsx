@@ -31,10 +31,10 @@ const EachSwitch: FC<EachSwitchProps> = ({
   return (
     <Flex gap={3} justifyContent="space-between" w="full">
       <Box>
-        <Text fontSize={18} fontWeight={600}>
+        <Text fontSize={16} fontWeight={500}>
           {title}
         </Text>
-        <Text fontSize={14} fontWeight={600} opacity={0.6}>
+        <Text fontSize={14} fontWeight={400} opacity={0.6}>
           {description}
         </Text>
       </Box>

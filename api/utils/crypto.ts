@@ -33,3 +33,18 @@ export const calculateAcademicHash = (uid: string, year: string) => {
 export const random = (length: number) => {
   return crypto.randomBytes(length).toString("hex");
 }
+
+
+export const generateSixDigitCode = () => {
+  return Math.floor(100000 + Math.random() * 900000);
+}
+
+export const makeid = (length: number) => {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}

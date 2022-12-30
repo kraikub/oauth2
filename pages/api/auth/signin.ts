@@ -1,4 +1,7 @@
-import { sha256 } from "./../../../api/utils/crypto";
+import { studentRepository } from './../../../api/repositories/student';
+import { mailService } from './../../../api/mail/index';
+import { redis } from './../../../data/redis/index';
+import { generateSixDigitCode, makeid, sha256 } from "./../../../api/utils/crypto";
 import { PrivateAuthMiddleware } from "./../../../api/middlewares/private.middleware";
 import { appConfig } from "./../../../api/config/app";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -39,6 +42,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       sig,
       redirect_uri,
       response_type,
+      otp,
       /// These below are used for PKCE
       code_challenge,
       code_challenge_method, // SHA256
@@ -80,6 +84,10 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
       uid = payload.uid;
+      // Check if user is existed or not.
+      user = await userUsecase.findOne({
+        uid: uid,
+      });
     } else {
       // Login to myku
       const authResponse = await bridge.login(username, password);
@@ -140,7 +148,34 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         .status(406)
         .send(createResponse(false, "redirect_uri not acceptable", null));
     }
-  
+
+    // handle two factor authentication
+    if (user?.personalEmail) {
+      if (!otp) {
+        const student = await studentRepository.findOne({ uid })
+        const otpCode = generateSixDigitCode().toString()
+        const otpRef = makeid(8);
+        await redis.set(`2fa:${uid}`, otpCode, appConfig.expirations.verificationEmail.s)
+        mailService.sendOTP(user.personalEmail, req.cookies.LANG || "en", {
+          code: otpCode,
+          name: req.cookies.LANG === "th" ? student?.nameTh : student?.nameEn,
+          ref: otpRef,
+        })
+        return res
+        .status(200)
+        .send(createResponse(false, "Require 2fa", { email: user?.personalEmail, otp_ref: otpRef }));
+      }
+      else {
+        const verifiedOtp = await redis.get(`2fa:${uid}`);
+        if (otp !== verifiedOtp) {
+          return res
+          .status(400)
+          .send(createResponse(false, "Invalid otp", null));
+        }
+        await redis.set(`2fa:${uid}`, "");
+      }
+    }
+
     const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
       state: state,
       code: code,
