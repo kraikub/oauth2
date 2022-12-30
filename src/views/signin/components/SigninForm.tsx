@@ -19,8 +19,20 @@ import {
   useColorModeValue,
   Input,
   Divider,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from "@chakra-ui/react";
-import * as crypto from "crypto";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import {
@@ -46,6 +58,7 @@ import { LangSetup } from "./LangSetup";
 import { CookieConsentScreen } from "./CookieConsentScreen";
 import { Setup } from "./Setup";
 import { useTranslation } from "react-i18next";
+import { TwoFactor } from "./TwoFactor";
 
 interface SigninFormProps {
   query: {
@@ -65,13 +78,7 @@ interface SigninFormProps {
   onSigninComplete?: (code: string) => void;
 }
 
-export const SigninForm: FC<SigninFormProps> = ({
-  query,
-  app,
-  onSigninComplete,
-  secret,
-  sdk,
-}) => {
+export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   const { t } = useTranslation("signin");
   const router = useRouter();
   const [pdpaPopup, setPdpaPopup] = useState<boolean>(false);
@@ -84,7 +91,9 @@ export const SigninForm: FC<SigninFormProps> = ({
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [activeUser, setActiveUser] = useState<FullUserData | null>();
   const [cookies] = useCookies(["LANG", "ACCEPT_COOKIES"]);
-
+  const [openAlert, setOpenAlert] = useState<boolean>(false);
+  const [OTPRef, setOTPRef] = useState("");
+  const [authForEmail, setAuthForEmail] = useState("");
   const styles = {
     input: {
       bg: useColorModeValue("blackAlpha.100", "whiteAlpha.200"),
@@ -114,6 +123,11 @@ export const SigninForm: FC<SigninFormProps> = ({
       },
     },
   };
+
+  const closeErrorAlert = () => {
+    setOpenAlert(false);
+  };
+
   const handleUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUsername(e.target.value);
   };
@@ -165,16 +179,32 @@ export const SigninForm: FC<SigninFormProps> = ({
         code_challenge_method: query.code_challenge_method as string,
         options,
       });
-      if (onSigninComplete) {
-        return onSigninComplete(data.payload.code);
+
+      if (data.payload.otp_ref) {
+        setOTPRef(data.payload.otp_ref);
       }
-      return router.push(data.payload.url);
+
+      if (data.payload.email) {
+        setAuthForEmail(data.payload.email);
+      }
+      if (data.message === "Require 2fa" && data.status === false) {
+        setStep(2);
+        return;
+      }
+      if (data.payload.url) {
+        return router.push(data.payload.url);
+      } else {
+        setOpenAlert(true);
+        backToSigninForm();
+      }
     } catch (error) {
       setIsSigninLoading(false);
       console.error(error);
       setPdpaPopup(false);
-      backToSigninForm();
-      alert("Sign in failed, please try again.");
+      if (step !== 2) {
+        backToSigninForm();
+      }
+      setOpenAlert(true);
     }
   };
 
@@ -216,7 +246,7 @@ export const SigninForm: FC<SigninFormProps> = ({
       <Fragment>
         <Head>
           <title>Signin with KU</title>
-          <meta property="og:title" content={`Katrade - Sign in with KU`} />
+          <meta property="og:title" content={`Kraikub - Sign in with KU`} />
           <meta
             property="og:description"
             content={`Sign in to ${app?.appName} with your Kasetsart Account.`}
@@ -236,6 +266,13 @@ export const SigninForm: FC<SigninFormProps> = ({
                 handleSignin={validateBeforeSignin}
                 handleReject={backToSigninForm}
                 loading={isSigninButtonLoading}
+              />
+            ) : step === 2 ? (
+              <TwoFactor
+                setStep={setStep}
+                handleSignin={handleSigninEvent}
+                OTPRef={OTPRef}
+                authForEmail={authForEmail}
               />
             ) : (
               <Box w="100%" overflow="hidden">
@@ -384,6 +421,7 @@ export const SigninForm: FC<SigninFormProps> = ({
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
+        <ErrorModal open={openAlert} onClose={closeErrorAlert} />
       </Fragment>
     );
   } else {
@@ -396,4 +434,34 @@ export const SigninForm: FC<SigninFormProps> = ({
       />
     );
   }
+};
+
+interface ErrorModalProps {
+  open: boolean;
+  onClose: any;
+}
+
+const ErrorModal: FC<ErrorModalProps> = ({ open, onClose }) => {
+  const bg = useColorModeValue("whiteAlpha.800", "whiteAlpha.200");
+  const { t } = useTranslation("signin");
+  const styles = {
+    bg,
+    backdropFilter: "blur(30px)",
+  };
+  return (
+    <Modal isOpen={open} onClose={onClose} isCentered>
+      <ModalOverlay />
+      <ModalContent {...styles}>
+        <ModalHeader>{t("err-modal-header")}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody fontSize={14}>{t("err-modal-description")}</ModalBody>
+
+        <ModalFooter>
+          <Button onClick={onClose} colorScheme="teal">
+            {t("err-modal-btn-close")}
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
 };

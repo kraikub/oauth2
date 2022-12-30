@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Divider,
   Flex,
   Grid,
   GridItem,
@@ -12,7 +11,6 @@ import {
   VStack,
   Link,
   Collapse,
-  Center,
 } from "@chakra-ui/react";
 import { FC, useState } from "react";
 import { AiFillAppstore } from "react-icons/ai";
@@ -20,31 +18,26 @@ import { Card } from "../../../components/Card";
 import { CustomDivider } from "../../../components/CustomDivider";
 import { IoPhonePortraitOutline, IoLaptopOutline } from "react-icons/io5";
 import {
-  IoIosArrowDown,
   IoIosArrowRoundForward,
-  IoIosArrowUp,
 } from "react-icons/io";
 import { useClientTranslation } from "../../../hooks/client-translation";
 import { dictDeviceCard } from "../../../translate/kraikubid";
 
-const patternList = ["iPhone", "Macintosh", "Android", "Windows"];
+const patternList = [
+  { pattern: "iPhone", value: "iPhone"}, 
+  { pattern: "Macintosh", value: "macOS"}, 
+  { pattern: "Android", value: "Android"}, 
+  { pattern: "Windows", value: "Windows"}, 
+];
 
 export const deviceMap = (ua: string, uap: string) => {
   if (uap) {
     return uap;
   }
   for (const e of patternList) {
-    if (ua.includes(e)) return e;
+    if (ua.includes(e.pattern)) return e.value;
   }
   return "Unknown";
-};
-
-const deviceIcon: { [key: string]: JSX.Element } = {
-  iPhone: <IoPhonePortraitOutline />,
-  Macintosh: <IoLaptopOutline />,
-  macOS: <IoLaptopOutline />,
-  Windows: <AiFillAppstore />,
-  Android: <IoPhonePortraitOutline />,
 };
 
 const whichIcon = (k: string) => {
@@ -144,8 +137,8 @@ const Each: FC<EachProps> = ({ keyName, device, last }) => {
               </Link>
               <IoIosArrowRoundForward />
             </HStack>
-            <Text fontSize={12} opacity={0.6} fontWeight={600} mb={2}>
-              {new Date(device.timestamp).toString()}
+            <Text fontSize={12} opacity={0.6} fontWeight={400} mb={2}>
+              {new Date(device.timestamp).toLocaleString()}
             </Text>
             <Collapse in={expand} animateOpacity>
               <CustomDivider />

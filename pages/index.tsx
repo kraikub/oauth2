@@ -11,7 +11,7 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { FC, ReactNode } from "react";
@@ -23,6 +23,7 @@ import { Card } from "../src/components/Card";
 import { FooterShort } from "../src/layouts/FooterShort";
 import StaticNavbar from "../src/layouts/StaticNavbar";
 import { p } from "../src/utils/path";
+import Link from "next/link";
 
 interface EachCardProps {
   title: string;
@@ -68,7 +69,7 @@ const Home: NextPage = () => {
         <title>Kraikub - Authenticate any KU students.</title>
       </Head>
       <Box>
-        <StaticNavbar hideLanguageSelector/>
+        <StaticNavbar hideLanguageSelector />
         <Box minH="100vh">
           <Container
             py="15vh"
@@ -94,32 +95,37 @@ const Home: NextPage = () => {
                   </Box>
                 </Heading>
               </Box>
-              <SimpleGrid columns={[1, 2, 3]} w="full" columnGap={4} my={20} rowGap={4}>
+              <SimpleGrid
+                columns={[1, 2, 3]}
+                w="full"
+                columnGap={4}
+                my={20}
+                rowGap={4}
+              >
                 <EachCard
                   title="Sign in with KU"
-                  description="Claim your users identity with OpenID Connect standard on our OAuth server."
+                  description="Use your KU account to sign in to any supported websites."
                   icon={<SiAuth0 size="24px" />}
                 />
                 <EachCard
                   title="Secure & Private"
-                  description="Claim your users identity with OpenID Connect standard on our OAuth server."
+                  description="Your university account is more secure with Two Factor Authentication."
                   icon={<AiOutlineSafety size="30px" />}
                 />
                 <EachCard
                   title="OpenID Connect"
-                  description="Claim your users identity with OpenID Connect standard on our OAuth server."
+                  description="For developers, claim your users identity with OpenID Connect standard on our OAuth server."
                   icon={<HiIdentification size="30px" />}
                 />
               </SimpleGrid>
               <Flex gap={2} mt="60px">
-                <Button
-                  size="lg"
-                  height="60px"
-                  onClick={() => router.push(p.projects)}
-                  gap={2}
-                >
-                  Try now for free <BsArrowUpRight />
-                </Button>
+                <Link href={p.projects}>
+                  <a>
+                    <Button size="lg" height="60px" gap={2}>
+                      Try now for free <BsArrowUpRight />
+                    </Button>
+                  </a>
+                </Link>
               </Flex>
             </Box>
           </Container>

@@ -3,11 +3,9 @@ import { bridge } from "../bridge/bridge";
 import { appConfig } from "../config/app";
 import { academicRepository } from "../repositories/academic";
 import { educationRepository } from "../repositories/education";
-import { gradeRepository } from "../repositories/grade";
 import { studentRepository } from "../repositories/student";
 import { userRepository } from "../repositories/user";
 import { educationCoverter } from "../utils/converter/education";
-import { gradeConverter } from "../utils/converter/grade";
 import { studentConverter } from "../utils/converter/student";
 import { createAnonymousIdentity } from "../utils/crypto";
 
