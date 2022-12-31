@@ -20,12 +20,15 @@ import {
 import { useTranslation } from "react-i18next";
 import { IoIosArrowBack } from "react-icons/io";
 import { SimpleFadeInRight } from "../../../components/animations/SimpleFadeInRight";
+import { getCountDownString } from "../../../utils/time";
 
 interface TwoFactorProps {
   setStep: Dispatch<SetStateAction<number>>;
   handleSignin: (options?: SigninOptions) => Promise<any>;
   OTPRef: string;
   authForEmail: string;
+  OTPExpire: number;
+  back: () => void;
 }
 
 export const TwoFactor: FC<TwoFactorProps> = ({
@@ -33,17 +36,27 @@ export const TwoFactor: FC<TwoFactorProps> = ({
   handleSignin,
   OTPRef,
   authForEmail,
+  OTPExpire,
+  back,
 }) => {
-  console.log(OTPRef);
   const [code, setCode] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [exp, setExp] = useState<string>(getCountDownString(OTPExpire * 1000))
   const { t } = useTranslation("signin");
+  const tealThemeColor = useColorModeValue("teal.500", "teal.200")
   const eachDigitStyles = {
     fontWeight: 600,
     bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
-    h: "80px",
-    w: "70px",
+    flex: 1,
+    h: "66px"
   };
+
+  useEffect(() => {
+    const intv = setInterval(() => {
+      setExp(getCountDownString(OTPExpire * 1000))
+    }, 1000)
+    return () => clearInterval(intv);
+  }, [])
 
   useEffect(() => {
     if (code.length === 6) {
@@ -80,8 +93,9 @@ export const TwoFactor: FC<TwoFactorProps> = ({
           {t("2fa-description-2")}
         </Text>
         <Text mt={2}>REF: {OTPRef}</Text>
+        <Text mt={2} color={tealThemeColor} fontWeight={700}>{exp || t("expired")}</Text>
         <form onSubmit={handleFormSubmit}>
-          <HStack my={6}>
+          <HStack my={6} justifyContent="space-between">
             <PinInput
               otp
               type="number"
@@ -102,7 +116,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
           <Button
             w="full"
             gap={2}
-            onClick={() => setStep(0)}
+            onClick={back}
             h="60px"
             colorScheme={loading ? "teal" : "gray"}
           >

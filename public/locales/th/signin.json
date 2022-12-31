@@ -28,5 +28,6 @@
   "2fa-btn-verify": "กำลังตวรจสอบ...",
   "err-modal-header": "ไม่สามารถยืนยันตัวตนบัญชีคุณได้",
   "err-modal-description": "โปรดตวรจสอบข้อมูลที่ป้อนเข้ามาอีกครั้ง",
-  "err-modal-btn-close": "ปิด"
+  "err-modal-btn-close": "ปิด",
+  "expired": "รหัสหมดอายุแล้ว"
 }
