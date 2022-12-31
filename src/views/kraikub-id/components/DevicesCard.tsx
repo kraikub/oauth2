@@ -167,7 +167,6 @@ const Each: FC<EachProps> = ({ keyName, device, last }) => {
 };
 
 export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
-  console.log(logs);
   const { t } = useClientTranslation(dictDeviceCard);
   const catMap = categorize(logs);
   return (

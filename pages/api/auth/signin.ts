@@ -1,7 +1,11 @@
-import { studentRepository } from './../../../api/repositories/student';
-import { mailService } from './../../../api/mail/index';
-import { redis } from './../../../data/redis/index';
-import { generateSixDigitCode, makeid, sha256 } from "./../../../api/utils/crypto";
+import { studentRepository } from "./../../../api/repositories/student";
+import { mailService } from "./../../../api/mail/index";
+import { redis } from "./../../../data/redis/index";
+import {
+  generateSixDigitCode,
+  makeid,
+  sha256,
+} from "./../../../api/utils/crypto";
 import { PrivateAuthMiddleware } from "./../../../api/middlewares/private.middleware";
 import { appConfig } from "./../../../api/config/app";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -20,6 +24,8 @@ import {
 import { authUsecase } from "../../../api/usecases/auth";
 import requestIp from "request-ip";
 import axios from "axios";
+import { deviceMap } from "../../../src/views/kraikub-id/components/DevicesCard";
+import { unixNow } from "../../../src/utils/time";
 
 const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -131,7 +137,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     let selectedUrl = "";
     const httpRegex = new RegExp("^http?://");
     const httpsRegex = new RegExp("^https?://");
-    
+
     if (
       httpsRegex.test(redirect_uri) &&
       hasRedirect(redirect_uri, app.redirects)
@@ -152,25 +158,35 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     // handle two factor authentication
     if (user?.personalEmail) {
       if (!otp) {
-        const student = await studentRepository.findOne({ uid })
-        const otpCode = generateSixDigitCode().toString()
+        const student = await studentRepository.findOne({ uid });
+        const otpCode = generateSixDigitCode().toString();
         const otpRef = makeid(8);
-        await redis.set(`2fa:${uid}`, otpCode, appConfig.expirations.verificationEmail.s)
+        await redis.set(
+          `2fa:${uid}`,
+          otpCode,
+          appConfig.expirations.verificationEmail.s
+        );
         mailService.sendOTP(user.personalEmail, req.cookies.LANG || "en", {
           code: otpCode,
           name: req.cookies.LANG === "th" ? student?.nameTh : student?.nameEn,
           ref: otpRef,
-        })
+          deviceName: deviceMap(ua || "", uaPlatform as string || ""),
+        });
         return res
-        .status(200)
-        .send(createResponse(false, "Require 2fa", { email: user?.personalEmail, otp_ref: otpRef }));
-      }
-      else {
+          .status(200)
+          .send(
+            createResponse(false, "Require 2fa", {
+              email: user?.personalEmail,
+              otp_ref: otpRef,
+              otp_expire: unixNow() + appConfig.expirations.verificationEmail.s - 5,
+            })
+          );
+      } else {
         const verifiedOtp = await redis.get(`2fa:${uid}`);
         if (otp !== verifiedOtp) {
           return res
-          .status(400)
-          .send(createResponse(false, "Invalid otp", null));
+            .status(400)
+            .send(createResponse(false, "Invalid otp", null));
         }
         await redis.set(`2fa:${uid}`, "");
       }
@@ -204,7 +220,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const response = createResponse(true, "Authorized", payload);
-    
+
     return res
       .status(200)
       .setHeader("Set-Cookie", [
@@ -215,7 +231,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       .setHeader("Access-Control-Allow-Credentials", "true")
       .setHeader("Access-Control-Allow-Headers", "Set-Cookie")
       .send(response);
-      
   } catch (error: any) {
     handleApiError(res, error);
   }

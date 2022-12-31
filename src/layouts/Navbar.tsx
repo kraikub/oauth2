@@ -233,7 +233,7 @@ const Navbar: FC = () => {
           </DrawerBody>
 
           <DrawerFooter>
-            <Button w="full" size="lg" gap={3}>
+            <Button w="full" size="lg" gap={3} onClick={signout}>
               {t("menu-logout")} <MdLogout size="20px" />
             </Button>
           </DrawerFooter>
@@ -293,7 +293,6 @@ const Navbar: FC = () => {
             w="full"
             borderStyle="solid"
             borderWidth="0 0 1px 0"
-            
             borderColor={gridBorderDividerColor}
           >
             {tabs.map((e, i) => {

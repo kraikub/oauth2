@@ -9,22 +9,14 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerOverlay,
   DrawerFooter,
   ButtonGroup,
   Stack,
-  Link,
   Progress,
   IconButton,
   useColorModeValue,
   Input,
   Divider,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -93,6 +85,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   const [cookies] = useCookies(["LANG", "ACCEPT_COOKIES"]);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [OTPRef, setOTPRef] = useState("");
+  const [OTPExpire, setOTPExpire] = useState<number>(0);
   const [authForEmail, setAuthForEmail] = useState("");
   const styles = {
     input: {
@@ -146,6 +139,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   };
   const backToSigninForm = () => {
     setPdpaPopup(false);
+    setIsSigninLoading(false)
     setStep(0);
   };
 
@@ -182,6 +176,10 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
 
       if (data.payload.otp_ref) {
         setOTPRef(data.payload.otp_ref);
+      }
+
+      if (data.payload.otp_expire) {
+        setOTPExpire(data.payload.otp_expire);
       }
 
       if (data.payload.email) {
@@ -272,7 +270,9 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                 setStep={setStep}
                 handleSignin={handleSigninEvent}
                 OTPRef={OTPRef}
+                OTPExpire={OTPExpire}
                 authForEmail={authForEmail}
+                back={backToSigninForm}
               />
             ) : (
               <Box w="100%" overflow="hidden">
