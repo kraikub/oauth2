@@ -77,6 +77,8 @@ jobs:
           build-args: |
             NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}
             MONGODB_URL_ARG=${{ secrets.MONGODB_URL }}
+            MYKU_APPKEY_ARG=${{ secrets.MYKU_APPKEY }}
+            NEXT_PUBLIC_SERVER_DOMAIN_ARG=${{ secrets.NEXT_PUBLIC_SERVER_DOMAIN }}
 
       # Remote
       - name: Deploy to app.kraikub.com
@@ -93,18 +95,20 @@ jobs:
           REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
           REDIS_HOST: ${{ secrets.REDIS_HOST }}
           SHARE_ACCESS_DOMAIN: ${{ secrets.SHARE_ACCESS_DOMAIN }}
+          NEXT_PUBLIC_SERVER_DOMAIN:  ${{ secrets.NEXT_PUBLIC_SERVER_DOMAIN }}
+          MAIL_SERVICE_HOST: ${{ secrets.MAIL_SERVICE_HOST }}
           
         with:
           host: ${{ secrets.DO_HOST_IP }}
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }}
-          envs: GIT_USERNAME, GITHUB_TOKEN, JWT_SECRET, IDENTITY_SECRET, MONGODB_URL, MONGODB_URL, MYKU_APPKEY, MYKU_AUTH_URL, NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID, REDIS_PASSWORD, REDIS_HOST, SHARE_ACCESS_DOMAIN
+          envs: GIT_USERNAME, GITHUB_TOKEN, JWT_SECRET, IDENTITY_SECRET, MONGODB_URL, MONGODB_URL, MYKU_APPKEY, MYKU_AUTH_URL, NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID, REDIS_PASSWORD, REDIS_HOST, SHARE_ACCESS_DOMAIN, MAIL_SERVICE_HOST, NEXT_PUBLIC_SERVER_DOMAIN
           script: |
             docker stop oauth2-production
             docker container prune -f 
             docker image prune -f
             docker login -u $GIT_USERNAME -p $GITHUB_TOKEN ghcr.io
             docker pull ghcr.io/${{ github.repository }}-production:latest
-            docker run --name oauth2-production --network=kraikub_network --restart=always -dit -p 3001:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID -e REDIS_PASSWORD=$REDIS_PASSWORD -e REDIS_HOST=$REDIS_HOST -e SHARE_ACCESS_DOMAIN=$SHARE_ACCESS_DOMAIN ghcr.io/${{ github.repository }}-production:latest
+            docker run --name oauth2-production --network=kraikub_network --restart=always -dit -p 3001:3000 -e JWT_SECRET=$JWT_SECRET -e IDENTITY_SECRET=$IDENTITY_SECRET -e MONGODB_URL=$MONGODB_URL -e MYKU_APPKEY=$MYKU_APPKEY -e MYKU_AUTH_URL=$MYKU_AUTH_URL -e NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=$NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID -e REDIS_PASSWORD=$REDIS_PASSWORD -e REDIS_HOST=$REDIS_HOST -e SHARE_ACCESS_DOMAIN=$SHARE_ACCESS_DOMAIN -e SERVER_DOMAIN=$SERVER_DOMAIN -e MAIL_SERVICE_HOST=$MAIL_SERVICE_HOST ghcr.io/${{ github.repository }}-production:latest
             echo "${{ github.repository }};production;${{ github.job }};$(date)" >> deployments.log
 
