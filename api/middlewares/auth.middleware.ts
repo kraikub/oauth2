@@ -3,6 +3,14 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { verify } from "../../libs/jwt";
 import { createResponse } from "../utils/response";
 
+export const PageAuthMiddleware = (token: any) => {
+  const [success, payload, error] = verify(token);
+  return {
+    uid: success ? payload.uid as string : undefined,
+    error: error,
+  }
+}
+
 export const AuthMiddleware = async (
   req: NextApiRequest,
   res: NextApiResponse

@@ -1,3 +1,11 @@
+import { studentRepository } from "./../../../api/repositories/student";
+import { mailService } from "./../../../api/mail/index";
+import { redis } from "./../../../data/redis/index";
+import {
+  generateSixDigitCode,
+  makeid,
+  sha256,
+} from "./../../../api/utils/crypto";
 import { PrivateAuthMiddleware } from "./../../../api/middlewares/private.middleware";
 import { appConfig } from "./../../../api/config/app";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -14,14 +22,17 @@ import {
   createAnonymousIdentity,
 } from "../../../api/utils/crypto";
 import { authUsecase } from "../../../api/usecases/auth";
-import requestIp from 'request-ip';
+import requestIp from "request-ip";
+import axios from "axios";
+import { deviceMap } from "../../../src/views/kraikub-id/components/DevicesCard";
+import { unixNow } from "../../../src/utils/time";
 
 const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (req.method !== "POST") {
       return res.status(400).send({});
     }
-    const detectedIp = requestIp.getClientIp(req)
+    const detectedIp = requestIp.getClientIp(req);
     const uaPlatform = req.headers["sec-ch-ua-platform"];
     const uaMobile = req.headers["sec-ch-ua-mobile"];
     const ua = req.headers["user-agent"];
@@ -37,6 +48,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       sig,
       redirect_uri,
       response_type,
+      otp,
       /// These below are used for PKCE
       code_challenge,
       code_challenge_method, // SHA256
@@ -45,7 +57,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const app = await applicationUsecase.findOneApp({ clientId: clientId });
 
     // Please handles method's params and query before doing any operation.
-
     if (
       // No App matched
       app === null ||
@@ -58,7 +69,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     ) {
       return res.status(400).send(createResponse(false, "Bad request", null));
     }
-
     // For handling PKCE
     if (
       response_type === "authorization_code" &&
@@ -71,7 +81,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           createResponse(false, "Bad request, Invalid code challenge", null)
         );
     }
-
     let uid: string;
     let user: User | null;
 
@@ -81,6 +90,10 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
       uid = payload.uid;
+      // Check if user is existed or not.
+      user = await userUsecase.findOne({
+        uid: uid,
+      });
     } else {
       // Login to myku
       const authResponse = await bridge.login(username, password);
@@ -103,7 +116,6 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         user = newUser;
       }
     }
-
     // If anonymous sign in.
     if (scope === "0") {
       // Recalculate uid for hiding user's identity.
@@ -143,6 +155,43 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         .send(createResponse(false, "redirect_uri not acceptable", null));
     }
 
+    // handle two factor authentication
+    if (user?.personalEmail) {
+      if (!otp) {
+        const student = await studentRepository.findOne({ uid });
+        const otpCode = generateSixDigitCode().toString();
+        const otpRef = makeid(8);
+        await redis.set(
+          `2fa:${uid}`,
+          otpCode,
+          appConfig.expirations.verificationEmail.s
+        );
+        mailService.sendOTP(user.personalEmail, req.cookies.LANG || "en", {
+          code: otpCode,
+          name: req.cookies.LANG === "th" ? student?.nameTh : student?.nameEn,
+          ref: otpRef,
+          deviceName: deviceMap(ua || "", uaPlatform as string || ""),
+        });
+        return res
+          .status(200)
+          .send(
+            createResponse(false, "Require 2fa", {
+              email: user?.personalEmail,
+              otp_ref: otpRef,
+              otp_expire: unixNow() + appConfig.expirations.verificationEmail.s - 5,
+            })
+          );
+      } else {
+        const verifiedOtp = await redis.get(`2fa:${uid}`);
+        if (otp !== verifiedOtp) {
+          return res
+            .status(400)
+            .send(createResponse(false, "Invalid otp", null));
+        }
+        await redis.set(`2fa:${uid}`, "");
+      }
+    }
+
     const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
       state: state,
       code: code,
@@ -155,14 +204,15 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       code: code,
     };
 
-    const logResult = await authUsecase.saveLog(
+    await authUsecase.saveLog(
+      sha256(code),
       uid,
       clientId,
       scope,
       ua,
       Array.isArray(uaPlatform) ? uaPlatform.join(" ") : uaPlatform,
       Array.isArray(uaMobile) ? uaMobile.join(" ") : uaMobile,
-      detectedIp || "",
+      detectedIp || ""
     );
 
     const internalServiceAccessToken = authUsecase.signInternalAccessToken({
@@ -170,16 +220,18 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     const response = createResponse(true, "Authorized", payload);
+
     return res
       .status(200)
       .setHeader("Set-Cookie", [
-        `access=${internalServiceAccessToken}; HttpOnly; Domain=${process.env.SHARE_ACCESS_DOMAIN || req.headers.origin}; Max-Age=604100; Path=/; Secure`,
+        `access=${internalServiceAccessToken}; HttpOnly; Domain=${
+          process.env.SHARE_ACCESS_DOMAIN || req.headers.origin
+        }; Max-Age=604100; Path=/; Secure`,
       ]) // Expire in almost 7 days.
       .setHeader("Access-Control-Allow-Credentials", "true")
       .setHeader("Access-Control-Allow-Headers", "Set-Cookie")
       .send(response);
   } catch (error: any) {
-    console.error(error);
     handleApiError(res, error);
   }
 };

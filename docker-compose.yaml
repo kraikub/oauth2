@@ -1,7 +1,7 @@
 version: '3'
 services:
   mongo: 
-    image: mongo:4.4
+    image: mongo:6.0.3
     ports:
       - 27017:27017
     environment:
@@ -11,7 +11,6 @@ services:
       - MONGO_INITDB_USERNAME=admin
       - MONGO_INITDB_PASSWORD=123456
     volumes:
-      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
       - ./db:/data/db
 
   redis:

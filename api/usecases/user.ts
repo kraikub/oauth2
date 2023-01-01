@@ -3,11 +3,9 @@ import { bridge } from "../bridge/bridge";
 import { appConfig } from "../config/app";
 import { academicRepository } from "../repositories/academic";
 import { educationRepository } from "../repositories/education";
-import { gradeRepository } from "../repositories/grade";
 import { studentRepository } from "../repositories/student";
 import { userRepository } from "../repositories/user";
 import { educationCoverter } from "../utils/converter/education";
-import { gradeConverter } from "../utils/converter/grade";
 import { studentConverter } from "../utils/converter/student";
 import { createAnonymousIdentity } from "../utils/crypto";
 
@@ -37,6 +35,10 @@ export class UserUsecase {
     return await userRepository.create(u);
   };
 
+  newPersonalEmail = async (uid: string, newEmail: string) => {
+    return await userRepository.update(uid, { personalEmail: newEmail})
+  }
+
   initUserProfile = async (
     uid: string,
     stdId: string,
@@ -52,6 +54,15 @@ export class UserUsecase {
       profileImageUrl: appConfig.defaultProfileImageUrl,
       appOwned: 0,
       shouldUpdate: false,
+      settings: {
+        email: {
+          signin: true,
+          news: true,
+        },
+        tfa: {
+          enable: false,
+        }
+      }
     };
     await userRepository.create(newUser);
     const accessToken = authResponse.accesstoken;
@@ -64,17 +75,17 @@ export class UserUsecase {
     const educations = educationCoverter(uid, educationResponse.data);
 
     // Query grades from myapi.ku.th
-    const gradesResponse = await bridge.getGrades(
-      authResponse.user.student.stdCode,
-      accessToken
-    );
-    const { academics, grades } = gradeConverter(uid, gradesResponse.data);
+    // const gradesResponse = await bridge.getGrades(
+    //   authResponse.user.student.stdCode,
+    //   accessToken
+    // );
+    // const { academics, grades } = gradeConverter(uid, gradesResponse.data);
 
     // Save data in db
     await studentRepository.create(student);
     await educationRepository.createMany(educations);
-    await academicRepository.createMany(academics);
-    await gradeRepository.createMany(grades);
+    // await academicRepository.createMany(academics);
+    // await gradeRepository.createMany(grades);
     return {
       user: newUser,
       student: student,
@@ -102,14 +113,14 @@ export class UserUsecase {
     }
   };
 
-  getPrivateUserWithStudent = async (uid: string) => {
+  getPrivateUserWithStudent = async (uid: string): Promise<UserWithStudent | null> => {
     const res = await userRepository.useAggregationPipeline([
       ...aggregations.private.user(uid),
       ...aggregations.public.student(),
       ...aggregations.public.education(),
     ]);
     if (res.length) {
-      return res[0];
+      return res[0] as UserWithStudent;
     } else {
       return null;
     }
@@ -119,7 +130,6 @@ export class UserUsecase {
     const res = await userRepository.useAggregationPipeline([
       ...aggregations.public.user(uid),
       ...aggregations.public.student(),
-      ...aggregations.public.education(),
     ]);
     if (res.length) {
       return res[0];

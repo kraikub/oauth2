@@ -8,37 +8,65 @@ import {
   Input,
   Select,
   Textarea,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { UserProvider, useUser } from "../../../../contexts/User";
+import { useClientTranslation } from "../../../../hooks/client-translation";
+import { useOnClient } from "../../../../hooks/on-client";
 import Navbar from "../../../../layouts/Navbar";
 import { appService } from "../../../../services/appService";
+import { p } from "../../../../utils/path";
+import { createAppPageDict } from "../../../../translate/create-app";
 
 const typeOptions = [
   { name: "Web Application", value: "web-application" },
   { name: "Data Analytics / ML", value: "web-application" },
   { name: "Mobile apps", value: "web-application" },
+  { name: "Decentralized Apps & Web 3.0 (Blockchain)", value: "dapps" },
   { name: "DevOps", value: "web-application" },
   { name: "Data Engineering", value: "web-application" },
   { name: "Business Development", value: "web-application" },
 ];
 
-export const CreateProjectPage: NextPage = () => {
+interface CreateProjectPageProps {
+  data: UserWithStudent | null;
+}
+
+export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
+  data,
+}) => {
   const router = useRouter();
   const { register, handleSubmit, getValues } = useForm();
-  const { reload } = useUser();
   const [hasName, setHasName] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
+  const { t } = useClientTranslation(createAppPageDict);
+  const ready = useOnClient();
+
+  const inputStyles = {
+    variant: "solid",
+    size: "lg",
+    rounded: 8,
+    bg: useColorModeValue("blackAlpha.100", "whiteAlpha.100"),
+    transition: "100ms ease",
+    _focus: {
+      boxShadow: `0 0 2px 2px #00CED1`,
+    },
+  };
+
+  if (!ready) {
+    return null;
+  }
 
   return (
-    <UserProvider>
+    <UserProvider user={data}>
       <Navbar />
       <Container maxW="container.md" py="100px">
         <Heading letterSpacing={-1} size="lg">
-          Tell us about your app
+          {t("header")}
         </Heading>
         <FormControl
           as="form"
@@ -46,8 +74,6 @@ export const CreateProjectPage: NextPage = () => {
           isRequired
           maxW="700px"
           onSubmit={handleSubmit(async (data) => {
-            const ac = localStorage.getItem("access");
-            setLoading(true);
             const hasNameResponse = await appService.hasName(data.appName);
             if (hasNameResponse?.payload !== false) {
               setHasName(true);
@@ -57,7 +83,7 @@ export const CreateProjectPage: NextPage = () => {
             try {
               const res = await appService.createApplication(data);
               setLoading(false);
-              router.push(`/projects/manager/${res?.payload.clientId}`);
+              router.push(`${p.projects}/${res?.payload.clientId}`);
             } catch (err) {
               setLoading(false);
             }
@@ -66,42 +92,45 @@ export const CreateProjectPage: NextPage = () => {
           <FormLabel
             htmlFor="app-name"
             mt={6}
-            color={hasName ? "red.400" : "black"}
+            color={hasName ? "red.500" : "inherit"}
           >
-            App name {hasName ? "(Cannot use this name)" : null}
+            {t("app-name")} {hasName ? `(${t("error-invalid-name")})` : null}
           </FormLabel>
           <Input
             id="app-name"
             {...register("appName")}
-            size="sm"
             isInvalid={hasName}
-            rounded={8}
+            {...inputStyles}
+            placeholder="Keep it easy, such as OceanicUltraOctopus!"
           />
 
           <FormLabel htmlFor="app-details" mt={6}>
-            Describe your app
+            {t("describe")}
           </FormLabel>
-          <Textarea {...register("appDescription")} rounded={8} />
+          <Textarea
+            {...register("appDescription")}
+            {...inputStyles}
+            placeholder="A really cool app."
+          />
 
           <FormLabel htmlFor="app-creator" mt={6}>
-            Creator name
+            {t("creator-name")}
           </FormLabel>
           <Input
             id="app-creator"
-            size="sm"
+            placeholder="Alice"
             {...register("creatorName")}
-            rounded={8}
+            {...inputStyles}
           />
 
           <FormLabel htmlFor="app-type" mt={6}>
-            Categories
+            {t("categories")}
           </FormLabel>
           <Select
             id="app-type"
             placeholder="Select type"
             {...register("appType")}
-            rounded={8}
-            boxShadow="0 4px 4px #00000010"
+            {...inputStyles}
           >
             {typeOptions.map((opt, index) => (
               <option key={`${opt.name}-${index}`} value={opt.value}>
@@ -110,23 +139,16 @@ export const CreateProjectPage: NextPage = () => {
             ))}
           </Select>
           <ButtonGroup mt={10}>
-            <Button
-              type="submit"
-              colorScheme="gray"
-              rounded={14}
-              size="lg"
-              onClick={() => router.push("/projects/manager")}
-            >
-              Cancel
+            <Button size="lg" onClick={() => router.push(p.projects)}>
+              {t("btn-cancel")}
             </Button>
             <Button
               type="submit"
-              colorScheme="katrade"
+              colorScheme="teal"
               isLoading={loading}
-              rounded={14}
               size="lg"
             >
-              Create new app
+              {t("btn-submit")}
             </Button>
           </ButtonGroup>
         </FormControl>

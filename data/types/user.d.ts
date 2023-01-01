@@ -25,4 +25,13 @@ interface User {
   personalEmail: string;
   profileImageUrl: string;
   shouldUpdate: boolean;
+  settings: {
+    email: {
+      signin: boolean;
+      news: boolean;
+    }
+    tfa: {
+      enable: boolean;
+    }
+  }
 }

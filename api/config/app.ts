@@ -1,9 +1,9 @@
 export const appConfig = {
-  INIT_MAX_APP_QUOTA: 3,
+  INIT_MAX_APP_QUOTA: 10,
   grantTypes: ["code"],
   codeChallengeMethod: ["SHA256"],
   tokenPayloadTypes: ["json", "http_cookie"],
-  defaultProfileImageUrl: "https://id.kraikub.com/resources/default-profile.png",
+  defaultProfileImageUrl: "https://resources-kraikub.firebaseapp.com/v1/default-profile.png",
   openid: {
     iss: "https://app.kraikub.com",
   },
@@ -27,6 +27,11 @@ export const appConfig = {
       str: "90d",
       ms: 60 * 60 * 24 * 90,
       s: 60 * 24 * 90,
+    },
+    verificationEmail: {
+      str: "5m",
+      ms: 1000 * 60 * 5,
+      s: 60 * 5,
     }
   }
 

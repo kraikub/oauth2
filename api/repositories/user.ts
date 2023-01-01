@@ -16,6 +16,7 @@ interface UserFilter {
 interface UserUpdatableFields {
   appOwned?: number;
   appQuota?: number;
+  personalEmail?: string;
 }
 
 class UserRepository {

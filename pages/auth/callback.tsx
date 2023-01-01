@@ -2,39 +2,41 @@ import { Progress } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { authService } from "../../src/services/authService";
-import { userService } from "../../src/services/userService";
+import { useEffect } from "react";
+import { p } from "../../src/utils/path";
 
 const Callback: NextPage = () => {
   const router = useRouter();
 
-  const handleClaimAccessTokens = async (code: string) => {
-    try {
-      const { status, data } = await userService.get();
-      if (!data.payload || status >= 400) {
-        return router.push("/auth");
+  const where = (path: string) => {
+    switch (path) {
+      case "view-app": {
+        return p.projects;
       }
-      else {
-        return router.push("/projects/manager");
+      case "view-id": {
+        return p.kraikubId;
       }
-    } catch {
-      return router.push("/auth");
+      default: {
+        return p.kraikubId;
+      }
     }
-  };
+  }
 
   useEffect(() => {
-    if (router.query.code && router.query.scope) {
-      handleClaimAccessTokens(router.query.code as string);
+    if (router.query.state) {
+      router.push(where(router.query.state as string))
     }
-  }, [router.query]);
+    else {
+      router.push(p.kraikubId)
+    }
+  }, [router]);
 
   return (
     <>
       <Head>
         <title>Signing in, please wait...</title>
       </Head>
-      <Progress size="xs" isIndeterminate colorScheme="katrade" />
+      <Progress size="xs" isIndeterminate colorScheme="teal" />
     </>
   );
 };

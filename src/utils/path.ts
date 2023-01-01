@@ -22,7 +22,15 @@ export const getSigninUrl = (p: signinOptions) => {
         ? process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_SECRET ||
           "ENV_CLIENT_SECRET_NOT_CONFIGURED"
         : undefined,
-    redirect_uri: location.origin+"/auth/callback",
+    redirect_uri: process.env.NEXT_PUBLIC_SERVER_DOMAIN+"/auth/callback",
     response_type: "code",
   });
 };
+
+
+export const p = {
+  projects: "/a",
+  kraikubId: "/id",
+  settings: "/settings",
+  emailVerification: "/id/kraikubid-activation"
+}

@@ -1,3 +1,49 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600&display=swap'); */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400&display=swap");
+
+.kraikub__animation_fade_in {
+  animation: kraikub-animation-fade-in ease;
+}
+
+@keyframes kraikub-animation-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kraikub__animation_fade_in_right {
+  animation: kraikub-animation-fade-in-right ease;
+}
+
+@keyframes kraikub-animation-fade-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.kraikub__animation_fade_in_left {
+  animation: kraikub-animation-fade-in-left ease;
+}
+
+@keyframes kraikub-animation-fade-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

@@ -1,21 +1,19 @@
-# Kraikub 🦄
-Kraikub is a authentication service that integrates with Kasetsart University API (Unofficial Project).
-Kraikub adapts the core concept of OAuth2.0 standard and be as an API adapter that plugs in to **myapi.ku.th**
-which is a part of Kasetsart University APIs.
+# Kraikub OAuth2 Server 🚀
 
-To understand Kraikub, you might be familiar with **Sign in with Google** buttons which can be found on most of today's websites or applications. These buttons bring you to Google's authentication page to identify who you are and send some of your allowed personal data back to the website or the application owners to process them for their purposes.
+An authorization server was built base on OAuth 2.0 protocol with OpenID Connect supported. To learn more about how the protocol works, you can visit
+[oauth.net](https://oauth.net/2/). Kraikub OAuth2 server use myapi.ku.th as an authentication service to support almost Kasetsart University students. 
+Once you have signed in your Kasetsart Account (known as Nontri Account) on Kraikub's OAuth server, your information will be saved on Kraikub's 
+databases. You are totally safe and secure, Kraikub won't remember your credentials (such as username and password).
 
-Likewise, Kraikub is an (unofficial) authentication gateway for Kasetsart University API. It helps developers to identify their users with Kasetsart University easier.
+![Authorization Flow](https://user-images.githubusercontent.com/62375505/206862485-112a9dd8-9516-438d-8ee3-c67852d0df98.png)
 
-Kraikub is a middleman between you (as both developers and users) and Kasetsart University. Our goal is to make the user's authentication much easier than before. Once the authentication is proficient, developers can use most of their time to deal with their best ideas and features.
+### About contributions
+All PRs are accepted. Please feel free to make any contribution.
 
-## Try it now 🙋🏻‍♂️
-Check out [Kraikub](https://kraikub.netlify.app), Log in with your KU account and create your first app now!
+- **A little thanks to [Napasin S.](https://github.com/frankydesu) for helping me init this project once it was born.** 
 
-## Our Contributors 👩🏻‍💻
-- [NUTCHANON C.](https://github.com/nutchanonc) 
-- Special thanks to [NAPASIN S.](https://github.com/frankydesu) 
+<hr />
 
+Learn more about us at [kraikub.com](https://kraikub.com)
 
-
-
+**© 2022 Nutchanon Chantrasup**

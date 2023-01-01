@@ -63,7 +63,7 @@ class AppService {
       CustomApiResponse<boolean>
     >(`/api/app/hasname?name=${appNameToCheck}`);
     if (status === 200) {
-      return data;
+      return data
     }
   }
 }
