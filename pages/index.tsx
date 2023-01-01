@@ -23,7 +23,6 @@ import { Card } from "../src/components/Card";
 import { FooterShort } from "../src/layouts/FooterShort";
 import StaticNavbar from "../src/layouts/StaticNavbar";
 import { p } from "../src/utils/path";
-import Link from "next/link";
 
 interface EachCardProps {
   title: string;
@@ -119,13 +118,11 @@ const Home: NextPage = () => {
                 />
               </SimpleGrid>
               <Flex gap={2} mt="60px">
-                <Link href={p.projects}>
-                  <a>
-                    <Button size="lg" height="60px" gap={2}>
-                      Try now for free <BsArrowUpRight />
-                    </Button>
-                  </a>
-                </Link>
+                <a href={p.projects}>
+                  <Button size="lg" height="60px" gap={2}>
+                    Try now for free <BsArrowUpRight />
+                  </Button>
+                </a>
               </Flex>
             </Box>
           </Container>

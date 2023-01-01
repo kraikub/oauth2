@@ -35,7 +35,7 @@ import { FC, useState } from "react";
 import { useUser } from "../contexts/User";
 import { SmartLanguageToggler } from "../components/SmartLanguageToggler";
 import { useOnClient } from "../hooks/on-client";
-import { IoIosArrowDown, IoIosMenu } from "react-icons/io";
+import { IoIosArrowDown, IoIosCloseCircle, IoIosMenu } from "react-icons/io";
 import { Card } from "../components/Card";
 import Link from "next/link";
 import { ThemeToggler } from "../components/ThemeToggler";
@@ -81,6 +81,7 @@ const Navbar: FC = () => {
   const [showUserModal, setShowUserModal] = useState(false);
   const [navModal, setNavModal] = useState(false);
   const menuBarBg = useColorModeValue("bg.light", "bg.dark");
+  const [showAnnouncement, setShowAnnouncement] = useState<boolean>(true);
   const ready = useOnClient();
 
   const onNavModalClose = () => {
@@ -145,6 +146,29 @@ const Navbar: FC = () => {
 
   return (
     <>
+      {showAnnouncement ? (
+        <Box bg="teal.200" color="black">
+          <Container
+            maxW="container.xl"
+            minH="48px"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Text>We still in Alpha phase :)</Text>
+            <IconButton
+              aria-label="close"
+              rounded="full"
+              variant="unstyled"
+              color="inherit"
+              onClick={() => setShowAnnouncement(false)}
+            >
+              <IoIosCloseCircle size="22px" />
+            </IconButton>
+          </Container>
+        </Box>
+      ) : null}
+
       <Container
         maxW="container.xl"
         minH="58px"
