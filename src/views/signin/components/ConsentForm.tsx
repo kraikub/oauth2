@@ -59,13 +59,22 @@ export const ConsentForm: FC<ConsentFormProps> = ({
     },
   ];
   const dataListWithScope = (scope: string) => {
-    let result = consentDataList.filter((consent) =>
-      consent.requires.includes(scope)
-    );
-    if (!result.length) return [];
+    
+    let result: ConsentData[] = []
+    let splt = scope.split(" ")
+    for (let consent of consentDataList) {
+      for (let each of splt) {
+        if (consent.requires.includes(each)) {
+          result.push(consent)
+          break;
+        }
+      }
+    }
     result[result.length - 1].disableBorder = true;
+    console.log(result)
     return result;
   };
+  console.log(scope, dataListWithScope(scope))
   return (
     <Box overflow="hidden" w="100%">
       <SimpleFadeInRight>
@@ -95,6 +104,7 @@ export const ConsentForm: FC<ConsentFormProps> = ({
             />
           ) : null}
           {dataListWithScope(scope).map((data: ConsentData, index: number) => {
+            console.log(data)
             return <Each scope={scope} {...data} key={`consent-${index}`} />;
           })}
         </Card>
@@ -125,11 +135,8 @@ interface EachProps extends ConsentData {
   scope: string;
 }
 
-const Each: FC<EachProps> = ({ label, requires, disableBorder, scope }) => {
+const Each: FC<EachProps> = ({ label, disableBorder }) => {
   const dynamicTealColor = useColorModeValue("teal.400", "teal.200");
-  if (!requires.includes(scope)) {
-    return null;
-  }
   return (
     <Flex
       border={disableBorder ? "none" : "solid #00000020"}
