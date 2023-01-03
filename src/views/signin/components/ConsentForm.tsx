@@ -53,6 +53,10 @@ export const ConsentForm: FC<ConsentFormProps> = ({
       label: t("consent-scope-edu"),
       requires: ["provider", "education"],
     },
+    {
+      label: t("consent-scope-openid"),
+      requires: ["openid"],
+    },
   ];
   const dataListWithScope = (scope: string) => {
     let result = consentDataList.filter((consent) =>

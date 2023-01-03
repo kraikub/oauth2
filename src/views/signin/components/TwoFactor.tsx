@@ -23,7 +23,7 @@ import { SimpleFadeInRight } from "../../../components/animations/SimpleFadeInRi
 import { getCountDownString } from "../../../utils/time";
 
 interface TwoFactorProps {
-  setStep: Dispatch<SetStateAction<number>>;
+  signinType: string;
   handleSignin: (options?: SigninOptions) => Promise<any>;
   OTPRef: string;
   authForEmail: string;
@@ -32,7 +32,7 @@ interface TwoFactorProps {
 }
 
 export const TwoFactor: FC<TwoFactorProps> = ({
-  setStep,
+  signinType,
   handleSignin,
   OTPRef,
   authForEmail,
@@ -48,7 +48,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
     fontWeight: 600,
     bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
     flex: 1,
-    h: "66px"
+    h: "66px",
   };
 
   useEffect(() => {
@@ -73,6 +73,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
     setLoading(true);
     await handleSignin({
       otp: code,
+      signin_method: signinType
     });
     setCode("");
     setLoading(false);
@@ -105,12 +106,12 @@ export const TwoFactor: FC<TwoFactorProps> = ({
               value={code}
               onChange={handleInputChange}
             >
-              <PinInputField {...eachDigitStyles} />
-              <PinInputField {...eachDigitStyles} />
-              <PinInputField {...eachDigitStyles} />
-              <PinInputField {...eachDigitStyles} />
-              <PinInputField {...eachDigitStyles} />
-              <PinInputField {...eachDigitStyles} />
+              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
+              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
+              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
+              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
+              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
+              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
             </PinInput>
           </HStack>
           <Button
