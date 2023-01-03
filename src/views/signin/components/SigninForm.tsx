@@ -139,17 +139,22 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   };
   const backToSigninForm = () => {
     setPdpaPopup(false);
-    setIsSigninLoading(false)
+    setIsSigninLoading(false);
     setStep(0);
   };
 
   const validateBeforeSignin = async () => {
+    if (activeUser) return await handleSigninEvent({ signin_method: "credential"});
     const { data: validateResponse } =
       await authService.validateSigninSignature(username);
     if (validateResponse.payload.validateResult) {
       return await handleSigninEvent();
     }
     setPdpaPopup(true);
+  };
+
+  const handleNextWhenHasActiveUser = () => {
+    setStep(1);
   };
 
   const handleSigninEvent = async (options?: SigninOptions) => {
@@ -171,7 +176,10 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
         response_type: query.response_type,
         code_challenge: query.code_challenge as string,
         code_challenge_method: query.code_challenge_method as string,
-        options,
+        options: {
+          ...options,
+          signin_method: activeUser ? "credential" : "",
+        },
       });
 
       if (data.payload.otp_ref) {
@@ -239,7 +247,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
 
   if (activeUser === undefined) {
     return null;
-  } else if (activeUser === null) {
+  } else {
     return (
       <Fragment>
         <Head>
@@ -267,12 +275,19 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
               />
             ) : step === 2 ? (
               <TwoFactor
-                setStep={setStep}
                 handleSignin={handleSigninEvent}
                 OTPRef={OTPRef}
                 OTPExpire={OTPExpire}
                 authForEmail={authForEmail}
                 back={backToSigninForm}
+                signinType="credential"
+              />
+            ) : activeUser ? (
+              <UserSelector
+                user={activeUser}
+                reject={() => setActiveUser(null)}
+                next={handleNextWhenHasActiveUser}
+                loading={isSigninButtonLoading}
               />
             ) : (
               <Box w="100%" overflow="hidden">
@@ -423,15 +438,6 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
         </Drawer>
         <ErrorModal open={openAlert} onClose={closeErrorAlert} />
       </Fragment>
-    );
-  } else {
-    return (
-      <UserSelector
-        user={activeUser}
-        reject={() => setActiveUser(null)}
-        handleSignin={handleSigninEvent}
-        loading={isSigninButtonLoading}
-      />
     );
   }
 };

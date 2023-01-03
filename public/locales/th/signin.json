@@ -15,6 +15,7 @@
   "consent-scope-uemail": "ดูอีเมลมหาวิทยาลัยที่คุณลงทะเบียน (ถ้ามี)",
   "consent-scope-pemail": "ดูอีเมลส่วนตัวที่ยืนยันแล้วของคุณ (ถ้ามี)",
   "consent-scope-edu": "ดูรายละเอียดการศึกษาของคุณสังกัดมหาวิทยาลัยเกษตรศาสตร์",
+  "consent-scope-openid": "ยืนยันตัวตนคุณด้วย OpenID Connect",
   "consent-btn-cancel": "ยกเลิก",
   "consent-btn-allow": "อนุญาต",
   "account-header": "ดำเนินการต่อด้วยบัญชี KU",

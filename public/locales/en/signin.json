@@ -15,6 +15,7 @@
   "consent-scope-uemail": "See your registered university email (if available)",
   "consent-scope-pemail": "See your verified personal email (if available)",
   "consent-scope-edu": "See your educational profile under Kasetsart University",
+  "consent-scope-openid": "Verify your identity with OpenID Connect",
   "consent-btn-cancel": "Cancel",
   "consent-btn-allow": "Allow",
   "account-header": "Continue with KU Account",
