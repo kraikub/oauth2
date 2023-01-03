@@ -155,7 +155,7 @@ const Navbar: FC = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Text>We still in Alpha phase :)</Text>
+            <Text fontSize={14}>We still in alpha version :)</Text>
             <IconButton
               aria-label="close"
               rounded="full"
