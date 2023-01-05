@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Navbar from "../../../../layouts/Navbar";
 import { UserProvider } from "../../../../contexts/User";
@@ -17,9 +17,9 @@ export const ProjectManagerDashboard: NextPage<ProjectManagerDashboardProps> = (
     <>
       <UserProvider user={props.data}>
         <Navbar />
-        <Box minH="100vh">
+        <Container maxWidth="container.xl" minH="100vh">
           <AppTable apps={props.data.applications} />
-        </Box>
+        </Container>
         <FooterShort contentSize="container.xl" />
       </UserProvider>
     </>

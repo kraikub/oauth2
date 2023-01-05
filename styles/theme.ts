@@ -25,7 +25,7 @@ export const colors = {
   },
   bg: {
     light: "#ffffff",
-    dark: "#000000",
+    dark: "#060608",
   },
   color: {
     light: "#262626",
@@ -34,8 +34,8 @@ export const colors = {
 };
 
 const fonts = {
-  body: `-apple-system, BlinkMacSystemFont, "Segoe UI", "", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
-  heading: `-apple-system, BlinkMacSystemFont, "Segoe UI", "", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  body: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  heading: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
 };
 
 const components: { [key: string]: ComponentStyleConfig } = {
@@ -47,7 +47,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
   },
   Heading: {
     baseStyle: {
-      fontWeight: 700,
+      fontWeight: 600,
     },
     sizes: {
       xl: {
@@ -65,13 +65,13 @@ const components: { [key: string]: ComponentStyleConfig } = {
   Input: {
     defaultProps: {
       fontSize: 20,
-      fontWeight: 600,
+      fontWeight: 500,
     },
   },
   Button: {
     baseStyle: {
       rounded: 8,
-      fontWeight: 600,
+      fontWeight: 500,
     },
     sizes: {
       sm: {

@@ -89,7 +89,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   const [authForEmail, setAuthForEmail] = useState("");
   const styles = {
     input: {
-      bg: useColorModeValue("blackAlpha.100", "whiteAlpha.200"),
+      bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
       _hover: {
         bg: useColorModeValue("blackAlpha.300", "whiteAlpha.400"),
       },

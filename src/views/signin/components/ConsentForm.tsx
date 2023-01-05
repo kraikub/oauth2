@@ -71,10 +71,8 @@ export const ConsentForm: FC<ConsentFormProps> = ({
       }
     }
     result[result.length - 1].disableBorder = true;
-    console.log(result)
     return result;
   };
-  console.log(scope, dataListWithScope(scope))
   return (
     <Box overflow="hidden" w="100%">
       <SimpleFadeInRight>
@@ -104,7 +102,6 @@ export const ConsentForm: FC<ConsentFormProps> = ({
             />
           ) : null}
           {dataListWithScope(scope).map((data: ConsentData, index: number) => {
-            console.log(data)
             return <Each scope={scope} {...data} key={`consent-${index}`} />;
           })}
         </Card>

@@ -122,12 +122,11 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               alignItems="center"
               rounded={10}
             >
-              <Heading size="lg">{app.appName[0]}</Heading>
+              <Heading size="lg">{app.appName[0].toUpperCase()}</Heading>
             </Box>
             <Box>
               <Heading
                 size="lg"
-                fontFamily={`'Rubik', sans-serif`}
                 letterSpacing={1}
                 mb={1}
                 textTransform="uppercase"
@@ -236,7 +235,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                   {t("editable")}
                 </Text>
                 <Input
-                  variant="filled"
+                  variant="outline"
                   fontWeight={500}
                   py={2}
                   size="md"
@@ -251,7 +250,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 <Textarea
                   my={2}
                   width="100%"
-                  variant="filled"
+                  variant="outline"
                   fontSize={16}
                   fontWeight={500}
                   py={2}

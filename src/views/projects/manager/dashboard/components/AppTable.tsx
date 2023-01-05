@@ -43,11 +43,9 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
 
   const { t, ready } = useClientTranslation(dashboardDict);
 
-  const styles = {
-    appsContainer: {
-      bg: useColorModeValue("white", "gray.700"),
-    },
-  };
+  const buttonWhenHover = {
+    bg: useColorModeValue("blackAlpha.50", "whiteAlpha.50")
+  }
 
   if (!user) {
     return null;
@@ -58,65 +56,66 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
   }
 
   return (
-    <Box>
+    <Box py={10}>
       <Grid templateColumns="repeat(12, 1fr)">
         <GridItem colSpan={[12, 12, 8]} minH="100vh">
-          <Container maxW="container.md" py="40px">
-            <Heading size="lg">{t("page-header")}</Heading>
-            <Text mt={2} fontWeight={500} opacity={0.7} fontSize={14}>
-              {t("page-quota-msg-1")} {user.appOwned}/{user.appQuota}{" "}
-              {t("page-quota-msg-2")}
-            </Text>
-            <Card
-              props={{
-                my: 5,
-              }}
-            >
-              <VStack spacing={0}>
-                {apps.map((app, index) => (
-                  <Box key={`rendered-app-${index}`} w="full">
-                    <AppCard2 app={app} key={`app-${app.clientId}`} />
-                    {index === apps.length - 1 ? null : <CustomDivider sx={{ my: 0 }}/>}
-                  </Box>
-                ))}
-                <Box mt="40px !important">
-                  <Link
-                    href={isLimit(
-                      user.appOwned >= user.appQuota,
-                      `${p.projects}/create`,
-                      "quotas"
-                    )}
-                  >
-                    <a>
-                      <Button
-                        variant="solid"
-                        size="lg"
-                        gap={2}
-                        colorScheme={isLimit(
-                          user.appOwned >= user.appQuota,
-                          "teal",
-                          "red"
-                        )}
-                        w="full"
-                        rounded="full"
-                      >
-                        {isLimit(
-                          user.appOwned >= user.appQuota,
-                          <IoIosAddCircle size="22px" />,
-                          <IoIosRemoveCircle size="22px" />
-                        )}
-                        {isLimit(
-                          user.appOwned >= user.appQuota,
-                          t("page-btn-create"),
-                          t("page-btn-quota-exceed")
-                        )}
-                      </Button>
-                    </a>
-                  </Link>
+          <Heading size="md">{t("page-header")}</Heading>
+          <Text mt={2} fontWeight={500} opacity={0.7} fontSize={14}>
+            {t("page-quota-msg-1")} {user.appOwned}/{user.appQuota}{" "}
+            {t("page-quota-msg-2")}
+          </Text>
+          <Card
+            props={{
+              my: 5,
+              p: 0,
+            }}
+          >
+            <VStack spacing={0}>
+              {apps.map((app, index) => (
+                <Box key={`rendered-app-${index}`} w="full">
+                  <AppCard2 app={app} key={`app-${app.clientId}`} />
+                  {index === apps.length - 1 ? null : (
+                    <Box ps={8}>
+                      <CustomDivider sx={{ my: 0 }} />
+                    </Box>
+                  )}
                 </Box>
-              </VStack>
-            </Card>
-          </Container>
+              ))}
+              <CustomDivider />
+              <Box w="full">
+                <Link
+                  href={isLimit(
+                    user.appOwned >= user.appQuota,
+                    `${p.projects}/create`,
+                    "quotas"
+                  )}
+                >
+                  <a>
+                    <Button
+                      w="full"
+                      h="60px"
+                      variant="unstyled"
+                      size="lg"
+                      fontWeight={600}
+                      gap={2}
+                      _hover={buttonWhenHover}
+                      color={isLimit(
+                        user.appOwned >= user.appQuota,
+                        "teal.400",
+                        "red.400"
+                      )}
+                    >
+                      {isLimit(
+                        user.appOwned >= user.appQuota,
+                        t("page-btn-create"),
+                        t("page-btn-quota-exceed")
+                      )}
+                    </Button>
+                  </a>
+                </Link>
+              </Box>
+            </VStack>
+          </Card>
         </GridItem>
         {/* <GridItem
           colSpan={[12, 12, 4]}
