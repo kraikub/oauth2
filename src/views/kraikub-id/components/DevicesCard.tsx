@@ -127,7 +127,7 @@ const Each: FC<EachProps> = ({ keyName, device, last }) => {
             <Text fontSize={18} fontWeight={600}>
               {keyName}
             </Text>
-            <HStack spacing={1} color="teal.300">
+            <HStack spacing={1} color="kraikub.blue.500">
               <Link
                 fontSize={12}
                 fontWeight={800}
@@ -141,8 +141,7 @@ const Each: FC<EachProps> = ({ keyName, device, last }) => {
               {new Date(device.timestamp).toLocaleString()}
             </Text>
             <Collapse in={expand} animateOpacity>
-              <CustomDivider />
-              <Text fontSize={12} opacity={0.7}>
+              <Text fontSize={12} opacity={0.7} my={6}>
                 {device.ua}
               </Text>
             </Collapse>
@@ -153,7 +152,7 @@ const Each: FC<EachProps> = ({ keyName, device, last }) => {
                 fontSize={10}
                 textDecoration="underline"
                 textTransform="uppercase"
-                opacity={0.4}
+                opacity={0.8}
               >
                 {expand ? t("btn-see-less") : t("btn-see-more")}
               </Button>

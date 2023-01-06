@@ -58,7 +58,7 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
   return (
     <Box py={10}>
       <Grid templateColumns="repeat(12, 1fr)">
-        <GridItem colSpan={[12, 12, 8]} minH="100vh">
+        <GridItem colSpan={[12, 12, 4]} minH="100vh">
           <Heading size="md">{t("page-header")}</Heading>
           <Text mt={2} fontWeight={500} opacity={0.7} fontSize={14}>
             {t("page-quota-msg-1")} {user.appOwned}/{user.appQuota}{" "}
@@ -93,7 +93,7 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
                   <a>
                     <Button
                       w="full"
-                      h="60px"
+                      h="50px"
                       variant="unstyled"
                       size="lg"
                       fontWeight={600}

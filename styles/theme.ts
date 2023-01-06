@@ -17,10 +17,10 @@ export const colors = {
   },
   kraikub: {
     blue: {
-      200: "#7B65FF",
-      300: "#644AFC",
-      400: "#5238EC",
-      500: "#2D19A6",
+      200: "#abceff",
+      300: "#70acff",
+      400: "#3d8eff",
+      500: "#1468de",
     },
   },
   bg: {

@@ -17,7 +17,7 @@ interface LoaderProps {
 export const Loader: FC<LoaderProps> = ({ children }) => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const bg = useColorModeValue("#d7d7d7a0", "#161616b0");
+  const bg = useColorModeValue("whiteAlpha.700", "blackAlhpa.600");
   const handleStart = (url: string) => {
     return url !== router.asPath && setLoading(true);
   };
