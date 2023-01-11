@@ -1,3 +1,7 @@
+import { checkRedisTopic } from "./../utils/string";
+import { mailService } from "./../mail/index";
+import { sha256 } from "./../utils/crypto";
+import { redis } from "./../../data/redis/index";
 import { aggregations } from "../../data/aggregations";
 import { bridge } from "../bridge/bridge";
 import { appConfig } from "../config/app";
@@ -8,6 +12,7 @@ import { userRepository } from "../repositories/user";
 import { educationCoverter } from "../utils/converter/education";
 import { studentConverter } from "../utils/converter/student";
 import { createAnonymousIdentity } from "../utils/crypto";
+import { p } from "../../src/utils/path";
 
 export class UserUsecase {
   publicData = async (uid: string): Promise<PublicUserData | null> => {
@@ -36,8 +41,8 @@ export class UserUsecase {
   };
 
   newPersonalEmail = async (uid: string, newEmail: string) => {
-    return await userRepository.update(uid, { personalEmail: newEmail})
-  }
+    return await userRepository.update(uid, { personalEmail: newEmail });
+  };
 
   initUserProfile = async (
     uid: string,
@@ -50,7 +55,8 @@ export class UserUsecase {
       appQuota: appConfig.INIT_MAX_APP_QUOTA,
       signinSignature: signinSignature,
       personalEmail: "",
-      universityEmail: "",
+      fullName: "",
+      type: "student",
       profileImageUrl: appConfig.defaultProfileImageUrl,
       appOwned: 0,
       shouldUpdate: false,
@@ -61,8 +67,8 @@ export class UserUsecase {
         },
         tfa: {
           enable: false,
-        }
-      }
+        },
+      },
     };
     await userRepository.create(newUser);
     const accessToken = authResponse.accesstoken;
@@ -113,7 +119,9 @@ export class UserUsecase {
     }
   };
 
-  getPrivateUserWithStudent = async (uid: string): Promise<UserWithStudent | null> => {
+  getPrivateUserWithStudent = async (
+    uid: string
+  ): Promise<UserWithStudent | null> => {
     const res = await userRepository.useAggregationPipeline([
       ...aggregations.private.user(uid),
       ...aggregations.public.student(),
@@ -124,7 +132,7 @@ export class UserUsecase {
     } else {
       return null;
     }
-  }
+  };
 
   getUserWithStudent = async (uid: string) => {
     const res = await userRepository.useAggregationPipeline([
@@ -143,6 +151,71 @@ export class UserUsecase {
       ...aggregations.public.academic(uid),
     ]);
     return res;
+  };
+
+  signUp = async (
+    fullName: string,
+    email: string,
+    accountType: string,
+    lang: string = "en"
+  ) => {
+    const u = await userRepository.findOne({ personalEmail: email });
+    if (u) {
+      return {};
+    }
+    let redisKey = `signup:${sha256(email)}`;
+    await redis.set(
+      redisKey,
+      JSON.stringify({
+        fullName,
+        email,
+        accountType,
+      }),
+      appConfig.expirations.verificationEmail.s
+    );
+    const mailResponse = await mailService.sendVerificationEmail(email, lang, {
+      code: `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}${p.signUpVerification}?vssid=${redisKey}`,
+      name: fullName,
+    });
+    return {
+      redisKey,
+      mailResponse,
+    };
+  };
+
+  activateSignUp = async (redisKey: string) => {
+    if (!checkRedisTopic(redisKey, "signup")) {
+      return false;
+    }
+    const strValue = await redis.get(redisKey);
+    const signupDetail = JSON.parse(strValue) as SignupCacheSchema;
+    const newUser: User = {
+      uid: sha256(
+        signupDetail.email +
+          signupDetail.fullName +
+          sha256(signupDetail.accountType)
+      ),
+      type: signupDetail.accountType,
+      fullName: signupDetail.fullName,
+      appQuota: appConfig.INIT_MAX_APP_QUOTA,
+      signinSignature: sha256(signupDetail.email),
+      personalEmail: signupDetail.email,
+      profileImageUrl: appConfig.defaultProfileImageUrl,
+      appOwned: 0,
+      shouldUpdate: false,
+      settings: {
+        email: {
+          signin: true,
+          news: true,
+        },
+        tfa: {
+          enable: false,
+        },
+      },
+    };
+    await userRepository.create(newUser);
+    await redis.delete(redisKey);
+    return true;
   };
 }
 

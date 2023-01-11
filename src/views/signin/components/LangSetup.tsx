@@ -17,7 +17,6 @@ interface LangButtonProps {
 }
 
 const LangButton: FC<LangButtonProps> = (props) => {
-  const [, setCookie] = useCookies(["LANG"]);
   return (
     <AspectRatio ratio={1 / 1}>
       <Button

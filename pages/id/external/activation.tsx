@@ -9,8 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
 import { GoCheck } from "react-icons/go";
-import { userUsecase } from "../../api/usecases";
-import { redis } from "../../data/redis";
+import { userUsecase } from "../../../api/usecases";
+import { redis } from "../../../data/redis";
 
 interface VerificationSession {
   email: string;
@@ -24,22 +24,17 @@ interface PageProps {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const vssid = context.query.vssid;
-
-  const s = await redis.get(`emv:${vssid}`);
-  if (!s) {
+  if (typeof vssid !== "string") {
     return {
       props: {
         success: false,
       },
     };
   }
-
-  const vs: VerificationSession = JSON.parse(s);
-  await userUsecase.newPersonalEmail(vs.uid, vs.email);
-  await redis.delete(`emv:${vssid}`);
+  const isCreateUserSuccess = await userUsecase.activateSignUp(vssid)
   return {
     props: {
-      success: true,
+      success: isCreateUserSuccess,
     },
   };
 };
@@ -66,7 +61,7 @@ const Page: NextPage<PageProps> = ({ success }) => {
             </Box>
           </HStack>
           <Text fontSize={20} fontWeight={600} opacity={0.6} mt={6}>
-            You can now go back to your previous browser and wait for a few seconds. Then you will ready to go! 
+            You can now go back to your previous browser and you are ready to go.
           </Text>
         </Box>
       </Center>

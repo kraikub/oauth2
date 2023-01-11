@@ -1,4 +1,5 @@
 import {
+  AspectRatio,
   Avatar,
   Badge,
   Box,
@@ -23,9 +24,10 @@ interface UserCardProps {
 }
 
 export const UserCard: FC<UserCardProps> = ({ user }) => {
-  const { t } = useClientTranslation(dictUserCard)
+  const { t } = useClientTranslation(dictUserCard);
+  console.log(user.type)
   return (
-    <Grid templateColumns="repeat(12, 1fr)" columnGap={4} rowGap={3}>
+    <Grid templateColumns="repeat(12, 1fr)" columnGap={4} rowGap={3} w="full">
       <GridItem colSpan={[12, 10]}>
         <Card props={{ h: "full" }}>
           <VStack
@@ -36,20 +38,30 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
           >
             <Box>
               <HStack spacing={4}>
-                <Heading size="md">{user.student.nameEn}</Heading>
-                <Badge colorScheme="teal" rounded={6}>
-                  {t("student")}
+                <Heading size="md" textTransform="uppercase">
+                  {user.student?.nameEn || user.fullName}
+                </Heading>
+                <Badge colorScheme="messenger" rounded={6}>
+                  {t(user.type)}
                 </Badge>
               </HStack>
               <Text fontWeight={600} fontSize={18} opacity={0.6} mt={2}>
-                {user.student.nameTh}
+                {user.student?.nameTh || ""}
               </Text>
             </Box>
           </VStack>
         </Card>
       </GridItem>
       <GridItem colSpan={[12, 2]} display={["none", "block"]}>
-        <Avatar size="full" src={user.profileImageUrl} borderRadius="12px" />
+        <Box>
+          <AspectRatio ratio={1 / 1}>
+            <Avatar
+              size="full"
+              src={user.profileImageUrl}
+              borderRadius="12px"
+            />
+          </AspectRatio>
+        </Box>
       </GridItem>
     </Grid>
   );

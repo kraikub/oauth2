@@ -11,13 +11,15 @@ import { useTranslation } from "react-i18next";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { SimpleFadeInRight } from "../../../components/animations/SimpleFadeInRight";
 import { Card } from "../../../components/Card";
+import { CustomDivider } from "../../../components/CustomDivider";
 
 interface ConsentFormProps {
   scope: string;
   appName: string;
-  handleSignin: () => any | (() => Promise<any>);
+  handleSignin: (options?: SigninOptions) => any | (() => Promise<any>);
   handleReject: () => any | (() => Promise<any>);
   loading: boolean;
+  signInMethod: SignInMethodType
 }
 
 type ConsentData = {
@@ -32,10 +34,9 @@ export const ConsentForm: FC<ConsentFormProps> = ({
   handleSignin,
   handleReject,
   loading,
+  signInMethod,
 }) => {
   const { t } = useTranslation("signin");
-  const dynamicTealColor = useColorModeValue("teal.600", "teal.200");
-  const cardBg = useColorModeValue("blackAlpha.50", "whiteAlpha.100")
   const consentDataList: ConsentData[] = [
     {
       label: t("consent-scope-name"),
@@ -59,13 +60,12 @@ export const ConsentForm: FC<ConsentFormProps> = ({
     },
   ];
   const dataListWithScope = (scope: string) => {
-    
-    let result: ConsentData[] = []
-    let splt = scope.split(" ")
+    let result: ConsentData[] = [];
+    let splt = scope.split(" ");
     for (let consent of consentDataList) {
       for (let each of splt) {
         if (consent.requires.includes(each)) {
-          result.push(consent)
+          result.push(consent);
           break;
         }
       }
@@ -77,7 +77,7 @@ export const ConsentForm: FC<ConsentFormProps> = ({
     <Box overflow="hidden" w="100%">
       <SimpleFadeInRight>
         <Heading size="md" mb={6}>
-          <Box as="span" lang="en" color={dynamicTealColor}>
+          <Box as="span" lang="en">
             {appName}
           </Box>{" "}
           {t("conset-header")}
@@ -89,8 +89,7 @@ export const ConsentForm: FC<ConsentFormProps> = ({
           props={{
             p: 0,
             my: 6,
-            bg: cardBg,
-            boxShadow: "none"
+            boxShadow: "none",
           }}
         >
           {scope === "0" ? (
@@ -109,15 +108,15 @@ export const ConsentForm: FC<ConsentFormProps> = ({
           <Button
             size="lg"
             variant="ghost"
-            colorScheme="teal"
+            colorScheme="kraikub.blue"
             onClick={handleReject}
           >
             {t("consent-btn-cancel")}
           </Button>
           <Button
             size="lg"
-            colorScheme="teal"
-            onClick={handleSignin}
+            colorScheme="kraikub.blue"
+            onClick={() => handleSignin({ signin_method: signInMethod})}
             isLoading={loading}
           >
             {t("consent-btn-allow")}
@@ -133,22 +132,21 @@ interface EachProps extends ConsentData {
 }
 
 const Each: FC<EachProps> = ({ label, disableBorder }) => {
-  const dynamicTealColor = useColorModeValue("teal.400", "teal.200");
+  const dynamicTealColor = useColorModeValue(
+    "kraikub.blue.500",
+    "kraikub.blue.500"
+  );
   return (
-    <Flex
-      border={disableBorder ? "none" : "solid #00000020"}
-      borderWidth="0 0 1px 0"
-      py={4}
-      px={6}
-      gap={3}
-      alignItems="center"
-    >
-      <Box color={dynamicTealColor}>
-        <BsFillCheckCircleFill fontSize={20} />
-      </Box>
-      <Text fontSize={14} opacity={0.7}>
-        {label}
-      </Text>
-    </Flex>
+    <>
+      <Flex py={4} px={6} gap={3} alignItems="center">
+        <Box color={dynamicTealColor}>
+          <BsFillCheckCircleFill fontSize={20} />
+        </Box>
+        <Text fontSize={14} opacity={0.7}>
+          {label}
+        </Text>
+      </Flex>
+      {disableBorder ? null : <CustomDivider sx={{ my: 0 }} />}
+    </>
   );
 };

@@ -44,8 +44,8 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
   const { t, ready } = useClientTranslation(dashboardDict);
 
   const buttonWhenHover = {
-    bg: useColorModeValue("blackAlpha.50", "whiteAlpha.50")
-  }
+    bg: useColorModeValue("blackAlpha.50", "whiteAlpha.50"),
+  };
 
   if (!user) {
     return null;
@@ -81,7 +81,9 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
                   )}
                 </Box>
               ))}
-              <CustomDivider />
+
+              {apps.length ? <CustomDivider /> : null}
+
               <Box w="full">
                 <Link
                   href={isLimit(
@@ -101,7 +103,7 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
                       _hover={buttonWhenHover}
                       color={isLimit(
                         user.appOwned >= user.appQuota,
-                        "teal.400",
+                        "kraikub.blue.400",
                         "red.400"
                       )}
                     >

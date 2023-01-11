@@ -14,6 +14,7 @@ interface SigninParams {
   ref?: string;
   secret?: string;
   redirectUri?: string;
+  email?: string;
   options?: SigninOptions;
 }
 
@@ -35,6 +36,7 @@ class AuthService {
       clientId: params.clientId,
       scope: params.scope,
       state: params.state,
+      email: params.email,
       ref: params.ref,
       secret: params.secret,
       redirect_uri: params.redirectUri,
