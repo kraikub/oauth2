@@ -36,7 +36,7 @@ const Callback: NextPage = () => {
       <Head>
         <title>Signing in, please wait...</title>
       </Head>
-      <Progress size="xs" isIndeterminate colorScheme="teal" />
+      <Progress size="xs" isIndeterminate colorScheme="kraikub.blue" />
     </>
   );
 };

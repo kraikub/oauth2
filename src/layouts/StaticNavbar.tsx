@@ -27,7 +27,9 @@ const StaticNavbar: FC<NavbarOptions> = (props) => {
         </Flex>
         <HStack spacing={3}>
           <ThemeToggler />
-          {props.hideLanguageSelector ? null : <SmartLanguageToggler />}
+          {props.hideLanguageSelector ? null : (
+            <SmartLanguageToggler sx={{ size: "sm" }} />
+          )}
         </HStack>
       </Flex>
     </Container>

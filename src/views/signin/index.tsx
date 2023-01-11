@@ -169,8 +169,8 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
     <>
       <Box position="fixed" top="22px" right="22px">
         <Switch
-          size="lg"
-          colorScheme="teal"
+          size="md"
+          colorScheme="kraikub.blue.always"
           defaultChecked={colorMode === "dark"}
           onChange={toggleColorMode}
         />

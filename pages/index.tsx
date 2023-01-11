@@ -88,7 +88,7 @@ const Home: NextPage = () => {
                   <Box
                     as="span"
                     fontWeight={700}
-                    color={useColorModeValue("teal.400", "teal.200")}
+                    color={useColorModeValue("kraikub.blue.400", "kraikub.blue.200")}
                   >
                     KRAIKUB
                   </Box>

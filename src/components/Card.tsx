@@ -14,7 +14,7 @@ export const Card: FC<CardProps> = (props) => {
       rounded={10}
       borderStyle="solid"
       borderWidth="1px"
-      borderColor={useColorModeValue("blackAlpha.300", "whiteAlpha.300")}
+      borderColor={useColorModeValue("blackAlpha.300", "whiteAlpha.200")}
       // boxShadow={`0 3px 8px #0000001a`}
       {...props.props}
     >

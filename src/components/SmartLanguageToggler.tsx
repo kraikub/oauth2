@@ -32,7 +32,7 @@ export const SmartLanguageToggler: FC<SmartLanguageTogglerProps> = (props) => {
   const textSelector = () => {
     switch (c.LANG) {
       case "th": {
-        return "View in English";
+        return "English";
       }
       case "en": {
         return "ภาษาไทย";
@@ -43,10 +43,12 @@ export const SmartLanguageToggler: FC<SmartLanguageTogglerProps> = (props) => {
     }
   };
 
-  const borderColor = useColorModeValue("gray.400", "gray.600")
-
+  const borderColor = useColorModeValue("gray.400", "gray.600");
+  const onHoverStyles: ButtonProps = {
+    bg: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
+  };
   if (!ready) {
-    return null
+    return null;
   }
 
   return (
@@ -55,6 +57,7 @@ export const SmartLanguageToggler: FC<SmartLanguageTogglerProps> = (props) => {
       rounded="full"
       onClick={() => setLang(toggleLangValue())}
       borderColor={borderColor}
+      _hover={onHoverStyles}
       {...props.sx}
     >
       {textSelector()}

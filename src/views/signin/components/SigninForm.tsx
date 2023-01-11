@@ -16,7 +16,6 @@ import {
   IconButton,
   useColorModeValue,
   Input,
-  Divider,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -37,20 +36,18 @@ import {
   useState,
 } from "react";
 import { authService } from "../../../services/authService";
-import { PrimaryInput } from "../PrimaryInput";
 import { ConsentForm } from "./ConsentForm";
 import { SimpleFadeInLeft } from "../../../components/animations/SimpleFadeInLeft";
-import { FaArrowRight } from "react-icons/fa";
 import { FooterShort } from "../../../layouts/FooterShort";
 import { IoIosEye, IoIosEyeOff } from "react-icons/io";
 import { userService } from "../../../services/userService";
 import { UserSelector } from "./UserSelector";
 import { useCookies } from "react-cookie";
-import { LangSetup } from "./LangSetup";
-import { CookieConsentScreen } from "./CookieConsentScreen";
 import { Setup } from "./Setup";
 import { useTranslation } from "react-i18next";
 import { TwoFactor } from "./TwoFactor";
+import { CustomDivider } from "../../../components/CustomDivider";
+import Link from "next/link";
 
 interface SigninFormProps {
   query: {
@@ -77,6 +74,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   const [step, setStep] = useState(0);
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [isSigninButtonLoading, setIsSigninLoading] = useState<boolean>(false);
   const [deviceConfigCheck, setDeviceConfigCheck] = useState<boolean>(false);
   const deviceConfigRef = useRef<any>({});
@@ -87,11 +85,18 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   const [OTPRef, setOTPRef] = useState("");
   const [OTPExpire, setOTPExpire] = useState<number>(0);
   const [authForEmail, setAuthForEmail] = useState("");
+
+  const [signInMethod, setSigninMethod] = useState<SignInMethodType>("nontri");
+
   const styles = {
     input: {
+      fontWeight: 600,
       bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
       _hover: {
         bg: useColorModeValue("blackAlpha.300", "whiteAlpha.400"),
+      },
+      _placeholder: {
+        color: useColorModeValue("blackAlpha.600", "whiteAlpha.600"),
       },
     },
     layout: {
@@ -103,7 +108,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
     },
 
     highlight: {
-      color: useColorModeValue("teal.400", "teal.200"),
+      color: "kraikub.blue.500",
     },
 
     pdpaOverride: {
@@ -129,6 +134,21 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
     setPassword(e.target.value);
   };
 
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const changeToNontri = () => {
+    setEmail("");
+    setSigninMethod("nontri");
+  };
+
+  const changeToKraikubId = () => {
+    setUsername("");
+    setPassword("");
+    setSigninMethod("kraikubid");
+  };
+
   const toConsent = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSigninLoading(true);
@@ -144,11 +164,14 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   };
 
   const validateBeforeSignin = async () => {
-    if (activeUser) return await handleSigninEvent({ signin_method: "credential"});
+    if (activeUser)
+      return await handleSigninEvent({ signin_method: "credential" });
+    if (signInMethod === "kraikubid")
+      return await handleSigninEvent({ signin_method: "kraikubid" });
     const { data: validateResponse } =
       await authService.validateSigninSignature(username);
     if (validateResponse.payload.validateResult) {
-      return await handleSigninEvent();
+      return await handleSigninEvent({ signin_method: signInMethod });
     }
     setPdpaPopup(true);
   };
@@ -160,15 +183,26 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   const handleSigninEvent = async (options?: SigninOptions) => {
     if (app == null || query.scope === null) return;
     setIsSigninLoading(true);
-    if ((!username || !password) && options?.signin_method !== "credential") {
-      setIsSigninLoading(false);
-      return alert("Some field is missing.");
+    // Validate for before it is sent to backend
+    if (options?.signin_method === "credential") {
+      //
+    } else if (options?.signin_method === "kraikubid") {
+      if (!email) {
+        return alert("Require email");
+      }
+    } else if (options?.signin_method === "nontri") {
+      if (!username || !password) {
+        return alert("Some field is missing.");
+      }
+    } else {
+      return console.error("Unknown sign in method");
     }
     try {
       const { data } = await authService.signin({
         username,
         password,
         clientId: app.clientId,
+        email: email,
         scope: query.scope as string,
         state: query.state as string,
         secret: secret || (query.secret as string | undefined),
@@ -178,7 +212,6 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
         code_challenge_method: query.code_challenge_method as string,
         options: {
           ...options,
-          signin_method: activeUser ? "credential" : "",
         },
       });
 
@@ -272,6 +305,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                 handleSignin={validateBeforeSignin}
                 handleReject={backToSigninForm}
                 loading={isSigninButtonLoading}
+                signInMethod={signInMethod}
               />
             ) : step === 2 ? (
               <TwoFactor
@@ -280,16 +314,21 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                 OTPExpire={OTPExpire}
                 authForEmail={authForEmail}
                 back={backToSigninForm}
-                signinType="credential"
+                signInMethod={signInMethod}
               />
             ) : activeUser ? (
               <UserSelector
+                setSigninMethod={setSigninMethod}
                 user={activeUser}
-                reject={() => setActiveUser(null)}
+                reject={() => {
+                  setActiveUser(null);
+                  setSigninMethod("nontri");
+                }}
                 next={handleNextWhenHasActiveUser}
                 loading={isSigninButtonLoading}
               />
             ) : (
+              // Begin sign in form
               <Box w="100%" overflow="hidden">
                 <SimpleFadeInLeft>
                   <form onSubmit={toConsent}>
@@ -319,58 +358,106 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                         <Progress
                           size="xs"
                           isIndeterminate
-                          colorScheme="teal"
+                          colorScheme="kraikub.blue.always"
                           background="transparent"
                           opacity={isSigninButtonLoading ? 1 : 0}
                         />
-                        <Input
-                          variant="filled"
-                          borderRadius="8px 8px 0 0"
-                          size="lg"
-                          placeholder={t("form-input-username") as string}
-                          onChange={handleUsernameChange}
-                          value={username}
-                          {...styles.input}
-                        />
-                        <Divider />
-                        <Box position="relative">
-                          <Input
-                            variant="filled"
-                            size="lg"
-                            placeholder={t("form-input-password") as string}
-                            borderRadius="0 0 8px 8px"
-                            type={showPassword ? "text" : "password"}
-                            onChange={handlePasswordChange}
-                            value={password}
-                            {...styles.input}
-                          />
-                          <IconButton
-                            aria-label="toggle-password"
-                            onClick={() => setShowPassword(!showPassword)}
-                            position="absolute"
-                            top="50%"
-                            right="10px"
-                            transform="translate(0,-50%);"
-                            fontSize={20}
-                            variant="ghost"
-                            size="sm"
-                          >
-                            {!showPassword ? <IoIosEye /> : <IoIosEyeOff />}
-                          </IconButton>
-                        </Box>
+                        {signInMethod === "nontri" ? (
+                          <>
+                            <Input
+                              variant="outlined"
+                              borderRadius="8px 8px 0 0"
+                              size="lg"
+                              placeholder={t("form-input-username") as string}
+                              onChange={handleUsernameChange}
+                              value={username}
+                              {...styles.input}
+                            />
+                            <CustomDivider
+                              sx={{
+                                my: 0,
+                                opacity: 0.6,
+                              }}
+                            />
+                            <Box position="relative">
+                              <Input
+                                variant="outlined"
+                                size="lg"
+                                placeholder={t("form-input-password") as string}
+                                borderRadius="0 0 8px 8px"
+                                type={showPassword ? "text" : "password"}
+                                onChange={handlePasswordChange}
+                                value={password}
+                                {...styles.input}
+                              />
+                              <IconButton
+                                aria-label="toggle-password"
+                                onClick={() => setShowPassword(!showPassword)}
+                                position="absolute"
+                                top="50%"
+                                right="10px"
+                                transform="translate(0,-50%);"
+                                fontSize={20}
+                                variant="ghost"
+                                size="sm"
+                              >
+                                {!showPassword ? <IoIosEye /> : <IoIosEyeOff />}
+                              </IconButton>
+                            </Box>
+                          </>
+                        ) : signInMethod === "kraikubid" ? (
+                          <>
+                            <Input
+                              variant="outlined"
+                              size="lg"
+                              placeholder={t("form-input-email") as string}
+                              type="email"
+                              onChange={handleEmailChange}
+                              value={email}
+                              {...styles.input}
+                            />
+                          </>
+                        ) : null}
                       </Box>
-                      <IconButton
-                        isLoading={isSigninButtonLoading}
-                        type="submit"
-                        disabled={!username || !password}
-                        aria-label="sign-in-button"
-                        // color="#00000060"
-                        rounded="full"
-                        colorScheme="teal"
-                        // border="1px solid #00000030"
+                      <Box w="full" textAlign="end">
+                        <Link href="/signup">
+                          <a>
+                            <Text
+                              color="kraikub.blue.500"
+                              fontSize={14}
+                              _hover={{ textDecoration: "underline" }}
+                            >
+                              {t("form-link-sign-up")}
+                            </Text>
+                          </a>
+                        </Link>
+                      </Box>
+                      <ButtonGroup
+                        spacing={2}
+                        justifyContent="space-between"
+                        w="full"
                       >
-                        <FaArrowRight color="inherit" />
-                      </IconButton>
+                        {signInMethod === "nontri" ? (
+                          <Button onClick={changeToKraikubId} variant="outline" rounded="full">
+                            {t("form-btn-use-kraikubid")}
+                          </Button>
+                        ) : (
+                          <Button onClick={changeToNontri} variant="outline" rounded="full">
+                            {t("form-btn-use-nontri")}
+                          </Button>
+                        )}
+
+                        <Button
+                          colorScheme="kraikub.blue.always"
+                          color="white"
+                          type="submit"
+                          aria-label="sign-in-button"
+                          isLoading={isSigninButtonLoading}
+                          disabled={(!username || !password) && !email}
+                        >
+                          {t("form-btn-continue")}
+                        </Button>
+                      </ButtonGroup>
                     </Flex>
                   </form>
                 </SimpleFadeInLeft>
@@ -424,9 +511,11 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                   </Button>
                   <Button
                     size="lg"
-                    colorScheme="teal"
+                    colorScheme="kraikub.blue.always"
                     rounded={6}
-                    onClick={() => handleSigninEvent()}
+                    onClick={() =>
+                      handleSigninEvent({ signin_method: "nontri" })
+                    }
                     isLoading={isSigninButtonLoading}
                   >
                     Agree
@@ -463,7 +552,7 @@ const ErrorModal: FC<ErrorModalProps> = ({ open, onClose }) => {
         <ModalBody fontSize={14}>{t("err-modal-description")}</ModalBody>
 
         <ModalFooter>
-          <Button onClick={onClose} colorScheme="teal">
+          <Button onClick={onClose} colorScheme="kraikub.blue.always">
             {t("err-modal-btn-close")}
           </Button>
         </ModalFooter>

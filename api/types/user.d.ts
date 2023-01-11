@@ -1,7 +1,6 @@
 interface UserFilter {
   uid?: string;
-  stdId?: string;
-  stdCode?: string;
+  personalEmail?: string;
 }
 
 interface PublicUserData {
@@ -16,5 +15,5 @@ interface FullUserData extends User {
 }
 
 interface UserWithStudent extends User {
-  student: Student
+  student?: Student
 }

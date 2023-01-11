@@ -23,7 +23,7 @@ import { SimpleFadeInRight } from "../../../components/animations/SimpleFadeInRi
 import { getCountDownString } from "../../../utils/time";
 
 interface TwoFactorProps {
-  signinType: string;
+  signInMethod: SignInMethodType;
   handleSignin: (options?: SigninOptions) => Promise<any>;
   OTPRef: string;
   authForEmail: string;
@@ -32,7 +32,7 @@ interface TwoFactorProps {
 }
 
 export const TwoFactor: FC<TwoFactorProps> = ({
-  signinType,
+  signInMethod,
   handleSignin,
   OTPRef,
   authForEmail,
@@ -43,10 +43,9 @@ export const TwoFactor: FC<TwoFactorProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [exp, setExp] = useState<string>(getCountDownString(OTPExpire * 1000))
   const { t } = useTranslation("signin");
-  const tealThemeColor = useColorModeValue("teal.500", "teal.200")
+  const blueThemeColor = useColorModeValue("kraikub.blue.500", "kraikub.blue.200")
   const eachDigitStyles = {
     fontWeight: 600,
-    bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
     flex: 1,
     h: "66px",
   };
@@ -73,7 +72,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
     setLoading(true);
     await handleSignin({
       otp: code,
-      signin_method: signinType
+      signin_method: signInMethod
     });
     setCode("");
     setLoading(false);
@@ -94,7 +93,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
           {t("2fa-description-2")}
         </Text>
         <Text mt={2}>REF: {OTPRef}</Text>
-        <Text mt={2} color={tealThemeColor} fontWeight={700}>{exp || t("expired")}</Text>
+        <Text mt={2} color={blueThemeColor} fontWeight={700}>{exp || t("expired")}</Text>
         <form onSubmit={handleFormSubmit}>
           <HStack my={6} justifyContent="space-between">
             <PinInput
@@ -102,7 +101,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
               type="number"
               size="lg"
               placeholder=""
-              variant="filled"
+              variant="outline"
               value={code}
               onChange={handleInputChange}
             >
@@ -119,7 +118,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
             gap={2}
             onClick={back}
             h="60px"
-            colorScheme={loading ? "teal" : "gray"}
+            colorScheme={loading ? "kraikub.blue" : "gray"}
           >
             {loading ? (
               t("2fa-btn-verify")

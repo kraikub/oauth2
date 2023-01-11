@@ -70,9 +70,11 @@ export const dictSetupPage3: Dictionary = {
 export const dictUserCard: Dictionary = {
   en: {
     "student": "Student",
+    "corporate": "Coporate",
   },
   th: {
     "student": "นักศึกษา",
+    "corporate": "องค์กร",
   }
 }
 

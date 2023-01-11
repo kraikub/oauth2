@@ -30,6 +30,7 @@ const Each: FC<EachProps> = ({ access }) => {
           w="40px"
           h="40px"
           bg="linear-gradient(155deg, rgba(0,114,154,1) 0%, rgba(0,162,119,1) 100%)"
+          textTransform="uppercase"
           color="white"
           fontWeight={600}
           fontSize={20}

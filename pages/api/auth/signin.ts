@@ -49,6 +49,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       redirect_uri,
       response_type,
       otp,
+      email,
       /// These below are used for PKCE
       code_challenge,
       code_challenge_method, // SHA256
@@ -94,7 +95,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       user = await userUsecase.findOne({
         uid: uid,
       });
-    } else {
+    } else if (signin_method === "nontri") {
       // Login to myku
       const authResponse = await bridge.login(username, password);
       const { stdId, stdCode } = authResponse.data.user.student;
@@ -115,15 +116,18 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         );
         user = newUser;
       }
+    } else if (signin_method === "kraikubid") {
+      const queriedUser = await userUsecase.findOne({ personalEmail: email })
+      if (!queriedUser) {
+        return res.status(400).send(createResponse(false, "Provided email not found.", null));
+      }
+      user = queriedUser;
+      uid = queriedUser.uid;
     }
-    // If anonymous sign in.
-    if (scope === "0") {
-      // Recalculate uid for hiding user's identity.
-      uid = createAnonymousIdentity(uid, clientId);
+    else {
+      return res.status(400).send(createResponse(false, "signin_method not allowed.", null));
     }
-
     // Sign the authorization code for each auth method.
-
     const code = authUsecase.signAuthCode({
       uid,
       scope,
