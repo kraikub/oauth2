@@ -50,7 +50,7 @@ interface TabProps {
 
 const Tab: FC<TabProps> = (props) => {
   const router = useRouter();
-  const tabHighlightBg = "kraikub.blue.500";
+  const tabHighlightBg = "kraikub.blue.400";
   const tabButtonStyles: ButtonProps = {
     rounded: 6,
     variant: "ghost",

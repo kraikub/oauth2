@@ -35,8 +35,12 @@ export const colors = {
     },
   },
   bg: {
-    light: "#ffffff",
+    light: "#f7f9fa",
     dark: "#141414",
+  },
+  card: {
+    light: "#ffffff",
+    dark: "#1a1c1c",
   },
   color: {
     light: "#262626",

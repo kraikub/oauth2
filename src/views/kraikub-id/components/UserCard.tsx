@@ -25,7 +25,6 @@ interface UserCardProps {
 
 export const UserCard: FC<UserCardProps> = ({ user }) => {
   const { t } = useClientTranslation(dictUserCard);
-  console.log(user.type)
   return (
     <Grid templateColumns="repeat(12, 1fr)" columnGap={4} rowGap={3} w="full">
       <GridItem colSpan={[12, 10]}>

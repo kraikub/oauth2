@@ -61,7 +61,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   ];
 
   let res = await UserModel.aggregate(pipeline);
-  console.log(res[0].accesses)
   return {
     props: {
       user: u.length ? jsonSerialize(u[0]) : null,

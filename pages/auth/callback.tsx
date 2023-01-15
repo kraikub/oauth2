@@ -20,14 +20,13 @@ const Callback: NextPage = () => {
         return p.kraikubId;
       }
     }
-  }
+  };
 
   useEffect(() => {
     if (router.query.state) {
-      router.push(where(router.query.state as string))
-    }
-    else {
-      router.push(p.kraikubId)
+      location.href = where(router.query.state as string);
+    } else {
+      location.href = p.kraikubId;
     }
   }, [router]);
 

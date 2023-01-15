@@ -117,15 +117,18 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
         user = newUser;
       }
     } else if (signin_method === "kraikubid") {
-      const queriedUser = await userUsecase.findOne({ personalEmail: email })
+      const queriedUser = await userUsecase.findOne({ personalEmail: email });
       if (!queriedUser) {
-        return res.status(400).send(createResponse(false, "Provided email not found.", null));
+        return res
+          .status(400)
+          .send(createResponse(false, "Provided email not found.", null));
       }
       user = queriedUser;
       uid = queriedUser.uid;
-    }
-    else {
-      return res.status(400).send(createResponse(false, "signin_method not allowed.", null));
+    } else {
+      return res
+        .status(400)
+        .send(createResponse(false, "signin_method not allowed.", null));
     }
     // Sign the authorization code for each auth method.
     const code = authUsecase.signAuthCode({
@@ -170,21 +173,39 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           otpCode,
           appConfig.expirations.verificationEmail.s
         );
-        mailService.sendOTP(user.personalEmail, req.cookies.LANG || "en", {
-          code: otpCode,
-          name: req.cookies.LANG === "th" ? student?.nameTh : student?.nameEn,
-          ref: otpRef,
-          deviceName: deviceMap(ua || "", uaPlatform as string || ""),
-        });
-        return res
-          .status(200)
-          .send(
+        try {
+          await mailService.sendOTP(
+            user.personalEmail,
+            req.cookies.LANG || "en",
+            {
+              code: otpCode,
+              name:
+                req.cookies.LANG === "th" ? student?.nameTh : student?.nameEn,
+              ref: otpRef,
+              deviceName: deviceMap(ua || "", (uaPlatform as string) || ""),
+            }
+          );
+          return res.status(200).send(
             createResponse(false, "Require 2fa", {
               email: user?.personalEmail,
               otp_ref: otpRef,
-              otp_expire: unixNow() + appConfig.expirations.verificationEmail.s - 5,
+              otp_expire:
+                unixNow() + appConfig.expirations.verificationEmail.s - 5,
             })
           );
+        } catch (error: any) {
+          // If mail service calling failed.
+          if (axios.isAxiosError(error)) {
+            console.error(error.code, error.message, error.status);
+            return res.status(500).send(
+              createResponse(false, "Mail service connection refused.", {
+                error: error,
+              })
+            );
+          } else {
+            throw new Error(error);
+          }
+        }
       } else {
         const verifiedOtp = await redis.get(`2fa:${uid}`);
         if (otp !== verifiedOtp) {

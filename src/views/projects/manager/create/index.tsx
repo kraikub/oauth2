@@ -47,14 +47,10 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
   const ready = useOnClient();
 
   const inputStyles = {
-    variant: "solid",
-    size: "lg",
+    variant: "outline",
+    size: "md",
     rounded: 8,
-    bg: useColorModeValue("blackAlpha.100", "whiteAlpha.100"),
     transition: "100ms ease",
-    _focus: {
-      boxShadow: `0 0 2px 2px #00CED1`,
-    },
   };
 
   if (!ready) {
@@ -139,14 +135,14 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
             ))}
           </Select>
           <ButtonGroup mt={10}>
-            <Button size="lg" onClick={() => router.push(p.projects)}>
+            <Button size="md" onClick={() => router.push(p.projects)}>
               {t("btn-cancel")}
             </Button>
             <Button
               type="submit"
               colorScheme="kraikub.blue"
               isLoading={loading}
-              size="lg"
+              size="md"
             >
               {t("btn-submit")}
             </Button>
