@@ -20,14 +20,13 @@ const Callback: NextPage = () => {
         return p.kraikubId;
       }
     }
-  }
+  };
 
   useEffect(() => {
     if (router.query.state) {
-      router.push(where(router.query.state as string))
-    }
-    else {
-      router.push(p.kraikubId)
+      location.href = where(router.query.state as string);
+    } else {
+      location.href = p.kraikubId;
     }
   }, [router]);
 
@@ -36,7 +35,7 @@ const Callback: NextPage = () => {
       <Head>
         <title>Signing in, please wait...</title>
       </Head>
-      <Progress size="xs" isIndeterminate colorScheme="teal" />
+      <Progress size="xs" isIndeterminate colorScheme="kraikub.blue" />
     </>
   );
 };

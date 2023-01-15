@@ -124,7 +124,7 @@ const Each: FC<EachProps> = ({ keyName, device, last }) => {
         </GridItem>
         <GridItem colSpan={[9, 10]}>
           <Box mb={2} rounded={10} p={0}>
-            <Text fontSize={18} fontWeight={600}>
+            <Text fontSize={16} fontWeight={600}>
               {keyName}
             </Text>
             <HStack spacing={1} color="kraikub.blue.500">

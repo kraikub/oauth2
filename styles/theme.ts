@@ -21,11 +21,26 @@ export const colors = {
       300: "#70acff",
       400: "#3d8eff",
       500: "#1468de",
+      600: "#0952b8",
+      700: "#033c8c",
+      800: "#00275e",
+      900: "#001430",
+      always: {
+        200: "#1468de",
+        300: "#1468de",
+        400: "#1468de",
+        500: "#1468de",
+        600: "#1468de",
+      },
     },
   },
   bg: {
+    light: "#f7f9fa",
+    dark: "#141414",
+  },
+  card: {
     light: "#ffffff",
-    dark: "#060608",
+    dark: "#1a1c1c",
   },
   color: {
     light: "#262626",
@@ -66,6 +81,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
     defaultProps: {
       fontSize: 20,
       fontWeight: 500,
+      focusBorderColor: 'kraikub.blue.500',
     },
   },
   Button: {

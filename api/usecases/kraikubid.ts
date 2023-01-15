@@ -12,8 +12,8 @@ class KraikubIDUsecase {
       code: `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}${p.emailVerification}?vssid=${vssid}`,
       name:
         lang === "th"
-          ? nameWithOutPrefix(user.student.nameTh)
-          : nameWithOutPrefix(user.student.nameEn),
+          ? nameWithOutPrefix(user.student?.nameTh || "")
+          : nameWithOutPrefix(user.student?.nameEn || ""),
     });
     return res;
   }

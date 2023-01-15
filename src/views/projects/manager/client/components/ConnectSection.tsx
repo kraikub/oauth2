@@ -87,7 +87,7 @@ export const ConnectSection: FC<ConnectSectionProps> = ({ app }) => {
               <Text fontSize={12} opacity={0.5}>
                 {t("connect-step-1-tip-secret")}
               </Text>
-              <Button size="sm" colorScheme="teal" gap={2}>
+              <Button size="sm" colorScheme="kraikub.blue" gap={2}>
                 {t("connect-step-1-btn-safety")}{" "}
                 <IoIosArrowRoundForward size="20px" />
               </Button>
@@ -119,7 +119,7 @@ export const ConnectSection: FC<ConnectSectionProps> = ({ app }) => {
                 <Highlight
                   query={["<redirect-url>"]}
                   styles={{
-                    bg: "teal.200",
+                    bg: "kraikub.blue.200",
                     py: "0.008em",
                   }}
                 >

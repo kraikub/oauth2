@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  ButtonProps,
   Container,
   Drawer,
   DrawerBody,
@@ -49,11 +50,14 @@ interface TabProps {
 
 const Tab: FC<TabProps> = (props) => {
   const router = useRouter();
-  const tabHighlightBg = useColorModeValue("teal.500", "teal.200");
-  const tabButtonStyles = {
+  const tabHighlightBg = "kraikub.blue.400";
+  const tabButtonStyles: ButtonProps = {
     rounded: 6,
     variant: "ghost",
-    fontSize: 16,
+    fontSize: 14,
+    _hover: {
+      bg: "whiteAlpha.200",
+    },
     opacity: router.asPath === props.href ? 1 : 0.6,
   };
   return (
@@ -64,7 +68,7 @@ const Tab: FC<TabProps> = (props) => {
         </Button>
       </LinkWrap>
       {router.asPath === props.href ? (
-        <Box h="2px" bg={tabHighlightBg} />
+        <Box h="3px" bg={tabHighlightBg} />
       ) : null}
     </Box>
   );
@@ -76,7 +80,6 @@ const Navbar: FC = () => {
   const [showUserModal, setShowUserModal] = useState(false);
   const [navModal, setNavModal] = useState(false);
   const menuBarBg = useColorModeValue("bg.light", "bg.dark");
-  const [showAnnouncement, setShowAnnouncement] = useState<boolean>(true);
   const ready = useOnClient();
 
   const onNavModalClose = () => {
@@ -107,7 +110,14 @@ const Navbar: FC = () => {
   };
 
   const navStyles = {
-    bg: useColorModeValue("whiteAlpha.700", "blackAlpha.700"),
+    desktop: {
+      bg: useColorModeValue("#1c1c1c", "#1c1c1c"),
+      color: "white",
+    },
+    mobile: {
+      bg: useColorModeValue("blackAlpha.700", "blackAlpha.700"),
+      color: "white",
+    },
   };
 
   const modalStyles = {
@@ -141,80 +151,63 @@ const Navbar: FC = () => {
 
   return (
     <>
-      {showAnnouncement ? (
-        <Box bg="teal.200" color="black">
-          <Container
-            maxW="container.xl"
-            minH="48px"
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Text fontSize={14}>We still in alpha version :)</Text>
-            <IconButton
-              aria-label="close"
-              rounded="full"
-              variant="unstyled"
-              color="inherit"
-              onClick={() => setShowAnnouncement(false)}
-            >
-              <IoIosCloseCircle size="22px" />
-            </IconButton>
-          </Container>
-        </Box>
-      ) : null}
-
-      <Container
-        maxW="container.xl"
-        minH="58px"
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <HStack alignItems="center" spacing={6}>
-          <LinkWrap href="/">
-            <Heading size="sm" fontWeight={700} letterSpacing="-0.04em">
-              KRAIKUB{" "}
-            </Heading>
-          </LinkWrap>
-        </HStack>
-        <Flex alignItems="center" gap={4}>
-          <HStack spacing={3}>
-            <ThemeToggler />
-            <Box display={["none", "flex"]}>
-              <SmartLanguageToggler />
-            </Box>
-            <Avatar
-              src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
-              name={user.student.nameEn.split(" ").slice(1).join(" ")}
-              w="34px"
-              h="34px"
-              onClick={onUserModalOpen}
-              cursor="pointer"
-              transition="300ms ease"
-              _hover={{
-                boxShadow: "0 0 0 2px #00CED1",
-              }}
-            />
-
-            <IconButton
-              aria-label="mobile-nav-menu"
-              display={["flex", "none"]}
-              onClick={() => setNavModal(true)}
-              rounded={8}
-            >
-              <IoIosMenu size="24px" />
-            </IconButton>
+      <Box {...navStyles.desktop}>
+        <Container
+          maxW="container.xl"
+          minH="48px"
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <HStack alignItems="center" spacing={6}>
+            <LinkWrap href="/">
+              <Heading size="sm" fontWeight={700} letterSpacing="-0.04em">
+                KRAIKUB{" "}
+              </Heading>
+            </LinkWrap>
           </HStack>
-        </Flex>
-      </Container>
+          <Flex alignItems="center" gap={4}>
+            <HStack spacing={3}>
+              <ThemeToggler />
+              <Box display={["none", "flex"]}>
+                <SmartLanguageToggler sx={{ size: "sm" }} />
+              </Box>
+              <Avatar
+                src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
+                name={
+                  user.student?.nameEn.split(" ").slice(1).join(" ") ||
+                  user.fullName
+                }
+                w="34px"
+                h="34px"
+                onClick={onUserModalOpen}
+                cursor="pointer"
+                transition="300ms ease"
+                _hover={{
+                  boxShadow: "0 0 0 2px #3182f5",
+                }}
+              />
+
+              <IconButton
+                aria-label="mobile-nav-menu"
+                display={["flex", "none"]}
+                onClick={() => setNavModal(true)}
+                rounded={8}
+                variant="unsyled"
+              >
+                <IoIosMenu size="24px" />
+              </IconButton>
+            </HStack>
+          </Flex>
+        </Container>
+      </Box>
       <Drawer
         isOpen={navModal}
         placement="right"
         onClose={onNavModalClose}
         size="full"
       >
-        <DrawerContent p={4} bg={navStyles.bg} backdropFilter="blur(20px)">
+        <DrawerContent p={4} backdropFilter="blur(20px)" {...navStyles.mobile}>
           <DrawerCloseButton />
           <DrawerHeader>
             <Text
@@ -252,7 +245,15 @@ const Navbar: FC = () => {
           </DrawerBody>
 
           <DrawerFooter>
-            <Button w="full" size="lg" gap={3} onClick={signout}>
+            <Button
+              w="full"
+              size="lg"
+              gap={3}
+              onClick={signout}
+              bg="kraikub.blue.500"
+              _hover={{ bg: undefined }}
+              _active={{ bg: undefined }}
+            >
               {t("menu-logout")} <MdLogout size="20px" />
             </Button>
           </DrawerFooter>
@@ -264,9 +265,11 @@ const Navbar: FC = () => {
           <ModalHeader fontSize={14}>{t("signed-in-as")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text fontWeight={700}>{user.student.nameEn}</Text>
+            <Text fontWeight={700}>
+              {user.student?.nameEn || user.fullName}
+            </Text>
             <Text fontSize={14} opacity={0.6}>
-              {user.student.nameTh}
+              {user.student?.nameTh || user.fullName}
             </Text>
             <VStack mt={10} spacing={3}>
               <Link href={p.kraikubId}>
@@ -287,7 +290,8 @@ const Navbar: FC = () => {
                 w="full"
                 size="lg"
                 rounded={8}
-                colorScheme="teal"
+                colorScheme="kraikub.blue.always"
+                color="white"
                 justifyContent="start"
                 onClick={signout}
                 gap={2}
@@ -300,10 +304,10 @@ const Navbar: FC = () => {
           <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
-      <Box position="sticky" top={0} bg={menuBarBg} zIndex={59}>
+      <Box position="sticky" top={0} zIndex={59} {...navStyles.desktop}>
         <Container
           maxW="container.xl"
-          h="64px"
+          h="48px"
           alignItems="end"
           display={["flex", "flex"]}
           overflowX="auto"

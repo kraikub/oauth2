@@ -9,8 +9,8 @@ import { mongodb } from "../../data/mongo";
 interface UserFilter {
   uid?: string;
   signinSignature?: string;
-  stdId?: string;
-  stdCode?: string;
+  personalEmail?: string;
+
 }
 
 interface UserUpdatableFields {

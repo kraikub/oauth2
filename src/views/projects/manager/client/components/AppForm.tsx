@@ -54,7 +54,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
   const router = useRouter();
   const { t } = useClientTranslation(appFormComponentDict);
   const saveWindowBg = useColorModeValue("blackAlpha.200", "whiteAlpha.200");
-  const tealColor = useColorModeValue("teal.400", "teal.200");
+  const blueColor = useColorModeValue("kraikub.blue.400", "kraikub.blue.200");
   const ready = useOnClient();
   const { register, getValues, watch, reset, handleSubmit, control } = useForm({
     defaultValues: app,
@@ -165,7 +165,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                   my={2}
                   rounded={0}
                   placeholder="https://mydomain.com/redirect/path"
-                  _focus={{ borderColor: "teal.400" }}
+                  _focus={{ borderColor: "kraikub.blue.400" }}
                   {...register(`redirects.${index}.url`)}
                 />
                 <ButtonGroup>
@@ -188,7 +188,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               gap={2}
               size="lg"
               variant="solid"
-              colorScheme="teal"
+              colorScheme="kraikub.blue"
               rounded="full"
               onClick={() =>
                 append({
@@ -320,7 +320,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               <Spacer />
               <ButtonGroup>
                 <Button onClick={resetForm}>{t("btn-undo")}</Button>
-                <Button type="submit" colorScheme="teal" isLoading={isUpdating}>
+                <Button type="submit" colorScheme="kraikub.blue" isLoading={isUpdating}>
                   {t("btn-save")}
                 </Button>
               </ButtonGroup>
@@ -339,7 +339,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           <ModalHeader py={4}>
             <Text fontWeight={600} fontSize={16}>
               {t("delete-popup-msg-1")}{" "}
-              <Box as="span" fontWeight={700} color={tealColor}>
+              <Box as="span" fontWeight={700} color={blueColor}>
                 {app.appName}
               </Box>{" "}
               {t("delete-popup-msg-2")}

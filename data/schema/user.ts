@@ -7,8 +7,9 @@ export const userSchema = new Schema<User>(
     signinSignature: { type: String },
     uid: { type: String },
     shouldUpdate: { type: Boolean },
+    fullName: { type: String },
+    type: { type: String },
     profileImageUrl: { type: String },
-    universityEmail: { type: String },
     personalEmail: { type: String },
     settings: {
       email: {
