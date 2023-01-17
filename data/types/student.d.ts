@@ -18,4 +18,6 @@ interface Student {
   edulevelCode: string;
   edulevelNameTh: string;
   edulevelNameEn: string;
+  createdAt?: string;
+  updatedAt?: string;
 }

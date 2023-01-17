@@ -19,6 +19,7 @@ import { dictWhenNoActiveAccount } from "../../translate/kraikubid";
 import { AccessesCard } from "./components/AccessesCard";
 import { DevicesCard } from "./components/DevicesCard";
 import { NotificationCard } from "./components/NotificationCard";
+import { OrganizationCard } from "./components/OrganizationCard";
 import { UserCard } from "./components/UserCard";
 
 export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
@@ -62,9 +63,24 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
   }
 
   return (
-    <Container maxW="container.xl" py="60px">
-      <VStack my={8} spacing={6}>
-        <UserCard user={user} />
+    <Container maxW="container.xl" py="20px">
+      <Grid templateColumns="repeat(12, 1fr)" columnGap={4} rowGap={4} w="full">
+        <GridItem colSpan={[12, 12, 8]}>
+          <VStack spacing={4}>
+            <UserCard user={user} />
+            <DevicesCard logs={props.logs} />
+            <AccessesCard accesses={props.accesses} />
+          </VStack>
+        </GridItem>
+        <GridItem colSpan={[12, 12, 4]}>
+          <VStack spacing={4}>
+            <OrganizationCard user={user}/>
+            <NotificationCard user={user} />
+          </VStack>
+        </GridItem>
+      </Grid>
+      <VStack spacing={4}>
+        {/* <UserCard user={user} />
         <Grid
           templateColumns="repeat(12, 1fr)"
           columnGap={6}
@@ -78,7 +94,7 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
             <DevicesCard logs={props.logs} />
           </GridItem>
         </Grid>
-        <AccessesCard accesses={props.accesses} />
+        <AccessesCard accesses={props.accesses} /> */}
       </VStack>
     </Container>
   );

@@ -10,5 +10,9 @@ class UserService {
     const { status, data } = await nextApiBaseInstance.get<CustomApiResponse<null>>("/api/public/signout");
     return { status, data };
   }
+
+  public safeUserFromUsername = async (username: string) => {
+    return await nextApiBaseInstance.get<CustomApiResponse<{user: SafeUser | null}>>(`/api/internal/user/safe?username=${username}`);
+  }
 }
 export const userService = new UserService();

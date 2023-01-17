@@ -2,7 +2,7 @@ interface PageWithTranslation {
   lang: string;
 }
 
-type UserVariant = UserWithStudent | UserWithApplication;
+type UserVariant = UserWithStudent | UserWithApplication | UserWithExtra;
 
 interface BasePageProps {
   user: UserWithStudent | null;

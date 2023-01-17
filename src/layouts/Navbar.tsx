@@ -15,6 +15,7 @@ import {
   Heading,
   HStack,
   IconButton,
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -50,13 +51,16 @@ interface TabProps {
 
 const Tab: FC<TabProps> = (props) => {
   const router = useRouter();
-  const tabHighlightBg = "kraikub.blue.400";
+  const activeButtonBg = useColorModeValue("blackAlpha.100", "whiteAlpha.200");
   const tabButtonStyles: ButtonProps = {
     rounded: 6,
     variant: "ghost",
     fontSize: 14,
+    fontWeight: 600,
+    letterSpacing: "-0.03em",
+    bg: router.asPath === props.href ? activeButtonBg : "transparent",
     _hover: {
-      bg: "whiteAlpha.200",
+      bg: activeButtonBg,
     },
     opacity: router.asPath === props.href ? 1 : 0.6,
   };
@@ -67,9 +71,6 @@ const Tab: FC<TabProps> = (props) => {
           {props.text}
         </Button>
       </LinkWrap>
-      {router.asPath === props.href ? (
-        <Box h="3px" bg={tabHighlightBg} />
-      ) : null}
     </Box>
   );
 };
@@ -111,8 +112,10 @@ const Navbar: FC = () => {
 
   const navStyles = {
     desktop: {
-      bg: useColorModeValue("#1c1c1c", "#1c1c1c"),
-      color: "white",
+      bg: useColorModeValue("card.light", "card.dark"),
+      borderStyle: "solid",
+      borderWidth: "0 0 1px 0",
+      borderColor: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
     },
     mobile: {
       bg: useColorModeValue("blackAlpha.700", "blackAlpha.700"),
@@ -139,9 +142,8 @@ const Navbar: FC = () => {
       href: p.projects,
     },
     {
-      text: t("menu-user"),
-      onClick: onUserModalOpen,
-      href: "",
+      text: t("menu-org"),
+      href: p.organization,
     },
     {
       text: t("menu-settings"),
@@ -154,17 +156,32 @@ const Navbar: FC = () => {
       <Box {...navStyles.desktop}>
         <Container
           maxW="container.xl"
-          minH="48px"
+          py="14px"
           display="flex"
           justifyContent="space-between"
           alignItems="center"
         >
           <HStack alignItems="center" spacing={6}>
             <LinkWrap href="/">
-              <Heading size="sm" fontWeight={700} letterSpacing="-0.04em">
-                KRAIKUB{" "}
-              </Heading>
+              <HStack spacing={2}>
+                <Image
+                  src="/kraikub-logo-app-with-outline.png"
+                  width="40px"
+                  alt="kraikub-nav-logo"
+                  borderStyle="solid"
+                  borderWidth="1px"
+                  rounded={10}
+                />
+                <Heading size="sm" fontWeight={700} letterSpacing="-0.06em">
+                  KRAIKUB{" "}
+                </Heading>
+              </HStack>
             </LinkWrap>
+          </HStack>
+          <HStack spacing={2} display={["none", "none", "flex"]}>
+            {tabs.map((e, i) => {
+              return <Tab key={`tab-${i}`} {...e} />;
+            })}
           </HStack>
           <Flex alignItems="center" gap={4}>
             <HStack spacing={3}>
@@ -229,12 +246,7 @@ const Navbar: FC = () => {
                   <Box key={`mobile-menu-${i}`} w="full">
                     <Link href={e.href || ""}>
                       <a>
-                        <Button
-                          {...navModalMenuButtonStyles}
-                          onClick={e.onClick}
-                        >
-                          {e.text}
-                        </Button>
+                        <Button {...navModalMenuButtonStyles}>{e.text}</Button>
                       </a>
                     </Link>
                   </Box>
@@ -304,7 +316,7 @@ const Navbar: FC = () => {
           <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
-      <Box position="sticky" top={0} zIndex={59} {...navStyles.desktop}>
+      {/* <Box position="sticky" top={0} zIndex={59} {...navStyles.desktop}>
         <Container
           maxW="container.xl"
           h="48px"
@@ -323,7 +335,7 @@ const Navbar: FC = () => {
             })}
           </ButtonGroup>
         </Container>
-      </Box>
+      </Box> */}
     </>
   );
 };

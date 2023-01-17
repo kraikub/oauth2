@@ -32,6 +32,11 @@ export const appConfig = {
       str: "5m",
       ms: 1000 * 60 * 5,
       s: 60 * 5,
+    },
+    invites: {
+      str: "14d",
+      ms: 60 * 60 * 24 * 14 * 1000,
+      s: 60 * 60 * 24 * 14
     }
   }
 
