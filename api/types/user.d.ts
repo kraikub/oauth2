@@ -17,3 +17,9 @@ interface FullUserData extends User {
 interface UserWithStudent extends User {
   student?: Student
 }
+
+interface UserWithExtra extends User {
+  student?: Student;
+  organization?: Organization;
+  roles?: RoleWithUser<OrganizationRoleData>[];
+}

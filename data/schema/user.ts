@@ -9,8 +9,10 @@ export const userSchema = new Schema<User>(
     shouldUpdate: { type: Boolean },
     fullName: { type: String },
     type: { type: String },
+    username: { type: String },
     profileImageUrl: { type: String },
     personalEmail: { type: String },
+    orgId: { type: String },
     settings: {
       email: {
         signin: { type: Boolean },

@@ -14,13 +14,13 @@ export const dictWhenNoActiveAccount: Dictionary =  {
 export const dictSetupPage1: Dictionary = {
   en: {
     "header": "A little setup for your new Kraikub ID",
-    "description": "What is your personal email? We recommend not to use @ku.th email.",
+    "description": "What is your personal email?",
     "btn-cancel": "Cancel activation",
     "btn-next": "Next",
   },
   th: {
     "header": "เตรียมความพร้อมสำหรับ Kraikub ID",
-    "description": "โปรดกรอกอีเมลของคุณ หากเป็นไปได้ เราไม่แน่นำให้คุณใช้อีเมล @ku.th",
+    "description": "โปรดกรอกอีเมลของคุณ",
     "btn-cancel": "ยกเลิกการเปิดใช้งาน",
     "btn-next": "ถัดไป",
   }
@@ -71,10 +71,12 @@ export const dictUserCard: Dictionary = {
   en: {
     "student": "Student",
     "corporate": "Coporate",
+    "at": "at",
   },
   th: {
     "student": "นักศึกษา",
     "corporate": "องค์กร",
+    "at": "ที่",
   }
 }
 
@@ -114,9 +116,11 @@ export const dictAccessesCard: Dictionary = {
   en: {
     "header": "Apps & Accesses",
     "at-time": "At",
+    "no-access": "You account has not been logged in to any application yet."
   },
   th: {
     "header": "แอปและการเข้าถึง",
     "at-time": "เมื่อ",
+    "no-access": "บัญชีของคุณยังไม่เคยใช้งานบนแอปพลิเคชันอื่น"
   },
 }

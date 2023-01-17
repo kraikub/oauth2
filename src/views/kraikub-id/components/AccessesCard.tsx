@@ -1,11 +1,4 @@
-import {
-  Box,
-  Center,
-  Heading,
-  HStack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Center, Heading, HStack, Text, VStack } from "@chakra-ui/react";
 import { FC } from "react";
 import { Card } from "../../../components/Card";
 import { CustomDivider } from "../../../components/CustomDivider";
@@ -21,7 +14,7 @@ interface EachProps {
 }
 
 const Each: FC<EachProps> = ({ access }) => {
-  const { t } = useClientTranslation(dictAccessesCard)
+  const { t } = useClientTranslation(dictAccessesCard);
   return (
     <HStack w="full" justifyContent="space-between">
       <HStack spacing={[0, 4]}>
@@ -39,7 +32,9 @@ const Each: FC<EachProps> = ({ access }) => {
           {access.app.length ? access.app[0].appName[0] : ""}
         </Center>
         <Box>
-          <Heading size="sm">{access.app.length ? access.app[0].appName : "Unknown"}</Heading>
+          <Heading size="sm">
+            {access.app.length ? access.app[0].appName : "Unknown"}
+          </Heading>
           <Text fontSize={12} fontWeight={600} opacity={0.6} mt={2}>
             {t("at-time")} {new Date(access.createdAt).toString()}
           </Text>
@@ -51,7 +46,7 @@ const Each: FC<EachProps> = ({ access }) => {
 };
 
 export const AccessesCard: FC<AccessesCardProps> = ({ accesses }) => {
-  const { t } = useClientTranslation(dictAccessesCard)
+  const { t } = useClientTranslation(dictAccessesCard);
   return (
     <Card
       props={{
@@ -59,12 +54,15 @@ export const AccessesCard: FC<AccessesCardProps> = ({ accesses }) => {
       }}
     >
       <Heading size="md">{t("header")}</Heading>
-      <CustomDivider />
-      <VStack spacing={5} my={10}>
-        {accesses.map((access, index) => {
-          return <Each key={`access-${index}`} access={access} />;
-        })}
-      </VStack>
+      {!accesses.length ? (
+        <Text opacity={0.7}>{t("no-access")}</Text>
+      ) : (
+        <VStack spacing={5} my={10}>
+          {accesses.map((access, index) => {
+            return <Each key={`access-${index}`} access={access} />;
+          })}
+        </VStack>
+      )}
     </Card>
   );
 };

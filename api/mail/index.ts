@@ -4,6 +4,10 @@ interface MailArgs {
   name?: string;
   deviceName?: string;
   ref?: string;
+  orgName?: string;
+  orgUsername?: string;
+  by?: string;
+  position?: string;
 }
 
 class MailService {
@@ -41,6 +45,14 @@ class MailService {
     const res = await axios.post(`${this.host}/api/v1/2fa`, {
       to,
       lang,
+      ...args,
+    });
+    return res;
+  }
+
+  async inviteToOrg(to: string, args: MailArgs) {
+    const res = await axios.post(`${this.host}/api/v1/org-invite`, {
+      to,
       ...args,
     });
     return res;

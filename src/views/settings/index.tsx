@@ -30,14 +30,14 @@ export const SettingPage: NextPage<SettingPageProps> = (props) => {
       <Container maxW="container.md" my="100px">
         <Card>
           <Grid templateColumns="repeat(12, 1fr)">
-            <GridItem colSpan={[12, 5]}>
+            <GridItem colSpan={8}>
               <Heading size="md">{t("topic-languages")}</Heading>
               <Text fontSize={12} opacity={0.7} mt={2}>
                 {t("topic-languages-description")}
               </Text>
             </GridItem>
-            <GridItem colSpan={[12, 7]}>
-              <HStack justifyContent="end">
+            <GridItem colSpan={4}>
+              <HStack justifyContent="end" flexWrap="wrap">
                 <Text>{t("option-languages-switch")}</Text>
                 <SmartLanguageToggler
                   sx={{
@@ -53,13 +53,13 @@ export const SettingPage: NextPage<SettingPageProps> = (props) => {
             }}
           />
           <Grid templateColumns="repeat(12, 1fr)">
-            <GridItem colSpan={[12, 5]}>
+            <GridItem colSpan={8}>
               <Heading size="md">{t("topic-dark")}</Heading>
               <Text fontSize={12} opacity={0.7} mt={2}>
                 {t("topic-dark-description")}
               </Text>
             </GridItem>
-            <GridItem colSpan={[12, 7]}>
+            <GridItem colSpan={4}>
               <HStack justifyContent="end">
                 <ThemeToggler />
               </HStack>

@@ -14,3 +14,11 @@ interface CustomApiResponse<type> {
   message: string;
   payload: type;
 }
+
+interface UseCaseResult<T = any> {
+  success: boolean;
+  httpStatus?: number;
+  internalStatus?: number;
+  message?: string;
+  data?: T;
+}

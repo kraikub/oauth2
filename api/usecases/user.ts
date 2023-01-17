@@ -1,4 +1,8 @@
-import { checkRedisTopic } from "./../utils/string";
+import {
+  checkRedisTopic,
+  concatFullName,
+  createUsername,
+} from "./../utils/string";
 import { mailService } from "./../mail/index";
 import { sha256 } from "./../utils/crypto";
 import { redis } from "./../../data/redis/index";
@@ -50,16 +54,27 @@ export class UserUsecase {
     signinSignature: string,
     authResponse: MyKULoginResponse
   ): Promise<{ user: User; student: Student; educations: Education[] }> => {
+    console.log("======", authResponse.user.avatar);
     const newUser: User = {
       uid: uid,
       appQuota: appConfig.INIT_MAX_APP_QUOTA,
       signinSignature: signinSignature,
       personalEmail: "",
-      fullName: "",
+      fullName: concatFullName(
+        authResponse.user.titleEn,
+        authResponse.user.firstNameEn,
+        authResponse.user.middleNameEn || "",
+        authResponse.user.lastNameEn
+      ),
       type: "student",
       profileImageUrl: appConfig.defaultProfileImageUrl,
       appOwned: 0,
       shouldUpdate: false,
+      orgId: "",
+      username: createUsername(
+        authResponse.user.firstNameEn,
+        authResponse.user.lastNameEn
+      ),
       settings: {
         email: {
           signin: true,
@@ -117,6 +132,33 @@ export class UserUsecase {
       }
       return null;
     }
+  };
+
+  getSafeUserContentFromUsername = async (
+    username: string
+  ): Promise<UseCaseResult<{ user: SafeUser | null }>> => {
+    const a = await userRepository.findWithUsername(username);
+    if (!a) {
+      return {
+        success: true,
+        data: { user: null },
+      };
+    }
+    const filtered: SafeUser = {
+      username: a.username,
+      uid: a.uid,
+      profileImageUrl: a.profileImageUrl,
+      fullName: a.fullName,
+      personalEmail: a.personalEmail,
+      createdAt: a.createdAt,
+      type: a.type,
+    };
+    return {
+      success: true,
+      data: {
+        user: filtered,
+      },
+    };
   };
 
   getPrivateUserWithStudent = async (
@@ -195,6 +237,8 @@ export class UserUsecase {
           signupDetail.fullName +
           sha256(signupDetail.accountType)
       ),
+      orgId: "",
+      username: "",
       type: signupDetail.accountType,
       fullName: signupDetail.fullName,
       appQuota: appConfig.INIT_MAX_APP_QUOTA,

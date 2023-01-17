@@ -34,4 +34,6 @@ export const p = {
   settings: "/settings",
   emailVerification: "/id/kraikubid-activation",
   signUpVerification: "/id/external/activation",
+  organization: "/id/organization",
+  organizationInviteLanding: "/id/external/organization/join"
 }

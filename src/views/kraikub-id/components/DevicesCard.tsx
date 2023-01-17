@@ -171,9 +171,8 @@ export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
   return (
     <Box w="full">
       <Card>
-        <Box>
+        <Box mb={6}>
           <Heading size="md">{t("header")}</Heading>
-          <CustomDivider />
         </Box>
         {/* <Button>Learn more about device detection</Button> */}
         <VStack spacing={5}>

@@ -10,7 +10,7 @@ interface UserFilter {
   uid?: string;
   signinSignature?: string;
   personalEmail?: string;
-
+  username?: string;
 }
 
 interface UserUpdatableFields {
@@ -23,6 +23,10 @@ class UserRepository {
   findOne = async (filter: UserFilter) => {
     await mongodb.connect();
     return UserModel.findOne<User>(filter);
+  };
+  findWithUsername = async (username: string) => {
+    await mongodb.connect();
+    return UserModel.findOne<User>({ username });
   };
   create = async (u: User) => {
     await mongodb.connect();
@@ -49,5 +53,9 @@ class UserRepository {
     await mongodb.connect();
     return await UserModel.aggregate(pipeline);
   };
+
+  setOrgId = async (uid: string, orgId: string) => {
+    return await UserModel.updateOne<User>({ uid: uid }, { orgId });
+  }
 }
 export const userRepository = new UserRepository();

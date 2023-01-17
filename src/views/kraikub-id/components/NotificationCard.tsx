@@ -31,10 +31,10 @@ const EachSwitch: FC<EachSwitchProps> = ({
   return (
     <Flex gap={3} justifyContent="space-between" w="full">
       <Box>
-        <Text fontSize={16} fontWeight={500}>
+        <Text fontWeight={600}>
           {title}
         </Text>
-        <Text fontSize={14} fontWeight={400} opacity={0.6}>
+        <Text fontWeight={400} opacity={0.6}>
           {description}
         </Text>
       </Box>
@@ -46,15 +46,14 @@ const EachSwitch: FC<EachSwitchProps> = ({
 export const NotificationCard: FC<NotificationCardProps> = ({ user }) => {
   const { t } = useClientTranslation(dictNotificationCard)
   return (
-    <Box w="full" h="full">
+    <Box w="full">
       <Card
         props={{
           h: "full",
         }}
       >
         <Heading size="md">{t("header")}</Heading>
-        <CustomDivider />
-        <VStack alignItems="start" my={6} spacing={9}>
+        <VStack alignItems="start" my={6} spacing={5}>
           <EachSwitch
             title={t("sign-in-activities")}
             description={t("sign-in-activities-description")}

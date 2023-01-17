@@ -10,7 +10,7 @@ export const CustomDivider: FC<CustomDividerProps> = ({ sx }) => {
     <Divider
       my={4}
       opacity={1}
-      borderColor={useColorModeValue("blackAlpha.300", "whiteAlpha.300")}
+      borderColor={useColorModeValue("blackAlpha.200", "whiteAlpha.200")}
       {...sx}
     />
   );

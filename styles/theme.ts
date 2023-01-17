@@ -17,6 +17,7 @@ export const colors = {
   },
   kraikub: {
     blue: {
+      100: "#e0edff",
       200: "#abceff",
       300: "#70acff",
       400: "#3d8eff",
@@ -35,7 +36,7 @@ export const colors = {
     },
   },
   bg: {
-    light: "#f7f9fa",
+    light: "#f8fafb",
     dark: "#141414",
   },
   card: {
@@ -56,8 +57,8 @@ const fonts = {
 const components: { [key: string]: ComponentStyleConfig } = {
   Text: {
     baseStyle: {
-      fontSize: 16,
-      fontWeight: 500,
+      fontSize: 14,
+      fontWeight: 400,
     },
   },
   Heading: {
@@ -81,7 +82,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
     defaultProps: {
       fontSize: 20,
       fontWeight: 500,
-      focusBorderColor: 'kraikub.blue.500',
+      focusBorderColor: "kraikub.blue.500",
     },
   },
   Button: {
@@ -101,6 +102,38 @@ const components: { [key: string]: ComponentStyleConfig } = {
         fontSize: 16,
       },
     },
+  },
+  Modal: {
+    defaultProps: {
+      isCentered: true,
+      motionPreset: "slideInBottom",
+    },
+    baseStyle: (props) => ({
+      dialog: {
+        rounded: 14,
+        roundedBottomLeft: [0, 0, 14],
+        roundedBottomRight: [0, 0, 14],
+        alignSelf: ["flex-end", "flex-center"],
+        m: [0, 0, "auto"],
+        minW: ["100vw", "100vw", "container.sm"],
+        bg: mode(colors.card.light, colors.card.dark)(props),
+      },
+    }),
+  },
+  Menu: {
+    baseStyle: (props) => ({
+      list: {
+        bg: mode(colors.card.light, colors.card.dark)(props),
+        boxShadow: "0 10px 20px #00000030",
+        rounded: 14
+      },
+      item: {
+        bg: "transparent",
+        _hover: {
+          bg: mode("blackAlpha.100", "whiteAlpha.100")(props),
+        },
+      },
+    }),
   },
 };
 
