@@ -24,6 +24,7 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { FC, SyntheticEvent, useEffect, useState } from "react";
 import { builtInRoles } from "../../../../api/config/org";
 import { testOrgUsername } from "../../../../api/utils/string";
@@ -40,6 +41,7 @@ export const Invite: FC<InviteProps> = ({ orgId }) => {
   const [position, setPosition] = useState<string>("");
   const [username, setUsername] = useState("");
   const [nextButtonLoading, setNextButtonLoading] = useState<boolean>(false);
+  const [err, setErr] = useState<string>();
   const [inviteButtonLoading, setInviteButtonLoading] =
     useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<SafeUser | null>();
@@ -54,23 +56,28 @@ export const Invite: FC<InviteProps> = ({ orgId }) => {
   const handleFindUser = async (e: SyntheticEvent) => {
     e.preventDefault();
     setNextButtonLoading(true);
-    if (!testOrgUsername(username)) {
-      setSelectedUser(null);
-      setNextButtonLoading(false);
-      return;
-    }
     const { data } = await userService.safeUserFromUsername(username);
     setSelectedUser(data.payload.user);
     setNextButtonLoading(false);
   };
 
   const handleInvite = async (e: SyntheticEvent) => {
-    console.log("yee");
     e.preventDefault();
     setInviteButtonLoading(true);
     const selectedRole = builtInRoles[role];
     if (!selectedRole || !selectedUser) {
       return alert("Require role or user");
+    }
+    try {
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          setErr((error.response?.data as CustomApiResponse<any>).message);
+        }
+      } else {
+        console.error();
+        return alert("Failed to create an invitation");
+      }
     }
     const { data } = await orgService.invite(orgId, selectedUser.uid, {
       ...selectedRole,
@@ -78,7 +85,6 @@ export const Invite: FC<InviteProps> = ({ orgId }) => {
         displayPosition: position,
       },
     });
-    console.log("yaa");
     setInviteButtonLoading(false);
     setIsModalOpen(false);
   };
@@ -143,6 +149,7 @@ export const Invite: FC<InviteProps> = ({ orgId }) => {
               Next
             </Button>
           </HStack>
+          { err ? <Text>{err}</Text> : null}
         </form>
       </VStack>
       <Modal isOpen={isModalOpen} onClose={handleClose}>
