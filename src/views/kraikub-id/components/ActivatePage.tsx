@@ -68,7 +68,7 @@ const Page1: FC<SubpageProps> = ({ next, lastPage, page }) => {
             required
           />
           <ButtonGroup justifyContent="space-between" w="full" py={6}>
-            <Link href="/a">
+            <Link href="/id">
               <a>
                 <Button size="lg">{t("btn-cancel")}</Button>
               </a>

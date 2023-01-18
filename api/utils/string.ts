@@ -12,21 +12,10 @@ export const testOrgUsername = (orgUsername: string) => {
   );
 };
 
-export const concatFullName = (
-  title: string,
-  firstName: string,
-  middleName: string,
-  lastName: string
-) => {
+export const concatFullName = (firstName: string, lastName: string) => {
   const res = [];
-  if (title) {
-    res.push(title);
-  }
   if (firstName) {
     res.push(firstName);
-  }
-  if (middleName) {
-    res.push(middleName);
   }
   if (lastName) {
     res.push(lastName);
@@ -34,6 +23,16 @@ export const concatFullName = (
   return res.join(" ");
 };
 
-export const createUsername = (firstName: string, lastName: string) => {
-  return firstName.toLowerCase()+"."+lastName.toLowerCase().slice(0,3);
+export const createUsername = (
+  firstName: string,
+  lastName: string,
+  i: number,
+  min: number = 3
+) => {
+  const first = firstName.toLowerCase();
+  const last =
+    lastName.length >= i
+      ? lastName.toLowerCase().slice(0, i)
+      : lastName.toLowerCase() + `${min - i + 1}`;
+  return first + "." + last;
 };
