@@ -13,6 +13,7 @@ import { CustomDivider } from "../../components/CustomDivider";
 import { useUser } from "../../contexts/User";
 import { CreateOrg } from "./components/CreateOrg";
 import { Invite } from "./components/Invite";
+import { NoKraikubID } from "./components/NoKraikubID";
 import { UserOrgCard } from "./components/UserOrgCard";
 
 interface OrgDashboardPage {
@@ -24,6 +25,13 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
   if (!user) {
     return null;
   }
+
+  if (!user.personalEmail) {
+    return (
+      <NoKraikubID />
+    )
+  }
+
   return (
     <Container maxW="container.lg" py="20px">
       {!user?.orgId ? (

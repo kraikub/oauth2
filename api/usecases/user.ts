@@ -54,16 +54,32 @@ export class UserUsecase {
     signinSignature: string,
     authResponse: MyKULoginResponse
   ): Promise<{ user: User; student: Student; educations: Education[] }> => {
-    console.log("======", authResponse.user.avatar);
+    let username = "";
+    let generatedTmpUsername = "";
+    let maxLoop = 10000;
+    for (let i = 3; i < maxLoop; i++) {
+      generatedTmpUsername = createUsername(
+        authResponse.user.firstNameEn,
+        authResponse.user.lastNameEn,
+        i
+      );
+      const found = await userRepository.findWithUsername(generatedTmpUsername);
+      if (!found) {
+        username = generatedTmpUsername;
+        break;
+      }
+    }
+    if (!username) {
+      throw new Error("Maximum loop exceed on username generation");
+    }
+
     const newUser: User = {
       uid: uid,
       appQuota: appConfig.INIT_MAX_APP_QUOTA,
       signinSignature: signinSignature,
       personalEmail: "",
       fullName: concatFullName(
-        authResponse.user.titleEn,
         authResponse.user.firstNameEn,
-        authResponse.user.middleNameEn || "",
         authResponse.user.lastNameEn
       ),
       type: "student",
@@ -71,10 +87,7 @@ export class UserUsecase {
       appOwned: 0,
       shouldUpdate: false,
       orgId: "",
-      username: createUsername(
-        authResponse.user.firstNameEn,
-        authResponse.user.lastNameEn
-      ),
+      username: username,
       settings: {
         email: {
           signin: true,

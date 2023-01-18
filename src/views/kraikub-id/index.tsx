@@ -33,31 +33,40 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
   if (!user.personalEmail) {
     return (
       <Container
-        maxW="container.xl"
+        maxW="container.md"
         h="50vh"
         display="flex"
         justifyContent="center"
         alignItems="center"
       >
-        <Box textAlign="center">
-          <Heading>{t("header")}</Heading>
-          <Text fontSize={18} fontWeight={600} opacity={0.6} mt={4}>
-            {t("description")}
-          </Text>
-          <LinkWrap href="/id/activate">
-            <Button
-              height="80px"
-              fontSize={20}
-              fontWeight={600}
-              mt={16}
-              px={14}
-              rounded={18}
-              colorScheme="kraikub.blue"
-            >
-              {t("btn-activate")}
-            </Button>
-          </LinkWrap>
-        </Box>
+        <Card
+          props={{
+            pt: "40px",
+            rounded: 16,
+          }}
+        >
+          <Container maxW="container.sm">
+            <Box textAlign="center">
+              <Heading size="lg">{t("header")}</Heading>
+              <Text fontSize={16} opacity={0.8} mt={4}>
+                {t("description")}
+              </Text>
+              <LinkWrap href="/id/activate">
+                <Button
+                  size="lg"
+                  w="full"
+                  fontWeight={600}
+                  mt={16}
+                  px={14}
+                  colorScheme="kraikub.blue.always"
+                  color="white"
+                >
+                  {t("btn-activate")}
+                </Button>
+              </LinkWrap>
+            </Box>
+          </Container>
+        </Card>
       </Container>
     );
   }
@@ -74,7 +83,7 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
         </GridItem>
         <GridItem colSpan={[12, 12, 4]}>
           <VStack spacing={4}>
-            <OrganizationCard user={user}/>
+            <OrganizationCard user={user} />
             <NotificationCard user={user} />
           </VStack>
         </GridItem>
