@@ -10,9 +10,9 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { useRouter } from "next/router";
 import { ChangeEvent, FC, SyntheticEvent, useState } from "react";
-import { testOrgUsername } from "../../../../api/utils/string";
 import { Card } from "../../../components/Card";
 import { CustomDivider } from "../../../components/CustomDivider";
 import { orgService } from "../../../services/organizationService";
@@ -30,7 +30,10 @@ export const CreateOrg: FC = () => {
   const [orgUsername, setOrgUsername] = useState("");
   const [nameError, setNameError] = useState<boolean>(false);
   const [usernameError, setUsernameError] = useState<boolean>(false);
+  const [userNameErrString, setUsernameErrString] = useState<string>("");
+  const [nameErrString, setNameErrString] = useState<string>("");
   const [position, setPosition] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   const handleOrgUsernameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -46,21 +49,27 @@ export const CreateOrg: FC = () => {
 
   const handleFormSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
+      // Check orgName
       const { data: nameData } = await orgService.checkName(orgName);
       setNameError(!nameData.payload.available);
+      setNameErrString(nameData.message);
+      // Check orgUsername
       const { data: usernameData } = await orgService.checkUsername(
         orgUsername
       );
-      setNameError(!usernameData.payload.available);
-
+      setUsernameError(!usernameData.payload.available);
+      setUsernameErrString(usernameData.message);
       if (!nameData.payload.available || !usernameData.payload.available)
         return;
+      // Create
       const { data } = await orgService.create(orgName, orgUsername, position);
-      router.reload();
+      return router.reload();
     } catch (error) {
-      console.error(error);
-      alert("An error occured while creating an organization.");
+      console.log(error);
+      setIsLoading(false);
+      alert("Fail to create an organization");
     }
   };
 
@@ -82,6 +91,7 @@ export const CreateOrg: FC = () => {
               w="full"
               maxW="400px"
             />
+            <Text fontWeight={500} color="red.500">{nameErrString}</Text>
           </InputStack>
 
           <InputStack w="full">
@@ -92,6 +102,7 @@ export const CreateOrg: FC = () => {
                 rounded={8}
                 value={orgUsername}
                 onChange={handleOrgUsernameChange}
+                isInvalid={usernameError}
                 maxW="400px"
               />
               <Box
@@ -103,6 +114,7 @@ export const CreateOrg: FC = () => {
                 <Text fontWeight={600}>Display as @{orgUsername}</Text>
               </Box>
             </HStack>
+            <Text fontWeight={500} color="red.500">{userNameErrString}</Text>
           </InputStack>
           <InputStack w="full">
             <Box>
@@ -132,7 +144,7 @@ export const CreateOrg: FC = () => {
           <Button
             colorScheme="kraikub.blue.always"
             color="white"
-            disabled={!orgName || !testOrgUsername(orgUsername) || !position}
+            disabled={!orgName || !orgUsername || !position}
             type="submit"
           >
             Create organization

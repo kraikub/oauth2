@@ -20,7 +20,7 @@ class OrganizationService {
   };
 
   create = async (orgName: string, orgUsername: string, position: string) => {
-    return nextApiBaseInstance.post<CustomApiResponse<{ available: boolean }>>(
+    return nextApiBaseInstance.post<CustomApiResponse<{ orgId: string }>>(
       "/api/internal/org/create",
       {
         orgName,

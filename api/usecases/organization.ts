@@ -13,7 +13,7 @@ class OragnizationUsecase {
     if (!testOrgUsername(orgUsername)) {
       return {
         success: true,
-        message: "Regex test failed",
+        message: "Invalid username pattern (regex test failed)",
         data: {
           available: false,
         },
@@ -22,6 +22,7 @@ class OragnizationUsecase {
     const o = await orgRepo.getWithUserName(orgUsername);
     return {
       success: true,
+      message: o ? "Username already taken" : "",
       data: {
         available: o ? false : true,
       },
@@ -32,6 +33,7 @@ class OragnizationUsecase {
     const o = await orgRepo.getWithName(orgName);
     return {
       success: true,
+      message: o ? "This name is already taken" : "",
       data: {
         available: o ? false : true,
       },
