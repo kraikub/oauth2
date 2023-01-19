@@ -181,9 +181,9 @@ class OragnizationUsecase {
         return {
           success: false,
           message: "Operation on mail service failed",
+          httpStatus: 500,
           data: {
-            mailServiceRequest: error.request, 
-            mailServiceResponse: error.response,
+            mailServiceResponse: error.response ? error.response.data : undefined,
             mailServiceErrorCode: error.code,
             mailServiceErrorCause: error.cause,
             mailServiceErrorStatus: error.status
