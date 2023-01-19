@@ -222,10 +222,18 @@ export class UserUsecase {
     const userFromEmail = await userRepository.findOne({
       personalEmail: email,
     });
+    const userFromUsername = await userRepository.findWithUsername(username)
     if (userFromEmail) {
       return {
         success: false,
-        message: "Email may be used bu another user.",
+        message: "Email may be used by another user.",
+        httpStatus: 406,
+      };
+    }
+    if (userFromUsername) {
+      return {
+        success: false,
+        message: "Username may be used by another user.",
         httpStatus: 406,
       };
     }
@@ -236,6 +244,7 @@ export class UserUsecase {
         fullName,
         email,
         accountType,
+        username,
       }),
       appConfig.expirations.verificationEmail.s
     );
@@ -265,7 +274,7 @@ export class UserUsecase {
           sha256(signupDetail.accountType)
       ),
       orgId: "",
-      username: "",
+      username: signupDetail.username,
       type: signupDetail.accountType,
       fullName: signupDetail.fullName,
       appQuota: appConfig.INIT_MAX_APP_QUOTA,

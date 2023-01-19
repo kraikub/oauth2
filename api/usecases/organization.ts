@@ -9,6 +9,7 @@ import { orgRepo } from "./../repositories/organization";
 import { random, sha256 } from "./../utils/crypto";
 import { builtInRoles } from "../config/org";
 import { p } from "../../src/utils/path";
+import axios from "axios";
 class OragnizationUsecase {
   isUsernameAvailable = async (
     username: string
@@ -167,6 +168,7 @@ class OragnizationUsecase {
       JSON.stringify(fullRole),
       appConfig.expirations.invites.s
     );
+    try {
     await mailService.inviteToOrg(memberData.personalEmail, {
       code: `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}${p.organizationInviteLanding}?vssid=${redisKey}`,
       orgName: organization.orgName,
@@ -174,6 +176,21 @@ class OragnizationUsecase {
       position: role.data.displayPosition,
       by: operatorData.fullName,
     });
+    } catch(error) {
+      if (axios.isAxiosError(error)) {
+        return {
+          success: false,
+          message: "Operation on mail service failed",
+          data: {
+            mailServiceRequest: error.request, 
+            mailServiceResponse: error.response,
+            mailServiceErrorCode: error.code,
+            mailServiceErrorCause: error.cause,
+            mailServiceErrorStatus: error.status
+          }
+        }
+      }
+    }
 
     return {
       success: true,

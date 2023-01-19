@@ -75,34 +75,35 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
       return alert("Require role or user");
     }
     try {
+      await orgService.invite(
+        orgId,
+        selectedUser.uid,
+        selectedRole.priority,
+        position
+      );
+      toast.closeAll();
+      toast({
+        position: "top",
+        render: () => (
+          <NotificationToast
+            title="Invite sent"
+            detail={`Sucessfully invite ${selectedUser.fullName}`}
+          />
+        ),
+      });
+      setInviteButtonLoading(false);
+      setIsModalOpen(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
           setErr((error.response?.data as CustomApiResponse<any>).message);
         }
       } else {
-        console.error();
+        console.error(error);
         return alert("Failed to create an invitation");
       }
+      setInviteButtonLoading(false);
     }
-    await orgService.invite(
-      orgId,
-      selectedUser.uid,
-      selectedRole.priority,
-      position
-    );
-    toast.closeAll();
-    toast({
-      position: "top",
-      render: () => (
-        <NotificationToast
-          title="Invite sent"
-          detail={`Sucessfully invite ${selectedUser.fullName}`}
-        />
-      ),
-    });
-    setInviteButtonLoading(false);
-    setIsModalOpen(false);
   };
 
   const titleStyle = {
