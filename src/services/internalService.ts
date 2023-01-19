@@ -9,6 +9,7 @@ interface SignupPayload {
   lastName: string;
   email: string;
   accountType: string;
+  username: string;
 }
 
 class InternalServiceApi {

@@ -125,17 +125,22 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
               <Text>
                 <strong>@{user.username}</strong>
               </Text>
-              <BsDot opacity={0.6} size="20px" />
-              <Text>
-                {matchedRoleName} {t("at")} {user.organization?.orgName}
-              </Text>
+
+              {user.orgId ? (
+                <>
+                  <BsDot opacity={0.6} size="20px" />
+                  <Text>
+                    {matchedRoleName} {t("at")} {user.organization?.orgName}
+                  </Text>
+                </>
+              ) : null}
             </HStack>
           </VStack>
           <ButtonGroup mt={6} spacing={[0, 2]} flexWrap="wrap" rowGap={2}>
             <Link href="/id/organization">
               <a>
                 <Button variant="outline" {...menuButtonProps}>
-                  View Organization
+                  {user.orgId ? "View" : "Join an"} Organization
                 </Button>
               </a>
             </Link>

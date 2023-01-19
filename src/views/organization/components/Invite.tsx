@@ -22,20 +22,25 @@ import {
   Select,
   Text,
   useColorModeValue,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { FC, SyntheticEvent, useEffect, useState } from "react";
 import { builtInRoles } from "../../../../api/config/org";
 import { testOrgUsername } from "../../../../api/utils/string";
+import { Card } from "../../../components/Card";
+import { NotificationToast } from "../../../components/NotificationToast";
+import { RoleSelector } from "../../../components/org/RoleSelector";
 import { orgService } from "../../../services/organizationService";
 import { userService } from "../../../services/userService";
 
 interface InviteProps {
   orgId: string;
+  myRole: MemberData;
 }
 
-export const Invite: FC<InviteProps> = ({ orgId }) => {
+export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
   const [position, setPosition] = useState<string>("");
@@ -45,6 +50,7 @@ export const Invite: FC<InviteProps> = ({ orgId }) => {
   const [inviteButtonLoading, setInviteButtonLoading] =
     useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<SafeUser | null>();
+  const toast = useToast();
 
   const handleClose = () => {
     setIsModalOpen(false);
@@ -79,11 +85,21 @@ export const Invite: FC<InviteProps> = ({ orgId }) => {
         return alert("Failed to create an invitation");
       }
     }
-    const { data } = await orgService.invite(orgId, selectedUser.uid, {
-      ...selectedRole,
-      data: {
-        displayPosition: position,
-      },
+    await orgService.invite(
+      orgId,
+      selectedUser.uid,
+      selectedRole.priority,
+      position
+    );
+    toast.closeAll();
+    toast({
+      position: "top",
+      render: () => (
+        <NotificationToast
+          title="Invite sent"
+          detail={`Sucessfully invite ${selectedUser.fullName}`}
+        />
+      ),
     });
     setInviteButtonLoading(false);
     setIsModalOpen(false);
@@ -149,7 +165,7 @@ export const Invite: FC<InviteProps> = ({ orgId }) => {
               Next
             </Button>
           </HStack>
-          { err ? <Text>{err}</Text> : null}
+          {err ? <Text>{err}</Text> : null}
         </form>
       </VStack>
       <Modal isOpen={isModalOpen} onClose={handleClose}>
@@ -170,40 +186,11 @@ export const Invite: FC<InviteProps> = ({ orgId }) => {
                 <Text {...titleStyle} mt={8}>
                   Permission
                 </Text>
-                <Menu>
-                  <MenuButton
-                    px={4}
-                    h="36px"
-                    type="button"
-                    transition="all 0.2s"
-                    borderRadius="md"
-                    borderWidth="1px"
-                  >
-                    {builtInRoles[role]
-                      ? builtInRoles[role].roleName
-                      : "Select role"}{" "}
-                    <ChevronDownIcon />
-                  </MenuButton>
-                  <MenuList maxW="100vw">
-                    {Object.keys(builtInRoles).map((k, index) => {
-                      const role = builtInRoles[k];
-                      return (
-                        <MenuItem
-                          key={`option-role-${index}`}
-                          display="flex"
-                          flexDirection="column"
-                          alignItems="start"
-                          onClick={() => setRole(k)}
-                        >
-                          <Text fontWeight={600}>{role.roleName}</Text>
-                          <Text opacity={0.6} fontSize={12}>
-                            {role.desc}
-                          </Text>
-                        </MenuItem>
-                      );
-                    })}
-                  </MenuList>
-                </Menu>
+                <RoleSelector
+                  role={role}
+                  setRole={setRole}
+                  showRolesUnder={myRole.priority}
+                />
               </Box>
               <Text {...titleStyle} mt={8}>
                 What they do? Give them a position.

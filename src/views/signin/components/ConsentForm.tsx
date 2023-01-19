@@ -19,7 +19,7 @@ interface ConsentFormProps {
   handleSignin: (options?: SigninOptions) => any | (() => Promise<any>);
   handleReject: () => any | (() => Promise<any>);
   loading: boolean;
-  signInMethod: SignInMethodType
+  signInMethod: SignInMethodType;
 }
 
 type ConsentData = {
@@ -108,15 +108,16 @@ export const ConsentForm: FC<ConsentFormProps> = ({
           <Button
             size="lg"
             variant="ghost"
-            colorScheme="kraikub.blue"
+            colorScheme="kraikub.blue.always"
             onClick={handleReject}
           >
             {t("consent-btn-cancel")}
           </Button>
           <Button
             size="lg"
-            colorScheme="kraikub.blue"
-            onClick={() => handleSignin({ signin_method: signInMethod})}
+            colorScheme="kraikub.blue.always"
+            color="white"
+            onClick={() => handleSignin({ signin_method: signInMethod })}
             isLoading={loading}
           >
             {t("consent-btn-allow")}

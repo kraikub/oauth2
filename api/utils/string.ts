@@ -15,10 +15,13 @@ export const testOrgUsername = (orgUsername: string) => {
 export const concatFullName = (firstName: string, lastName: string) => {
   const res = [];
   if (firstName) {
-    res.push(firstName);
+    let fn = firstName.slice(0, 1) + firstName.slice(1).toLowerCase();
+
+    res.push(fn);
   }
   if (lastName) {
-    res.push(lastName);
+    let ln = lastName.slice(0, 1) + lastName.slice(1).toLowerCase();
+    res.push(ln);
   }
   return res.join(" ");
 };

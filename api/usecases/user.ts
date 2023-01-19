@@ -17,6 +17,7 @@ import { educationCoverter } from "../utils/converter/education";
 import { studentConverter } from "../utils/converter/student";
 import { createAnonymousIdentity } from "../utils/crypto";
 import { p } from "../../src/utils/path";
+import { AxiosResponse } from "axios";
 
 export class UserUsecase {
   publicData = async (uid: string): Promise<PublicUserData | null> => {
@@ -57,7 +58,8 @@ export class UserUsecase {
     let username = "";
     let generatedTmpUsername = "";
     let maxLoop = 10000;
-    for (let i = 3; i < maxLoop; i++) {
+    let minLastnameLengthThresold = 2;
+    for (let i = minLastnameLengthThresold; i < maxLoop; i++) {
       generatedTmpUsername = createUsername(
         authResponse.user.firstNameEn,
         authResponse.user.lastNameEn,
@@ -212,11 +214,20 @@ export class UserUsecase {
     fullName: string,
     email: string,
     accountType: string,
+    username: string,
     lang: string = "en"
-  ) => {
-    const u = await userRepository.findOne({ personalEmail: email });
-    if (u) {
-      return {};
+  ): Promise<
+    UseCaseResult<{ mailResponse: AxiosResponse<any, any> | undefined }>
+  > => {
+    const userFromEmail = await userRepository.findOne({
+      personalEmail: email,
+    });
+    if (userFromEmail) {
+      return {
+        success: false,
+        message: "Email may be used bu another user.",
+        httpStatus: 406,
+      };
     }
     let redisKey = `signup:${sha256(email)}`;
     await redis.set(
@@ -233,8 +244,11 @@ export class UserUsecase {
       name: fullName,
     });
     return {
-      redisKey,
-      mailResponse,
+      success: true,
+      message: "",
+      data: {
+        mailResponse,
+      },
     };
   };
 

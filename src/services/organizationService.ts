@@ -30,14 +30,33 @@ class OrganizationService {
     );
   };
 
-  invite = async (orgId: string, uid: string, role: RolePrototype<OrganizationRoleData>) => {
+  invite = async (orgId: string, uid: string, priority: number, position: string) => {
     return nextApiBaseInstance.post<CustomApiResponse<any>>(
       `/api/internal/org/add-member/${orgId}`,
       {
         uid,
-        role,
+        priority,
+        position
       }
     );
   };
+
+  updateRole = async (orgId: string, uid: string, priority: number) => {
+    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/update/role`, {
+      orgId,
+      uid,
+      priority,
+    })
+  }
+
+  removeMember = async (orgId: string, uid: string) => {
+    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/remove`, {
+      orgId,
+      uid,
+    })
+  }
+  leave = async () => {
+    return nextApiBaseInstance.get<CustomApiResponse>(`/api/internal/org/leave`)
+  }
 }
 export const orgService = new OrganizationService();
