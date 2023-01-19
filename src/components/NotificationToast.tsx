@@ -25,16 +25,26 @@ export const NotificationToast: FC<NotificationProps> = ({
   return (
     <Card
       props={{
-        width: "92vw",
+        width: "96vw",
         maxWidth: "500px",
-        boxShadow: "0 0 30px #00000030",
+        boxShadow: useColorModeValue("0 0 30px #00000050", "0 0 30px #ffffff10"),
         rounded: 20,
         backdropFilter: "blur(20px)",
+        bg: useColorModeValue(
+          "notificationCard.light",
+          "notificationCard.dark"
+        ),
       }}
     >
       <HStack spacing={3}>
         <Box>
-          <Center w="50px" h="50px" bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")} fontSize={24} rounded={16}>
+          <Center
+            w="50px"
+            h="50px"
+            bg={useColorModeValue("blackAlpha.100", "whiteAlpha.100")}
+            fontSize={24}
+            rounded={16}
+          >
             <BellIcon />
           </Center>
         </Box>
