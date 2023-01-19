@@ -93,6 +93,9 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
       });
       setInviteButtonLoading(false);
       setIsModalOpen(false);
+      setPosition("")
+      setErr("")
+      setRole("")
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -103,6 +106,8 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
         return alert("Failed to create an invitation");
       }
       setInviteButtonLoading(false);
+      setPosition("")
+      setRole("")
     }
   };
 
@@ -132,7 +137,7 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
                 borderRadius="md"
                 borderWidth="1px"
                 transition="300me ease"
-                boxShadow={selectedUser === null ? "0 0 0 2px crimson" : "none"}
+                boxShadow={err ? "0 0 0 2px crimson" : "none"}
               >
                 <Center
                   minH="36px"
@@ -166,7 +171,7 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
               Next
             </Button>
           </HStack>
-          {err ? <Text>{err}</Text> : null}
+          {err ? <Text mt={2} color="kraikub.red.500">{err}</Text> : null}
         </form>
       </VStack>
       <Modal isOpen={isModalOpen} onClose={handleClose}>

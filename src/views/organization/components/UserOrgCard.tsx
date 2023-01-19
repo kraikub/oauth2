@@ -4,6 +4,7 @@ import {
   Button,
   ButtonGroup,
   Center,
+  Collapse,
   Grid,
   GridItem,
   Heading,
@@ -16,6 +17,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  SimpleGrid,
   Text,
   useColorModeValue,
   useToast,
@@ -30,6 +32,7 @@ import { Card } from "../../../components/Card";
 import { NotificationToast } from "../../../components/NotificationToast";
 import { RoleSelector } from "../../../components/org/RoleSelector";
 import { orgService } from "../../../services/organizationService";
+import { PageWrapper } from "../../kraikub-id/components/PageWrapper";
 
 interface UserCardProps {
   member: MemberData;
@@ -47,12 +50,15 @@ export const UserOrgCard: FC<UserCardProps> = ({
   myRole,
 }) => {
   const router = useRouter();
+
   const [prevRole, setPrevRole] = useState(member.roleType);
   const [role, setRole] = useState(member.roleType);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const toast = useToast();
+  const [isConfirmation, setIsConfirmation] = useState(false);
   const handleClose = () => {
     setIsOpen(false);
+    setIsConfirmation(false);
   };
   const handleOpen = () => {
     setIsOpen(true);
@@ -129,56 +135,125 @@ export const UserOrgCard: FC<UserCardProps> = ({
           <IoMdMore />
         </IconButton>
       </HStack>
-      <Modal isOpen={isOpen} onClose={handleClose}>
+      <Modal isOpen={isOpen} onClose={handleClose} closeOnOverlayClick={!isConfirmation}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <VStack spacing={6}>
-              <Avatar src={member.user.profileImageUrl} size="2xl"></Avatar>
-              <VStack spacing={2}>
-                <Heading size="lg">{member.user.fullName}</Heading>
-                <Text opacity={0.7} fontSize={18}>
-                  {member.data.displayPosition}
-                </Text>
+            <Collapse in={!isConfirmation}>
+              <VStack spacing={3} mt={8}>
+                <VStack spacing={6} w="full">
+                  <Avatar src={member.user.profileImageUrl} size="2xl"></Avatar>
+                  <VStack spacing={2}>
+                    <Heading size="lg">{member.user.fullName}</Heading>
+                    <Text opacity={0.7} fontSize={18}>
+                      {member.data.displayPosition}
+                    </Text>
 
-                <Text opacity={0.7} fontSize={18}>
-                  {member.user.personalEmail}
-                </Text>
+                    <Text opacity={0.7} fontSize={18}>
+                      {member.user.personalEmail}
+                    </Text>
+                  </VStack>
+                  <Box w="full">
+                    <RoleSelector
+                      showRolesUnder={myRole.priority}
+                      role={role}
+                      setRole={setRole}
+                      disabled={role === "owner" || !editable}
+                      menuButtonProps={{
+                        w: "full",
+                        h: "44px",
+                        rounded: 12,
+                      }}
+                    />
+                  </Box>
+                </VStack>
+                {(member.priority &&
+                  myRole.priority <= 2 &&
+                  myRole.priority < member.priority) ||
+                me ? (
+                  <Button
+                    colorScheme="kraikub.red.always"
+                    color="white"
+                    h="58px"
+                    size="lg"
+                    onClick={() => setIsConfirmation(true)}
+                    w="full"
+                    rounded={12}
+                  >
+                    {me ? "Leave" : "Remove"}
+                  </Button>
+                ) : null}
               </VStack>
-              <Box w="full">
-                <RoleSelector
-                  showRolesUnder={myRole.priority}
-                  role={role}
-                  setRole={setRole}
-                  disabled={role === "owner" || !editable}
-                  menuButtonProps={{
-                    w: "full",
-                    h: "44px",
-                    rounded: 12,
-                  }}
-                />
-              </Box>
-            </VStack>
+            </Collapse>
+            <Collapse in={isConfirmation}>
+              <Confirmation
+                onConfirm={me ? handleLeave : handleRemove}
+                onCancel={() => setIsConfirmation(false)}
+                actionButtonText={me ? "Leave" : "Remove"}
+                actionDescribe={
+                  me
+                    ? `You are going to leave this organization.` +
+                      " " +
+                      "This operation cannot be undone. Would you like to proceed?"
+                    : "You are going to remove" +
+                      " " +
+                      member.user.fullName +
+                      " " +
+                      "from this organization." +
+                      " " +
+                      "This operation cannot be undone. Would you like to proceed?"
+                }
+                member={member}
+              />
+            </Collapse>
           </ModalBody>
 
-          <ModalFooter display="block">
-            {member.priority ? (
-              <Button
-                colorScheme="kraikub.red.always"
-                color="white"
-                size="lg"
-                onClick={me ? handleLeave : handleRemove}
-                w="full"
-                rounded={12}
-              >
-                {me ? "Leave" : "Remove"}
-              </Button>
-            ) : null}
-          </ModalFooter>
+          <ModalFooter py={2}></ModalFooter>
         </ModalContent>
       </Modal>
     </>
+  );
+};
+
+interface ConfirmationProps {
+  onConfirm: (() => Promise<void>) | (() => void);
+  onCancel: (() => Promise<void>) | (() => void);
+  actionDescribe: string;
+  actionButtonText: string;
+  member: MemberData;
+}
+
+export const Confirmation: FC<ConfirmationProps> = ({
+  onCancel,
+  onConfirm,
+  member,
+  actionDescribe,
+  actionButtonText,
+}) => {
+  const buttonProps = {
+    size: "lg",
+    h: "50px",
+  };
+  return (
+    <Box pt={6}>
+      <Heading size="md">Are your sure?</Heading>
+      <Text fontWeight={500} mt={2} opacity={0.7}>
+        {actionDescribe}
+      </Text>
+      <SimpleGrid columns={2} gap={2} mt="40px">
+        <Button {...buttonProps} onClick={onCancel}>
+          Back
+        </Button>
+        <Button
+          {...buttonProps}
+          colorScheme="kraikub.red.always"
+          color="white"
+          onClick={onConfirm}
+        >
+          {actionButtonText}
+        </Button>
+      </SimpleGrid>
+    </Box>
   );
 };

@@ -27,7 +27,7 @@ export const NotificationToast: FC<NotificationProps> = ({
       props={{
         width: "96vw",
         maxWidth: "500px",
-        boxShadow: useColorModeValue("0 0 30px #00000050", "0 0 30px #ffffff10"),
+        boxShadow: useColorModeValue("0 0 30px #00000020", "0 0 30px #ffffff05"),
         rounded: 20,
         backdropFilter: "blur(20px)",
         bg: useColorModeValue(

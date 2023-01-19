@@ -142,6 +142,26 @@ class OragnizationUsecase {
       };
     }
 
+    if (
+      memberData.orgId && memberData.orgId !== orgId
+    ) {
+      return {
+        success: false,
+        message: "This user is already in another organization",
+        httpStatus: 422,
+      };
+    }
+
+    if (
+      memberData.orgId && memberData.orgId === orgId
+    ) {
+      return {
+        success: false,
+        message: "This user is already in this organization",
+        httpStatus: 422,
+      };
+    }
+
     const role = roleMap[priority];
     if (!role) {
       return {
@@ -169,26 +189,29 @@ class OragnizationUsecase {
       appConfig.expirations.invites.s
     );
     try {
-    await mailService.inviteToOrg(memberData.personalEmail, {
-      code: `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}${p.organizationInviteLanding}?vssid=${redisKey}`,
-      orgName: organization.orgName,
-      orgUsername: organization.orgUsername,
-      position: role.data.displayPosition,
-      by: operatorData.fullName,
-    });
-    } catch(error) {
+      await mailService.inviteToOrg(memberData.personalEmail, {
+        name: memberData.fullName,
+        code: `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}${p.organizationInviteLanding}?vssid=${redisKey}`,
+        orgName: organization.orgName,
+        orgUsername: organization.orgUsername,
+        position: position,
+        by: operatorData.fullName,
+      });
+    } catch (error) {
       if (axios.isAxiosError(error)) {
         return {
           success: false,
           message: "Operation on mail service failed",
           httpStatus: 500,
           data: {
-            mailServiceResponse: error.response ? error.response.data : undefined,
+            mailServiceResponse: error.response
+              ? error.response.data
+              : undefined,
             mailServiceErrorCode: error.code,
             mailServiceErrorCause: error.cause,
-            mailServiceErrorStatus: error.status
-          }
-        }
+            mailServiceErrorStatus: error.status,
+          },
+        };
       }
     }
 

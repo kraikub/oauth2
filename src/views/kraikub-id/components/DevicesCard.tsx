@@ -17,17 +17,15 @@ import { AiFillAppstore } from "react-icons/ai";
 import { Card } from "../../../components/Card";
 import { CustomDivider } from "../../../components/CustomDivider";
 import { IoPhonePortraitOutline, IoLaptopOutline } from "react-icons/io5";
-import {
-  IoIosArrowRoundForward,
-} from "react-icons/io";
+import { IoIosArrowRoundForward } from "react-icons/io";
 import { useClientTranslation } from "../../../hooks/client-translation";
 import { dictDeviceCard } from "../../../translate/kraikubid";
 
 const patternList = [
-  { pattern: "iPhone", value: "iPhone"}, 
-  { pattern: "Macintosh", value: "macOS"}, 
-  { pattern: "Android", value: "Android"}, 
-  { pattern: "Windows", value: "Windows"}, 
+  { pattern: "iPhone", value: "iPhone" },
+  { pattern: "Macintosh", value: "macOS" },
+  { pattern: "Android", value: "Android" },
+  { pattern: "Windows", value: "Windows" },
 ];
 
 export const deviceMap = (ua: string, uap: string) => {
@@ -180,13 +178,11 @@ export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
             const keyName = k.replaceAll(`"`, "");
             const device = catMap[k];
             return (
-              <>
-                <Each
-                  key={`device-list-${index}`}
-                  {...{ keyName, device }}
-                  last={index === Object.keys(catMap).length - 1}
-                />
-              </>
+              <Each
+                key={`device-list-${index}`}
+                {...{ keyName, device }}
+                last={index === Object.keys(catMap).length - 1}
+              />
             );
           })}
         </VStack>

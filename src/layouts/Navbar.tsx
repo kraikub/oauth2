@@ -54,7 +54,7 @@ const Tab: FC<TabProps> = (props) => {
   const router = useRouter();
   const activeButtonBg = useColorModeValue("blackAlpha.100", "whiteAlpha.200");
   const tabButtonStyles: ButtonProps = {
-    rounded: 6,
+    rounded: 10,
     variant: "ghost",
     fontSize: 14,
     fontWeight: 600,
@@ -172,7 +172,12 @@ const Navbar: FC = () => {
                   borderWidth="1px"
                   rounded={10}
                 />
-                <Heading size="sm" fontWeight={700} letterSpacing="-0.06em" display={["none", "block"]}>
+                <Heading
+                  size="sm"
+                  fontWeight={700}
+                  letterSpacing="-0.06em"
+                  display={["none", "block"]}
+                >
                   KRAIKUB{" "}
                 </Heading>
               </HStack>
@@ -186,7 +191,7 @@ const Navbar: FC = () => {
           <Flex alignItems="center" gap={4}>
             <HStack spacing={3}>
               {/* <ThemeToggler /> */}
-              <Box display={["none", "flex"]}>
+              <Box display={["none", "none", "flex"]}>
                 <SmartLanguageToggler sx={{ size: "sm" }} />
               </Box>
               <Avatar
@@ -197,7 +202,7 @@ const Navbar: FC = () => {
                 }
                 w="44px"
                 h="44px"
-                display={["none", "block"]}
+                display={["none", "none", "block"]}
                 onClick={onUserModalOpen}
                 cursor="pointer"
                 transition="300ms ease"
@@ -208,7 +213,7 @@ const Navbar: FC = () => {
 
               <IconButton
                 aria-label="mobile-nav-menu"
-                display={["flex", "none"]}
+                display={["flex", "flex", "none"]}
                 onClick={() => setNavModal(true)}
                 rounded={8}
                 variant="unsyled"
