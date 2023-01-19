@@ -27,7 +27,7 @@ export const OrganizationCard: FC<OrganizationCardProps> = ({ user }) => {
         w: "full",
       }}
     >
-      <Heading size="md">{t("title")}</Heading>
+      <Heading size="md">{user.orgId ? t("title") : t("title-no-org")}</Heading>
       <VStack spacing={4} mt={4} alignItems="start">
         <AvatarGroup max={6} size="sm">
           {user.roles?.map((e, index) => {

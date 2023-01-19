@@ -1,11 +1,7 @@
-interface Role<T = any> {
+interface Role<T = any> extends RolePrototype<T> {
   roleId: string;
-  roleName: string;
-  roleType: string;
-  priority: number;
   roleRef: string;
   userRef: string;
-  data: T;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -19,4 +15,29 @@ interface RolePrototype<T = any> {
 
 interface RoleWithUser<T = any> extends Role<T> {
   user: ExtraSafeUser;
+}
+
+
+/// 
+/// USE FOR BUILT-IN ROLES
+///
+type RoleCollections = { [key: string]: BuiltInRole };
+
+type RoleMap = { [key: number]: BuiltInRole };
+
+type BuiltInRole = RolePrototype & {
+  desc?: string;
+};
+
+
+///
+/// USE IN REPOSITORIES ONLY
+///
+type RoleUpdateDocument = {
+  roleName: string;
+  roleType: string;
+  priority: number;
+}
+type PositionUpdateDocument = {
+  data: OrganizationRoleData
 }

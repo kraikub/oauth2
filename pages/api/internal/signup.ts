@@ -1,9 +1,10 @@
+import { orgUsecase } from "./../../../api/usecases/organization";
 import { makeResponse } from "./../../../api/utils/response";
 import { userUsecase } from "./../../../api/usecases/user";
 import { NextApiResponse } from "next";
 import { NextApiRequest } from "next";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { firstName, lastName, email, accountType } = req.body;
+  const { firstName, lastName, email, accountType, username } = req.body;
   if (!firstName || !lastName || !email || !accountType) {
     return makeResponse(
       res,
@@ -13,24 +14,40 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       undefined
     );
   }
-  const { redisKey, mailResponse } = await userUsecase.signUp(
+
+  const usernameResult = await orgUsecase.isUsernameAvailable(username);
+  console.log(usernameResult);
+  if (!usernameResult.data?.available) {
+    return makeResponse(
+      res,
+      usernameResult.httpStatus || 405,
+      usernameResult.data?.available || false,
+      usernameResult.message || "",
+      { ...usernameResult.data }
+    );
+  }
+
+  const result = await userUsecase.signUp(
     `${firstName} ${lastName}`,
     email,
     accountType,
+    username,
     req.cookies.LANG
   );
-  if (!redisKey) {
-    return makeResponse(
-      res,
-      406,
-      false,
-      "Email may be used bu another user.",
-      undefined
-    );
-  }
-  return makeResponse(res, 200, true, "Email sent", {
-    mailServiceResponseStatus: mailResponse?.status,
-    mailServiceResponseBody: mailResponse?.data,
-  });
+
+  return makeResponse(
+    res,
+    result.httpStatus || 200,
+    result.success,
+    result.message || "",
+    {
+      mailServiceResponseStatus: result.data
+        ? result.data.mailResponse?.status
+        : undefined,
+      mailServiceResponseBody: result.data
+        ? result.data.mailResponse?.data
+        : undefined,
+    }
+  );
 };
 export default handler;

@@ -1,3 +1,4 @@
+import { roleMap } from "./../config/org";
 import { mailService } from "./../mail/index";
 import { appConfig } from "./../config/app";
 import { redis } from "./../../data/redis/index";
@@ -9,8 +10,10 @@ import { random, sha256 } from "./../utils/crypto";
 import { builtInRoles } from "../config/org";
 import { p } from "../../src/utils/path";
 class OragnizationUsecase {
-  isUsernameAvailable = async (orgUsername: string): Promise<UseCaseResult> => {
-    if (!testOrgUsername(orgUsername)) {
+  isUsernameAvailable = async (
+    username: string
+  ): Promise<UseCaseResult<{ available: boolean }>> => {
+    if (!testOrgUsername(username)) {
       return {
         success: true,
         message: "Invalid username pattern (regex test failed)",
@@ -19,16 +22,26 @@ class OragnizationUsecase {
         },
       };
     }
-    const o = await orgRepo.getWithUserName(orgUsername);
+    const o = await orgRepo.getWithUserName(username);
+    const u = await userRepository.findWithUsername(username);
+    if (o || u) {
+      return {
+        success: true,
+        message: "Username already taken",
+        data: {
+          available: false,
+        },
+      };
+    }
     return {
       success: true,
-      message: o ? "Username already taken" : "",
+      message: "",
       data: {
-        available: o ? false : true,
+        available: true,
       },
     };
   };
-
+  //////////////////////////////////////////////////////////////////////////////////////
   isNameAvailable = async (orgName: string): Promise<UseCaseResult> => {
     const o = await orgRepo.getWithName(orgName);
     return {
@@ -39,7 +52,7 @@ class OragnizationUsecase {
       },
     };
   };
-
+  //////////////////////////////////////////////////////////////////////////////////////
   createNewOrg = async (
     orgName: string,
     orgUsername: string,
@@ -89,12 +102,13 @@ class OragnizationUsecase {
       },
     };
   };
-
+  //////////////////////////////////////////////////////////////////////////////////////
   inviteNewMember = async (
     orgId: string,
     member: string,
     operator: string,
-    role: RolePrototype<OrganizationRoleData>
+    priority: number,
+    position: string
   ): Promise<UseCaseResult> => {
     const operatorRole = await roleRepo.getRoleOfUserInOrg(orgId, operator);
     if (!operatorRole) {
@@ -104,10 +118,10 @@ class OragnizationUsecase {
         httpStatus: 405,
       };
     }
-    if (operatorRole.priority > 2) {
+    if (operatorRole.priority > 2 || priority <= operatorRole.priority) {
       return {
         success: false,
-        message: "Require permission",
+        message: "Require more permission",
         httpStatus: 405,
       };
     }
@@ -127,8 +141,20 @@ class OragnizationUsecase {
       };
     }
 
+    const role = roleMap[priority];
+    if (!role) {
+      return {
+        success: false,
+        message: "Undefined role",
+        httpStatus: 422,
+      };
+    }
+
     const fullRole: Role<OrganizationRoleData> = {
       ...role,
+      data: {
+        displayPosition: position,
+      },
       roleId: sha256(orgId + member + role.priority + operator + random(16)),
       roleRef: orgId,
       userRef: member,
@@ -154,12 +180,12 @@ class OragnizationUsecase {
       message: "Member invited",
     };
   };
-
+  //////////////////////////////////////////////////////////////////////////////////////
   activateInvite = async (redisKey: string): Promise<UseCaseResult> => {
     if (!checkRedisTopic(redisKey, "orgjoin")) {
       return {
         success: false,
-        message: "Invalid key"
+        message: "Invalid key",
       };
     }
     const r = await redis.get(redisKey);
@@ -171,9 +197,228 @@ class OragnizationUsecase {
       success: true,
     };
   };
-
+  //////////////////////////////////////////////////////////////////////////////////////
   getOrgForDisplay = async (orgId: string) => {
     return await orgRepo.getFullOrg(orgId);
+  };
+  //////////////////////////////////////////////////////////////////////////////////////
+  updateRole = async (
+    orgId: string,
+    assigneeId: string,
+    assignerId: string,
+    priority: number
+  ): Promise<UseCaseResult> => {
+    // Check assigner
+    const assigner = await userRepository.findOne({ uid: assignerId });
+    if (!assigner) {
+      return {
+        success: false,
+        message: "Unidentify assigner.",
+        httpStatus: 422,
+      };
+    }
+    if (assigner.orgId !== orgId) {
+      return {
+        success: false,
+        message: "Organization not matched.",
+        httpStatus: 422,
+      };
+    }
+
+    // Check assignee
+    const assignee = await userRepository.findOne({ uid: assigneeId });
+    if (!assignee) {
+      return {
+        success: false,
+        message: "Unidentify assignee.",
+        httpStatus: 422,
+      };
+    }
+    if (assignee.orgId !== orgId) {
+      return {
+        success: false,
+        message: "Organization not matched.",
+        httpStatus: 422,
+      };
+    }
+
+    /// Check if both users are valid to the org role.
+    const assignerRole = await roleRepo.getOrgRole(orgId, assigner.uid);
+    const assigneeRole = await roleRepo.getOrgRole(orgId, assignee.uid);
+    if (!assignerRole || !assigneeRole) {
+      return {
+        success: false,
+        message: "Cannot compare assigner and assignee roles.",
+        httpStatus: 409,
+      };
+    }
+
+    // Check priority
+    if (assignerRole.priority >= assigneeRole.priority) {
+      return {
+        success: false,
+        message:
+          "Assigner does not have a permission on this operation. (Assignee has more priority)",
+        httpStatus: 405,
+      };
+    }
+    if (priority <= assignerRole.priority) {
+      return {
+        success: false,
+        message:
+          "Assigner did not have a permission on this operation. (Out of priority)",
+        httpStatus: 405,
+      };
+    }
+
+    // Handle role changes
+    const newRole: BuiltInRole | undefined = roleMap[priority];
+    if (!newRole) {
+      return {
+        success: false,
+        message: "Cannot specify the input role.",
+        httpStatus: 422,
+      };
+    }
+    const updatedFields = {
+      roleName: newRole.roleName,
+      roleType: newRole.roleType,
+      priority: newRole.priority,
+    };
+
+    const updateResult = await roleRepo.updateOrgRole(
+      orgId,
+      assignee.uid,
+      updatedFields
+    );
+    if (!updateResult) {
+      return {
+        success: false,
+        message:
+          "Cannot update role. (Role not matched any entitiy in the collection)",
+        httpStatus: 409,
+      };
+    }
+    return {
+      success: true,
+    };
+  };
+  //////////////////////////////////////////////////////////////////////////////////////
+  leave = async (uid: string): Promise<UseCaseResult> => {
+    const user = await userRepository.findOne({ uid });
+    if (!user) {
+      return {
+        success: false,
+        message: "Cannot find any matched user.",
+        httpStatus: 422,
+      };
+    }
+    const org = await orgRepo.get(user.orgId);
+    if (!org) {
+      return {
+        success: false,
+        message: "User is not in any organization.",
+        httpStatus: 422,
+      };
+    }
+    const orgRole = await roleRepo.getOrgRole(user.orgId, user.uid);
+    if (!orgRole) {
+      return {
+        success: false,
+        message: "Cannot find any matched user's role.",
+        httpStatus: 422,
+      };
+    }
+    if (orgRole.priority === 0) {
+      return {
+        success: false,
+        message: "Owner cannot leave org.",
+        httpStatus: 422,
+      };
+    }
+    // Handle deletions
+    await roleRepo.deleteOrgRole(user.orgId, user.uid);
+    await userRepository.setOrgId(user.uid, "");
+    return {
+      success: true,
+      message: "",
+    };
+  };
+  //////////////////////////////////////////////////////////////////////////////////////
+  removeMember = async (
+    orgId: string,
+    assigneeId: string,
+    assignerId: string
+  ): Promise<UseCaseResult> => {
+    // Check assigner
+    const assigner = await userRepository.findOne({ uid: assignerId });
+    if (!assigner) {
+      return {
+        success: false,
+        message: "Unidentify assigner.",
+        httpStatus: 422,
+      };
+    }
+    if (assigner.orgId !== orgId) {
+      return {
+        success: false,
+        message: "Organization not matched.",
+        httpStatus: 422,
+      };
+    }
+
+    // Check assignee
+    const assignee = await userRepository.findOne({ uid: assigneeId });
+    if (!assignee) {
+      return {
+        success: false,
+        message: "Unidentify assignee.",
+        httpStatus: 422,
+      };
+    }
+    if (assignee.orgId !== orgId) {
+      return {
+        success: false,
+        message: "Organization not matched.",
+        httpStatus: 422,
+      };
+    }
+
+    /// Check if both users are valid to the org role.
+    const assignerRole = await roleRepo.getOrgRole(orgId, assigner.uid);
+    const assigneeRole = await roleRepo.getOrgRole(orgId, assignee.uid);
+    if (!assignerRole || !assigneeRole) {
+      return {
+        success: false,
+        message: "Cannot compare assigner and assignee roles.",
+        httpStatus: 409,
+      };
+    }
+
+    // Check priority
+    if (assignerRole.priority >= assigneeRole.priority) {
+      return {
+        success: false,
+        message:
+          "Assigner does not have a permission on this operation. (Assignee has more priority)",
+        httpStatus: 405,
+      };
+    }
+    if (assignerRole.priority > 2) {
+      return {
+        success: false,
+        message:
+          "Assigner did not have a permission on this operation. (Out of priority)",
+        httpStatus: 405,
+      };
+    }
+    // Handle removal
+    await roleRepo.deleteOrgRole(assignee.orgId, assignee.uid);
+    await userRepository.setOrgId(assignee.uid, "");
+    return {
+      success: true,
+      message: "",
+    };
   };
 }
 export const orgUsecase = new OragnizationUsecase();

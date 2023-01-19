@@ -34,6 +34,25 @@ export const colors = {
         600: "#1468de",
       },
     },
+    red: {
+      50: "#ffeaec",
+      100: "#ffd5d8",
+      200: "#ffaab1",
+      300: "#ff808b",
+      400: "#ff5564",
+      500: "#ff2b3d",
+      600: "#cc2231",
+      700: "#991a25",
+      800: "#661118",
+      900: "#33090c",
+      always: {
+        200: "#ff2b3d",
+        300: "#ff2b3d",
+        400: "#ff2b3d",
+        500: "#ff2b3d",
+        600: "#ff2b3d",
+      },
+    }
   },
   bg: {
     light: "#f8fafb",
@@ -109,6 +128,9 @@ const components: { [key: string]: ComponentStyleConfig } = {
       motionPreset: "slideInBottom",
     },
     baseStyle: (props) => ({
+      closeButton: {
+        rounded: "full"
+      },
       dialog: {
         rounded: 14,
         roundedBottomLeft: [0, 0, 14],

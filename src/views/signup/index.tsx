@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { FC, SyntheticEvent, useRef, useState } from "react";
+import { createUsername } from "../../../api/utils/string";
 import { Card } from "../../components/Card";
 import { CustomInput } from "../../components/inputs/Input";
 import { useClientTranslation } from "../../hooks/client-translation";
@@ -41,12 +42,14 @@ export const SignUpPage: FC = () => {
         lastName: { value: string };
         email: { value: string };
         accountType: { value: string };
+        username: { value: string };
       };
       const res = await internalServiceApi.signUp({
         firstName: target.firstName.value,
         lastName: target.lastName.value,
         accountType: target.accountType.value,
         email: target.email.value,
+        username: target.username.value,
       });
       if (res.status !== 200) {
         return console.warn(res.status, res.data);
@@ -134,6 +137,17 @@ export const SignUpPage: FC = () => {
                       placeholder={t("email")}
                       type="email"
                       name="email"
+                      isRequired
+                    />
+                  </VStack>
+                  <VStack spacing={2} alignItems="start" w="full">
+                    <Text fontSize={14} fontWeight={400}>
+                      {t("username")}{" "}
+                    </Text>
+                    <CustomInput
+                      maxW={["100%", "400px"]}
+                      placeholder={t("username-placeholder")}
+                      name="username"
                       isRequired
                     />
                   </VStack>

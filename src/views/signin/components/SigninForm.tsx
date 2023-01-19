@@ -23,6 +23,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -432,32 +433,46 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                           </a>
                         </Link>
                       </Box>
-                      <ButtonGroup
+                      <VStack
                         spacing={2}
                         justifyContent="space-between"
                         w="full"
                       >
-                        {signInMethod === "nontri" ? (
-                          <Button onClick={changeToKraikubId} variant="outline" rounded="full">
-                            {t("form-btn-use-kraikubid")}
-                          </Button>
-                        ) : (
-                          <Button onClick={changeToNontri} variant="outline" rounded="full">
-                            {t("form-btn-use-nontri")}
-                          </Button>
-                        )}
-
                         <Button
                           colorScheme="kraikub.blue.always"
                           color="white"
                           type="submit"
+                          w="full"
+                          size="lg"
                           aria-label="sign-in-button"
                           isLoading={isSigninButtonLoading}
-                          disabled={(!username || !password) && !email}
+                          isDisabled={(!username || !password) && !email}
                         >
                           {t("form-btn-continue")}
                         </Button>
-                      </ButtonGroup>
+                        <Button
+                          size="lg"
+                          w="full"
+                          onClick={
+                            signInMethod === "nontri"
+                              ? changeToKraikubId
+                              : changeToNontri
+                          }
+                        >
+                          {signInMethod === "nontri"
+                            ? t("form-btn-use-kraikubid")
+                            : t("form-btn-use-nontri")}
+                        </Button>
+                        {/* {signInMethod === "nontri" ? (
+                          <Button onClick={changeToKraikubId}>
+                            {t("form-btn-use-kraikubid")}
+                          </Button>
+                        ) : (
+                          <Button onClick={changeToNontri}>
+                            {t("form-btn-use-nontri")}
+                          </Button>
+                        )} */}
+                      </VStack>
                     </Flex>
                   </form>
                 </SimpleFadeInLeft>

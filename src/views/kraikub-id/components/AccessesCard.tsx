@@ -55,7 +55,7 @@ export const AccessesCard: FC<AccessesCardProps> = ({ accesses }) => {
     >
       <Heading size="md">{t("header")}</Heading>
       {!accesses.length ? (
-        <Text opacity={0.7}>{t("no-access")}</Text>
+        <Text opacity={0.7} mt={2}>{t("no-access")}</Text>
       ) : (
         <VStack spacing={5} my={10}>
           {accesses.map((access, index) => {

@@ -9,10 +9,10 @@ interface GlobalResponse {
   timestamp: Date;
 }
 
-interface CustomApiResponse<type> {
+interface CustomApiResponse<T = any> {
   status: boolean;
   message: string;
-  payload: type;
+  payload: T;
 }
 
 interface UseCaseResult<T = any> {
