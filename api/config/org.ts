@@ -25,7 +25,7 @@ export const builtInRoles: RoleCollections = {
     roleName: "Developer",
     roleType: "developer",
     priority: 3,
-    desc: "Manage connected OAuth applications",
+    desc: "Manage connected applications",
     data: {},
   },
   member: {

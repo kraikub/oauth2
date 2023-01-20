@@ -72,11 +72,23 @@ export const dictUserCard: Dictionary = {
     "student": "Student",
     "corporate": "Coporate",
     "at": "at",
+    "View organization": "View organization",
+    "Create/Join an organization": "Create/Join an organization",
+    "Change profile picture": "Change profile picture",
+    "change-desc": "We only allow url for your profile picture. Please upload theme somewhere else.",
+    "Cancel": "Cancel",
+    "Preview": "Preview",
   },
   th: {
     "student": "นักศึกษา",
     "corporate": "องค์กร",
     "at": "ที่",
+    "View organization": "ดูเกี่ยวกับองค์กร",
+    "Create/Join an organization": "สร้าง/เข้าร่วมองค์กร",
+    "Change profile picture": "เปลี่ยนรูปโปรไฟล์",
+    "change-desc": "ขออภัย เราอนุญาติให้ใช้ URL ในการเปลี่ยนเท่านั้น โปรดอัปโหลดขึ้นไปอยู่ที่ใดที่หนึ่ง",
+    "Cancel": "ยกเลิก",
+    "Preview": "ดูตัวอย่าง",
   }
 }
 

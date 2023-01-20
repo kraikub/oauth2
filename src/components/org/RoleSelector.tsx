@@ -10,6 +10,9 @@ import {
 } from "@chakra-ui/react";
 import { Dispatch, FC, SetStateAction } from "react";
 import { builtInRoles } from "../../../api/config/org";
+import { useClientTranslation } from "../../hooks/client-translation";
+import { useOnClient } from "../../hooks/on-client";
+import { roleSelectorDict } from "../../translate/org";
 
 interface RoleSelectorProps {
   role: string;
@@ -26,6 +29,11 @@ export const RoleSelector: FC<RoleSelectorProps> = ({
   menuButtonProps,
   showRolesUnder
 }) => {
+  const { t } = useClientTranslation(roleSelectorDict)
+  const ready = useOnClient(); 
+  if (!ready) {
+    return null;
+  }
   return (
     <Menu>
       <MenuButton
@@ -37,7 +45,7 @@ export const RoleSelector: FC<RoleSelectorProps> = ({
         borderWidth="1px"
         {...menuButtonProps}
       >
-        {builtInRoles[role] ? builtInRoles[role].roleName : "Select role"}{" "}
+        {builtInRoles[role] ? t(builtInRoles[role].roleName) : t("Select role")}{" "}
         {disabled ? null : <ChevronDownIcon />}
       </MenuButton>
       {disabled ? null : (
@@ -55,9 +63,9 @@ export const RoleSelector: FC<RoleSelectorProps> = ({
                 alignItems="start"
                 onClick={() => setRole(k)}
               >
-                <Text fontWeight={600}>{role.roleName}</Text>
+                <Text fontWeight={600}>{t(role.roleName)}</Text>
                 <Text opacity={0.6} fontSize={12}>
-                  {role.desc}
+                  {t(`${role.roleType}-desc`)}
                 </Text>
               </MenuItem>
             );

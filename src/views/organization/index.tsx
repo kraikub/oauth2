@@ -11,6 +11,9 @@ import { FC } from "react";
 import { Card, CardContent } from "../../components/Card";
 import { CustomDivider } from "../../components/CustomDivider";
 import { useUser } from "../../contexts/User";
+import { useClientTranslation } from "../../hooks/client-translation";
+import { useOnClient } from "../../hooks/on-client";
+import { orgDict } from "../../translate/org";
 import { CreateOrg } from "./components/CreateOrg";
 import { Invite } from "./components/Invite";
 import { NoKraikubID } from "./components/NoKraikubID";
@@ -22,7 +25,13 @@ interface OrgDashboardPage {
 
 export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
   const { user } = useUser();
+  const ready = useOnClient();
+  const { t } = useClientTranslation(orgDict)
   if (!user) {
+    return null;
+  }
+
+  if (!ready) {
     return null;
   }
 
@@ -37,7 +46,6 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
       </Container>
     );
   }
-
 
   const myRoles = org.members.filter((e) => {
     return e.user.uid === user.uid;
@@ -62,13 +70,13 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
           <HStack spacing={4}>
             <Heading size="md">{org.orgName}</Heading>
             <Badge size="sm" colorScheme="kraikub.blue" rounded="full">
-              {org.members.length} users
+              {org.members.length} {t("users")}
             </Badge>
           </HStack>
           <Text mt={1} opacity={0.6}>
-            Meet these people in {"Organization"}
+            {t("People in")} {org.orgName}
           </Text>
-          <Invite orgId={org.orgId} myRole={myRole}/>
+          <Invite orgId={org.orgId} myRole={myRole} />
         </CardContent>
         <CustomDivider sx={{ py: 0 }} />
         <VStack w="full">

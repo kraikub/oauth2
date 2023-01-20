@@ -1,12 +1,9 @@
 import {
   Avatar,
+  Badge,
   Box,
   Button,
-  ButtonGroup,
-  Center,
   Collapse,
-  Grid,
-  GridItem,
   Heading,
   HStack,
   IconButton,
@@ -15,24 +12,23 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
   SimpleGrid,
   Text,
-  useColorModeValue,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
-import { IoMdMail, IoMdMore } from "react-icons/io";
-import { builtInRoles, roleMap } from "../../../../api/config/org";
-import { Card } from "../../../components/Card";
+import { FaCrown } from "react-icons/fa";
+import { IoMdMore } from "react-icons/io";
+import { builtInRoles } from "../../../../api/config/org";
 import { NotificationToast } from "../../../components/NotificationToast";
 import { RoleSelector } from "../../../components/org/RoleSelector";
+import { useClientTranslation } from "../../../hooks/client-translation";
 import { orgService } from "../../../services/organizationService";
-import { PageWrapper } from "../../kraikub-id/components/PageWrapper";
+import { roleSelectorDict, userOrgCardDict } from "../../../translate/org";
 
 interface UserCardProps {
   member: MemberData;
@@ -50,7 +46,8 @@ export const UserOrgCard: FC<UserCardProps> = ({
   myRole,
 }) => {
   const router = useRouter();
-
+  const { t } = useClientTranslation(userOrgCardDict);
+  const { t: roltT } = useClientTranslation(roleSelectorDict);
   const [prevRole, setPrevRole] = useState(member.roleType);
   const [role, setRole] = useState(member.roleType);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -114,7 +111,9 @@ export const UserOrgCard: FC<UserCardProps> = ({
         return handleLeave;
       }
       default: {
-        return () => {};
+        return () => {
+          alert("Unknown transaction type.");
+        };
       }
     }
   };
@@ -122,13 +121,13 @@ export const UserOrgCard: FC<UserCardProps> = ({
   const confirmationButton = () => {
     switch (transactionType) {
       case "transferOwnership": {
-        return "Transfer";
+        return t("Transfer");
       }
       case "remove": {
-        return "Remove";
+        return t("Remove");
       }
       case "leave": {
-        return "Leave";
+        return t("Leave");
       }
       default: {
         return "";
@@ -139,13 +138,15 @@ export const UserOrgCard: FC<UserCardProps> = ({
   const actionDescribeFunction = () => {
     switch (transactionType) {
       case "transferOwnership": {
-        return `${member.user.fullName} will be your new organization owner. Once the assignment is completed, your role will be automatically dropped to ADMIN.This operation cannot be undone. Would you like to proceed?`;
+        return `${member.user.fullName} ${t(
+          "confirmation-transfer-ownership"
+        )}`;
       }
       case "remove": {
-        return `${member.user.fullName} will be removed from your organization. This operation cannot be undone. Would you like to proceed?`;
+        return `${member.user.fullName} ${t("confirmation-remove")}`;
       }
       case "leave": {
-        return `You are going to leave this organization. This operation cannot be undone. Would you like to proceed?`;
+        return t("confirmation-leave");
       }
       default: {
         return "Unknown transaction type";
@@ -166,8 +167,10 @@ export const UserOrgCard: FC<UserCardProps> = ({
         position: "top",
         render: () => (
           <NotificationToast
-            title="Role updated"
-            detail={`Successfully changed ${member.user.fullName} to ${newRole.roleName}.`}
+            title={t("Role updated")}
+            detail={`${t("Successfully changed")} ${member.user.fullName} ${t(
+              "to"
+            )} ${roltT(newRole.roleName)}${t("change-notification-suffix")}`}
           />
         ),
       });
@@ -188,7 +191,24 @@ export const UserOrgCard: FC<UserCardProps> = ({
         <HStack spacing={4}>
           <Avatar src={member.user.profileImageUrl} />
           <Box>
-            <Text fontWeight={600}>{member.user.fullName}</Text>
+            <HStack spacing={2}>
+              <Text fontWeight={600}>{member.user.fullName}</Text>
+              {me ? <Badge colorScheme="purple">{t("me")}</Badge> : null}
+              {member.priority === 0 ? (
+                <Badge
+                  colorScheme="blue"
+                  h="24px"
+                  w="24px"
+                  p={0}
+                  rounded={6}
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <FaCrown size="16px" />
+                </Badge>
+              ) : null}
+            </HStack>
             <Text opacity={0.6}>{member.data.displayPosition}</Text>
           </Box>
         </HStack>
@@ -247,7 +267,7 @@ export const UserOrgCard: FC<UserCardProps> = ({
                     w="full"
                     rounded={12}
                   >
-                    {"Transfer Ownership"}
+                    {t("Transfer Ownership")}
                   </Button>
                 ) : null}
                 {(myRole.priority <= 2 && myRole.priority < member.priority) ||
@@ -261,13 +281,14 @@ export const UserOrgCard: FC<UserCardProps> = ({
                     w="full"
                     rounded={12}
                   >
-                    {me ? "Leave" : "Remove"}
+                    {me ? t("Leave") : t("Remove")}
                   </Button>
                 ) : null}
               </VStack>
             </Collapse>
             <Collapse in={transactionType ? true : false}>
               <Confirmation
+                header={t("Are your sure?")}
                 onConfirm={onConfirmFunction()}
                 onCancel={clearTransactionType}
                 actionButtonText={confirmationButton()}
@@ -290,14 +311,15 @@ interface ConfirmationProps {
   actionDescribe: string;
   actionButtonText: string;
   member: MemberData;
+  header: string;
 }
 
 export const Confirmation: FC<ConfirmationProps> = ({
   onCancel,
   onConfirm,
-  member,
   actionDescribe,
   actionButtonText,
+  header,
 }) => {
   const buttonProps = {
     size: "lg",
@@ -305,7 +327,7 @@ export const Confirmation: FC<ConfirmationProps> = ({
   };
   return (
     <Box pt={6}>
-      <Heading size="md">Are your sure?</Heading>
+      <Heading size="md">{header}</Heading>
       <Text fontWeight={500} mt={2} opacity={0.7}>
         {actionDescribe}
       </Text>

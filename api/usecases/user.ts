@@ -222,7 +222,7 @@ export class UserUsecase {
     const userFromEmail = await userRepository.findOne({
       personalEmail: email,
     });
-    const userFromUsername = await userRepository.findWithUsername(username)
+    const userFromUsername = await userRepository.findWithUsername(username);
     if (userFromEmail) {
       return {
         success: false,
@@ -296,6 +296,31 @@ export class UserUsecase {
     await userRepository.create(newUser);
     await redis.delete(redisKey);
     return true;
+  };
+
+  updateProfilePic = async (
+    uid: string,
+    profilePicUrl: string
+  ): Promise<UseCaseResult> => {
+    if (!profilePicUrl) {
+      return {
+        success: false,
+        message: "Require profilePicUrl",
+        httpStatus: 400,
+      };
+    }
+    const result = await userRepository.updateProfileImageUrl(
+      uid,
+      profilePicUrl
+    );
+    if (!result.modifiedCount) {
+      return {
+        success: false,
+        message: "No document modified",
+        httpStatus: 422,
+      };
+    }
+    return { success: true };
   };
 }
 
