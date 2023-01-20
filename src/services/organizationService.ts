@@ -32,7 +32,7 @@ class OrganizationService {
 
   invite = async (orgId: string, uid: string, priority: number, position: string) => {
     return nextApiBaseInstance.post<CustomApiResponse<any>>(
-      `/api/internal/org/add-member/${orgId}`,
+      `/api/internal/org/${orgId}/add-member`,
       {
         uid,
         priority,
@@ -42,16 +42,19 @@ class OrganizationService {
   };
 
   updateRole = async (orgId: string, uid: string, priority: number) => {
-    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/update/role`, {
-      orgId,
+    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/${orgId}/update/role`, {
       uid,
       priority,
     })
   }
+  transferOwnership = async (orgId: string, uid: string) => {
+    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/${orgId}/update/ownership`, {
+      uid,
+    })
+  }
 
   removeMember = async (orgId: string, uid: string) => {
-    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/remove`, {
-      orgId,
+    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/${orgId}/remove`, {
       uid,
     })
   }

@@ -7,11 +7,6 @@ import {
   Heading,
   HStack,
   Input,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -19,17 +14,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   Text,
-  useColorModeValue,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { FC, SyntheticEvent, useEffect, useState } from "react";
 import { builtInRoles } from "../../../../api/config/org";
-import { testOrgUsername } from "../../../../api/utils/string";
-import { Card } from "../../../components/Card";
 import { NotificationToast } from "../../../components/NotificationToast";
 import { RoleSelector } from "../../../components/org/RoleSelector";
 import { orgService } from "../../../services/organizationService";
@@ -93,9 +84,9 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
       });
       setInviteButtonLoading(false);
       setIsModalOpen(false);
-      setPosition("")
-      setErr("")
-      setRole("")
+      setPosition("");
+      setErr("");
+      setRole("");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -106,8 +97,8 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
         return alert("Failed to create an invitation");
       }
       setInviteButtonLoading(false);
-      setPosition("")
-      setRole("")
+      setPosition("");
+      setRole("");
     }
   };
 
@@ -150,7 +141,7 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
                 <Input
                   rounded={6}
                   variant="unstyled"
-                  placeholder="username"
+                  placeholder="Enter username"
                   value={username}
                   isRequired
                   onChange={(e) => setUsername(e.target.value)}
@@ -171,7 +162,11 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
               Next
             </Button>
           </HStack>
-          {err ? <Text mt={2} color="kraikub.red.500">{err}</Text> : null}
+          {err ? (
+            <Text mt={2} color="kraikub.red.500" fontWeight={600}>
+              {err}
+            </Text>
+          ) : null}
         </form>
       </VStack>
       <Modal isOpen={isModalOpen} onClose={handleClose}>

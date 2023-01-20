@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { handleApiError } from "../../../../api/error";
-import { PrivateAuthMiddleware } from "../../../../api/middlewares/private.middleware";
-import { orgUsecase } from "../../../../api/usecases/organization";
-import { createResponse } from "../../../../api/utils/response";
+import { handleApiError } from "../../../../../../api/error";
+import { PrivateAuthMiddleware } from "../../../../../../api/middlewares/private.middleware";
+import { orgUsecase } from "../../../../../../api/usecases/organization";
+import { createResponse } from "../../../../../../api/utils/response";
 
 const controller = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -11,9 +11,10 @@ const controller = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
     if (req.method === "POST") {
-      const { uid, orgId } = req.body;
-      const result = await orgUsecase.removeMember(
-        orgId,
+      const { orgId } = req.query;
+      const { uid } = req.body;
+      const result = await orgUsecase.transferOwnership(
+        orgId as string,
         uid,
         payload.uid,
       );

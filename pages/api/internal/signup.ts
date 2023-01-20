@@ -16,7 +16,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const usernameResult = await orgUsecase.isUsernameAvailable(username);
-  console.log(usernameResult);
   if (!usernameResult.data?.available) {
     return makeResponse(
       res,

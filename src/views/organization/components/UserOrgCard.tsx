@@ -55,10 +55,15 @@ export const UserOrgCard: FC<UserCardProps> = ({
   const [role, setRole] = useState(member.roleType);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const toast = useToast();
-  const [isConfirmation, setIsConfirmation] = useState(false);
+  const [transactionType, setTransactionType] = useState("");
+
+  const clearTransactionType = () => {
+    setTransactionType("");
+  };
+
   const handleClose = () => {
     setIsOpen(false);
-    setIsConfirmation(false);
+    clearTransactionType();
   };
   const handleOpen = () => {
     setIsOpen(true);
@@ -82,6 +87,68 @@ export const UserOrgCard: FC<UserCardProps> = ({
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         console.error((error.response.data as CustomApiResponse).message);
+      }
+    }
+  };
+
+  const handleTransferOwnership = async () => {
+    try {
+      await orgService.transferOwnership(orgId, member.user.uid);
+      location.reload();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.error((error.response.data as CustomApiResponse).message);
+      }
+    }
+  };
+
+  const onConfirmFunction = () => {
+    switch (transactionType) {
+      case "transferOwnership": {
+        return handleTransferOwnership;
+      }
+      case "remove": {
+        return handleRemove;
+      }
+      case "leave": {
+        return handleLeave;
+      }
+      default: {
+        return () => {};
+      }
+    }
+  };
+
+  const confirmationButton = () => {
+    switch (transactionType) {
+      case "transferOwnership": {
+        return "Transfer";
+      }
+      case "remove": {
+        return "Remove";
+      }
+      case "leave": {
+        return "Leave";
+      }
+      default: {
+        return "";
+      }
+    }
+  };
+
+  const actionDescribeFunction = () => {
+    switch (transactionType) {
+      case "transferOwnership": {
+        return `${member.user.fullName} will be your new organization owner. Once the assignment is completed, your role will be automatically dropped to ADMIN.This operation cannot be undone. Would you like to proceed?`;
+      }
+      case "remove": {
+        return `${member.user.fullName} will be removed from your organization. This operation cannot be undone. Would you like to proceed?`;
+      }
+      case "leave": {
+        return `You are going to leave this organization. This operation cannot be undone. Would you like to proceed?`;
+      }
+      default: {
+        return "Unknown transaction type";
       }
     }
   };
@@ -135,12 +202,16 @@ export const UserOrgCard: FC<UserCardProps> = ({
           <IoMdMore />
         </IconButton>
       </HStack>
-      <Modal isOpen={isOpen} onClose={handleClose} closeOnOverlayClick={!isConfirmation}>
+      <Modal
+        isOpen={isOpen}
+        onClose={handleClose}
+        closeOnOverlayClick={!transactionType ? true : false}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
           <ModalBody>
-            <Collapse in={!isConfirmation}>
+            <Collapse in={!transactionType ? true : false}>
               <VStack spacing={3} mt={8}>
                 <VStack spacing={6} w="full">
                   <Avatar src={member.user.profileImageUrl} size="2xl"></Avatar>
@@ -168,16 +239,25 @@ export const UserOrgCard: FC<UserCardProps> = ({
                     />
                   </Box>
                 </VStack>
-                {(member.priority &&
-                  myRole.priority <= 2 &&
-                  myRole.priority < member.priority) ||
-                me ? (
+                {myRole.priority === 0 && !me ? (
+                  <Button
+                    h="58px"
+                    size="lg"
+                    onClick={() => setTransactionType("transferOwnership")}
+                    w="full"
+                    rounded={12}
+                  >
+                    {"Transfer Ownership"}
+                  </Button>
+                ) : null}
+                {(myRole.priority <= 2 && myRole.priority < member.priority) ||
+                (me && member.priority !== 0) ? (
                   <Button
                     colorScheme="kraikub.red.always"
                     color="white"
                     h="58px"
                     size="lg"
-                    onClick={() => setIsConfirmation(true)}
+                    onClick={() => setTransactionType(me ? "leave" : "remove")}
                     w="full"
                     rounded={12}
                   >
@@ -186,24 +266,12 @@ export const UserOrgCard: FC<UserCardProps> = ({
                 ) : null}
               </VStack>
             </Collapse>
-            <Collapse in={isConfirmation}>
+            <Collapse in={transactionType ? true : false}>
               <Confirmation
-                onConfirm={me ? handleLeave : handleRemove}
-                onCancel={() => setIsConfirmation(false)}
-                actionButtonText={me ? "Leave" : "Remove"}
-                actionDescribe={
-                  me
-                    ? `You are going to leave this organization.` +
-                      " " +
-                      "This operation cannot be undone. Would you like to proceed?"
-                    : "You are going to remove" +
-                      " " +
-                      member.user.fullName +
-                      " " +
-                      "from this organization." +
-                      " " +
-                      "This operation cannot be undone. Would you like to proceed?"
-                }
+                onConfirm={onConfirmFunction()}
+                onCancel={clearTransactionType}
+                actionButtonText={confirmationButton()}
+                actionDescribe={actionDescribeFunction()}
                 member={member}
               />
             </Collapse>

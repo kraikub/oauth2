@@ -31,7 +31,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
   const result = await orgUsecase.activateInvite(vssid);
-  console.log(result.success)
   return {
     props: {
       success: result.success,

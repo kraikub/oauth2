@@ -11,12 +11,12 @@ const controller = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
     if (req.method === "POST") {
-      const { uid, priority, orgId } = req.body;
-      const result = await orgUsecase.updateRole(
-        orgId,
+      const { orgId } = req.query;
+      const { uid } = req.body;
+      const result = await orgUsecase.removeMember(
+        orgId as string,
         uid,
         payload.uid,
-        priority
       );
       return res.status(result.httpStatus || 200).send(
         createResponse(result.success, result.message || "", {

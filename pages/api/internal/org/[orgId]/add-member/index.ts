@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { handleApiError } from "../../../../../api/error";
-import { PrivateAuthMiddleware } from "../../../../../api/middlewares/private.middleware";
-import { orgUsecase } from "../../../../../api/usecases/organization";
-import { createResponse } from "../../../../../api/utils/response";
+import { handleApiError } from "../../../../../../api/error";
+import { PrivateAuthMiddleware } from "../../../../../../api/middlewares/private.middleware";
+import { orgUsecase } from "../../../../../../api/usecases/organization";
+import { createResponse } from "../../../../../../api/utils/response";
 
 const controller = async (
   req: NextApiRequest,
