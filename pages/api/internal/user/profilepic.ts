@@ -1,8 +1,8 @@
+import { userUsecase } from "./../../../../api/usecases/user";
 import { NextApiRequest, NextApiResponse } from "next";
-import { handleApiError } from "../../../../../api/error";
-import { PrivateAuthMiddleware } from "../../../../../api/middlewares/private.middleware";
-import { orgUsecase } from "../../../../../api/usecases/organization";
-import { createResponse } from "../../../../../api/utils/response";
+import { handleApiError } from "../../../../api/error";
+import { createResponse } from "../../../../api/utils/response";
+import { PrivateAuthMiddleware } from "../../../../api/middlewares/private.middleware";
 
 const controller = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -11,12 +11,10 @@ const controller = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
     if (req.method === "POST") {
-      const { uid, priority, orgId } = req.body;
-      const result = await orgUsecase.updateRole(
-        orgId,
-        uid,
+      const { url } = req.body;
+      const result = await userUsecase.updateProfilePic(
         payload.uid,
-        priority
+        url
       );
       return res.status(result.httpStatus || 200).send(
         createResponse(result.success, result.message || "", {

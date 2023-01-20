@@ -19,13 +19,16 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
+import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { FC, useState } from "react";
 import { BsDot } from "react-icons/bs";
 import { IoMdMore } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import { Card, CardContent } from "../../../components/Card";
 import { useClientTranslation } from "../../../hooks/client-translation";
+import { userService } from "../../../services/userService";
 import { dictUserCard } from "../../../translate/kraikubid";
 
 interface UserCardProps {
@@ -44,6 +47,8 @@ const menuButtonProps = {
 
 export const UserCard: FC<UserCardProps> = ({ user }) => {
   const { t } = useClientTranslation(dictUserCard);
+  const router = useRouter();
+  const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [profileInputProfile, setProfileInputProfile] = useState<string>("");
   const [isChangeProfilePicModalOpen, setIsChangeProfilePicModalOpen] =
     useState<boolean>(false);
@@ -52,6 +57,24 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
   };
   const handleChangeProfilePicModalClose = () => {
     setIsChangeProfilePicModalOpen(false);
+  };
+  const handleProfilePicChange = async () => {
+    if (!profileInputProfile) return;
+    try {
+      setIsUpdatingProfile(true);
+      await userService.changeProfilePic(profileInputProfile);
+      handleChangeProfilePicModalClose();
+      router.reload();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const r = error.response.data as CustomApiResponse;
+        console.error(r.message);
+        alert(r.message);
+      } else {
+        console.error(error);
+      }
+    }
+    setIsUpdatingProfile(false);
   };
 
   const matchedRoles = user.roles?.filter((e) => {
@@ -140,7 +163,9 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
             <Link href="/id/organization">
               <a>
                 <Button variant="outline" {...menuButtonProps}>
-                  {user.orgId ? "View" : "Join an"} Organization
+                  {user.orgId
+                    ? t("View organization")
+                    : t("Create/Join an organization")}
                 </Button>
               </a>
             </Link>
@@ -156,16 +181,13 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Change profile picture</ModalHeader>
+          <ModalHeader>{t("Change profile picture")}</ModalHeader>
           <ModalCloseButton rounded="full" />
           <ModalBody>
-            <Text>
-              We only allow urls for your profile picture. Please upload theme
-              somewhere else.
-            </Text>
+            <Text>{t("change-desc")}</Text>
             <VStack my={4}>
               <Avatar src={profileInputProfile} size="2xl" />
-              <Text opacity={0.6}>Preview</Text>
+              <Text opacity={0.6}>{t("Preview")}</Text>
             </VStack>
             <Input
               w="full"
@@ -176,10 +198,26 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
           </ModalBody>
 
           <ModalFooter>
-            <ButtonGroup spacing={2}>
-              <Button onClick={handleChangeProfilePicModalClose}>Cancel</Button>
-              <Button colorScheme="kraikub.blue.always" color="white">
-                Change profile picture
+            <ButtonGroup
+              rowGap={2}
+              spacing={[0, 0, 2]}
+              flexDir={["column", "column", "row"]}
+              w="full"
+              size="lg"
+              justifyContent="end"
+            >
+              <Button onClick={handleChangeProfilePicModalClose}>
+                {t("Cancel")}
+              </Button>
+              <Button
+                colorScheme="kraikub.blue.always"
+                color="white"
+                size="lg"
+                isLoading={isUpdatingProfile}
+                onClick={handleProfilePicChange}
+                isDisabled={!profileInputProfile}
+              >
+                {t("Change profile picture")}
               </Button>
             </ButtonGroup>
           </ModalFooter>

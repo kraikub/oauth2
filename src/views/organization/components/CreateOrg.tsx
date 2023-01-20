@@ -64,10 +64,9 @@ export const CreateOrg: FC = () => {
       if (!nameData.payload.available || !usernameData.payload.available)
         return;
       // Create
-      const { data } = await orgService.create(orgName, orgUsername, position);
+      await orgService.create(orgName, orgUsername, position);
       return router.reload();
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
       alert("Fail to create an organization");
     }

@@ -1,4 +1,3 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
@@ -7,11 +6,6 @@ import {
   Heading,
   HStack,
   Input,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -19,21 +13,19 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   Text,
-  useColorModeValue,
   useToast,
   VStack,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { FC, SyntheticEvent, useEffect, useState } from "react";
 import { builtInRoles } from "../../../../api/config/org";
-import { testOrgUsername } from "../../../../api/utils/string";
-import { Card } from "../../../components/Card";
 import { NotificationToast } from "../../../components/NotificationToast";
 import { RoleSelector } from "../../../components/org/RoleSelector";
+import { useClientTranslation } from "../../../hooks/client-translation";
 import { orgService } from "../../../services/organizationService";
 import { userService } from "../../../services/userService";
+import { orgInviteDict } from "../../../translate/org";
 
 interface InviteProps {
   orgId: string;
@@ -41,6 +33,7 @@ interface InviteProps {
 }
 
 export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
+  const { t } = useClientTranslation(orgInviteDict);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
   const [position, setPosition] = useState<string>("");
@@ -86,13 +79,16 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
         position: "top",
         render: () => (
           <NotificationToast
-            title="Invite sent"
-            detail={`Sucessfully invite ${selectedUser.fullName}`}
+            title={t("Invite sent")}
+            detail={`${t("Sucessfully invite")} ${selectedUser.fullName}${t("invite-suffix")}`}
           />
         ),
       });
       setInviteButtonLoading(false);
       setIsModalOpen(false);
+      setPosition("");
+      setErr("");
+      setRole("");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response) {
@@ -103,6 +99,8 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
         return alert("Failed to create an invitation");
       }
       setInviteButtonLoading(false);
+      setPosition("");
+      setRole("");
     }
   };
 
@@ -126,13 +124,13 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
         <form onSubmit={handleFindUser}>
           <HStack spacing={3} w="full" alignItems="end">
             <Box>
-              <Text {...titleStyle}>Invite member</Text>
+              <Text {...titleStyle}>{t("Invite member")}</Text>
               <HStack
                 position="relative"
                 borderRadius="md"
                 borderWidth="1px"
                 transition="300me ease"
-                boxShadow={selectedUser === null ? "0 0 0 2px crimson" : "none"}
+                boxShadow={err ? "0 0 0 2px crimson" : "none"}
               >
                 <Center
                   minH="36px"
@@ -145,7 +143,7 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
                 <Input
                   rounded={6}
                   variant="unstyled"
-                  placeholder="username"
+                  placeholder="Enter username"
                   value={username}
                   isRequired
                   onChange={(e) => setUsername(e.target.value)}
@@ -163,17 +161,21 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
               isLoading={nextButtonLoading}
               h="36px"
             >
-              Next
+              {t("Next")}
             </Button>
           </HStack>
-          {err ? <Text>{err}</Text> : null}
+          {err ? (
+            <Text mt={2} color="kraikub.red.500" fontWeight={600}>
+              {err}
+            </Text>
+          ) : null}
         </form>
       </VStack>
       <Modal isOpen={isModalOpen} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
           <form onSubmit={handleInvite}>
-            <ModalHeader>Add your new crew!</ModalHeader>
+            <ModalHeader>{t("Invite your new crew")}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <HStack>
@@ -185,7 +187,7 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
               </HStack>
               <Box>
                 <Text {...titleStyle} mt={8}>
-                  Permission
+                  {t("Role")}
                 </Text>
                 <RoleSelector
                   role={role}
@@ -194,16 +196,15 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
                 />
               </Box>
               <Text {...titleStyle} mt={8}>
-                What they do? Give them a position.
+                {t("What they do? Give them a position.")}
               </Text>
               <Input
-                placeholder="Ex. Head of Marketing"
+                placeholder={`${t("Ex.")} Head of Marketing`}
                 value={position}
                 onChange={(e) => setPosition(e.target.value)}
               />
               <Text opacity={0.8} mt={8}>
-                We will send the invitation via email. Have a nice journey with
-                your new crew!
+                {t("invitation-descirption")}
               </Text>
             </ModalBody>
 
@@ -219,7 +220,7 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
                 onClick={handleClose}
                 type="submit"
               >
-                Invite
+                {t("Invite")}
               </Button>
             </ModalFooter>
           </form>

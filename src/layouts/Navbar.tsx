@@ -42,6 +42,7 @@ import { MdLogout } from "react-icons/md";
 import { useClientTranslation } from "../hooks/client-translation";
 import { navbarDict } from "../translate/navbar";
 import { LinkWrap } from "../components/LinkWrap";
+import { CustomDivider } from "../components/CustomDivider";
 
 interface TabProps {
   href?: string;
@@ -53,7 +54,7 @@ const Tab: FC<TabProps> = (props) => {
   const router = useRouter();
   const activeButtonBg = useColorModeValue("blackAlpha.100", "whiteAlpha.200");
   const tabButtonStyles: ButtonProps = {
-    rounded: 6,
+    rounded: 10,
     variant: "ghost",
     fontSize: 14,
     fontWeight: 600,
@@ -118,8 +119,7 @@ const Navbar: FC = () => {
       borderColor: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
     },
     mobile: {
-      bg: useColorModeValue("blackAlpha.700", "blackAlpha.700"),
-      color: "white",
+      bg: useColorModeValue("card.light", "card.dark"),
     },
   };
 
@@ -172,7 +172,12 @@ const Navbar: FC = () => {
                   borderWidth="1px"
                   rounded={10}
                 />
-                <Heading size="sm" fontWeight={700} letterSpacing="-0.06em">
+                <Heading
+                  size="sm"
+                  fontWeight={700}
+                  letterSpacing="-0.06em"
+                  display={["none", "block"]}
+                >
                   KRAIKUB{" "}
                 </Heading>
               </HStack>
@@ -185,8 +190,8 @@ const Navbar: FC = () => {
           </HStack>
           <Flex alignItems="center" gap={4}>
             <HStack spacing={3}>
-              <ThemeToggler />
-              <Box display={["none", "flex"]}>
+              {/* <ThemeToggler /> */}
+              <Box display={["none", "none", "flex"]}>
                 <SmartLanguageToggler sx={{ size: "sm" }} />
               </Box>
               <Avatar
@@ -195,8 +200,9 @@ const Navbar: FC = () => {
                   user.student?.nameEn.split(" ").slice(1).join(" ") ||
                   user.fullName
                 }
-                w="34px"
-                h="34px"
+                w="44px"
+                h="44px"
+                display={["none", "none", "block"]}
                 onClick={onUserModalOpen}
                 cursor="pointer"
                 transition="300ms ease"
@@ -207,7 +213,7 @@ const Navbar: FC = () => {
 
               <IconButton
                 aria-label="mobile-nav-menu"
-                display={["flex", "none"]}
+                display={["flex", "flex", "none"]}
                 onClick={() => setNavModal(true)}
                 rounded={8}
                 variant="unsyled"
@@ -224,7 +230,7 @@ const Navbar: FC = () => {
         onClose={onNavModalClose}
         size="full"
       >
-        <DrawerContent p={4} backdropFilter="blur(20px)" {...navStyles.mobile}>
+        <DrawerContent p={4} {...navStyles.mobile}>
           <DrawerCloseButton />
           <DrawerHeader>
             <Text
@@ -252,19 +258,47 @@ const Navbar: FC = () => {
                   </Box>
                 );
               })}
-              <SmartLanguageToggler sx={{ width: "full" }} />
             </VStack>
+            <CustomDivider />
+            <Box py={8}>
+              <HStack spacing={3}>
+                <Avatar
+                  src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
+                  name={
+                    user.student?.nameEn.split(" ").slice(1).join(" ") ||
+                    user.fullName
+                  }
+                  size="md"
+                />
+                <Box>
+                  <Heading size="md">{user.fullName}</Heading>
+                  <Text fontWeight={500} opacity={0.7}>
+                    @{user.username}
+                  </Text>
+                </Box>
+              </HStack>
+            </Box>
           </DrawerBody>
 
-          <DrawerFooter>
+          <DrawerFooter p={0} flexDirection="column" gap={4}>
+            <SmartLanguageToggler
+              sx={{
+                width: "full",
+                h: "64px",
+                variant: "solid",
+                rounded: 16,
+                size: "lg",
+              }}
+            />
             <Button
               w="full"
               size="lg"
+              h="64px"
+              rounded={16}
               gap={3}
               onClick={signout}
-              bg="kraikub.blue.500"
-              _hover={{ bg: undefined }}
-              _active={{ bg: undefined }}
+              colorScheme="kraikub.blue.always"
+              color="white"
             >
               {t("menu-logout")} <MdLogout size="20px" />
             </Button>

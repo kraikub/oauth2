@@ -1,8 +1,5 @@
 import { PipelineStage } from "mongoose";
-import {
-  fullStudentUserAggr,
-  studentAggr,
-} from "../../data/aggregations";
+import { fullStudentUserAggr, studentAggr } from "../../data/aggregations";
 import { UserModel } from "../../data/models/user";
 import { mongodb } from "../../data/mongo";
 
@@ -55,7 +52,13 @@ class UserRepository {
   };
 
   setOrgId = async (uid: string, orgId: string) => {
+    await mongodb.connect();
     return await UserModel.updateOne<User>({ uid: uid }, { orgId });
-  }
+  };
+
+  updateProfileImageUrl = async (uid: string, profileImageUrl: string) => {
+    await mongodb.connect();
+    return await UserModel.updateOne<User>({ uid }, { profileImageUrl });
+  };
 }
 export const userRepository = new UserRepository();

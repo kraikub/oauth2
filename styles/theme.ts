@@ -66,6 +66,10 @@ export const colors = {
     light: "#262626",
     dark: "#e6e9ea",
   },
+  notificationCard: {
+    light: "#ffffff",
+    dark: "#101010",
+  },
 };
 
 const fonts = {

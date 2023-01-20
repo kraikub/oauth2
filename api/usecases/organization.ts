@@ -142,6 +142,22 @@ class OragnizationUsecase {
       };
     }
 
+    if (memberData.orgId && memberData.orgId !== orgId) {
+      return {
+        success: false,
+        message: "This user is already in another organization",
+        httpStatus: 422,
+      };
+    }
+
+    if (memberData.orgId && memberData.orgId === orgId) {
+      return {
+        success: false,
+        message: "This user is already in this organization",
+        httpStatus: 422,
+      };
+    }
+
     const role = roleMap[priority];
     if (!role) {
       return {
@@ -169,26 +185,29 @@ class OragnizationUsecase {
       appConfig.expirations.invites.s
     );
     try {
-    await mailService.inviteToOrg(memberData.personalEmail, {
-      code: `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}${p.organizationInviteLanding}?vssid=${redisKey}`,
-      orgName: organization.orgName,
-      orgUsername: organization.orgUsername,
-      position: role.data.displayPosition,
-      by: operatorData.fullName,
-    });
-    } catch(error) {
+      await mailService.inviteToOrg(memberData.personalEmail, {
+        name: memberData.fullName,
+        code: `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}${p.organizationInviteLanding}?vssid=${redisKey}`,
+        orgName: organization.orgName,
+        orgUsername: organization.orgUsername,
+        position: position,
+        by: operatorData.fullName,
+      });
+    } catch (error) {
       if (axios.isAxiosError(error)) {
         return {
           success: false,
           message: "Operation on mail service failed",
+          httpStatus: 500,
           data: {
-            mailServiceRequest: error.request, 
-            mailServiceResponse: error.response,
+            mailServiceResponse: error.response
+              ? error.response.data
+              : undefined,
             mailServiceErrorCode: error.code,
             mailServiceErrorCause: error.cause,
-            mailServiceErrorStatus: error.status
-          }
-        }
+            mailServiceErrorStatus: error.status,
+          },
+        };
       }
     }
 
@@ -435,6 +454,116 @@ class OragnizationUsecase {
     return {
       success: true,
       message: "",
+    };
+  };
+
+  //////////////////////////////////////////////////////////////////////////////////////
+  transferOwnership = async (
+    orgId: string,
+    assigneeId: string,
+    assignerId: string
+  ): Promise<UseCaseResult> => {
+    const assigner = await userRepository.findOne({ uid: assignerId })
+    const assignee = await userRepository.findOne({ uid: assigneeId })
+
+    if (!assigner) {
+      return {
+        success: false,
+        message: "Unknown assigner",
+        httpStatus: 422,
+      }
+    }
+    if (!assignee) {
+      return {
+        success: false,
+        message: "Unknown assignee",
+        httpStatus: 422,
+      }
+    }
+    if (assignee.orgId !== orgId || assigner.orgId !== orgId) {
+      return {
+        success: false,
+        message: "Both assigner and assignee need to be in the same organization",
+        httpStatus: 422,
+      }
+    }
+
+    const assignerRole = await roleRepo.getOrgRole(assigner.orgId, assigner.uid);
+    if (!assignerRole) {
+      return {
+        success: false,
+        message: "Cannot find assigner role in roles collection",
+        httpStatus: 422,
+      }
+    }
+    if (assignerRole.priority !== 0) {
+      return {
+        success: false,
+        message: "Assigner is not an owner.",
+        httpStatus: 405,
+      }
+    }
+
+    ///// ======== Assign new role to the new owner (assignee)
+    const newRole: BuiltInRole | undefined = roleMap[0];
+    if (!newRole) {
+      return {
+        success: false,
+        message: "Cannot specify the input role.",
+        httpStatus: 422,
+      };
+    }
+    const updatedFields = {
+      roleName: newRole.roleName,
+      roleType: newRole.roleType,
+      priority: newRole.priority,
+    };
+
+    const updateResult = await roleRepo.updateOrgRole(
+      orgId,
+      assignee.uid,
+      updatedFields
+    );
+    if (!updateResult) {
+      return {
+        success: false,
+        message:
+          "Cannot update assignee role. (Role not matched any entitiy in the collection)",
+        httpStatus: 409,
+      };
+    }
+
+    ///// ======== Assign new role to the old owner (assigner)
+    const assignerNewRole: BuiltInRole | undefined = roleMap[1];
+    if (!newRole) {
+      return {
+        success: false,
+        message: "Cannot specify the input role (assigner).",
+        httpStatus: 422,
+      };
+    }
+    const assignerUpdatedFields = {
+      roleName: assignerNewRole.roleName,
+      roleType: assignerNewRole.roleType,
+      priority: assignerNewRole.priority,
+    };
+
+    const assignerUpdateResult = await roleRepo.updateOrgRole(
+      orgId,
+      assigner.uid,
+      assignerUpdatedFields
+    );
+    if (!assignerUpdateResult) {
+      return {
+        success: false,
+        message:
+          "Cannot update assigner role. (Role not matched any entitiy in the collection)",
+        httpStatus: 409,
+      };
+    }
+
+    return {
+      success: true,
     };
   };
 }
