@@ -73,15 +73,17 @@ export const colors = {
 };
 
 const fonts = {
-  body: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
-  heading: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  // body: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  // heading: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  body: `'Inter', sans-serif`,
+  heading: `'Inter Tight', sans-serif`,
 };
 
 const components: { [key: string]: ComponentStyleConfig } = {
   Text: {
     baseStyle: {
       fontSize: 14,
-      fontWeight: 400,
+      fontWeight: 500,
     },
   },
   Heading: {
@@ -91,13 +93,13 @@ const components: { [key: string]: ComponentStyleConfig } = {
     sizes: {
       xl: {
         fontSize: "3rem",
-        letterSpacing: "-0.05em",
+        // letterSpacing: "-0.05em",
       },
       lg: {
-        letterSpacing: "-0.03em",
+        // letterSpacing: "-0.03em",
       },
       md: {
-        letterSpacing: "-0.015em",
+        // letterSpacing: "-0.015em",
       },
     },
   },
