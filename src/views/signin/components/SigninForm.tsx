@@ -342,7 +342,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                       alignItems="center"
                       gap="20px"
                     >
-                      <Heading size="lg" letterSpacing="-1.5px" lang="en">
+                      <Heading size="lg">
                         {t("form-title")}
                       </Heading>
                       <Text>{t("form-description")}</Text>

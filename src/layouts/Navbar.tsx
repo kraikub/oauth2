@@ -43,6 +43,7 @@ import { useClientTranslation } from "../hooks/client-translation";
 import { navbarDict } from "../translate/navbar";
 import { LinkWrap } from "../components/LinkWrap";
 import { CustomDivider } from "../components/CustomDivider";
+import { usernameWithFixLength } from "../utils/string";
 
 interface TabProps {
   href?: string;
@@ -103,6 +104,9 @@ const Navbar: FC = () => {
 
   const navModalMenuButtonStyles = {
     width: "full",
+    whiteSpave: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
     variant: "ghost",
     rounded: 10,
     justifyContent: "start",
@@ -136,18 +140,22 @@ const Navbar: FC = () => {
     {
       text: t("menu-id"),
       href: p.kraikubId,
+      name: "kraikubid",
     },
     {
       text: t("menu-apps"),
       href: p.projects,
+      name: "applications",
     },
     {
       text: t("menu-org"),
       href: p.organization,
+      name: "organization",
     },
     {
       text: t("menu-settings"),
       href: p.settings,
+      name: "settings",
     },
   ];
 
@@ -172,12 +180,7 @@ const Navbar: FC = () => {
                   borderWidth="1px"
                   rounded={10}
                 />
-                <Heading
-                  size="sm"
-                  fontWeight={700}
-                  letterSpacing="-0.06em"
-                  display={["none", "block"]}
-                >
+                <Heading size="sm" fontWeight={700} display={["none", "block"]}>
                   KRAIKUB{" "}
                 </Heading>
               </HStack>
@@ -185,7 +188,17 @@ const Navbar: FC = () => {
           </HStack>
           <HStack spacing={2} display={["none", "none", "flex"]}>
             {tabs.map((e, i) => {
-              return <Tab key={`tab-${i}`} {...e} />;
+              return (
+                <Tab
+                  key={`tab-${i}`}
+                  {...e}
+                  text={
+                    e.name === "kraikubid" && user.username
+                      ? `@${usernameWithFixLength(user.username, 16)}`
+                      : e.text
+                  }
+                />
+              );
             })}
           </HStack>
           <Flex alignItems="center" gap={4}>
@@ -252,7 +265,11 @@ const Navbar: FC = () => {
                   <Box key={`mobile-menu-${i}`} w="full">
                     <Link href={e.href || ""}>
                       <a>
-                        <Button {...navModalMenuButtonStyles}>{e.text}</Button>
+                        <Button {...navModalMenuButtonStyles}>
+                          {e.name === "kraikubid" && user.username
+                            ? `@${usernameWithFixLength(user.username, 8)}`
+                            : e.text}
+                        </Button>
                       </a>
                     </Link>
                   </Box>
@@ -315,7 +332,7 @@ const Navbar: FC = () => {
               {user.student?.nameEn || user.fullName}
             </Text>
             <Text fontSize={14} opacity={0.6}>
-              {user.student?.nameTh || user.fullName}
+              @{user.username}
             </Text>
             <VStack mt={10} spacing={3}>
               <Link href={p.kraikubId}>
@@ -350,26 +367,6 @@ const Navbar: FC = () => {
           <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
-      {/* <Box position="sticky" top={0} zIndex={59} {...navStyles.desktop}>
-        <Container
-          maxW="container.xl"
-          h="48px"
-          alignItems="end"
-          display={["flex", "flex"]}
-          overflowX="auto"
-        >
-          <ButtonGroup
-            w="full"
-            borderStyle="solid"
-            borderWidth="0 0 1px 0"
-            borderColor={gridBorderDividerColor}
-          >
-            {tabs.map((e, i) => {
-              return <Tab key={`tab-${i}`} {...e} />;
-            })}
-          </ButtonGroup>
-        </Container>
-      </Box> */}
     </>
   );
 };

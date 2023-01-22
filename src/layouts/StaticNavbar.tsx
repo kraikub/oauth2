@@ -20,7 +20,7 @@ const StaticNavbar: FC<NavbarOptions> = (props) => {
       >
         <Flex alignItems="center" gap={3}>
           <LinkWrap href="/">
-            <Heading size="sm" fontWeight={700} letterSpacing={-1}>
+            <Heading size="sm" fontWeight={700}>
               KRAIKUB{" "}
             </Heading>
           </LinkWrap>
