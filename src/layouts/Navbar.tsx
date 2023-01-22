@@ -267,7 +267,7 @@ const Navbar: FC = () => {
                       <a>
                         <Button {...navModalMenuButtonStyles}>
                           {e.name === "kraikubid" && user.username
-                            ? `@${usernameWithFixLength(user.username, 8)}`
+                            ? `@${user.username}`
                             : e.text}
                         </Button>
                       </a>
@@ -295,9 +295,12 @@ const Navbar: FC = () => {
                 </Box>
               </HStack>
             </Box>
+            <VStack>
+              
+            </VStack>
           </DrawerBody>
 
-          <DrawerFooter p={0} flexDirection="column" gap={4}>
+          <DrawerFooter flexDirection="column" gap={4} pb="60px">
             <SmartLanguageToggler
               sx={{
                 width: "full",
