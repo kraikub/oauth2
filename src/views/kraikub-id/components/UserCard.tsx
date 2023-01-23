@@ -146,7 +146,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
         </CardContent>
         <CardContent {...cardContentProps}>
           <VStack spacing={2} alignItems="start">
-            <Heading size="lg">{user.student?.nameEn || user.fullName}</Heading>
+            <Heading size="lg">{user.fullName}</Heading>
             <Text opacity={0.7}>{t(user.type)}</Text>
             <HStack spacing={2}>
               <Text>
