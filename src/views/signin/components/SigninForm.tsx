@@ -109,7 +109,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
     },
 
     highlight: {
-      color: "kraikub.blue.500",
+      color: "kraikub.green.500",
     },
 
     pdpaOverride: {
@@ -359,7 +359,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                         <Progress
                           size="xs"
                           isIndeterminate
-                          colorScheme="kraikub.blue.always"
+                          colorScheme="kraikub.green.always"
                           background="transparent"
                           opacity={isSigninButtonLoading ? 1 : 0}
                         />
@@ -424,7 +424,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                         <Link href="/signup">
                           <a>
                             <Text
-                              color="kraikub.blue.500"
+                              color="kraikub.green.500"
                               fontSize={14}
                               _hover={{ textDecoration: "underline" }}
                             >
@@ -439,7 +439,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                         w="full"
                       >
                         <Button
-                          colorScheme="kraikub.blue.always"
+                          colorScheme="kraikub.green.always"
                           color="white"
                           type="submit"
                           w="full"
@@ -526,7 +526,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                   </Button>
                   <Button
                     size="lg"
-                    colorScheme="kraikub.blue.always"
+                    colorScheme="kraikub.green.always"
                     rounded={6}
                     onClick={() =>
                       handleSigninEvent({ signin_method: "nontri" })
@@ -567,7 +567,7 @@ const ErrorModal: FC<ErrorModalProps> = ({ open, onClose }) => {
         <ModalBody fontSize={14}>{t("err-modal-description")}</ModalBody>
 
         <ModalFooter>
-          <Button onClick={onClose} colorScheme="kraikub.blue.always">
+          <Button onClick={onClose} colorScheme="kraikub.green.always">
             {t("err-modal-btn-close")}
           </Button>
         </ModalFooter>

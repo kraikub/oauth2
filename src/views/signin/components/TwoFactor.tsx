@@ -43,7 +43,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [exp, setExp] = useState<string>(getCountDownString(OTPExpire * 1000))
   const { t } = useTranslation("signin");
-  const blueThemeColor = useColorModeValue("kraikub.blue.500", "kraikub.blue.200")
+  const greenThemeColor = useColorModeValue("kraikub.green.500", "kraikub.green.200")
   const eachDigitStyles = {
     fontWeight: 600,
     flex: 1,
@@ -93,7 +93,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
           {t("2fa-description-2")}
         </Text>
         <Text mt={2}>REF: {OTPRef}</Text>
-        <Text mt={2} color={blueThemeColor} fontWeight={700}>{exp || t("expired")}</Text>
+        <Text mt={2} color={greenThemeColor} fontWeight={700}>{exp || t("expired")}</Text>
         <form onSubmit={handleFormSubmit}>
           <HStack my={6} justifyContent="space-between">
             <PinInput
@@ -118,7 +118,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
             gap={2}
             onClick={back}
             h="60px"
-            colorScheme={loading ? "kraikub.blue" : "gray"}
+            colorScheme={loading ? "kraikub.green.always" : "gray"}
           >
             {loading ? (
               t("2fa-btn-verify")

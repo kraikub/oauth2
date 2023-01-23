@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const Page: NextPage<PageProps> = ({ success }) => {
-  const color = useColorModeValue("kraikub.blue.400", "teakraikub.blue.200");
+  const color = useColorModeValue("kraikub.green.400", "teakraikub.green.200");
   if (!success) {
     return (
       <Container size="md">

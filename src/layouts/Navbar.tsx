@@ -173,14 +173,12 @@ const Navbar: FC = () => {
             <LinkWrap href="/">
               <HStack spacing={2}>
                 <Image
-                  src="/kraikub-logo-app-with-outline.png"
-                  width="40px"
+                  src="https://resources-kraikub.firebaseapp.com/static/logo/transparent/kraikub-logo-256.png"
+                  width="28px"
                   alt="kraikub-nav-logo"
-                  borderStyle="solid"
-                  borderWidth="1px"
                   rounded={10}
                 />
-                <Heading size="sm" fontWeight={700} display={["none", "block"]}>
+                <Heading fontSize={16} fontWeight={700} display={["none", "block"]}>
                   KRAIKUB{" "}
                 </Heading>
               </HStack>
@@ -251,7 +249,6 @@ const Navbar: FC = () => {
               fontWeight={500}
               fontSize={14}
               textTransform="uppercase"
-              fontFamily={`'Rubik', sans-serif`}
               letterSpacing={0.5}
             >
               {t("mobile-nav-title")}
@@ -300,7 +297,7 @@ const Navbar: FC = () => {
             </VStack>
           </DrawerBody>
 
-          <DrawerFooter flexDirection="column" gap={4} pb="60px">
+          <DrawerFooter flexDirection="column" gap={4} pb="80px">
             <SmartLanguageToggler
               sx={{
                 width: "full",
@@ -317,7 +314,7 @@ const Navbar: FC = () => {
               rounded={16}
               gap={3}
               onClick={signout}
-              colorScheme="kraikub.blue.always"
+              colorScheme="kraikub.green.always"
               color="white"
             >
               {t("menu-logout")} <MdLogout size="20px" />
@@ -327,7 +324,7 @@ const Navbar: FC = () => {
       </Drawer>
       <Modal isOpen={showUserModal} onClose={onUserModalClose} isCentered>
         <ModalOverlay />
-        <ModalContent {...modalStyles}>
+        <ModalContent>
           <ModalHeader fontSize={14}>{t("signed-in-as")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -356,7 +353,7 @@ const Navbar: FC = () => {
                 w="full"
                 size="lg"
                 rounded={8}
-                colorScheme="kraikub.blue.always"
+                colorScheme="kraikub.green.always"
                 color="white"
                 justifyContent="start"
                 onClick={signout}

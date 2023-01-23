@@ -55,13 +55,12 @@ export const UserSelector: FC<UserSelectorProps> = ({
                 rounded="full"
               />
             </Box>
-            <Box>
+            <Box pt={1}>
               <Text fontWeight={600}>
-                {user.student?.nameEn.split(" ").splice(1).join(" ") ||
-                  user.fullName}
+                {user.fullName}
               </Text>
               <Text fontWeight={400} fontSize={14} opacity={0.7}>
-                {user.student?.nameTh.split(" ").splice(1).join(" ") || user.type}
+                @{user.username}
               </Text>
             </Box>
           </Flex>
@@ -76,7 +75,7 @@ export const UserSelector: FC<UserSelectorProps> = ({
             {t("account-btn-no")}
           </Button>
           <Button
-            colorScheme="kraikub.blue"
+            colorScheme="kraikub.green.always"
             fontWeight={600}
             onClick={next}
             isLoading={loading}

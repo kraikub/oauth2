@@ -125,7 +125,7 @@ const Each: FC<EachProps> = ({ keyName, device, last }) => {
             <Text fontSize={16} fontWeight={600}>
               {keyName}
             </Text>
-            <HStack spacing={1} color="kraikub.blue.500">
+            <HStack spacing={1} color="kraikub.green.500">
               <Link
                 fontSize={12}
                 fontWeight={800}

@@ -69,7 +69,7 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
         <CardContent props={{ py: 6 }}>
           <HStack spacing={4}>
             <Heading size="md">{org.orgName}</Heading>
-            <Badge size="sm" colorScheme="kraikub.blue" rounded="full">
+            <Badge size="sm" colorScheme="kraikub.green" rounded="full">
               {org.members.length} {t("users")}
             </Badge>
           </HStack>

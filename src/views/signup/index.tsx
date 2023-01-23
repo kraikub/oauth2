@@ -99,7 +99,7 @@ export const SignUpPage: FC = () => {
               <Box position="absolute" top={0} left={0} right={0}>
                 {loading ? (
                   <Progress
-                    colorScheme="kraikub.blue.always"
+                    colorScheme="kraikub.green.always"
                     size="xs"
                     isIndeterminate
                   />
@@ -166,7 +166,7 @@ export const SignUpPage: FC = () => {
                   </VStack>
                   <ButtonGroup justifyContent="end" w="full">
                     <Button
-                      colorScheme="kraikub.blue.always"
+                      colorScheme="kraikub.green.always"
                       color="white"
                       type="submit"
                       isLoading={loading}

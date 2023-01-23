@@ -116,8 +116,14 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
                   size="sm"
                   rounded="full"
                   aria-label="profile-pic-edit"
-                  colorScheme="kraikub.blue.always"
+                  colorScheme="kraikub.green.always"
                   color="white"
+                  borderStyle="solid"
+                  borderWidth="2px"
+                  _hover={{
+                    transform: "scale(1.1)",
+                  }}
+                  borderColor={useColorModeValue("card.light", "card.dark")}
                   onClick={handleChangeProfilePicModalOpen}
                 >
                   <MdEdit size="20px" />
@@ -140,9 +146,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
         </CardContent>
         <CardContent {...cardContentProps}>
           <VStack spacing={2} alignItems="start">
-            <Heading size="lg">
-              {user.student?.nameEn || user.fullName}
-            </Heading>
+            <Heading size="lg">{user.student?.nameEn || user.fullName}</Heading>
             <Text opacity={0.7}>{t(user.type)}</Text>
             <HStack spacing={2}>
               <Text>
@@ -210,7 +214,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
                 {t("Cancel")}
               </Button>
               <Button
-                colorScheme="kraikub.blue.always"
+                colorScheme="kraikub.green.always"
                 color="white"
                 size="lg"
                 isLoading={isUpdatingProfile}

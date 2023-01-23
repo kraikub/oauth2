@@ -24,6 +24,7 @@ import { isValideScope } from "./utils/scope";
 import { AiFillInfoCircle } from "react-icons/ai";
 import { useOnClient } from "../../hooks/on-client";
 import { Card } from "../../components/Card";
+import { ThemeToggler } from "../../components/ThemeToggler";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
@@ -168,12 +169,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
   return (
     <>
       <Box position="fixed" top="22px" right="22px">
-        <Switch
-          size="md"
-          colorScheme="kraikub.blue.always"
-          defaultChecked={colorMode === "dark"}
-          onChange={toggleColorMode}
-        />
+        <ThemeToggler />
       </Box>
       <SigninForm
         app={app}

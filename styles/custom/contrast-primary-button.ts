@@ -4,10 +4,10 @@ export const contrastPrimaryButtonStyles = {
   bgColor: "katrade.500",
   _hover: {
     bgColor: "white",
-    color: "kraikub.blue.500",
+    color: "kraikub.green.500",
   },
   _active: {
     bgColor: "white",
-    color: "kraikub.blue.500",
+    color: "kraikub.green.500",
   }
 }

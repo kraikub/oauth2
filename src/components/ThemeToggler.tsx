@@ -11,7 +11,7 @@ export const ThemeToggler = () => {
   return (
     <Switch
       size="md"
-      colorScheme="kraikub.blue.always"
+      colorScheme="kraikub.green.always"
       isChecked={colorMode === "dark"}
       onChange={toggleColorMode}
     />

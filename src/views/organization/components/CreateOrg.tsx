@@ -141,7 +141,7 @@ export const CreateOrg: FC = () => {
         </VStack>
         <ButtonGroup mt={6}>
           <Button
-            colorScheme="kraikub.blue.always"
+            colorScheme="kraikub.green.always"
             color="white"
             disabled={!orgName || !orgUsername || !position}
             type="submit"

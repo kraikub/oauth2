@@ -34,6 +34,25 @@ export const colors = {
         600: "#1468de",
       },
     },
+    green: {
+      50: "#ebf8f6",
+      100: "#d7f2ed",
+      200: "#aee5db",
+      300: "#86d7c8",
+      400: "#5dcab6",
+      500: "#35bda4",
+      600: "#2a9783",
+      700: "#207162",
+      800: "#154c42",
+      900: "#0b2621",
+      always: {
+        200: "#35bda4",
+        300: "#35bda4",
+        400: "#35bda4",
+        500: "#35bda4",
+        600: "#35bda4",
+      },
+    },
     red: {
       50: "#ffeaec",
       100: "#ffd5d8",
@@ -52,7 +71,7 @@ export const colors = {
         500: "#ff2b3d",
         600: "#ff2b3d",
       },
-    }
+    },
   },
   bg: {
     light: "#f8fafb",
@@ -75,20 +94,20 @@ export const colors = {
 const fonts = {
   // body: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
   // heading: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
-  body: `'Inter', sans-serif`,
-  heading: `'Inter Tight', sans-serif`,
+  body: `'Rubik', sans-serif`,
+  heading: `'Rubik', sans-serif`,
 };
 
 const components: { [key: string]: ComponentStyleConfig } = {
   Text: {
     baseStyle: {
       fontSize: 14,
-      fontWeight: 500,
+      fontWeight: 400,
     },
   },
   Heading: {
     baseStyle: {
-      fontWeight: 600,
+      fontWeight: 400,
     },
     sizes: {
       xl: {
@@ -107,7 +126,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
     defaultProps: {
       fontSize: 20,
       fontWeight: 500,
-      focusBorderColor: "kraikub.blue.500",
+      focusBorderColor: "kraikub.green.500",
     },
   },
   Button: {
@@ -135,7 +154,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
     },
     baseStyle: (props) => ({
       closeButton: {
-        rounded: "full"
+        rounded: "full",
       },
       dialog: {
         rounded: 14,
@@ -153,7 +172,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
       list: {
         bg: mode(colors.card.light, colors.card.dark)(props),
         boxShadow: "0 10px 20px #00000030",
-        rounded: 14
+        rounded: 14,
       },
       item: {
         bg: "transparent",
