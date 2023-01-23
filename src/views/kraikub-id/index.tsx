@@ -58,7 +58,7 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
                   fontWeight={600}
                   mt={16}
                   px={14}
-                  colorScheme="kraikub.blue.always"
+                  colorScheme="kraikub.green.always"
                   color="white"
                 >
                   {t("btn-activate")}

@@ -155,7 +155,7 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
               </HStack>
             </Box>
             <Button
-              colorScheme="kraikub.blue.always"
+              colorScheme="kraikub.green.always"
               color="white"
               type="submit"
               isLoading={nextButtonLoading}
@@ -212,7 +212,7 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
               <Button
                 size="lg"
                 w={["full"]}
-                colorScheme="kraikub.blue.always"
+                colorScheme="kraikub.green.always"
                 color="white"
                 mr={3}
                 isLoading={inviteButtonLoading}

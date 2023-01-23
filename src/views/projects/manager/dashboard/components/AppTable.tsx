@@ -103,7 +103,7 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
                       _hover={buttonWhenHover}
                       color={isLimit(
                         user.appOwned >= user.appQuota,
-                        "kraikub.blue.400",
+                        "kraikub.green.400",
                         "red.400"
                       )}
                     >

@@ -13,7 +13,7 @@ export const NoKraikubID = () => {
         <Link href="/id">
           <a>
             <Button
-              colorScheme="kraikub.blue.always"
+              colorScheme="kraikub.green.always"
               color="white"
               size="lg"
               mt={8}

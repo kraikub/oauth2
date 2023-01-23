@@ -140,7 +140,8 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
             </Button>
             <Button
               type="submit"
-              colorScheme="kraikub.blue"
+              colorScheme="kraikub.green.always"
+              color="white"
               isLoading={loading}
               size="md"
             >

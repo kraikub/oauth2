@@ -39,7 +39,7 @@ export const Loader: FC<LoaderProps> = ({ children }) => {
     return (
       <>
         <Box position="fixed" top={0}left={0} right={0} zIndex={999}>
-          <Progress size="xs" isIndeterminate colorScheme="kraikub.blue.always" />
+          <Progress size="xs" isIndeterminate colorScheme="kraikub.green.always" />
         </Box>
         <Modal
           isOpen={loading}

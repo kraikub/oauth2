@@ -110,7 +110,7 @@ const Page2: FC<SubpageProps> = ({ back, next, lastPage, page }) => {
           <Box
             as="span"
             fontWeight={600}
-            color={useColorModeValue("kraikub.blue.400", "kraikub.blue.200")}
+            color={useColorModeValue("kraikub.green.400", "kraikub.green.200")}
           >
             {t("description-2")}
           </Box>
@@ -170,7 +170,7 @@ const Page3: FC<SubpageProps> = ({ page, lastPage }) => {
 
           <Link href="/id">
             <a>
-              <Button size="lg" h="80px" colorScheme="kraikub.blue" fontSize={20}>
+              <Button size="lg" h="80px" colorScheme="kraikub.green" fontSize={20}>
                 {t("btn-finish")}
               </Button>
             </a>

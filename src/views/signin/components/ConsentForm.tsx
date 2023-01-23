@@ -108,14 +108,14 @@ export const ConsentForm: FC<ConsentFormProps> = ({
           <Button
             size="lg"
             variant="ghost"
-            colorScheme="kraikub.blue.always"
+            colorScheme="kraikub.green.always"
             onClick={handleReject}
           >
             {t("consent-btn-cancel")}
           </Button>
           <Button
             size="lg"
-            colorScheme="kraikub.blue.always"
+            colorScheme="kraikub.green.always"
             color="white"
             onClick={() => handleSignin({ signin_method: signInMethod })}
             isLoading={loading}
@@ -134,8 +134,8 @@ interface EachProps extends ConsentData {
 
 const Each: FC<EachProps> = ({ label, disableBorder }) => {
   const dynamicTealColor = useColorModeValue(
-    "kraikub.blue.500",
-    "kraikub.blue.500"
+    "kraikub.green.500",
+    "kraikub.green.500"
   );
   return (
     <>

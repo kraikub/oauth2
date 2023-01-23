@@ -38,7 +38,7 @@ const EachSwitch: FC<EachSwitchProps> = ({
           {description}
         </Text>
       </Box>
-      <Switch size="md" isChecked={defaultChecked} colorScheme="kraikub.blue.always" mt={2} />
+      <Switch size="md" isChecked={defaultChecked} colorScheme="kraikub.green.always" mt={2} />
     </Flex>
   );
 };
