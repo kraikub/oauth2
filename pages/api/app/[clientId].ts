@@ -52,16 +52,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     if (req.method === "DELETE") {
-      const { success, status } = await applicationUsecase.deleteApp(
+      const result = await applicationUsecase.deleteApp(
         payload.uid,
         clientId as string
       );
-      if (!success) {
-        return handleErrResponse(res, status, "", null);
-      }
       return res
-        .status(200)
-        .send(createResponse(true, "Delete complete", null));
+        .status(result.httpStatus || 200)
+        .send(createResponse(result.success, result.message || "", result.data));
     }
   } catch (error) {
     handleApiError(res, error);

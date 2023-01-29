@@ -2,7 +2,6 @@ import {
   Avatar,
   Box,
   Button,
-  ButtonGroup,
   ButtonProps,
   Container,
   Drawer,
@@ -32,10 +31,8 @@ import { FC, useState } from "react";
 import { useUser } from "../contexts/User";
 import { SmartLanguageToggler } from "../components/SmartLanguageToggler";
 import { useOnClient } from "../hooks/on-client";
-import { IoIosArrowDown, IoIosCloseCircle, IoIosMenu } from "react-icons/io";
-import { Card } from "../components/Card";
+import { IoIosMenu } from "react-icons/io";
 import Link from "next/link";
-import { ThemeToggler } from "../components/ThemeToggler";
 import { p } from "../utils/path";
 import { appConfig } from "../../api/config/app";
 import { MdLogout } from "react-icons/md";
@@ -58,8 +55,8 @@ const Tab: FC<TabProps> = (props) => {
     rounded: 10,
     variant: "ghost",
     fontSize: 14,
-    fontWeight: 600,
-    letterSpacing: "-0.03em",
+    fontWeight: router.asPath === props.href ? 600 : 500,
+    letterSpacing: "-0.02em",
     bg: router.asPath === props.href ? activeButtonBg : "transparent",
     _hover: {
       bg: activeButtonBg,
@@ -82,7 +79,6 @@ const Navbar: FC = () => {
   const { t } = useClientTranslation(navbarDict);
   const [showUserModal, setShowUserModal] = useState(false);
   const [navModal, setNavModal] = useState(false);
-  const menuBarBg = useColorModeValue("bg.light", "bg.dark");
   const ready = useOnClient();
 
   const onNavModalClose = () => {
@@ -125,11 +121,6 @@ const Navbar: FC = () => {
     mobile: {
       bg: useColorModeValue("card.light", "card.dark"),
     },
-  };
-
-  const modalStyles = {
-    bg: useColorModeValue("white", "whiteAlpha.100"),
-    backdropFilter: "blur(50px)",
   };
 
   if (!user || !ready) {
@@ -178,7 +169,11 @@ const Navbar: FC = () => {
                   alt="kraikub-nav-logo"
                   rounded={10}
                 />
-                <Heading fontSize={16} fontWeight={700} display={["none", "block"]}>
+                <Heading
+                  fontSize={16}
+                  fontWeight={700}
+                  display={["none", "block"]}
+                >
                   KRAIKUB{" "}
                 </Heading>
               </HStack>
@@ -292,9 +287,7 @@ const Navbar: FC = () => {
                 </Box>
               </HStack>
             </Box>
-            <VStack>
-              
-            </VStack>
+            <VStack></VStack>
           </DrawerBody>
 
           <DrawerFooter flexDirection="column" gap={4} pb="80px">

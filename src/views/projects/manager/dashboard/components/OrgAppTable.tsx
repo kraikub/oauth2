@@ -73,7 +73,10 @@ const OrgAppTable: FC<OrgAppTableProps> = ({ apps, org, role }) => {
         <CardContent props={{ px: 8 }}>
           <Heading size="md">{t("page-header-org")}</Heading>
           <Text mt={2} fontWeight={500} opacity={0.7} fontSize={14}>
-            {t("page-quota-msg-1")} {org.appQuota - org.appOwned}{" "}
+            <strong>
+              {org.orgName} {`(@${org.orgUsername})`}
+            </strong>{" "}
+            {t("page-quota-msg-org-1")} {org.appQuota - org.appOwned}{" "}
             {t("page-quota-msg-2")}
           </Text>
         </CardContent>

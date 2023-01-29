@@ -14,11 +14,11 @@ export const Card: FC<CardProps> = (props) => {
     <Box
       bg={useColorModeValue("card.light", "card.dark")}
       p={defaultPadding}
-      rounded={[0, 10]}
+      rounded={props.disableMobileBorder ? 10 : [0, 10]}
       borderStyle={props.disableMobileBorder ? "none" : ["solid", "none"]}
       borderWidth="1px 0 1px 0"
-      borderColor={useColorModeValue("blackAlpha.300", "whiteAlpha.200")}
-      boxShadow={["none", `0 2px 10px #0000001a`]}
+      borderColor={useColorModeValue("blackAlpha.200", "whiteAlpha.200")}
+      boxShadow={["none", `0 2px 4px #0000001a`]}
       {...props.props}
     >
       {props.children}

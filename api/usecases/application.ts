@@ -1,4 +1,4 @@
-import { roleRepo } from './../repositories/role';
+import { roleRepo } from "./../repositories/role";
 import { orgRepo } from "./../repositories/organization";
 import { convertToUsername, testStandardUsername } from "./../utils/string";
 import { applicationRepository } from "../repositories/application";
@@ -30,7 +30,7 @@ export class ApplicationUsecase {
     if (!appName) return false;
     const appId = convertToUsername(appName);
     const a = await applicationRepository.hasAppId(appId);
-    return a ? true : false
+    return a ? true : false;
   };
 
   createApp = async (
@@ -93,14 +93,14 @@ export class ApplicationUsecase {
           success: false,
           message: "Cannot find user's organization role",
           httpStatus: 409,
-        }
+        };
       }
       if (roleRef.priority > 1) {
         return {
           success: false,
           message: "Not allowed",
           httpStatus: 405,
-        }
+        };
       }
       if (orgRef.appOwned >= orgRef.appQuota) {
         return {
@@ -135,37 +135,60 @@ export class ApplicationUsecase {
       success: true,
       data: {
         clientId: app.clientId,
-      }
+      },
     };
   };
 
-  deleteApp = async (
-    uid: string,
-    clientId: string
-  ): Promise<{ success: boolean; status: number }> => {
+  deleteApp = async (uid: string, clientId: string): Promise<UseCaseResult> => {
     if (clientId === process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID) {
       return {
         success: false,
-        status: 403,
+        message: "Deletion not allowed",
+        httpStatus: 403,
       };
     }
-
-    if (!(await this.isOwned(uid, clientId))) {
+    let isAllowed = false;
+    // Reference test
+    const app = await applicationRepository.findOneApp({ clientId });
+    const user = await userRepository.findOne({ uid });
+    if (!app) {
       return {
         success: false,
-        status: 403,
+        message: "Cannot find an app",
+        httpStatus: 409,
+      };
+    }
+    if (!user) {
+      return {
+        success: false,
+        message: "Cannot find a user",
+        httpStatus: 409,
+      };
+    }
+    if (app.refType === "user") {
+      isAllowed = true;
+      userRepository.updateAppOwned(user.uid, user.appOwned - 1);
+    } else if (app.refType === "org") {
+      const role = await roleRepo.getOrgRole(user.orgId, user.uid);
+      if (!role || role.priority >= 2 || user.orgId !== app.refId) {
+        return {
+          success: false,
+          message: "Not allowed",
+          httpStatus: 405,
+        };
+      }
+      isAllowed = true;
+      orgRepo.updateAppOwned(user.uid, user.appOwned - 1);
+    } else {
+      return {
+        success: false,
+        message: `Unknown reference type: ${app.refType || "[empty_string]"}`,
+        httpStatus: 409,
       };
     }
     await applicationRepository.deleteOne(clientId);
-    const owner = await userRepository.findOne({ uid: uid });
-    if (!owner) {
-      throw new Error("User is not existed.");
-    }
-    await userRepository.update(owner.uid, { appOwned: owner.appOwned - 1 });
-
     return {
       success: true,
-      status: 200,
     };
   };
 

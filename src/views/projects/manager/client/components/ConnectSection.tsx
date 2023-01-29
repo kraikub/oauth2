@@ -20,6 +20,7 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { useOnClient } from "../../../../../hooks/on-client";
 import { useClientTranslation } from "../../../../../hooks/client-translation";
 import { connectionComponentDict } from "../../../../../translate/connection";
+import { DynamicContainer } from "../../../../../layouts/DynamicContainer";
 
 interface ConnectSectionProps {
   app: Application | null;
@@ -38,7 +39,9 @@ export const ConnectSection: FC<ConnectSectionProps> = ({ app }) => {
   }
 
   return (
-    <Container maxW="container.xl">
+    <DynamicContainer containerProps={{
+      maxW: "container.xl"
+    }}>
       <Card>
         <Grid templateColumns="repeat(12, 1fr)" columnGap={6} rowGap={4}>
           <GridItem
@@ -140,6 +143,6 @@ export const ConnectSection: FC<ConnectSectionProps> = ({ app }) => {
           </GridItem>
         </Grid>
       </Card>
-    </Container>
+    </DynamicContainer>
   );
 };

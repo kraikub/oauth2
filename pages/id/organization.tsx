@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { PageAuthMiddleware } from "../../api/middlewares/auth.middleware";
+import { userRepository } from "../../api/repositories/user";
 import { orgUsecase } from "../../api/usecases/organization";
 import { aggregations } from "../../data/aggregations";
 import { UserModel } from "../../data/models/user";
@@ -22,24 +23,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  const u = await UserModel.aggregate([
-    ...aggregations.private.user(uid),
-    ...aggregations.private.student(),
-  ]);
+  const u = await userRepository.findOne({ uid });
+  if (!u) {
+    return {
+      props: {
+        user: null,
+        organization: null,
+      },
+    };
+  }
 
-  const orgData = await orgUsecase.getOrgForDisplay(u[0].orgId)
+  const orgData = await orgUsecase.getOrgForDisplay(u.orgId);
 
   return {
     props: {
-      user: u.length ? jsonSerialize(u[0]) : null,
+      user: jsonSerialize(u),
       organization: jsonSerialize(orgData),
-    }
+    },
   };
 };
 
 interface OrganizationPageProps {
   user: UserWithStudent;
-  organization: FullOrganizationDisplayData; 
+  organization: FullOrganizationDisplayData;
 }
 
 const OragnizationPage: NextPage<OrganizationPageProps> = (props) => {
@@ -50,7 +56,7 @@ const OragnizationPage: NextPage<OrganizationPageProps> = (props) => {
       </Head>
       <Navbar />
       <ClientRender>
-        <OrgDashboardPage org={props.organization}/>
+        <OrgDashboardPage org={props.organization} />
       </ClientRender>
     </UserProvider>
   );

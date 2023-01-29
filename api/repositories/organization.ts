@@ -1,4 +1,4 @@
-import { orgFullDataForDisplay } from './../../data/aggregations/org';
+import { orgFullDataForDisplay } from "./../../data/aggregations/org";
 import { organizationModel } from "../../data/models/organization";
 import { mongodb } from "../../data/mongo";
 
@@ -35,7 +35,10 @@ class OrganizationRepo {
   };
 
   updateAppOwned = async (orgId: string, newValue: number) => {
-    return await organizationModel.updateOne<Organization>({ orgId, appOwned: newValue })
-  }
+    return await organizationModel.updateOne<Organization>(
+      { orgId },
+      { appOwned: newValue }
+    );
+  };
 }
 export const orgRepo = new OrganizationRepo();

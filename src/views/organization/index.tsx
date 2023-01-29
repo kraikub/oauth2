@@ -13,6 +13,7 @@ import { CustomDivider } from "../../components/CustomDivider";
 import { useUser } from "../../contexts/User";
 import { useClientTranslation } from "../../hooks/client-translation";
 import { useOnClient } from "../../hooks/on-client";
+import { DynamicContainer } from "../../layouts/DynamicContainer";
 import { orgDict } from "../../translate/org";
 import { CreateOrg } from "./components/CreateOrg";
 import { Invite } from "./components/Invite";
@@ -46,7 +47,6 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
       </Container>
     );
   }
-
   const myRoles = org.members.filter((e) => {
     return e.user.uid === user.uid;
   });
@@ -64,7 +64,7 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
   const myRole = myRoles[0];
 
   return (
-    <Container maxW="container.lg" py="20px">
+    <DynamicContainer containerProps={{ maxW: "container.lg"}}>
       <Card props={{ p: 0 }}>
         <CardContent props={{ py: 6 }}>
           <HStack spacing={4}>
@@ -111,6 +111,6 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
             })}
         </VStack>
       </Card>
-    </Container>
+    </DynamicContainer>
   );
 };

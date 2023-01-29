@@ -8,7 +8,7 @@ import {
 import { FC, ReactNode } from "react";
 
 interface DynamicContainerProps {
-  children: ReactNode[];
+  children: ReactNode | ReactNode[];
   containerProps?: ContainerProps;
   stackProps?: StackProps;
 }
@@ -18,13 +18,17 @@ export const DynamicContainer: FC<DynamicContainerProps> = (props) => {
     <Container px={[0, 4]} my="2vh" {...props.containerProps}>
       {
         <VStack spacing={2} w="full" {...props.stackProps}>
-          {props.children.map((element, index) => {
-            return (
-              <Box key={`container-element-${index}`} w="full">
-                {element}
-              </Box>
-            );
-          })}
+          {Array.isArray(props.children) ? (
+            props.children.map((element, index) => {
+              return (
+                <Box key={`container-element-${index}`} w="full">
+                  {element}
+                </Box>
+              );
+            })
+          ) : (
+            <Box w="full">{props.children}</Box>
+          )}
         </VStack>
       }
     </Container>

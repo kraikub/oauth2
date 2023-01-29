@@ -108,7 +108,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
           h="200px"
           w="100%"
           position="relative"
-          background="linear-gradient(155deg, rgba(206,252,231,1) 0%, rgba(213,255,203,1) 100%)"
+          background="linear-gradient(155deg, rgba(90,224,127,1) 0%, rgba(89,178,186,1) 100%)"
         >
           <Box position="absolute" bottom="-55px" left={["20px"]}>
             <Box position="relative">
@@ -125,7 +125,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
                   size="sm"
                   rounded="full"
                   aria-label="profile-pic-edit"
-                  colorScheme="kraikub.green.always"
+                  bg="black"
                   color="white"
                   borderStyle="solid"
                   borderWidth="2px"

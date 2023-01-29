@@ -14,6 +14,7 @@ import { ThemeToggler } from "../../components/ThemeToggler";
 import { UserProvider } from "../../contexts/User";
 import { useClientTranslation } from "../../hooks/client-translation";
 import { useOnClient } from "../../hooks/on-client";
+import { DynamicContainer } from "../../layouts/DynamicContainer";
 import Navbar from "../../layouts/Navbar";
 import { settingsDict } from "../../translate/settings";
 
@@ -27,7 +28,9 @@ export const SettingPage: NextPage<SettingPageProps> = (props) => {
   return (
     <UserProvider user={props.user}>
       <Navbar />
-      <Container maxW="container.md" my="100px">
+      <DynamicContainer containerProps={{
+        maxW: "container.md"
+      }}>
         <Card>
           <Grid templateColumns="repeat(12, 1fr)">
             <GridItem colSpan={8}>
@@ -66,7 +69,7 @@ export const SettingPage: NextPage<SettingPageProps> = (props) => {
             </GridItem>
           </Grid>
         </Card>
-      </Container>
+      </DynamicContainer>
     </UserProvider>
   );
 };

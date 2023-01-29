@@ -51,6 +51,7 @@ export const UserOrgCard: FC<UserCardProps> = ({
   const [prevRole, setPrevRole] = useState(member.roleType);
   const [role, setRole] = useState(member.roleType);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
   const [transactionType, setTransactionType] = useState("");
 
@@ -67,10 +68,12 @@ export const UserOrgCard: FC<UserCardProps> = ({
   };
 
   const handleRemove = async () => {
+    setLoading(true)
     try {
       await orgService.removeMember(orgId, member.user.uid);
       router.reload();
     } catch (error) {
+      setLoading(false);
       if (axios.isAxiosError(error) && error.response) {
         console.error((error.response.data as CustomApiResponse).message);
       }
@@ -78,10 +81,12 @@ export const UserOrgCard: FC<UserCardProps> = ({
   };
 
   const handleLeave = async () => {
+    setLoading(true)
     try {
       await orgService.leave();
       location.reload();
     } catch (error) {
+      setLoading(false);
       if (axios.isAxiosError(error) && error.response) {
         console.error((error.response.data as CustomApiResponse).message);
       }
@@ -89,10 +94,12 @@ export const UserOrgCard: FC<UserCardProps> = ({
   };
 
   const handleTransferOwnership = async () => {
+    setLoading(true)
     try {
       await orgService.transferOwnership(orgId, member.user.uid);
       location.reload();
     } catch (error) {
+      setLoading(false);
       if (axios.isAxiosError(error) && error.response) {
         console.error((error.response.data as CustomApiResponse).message);
       }
@@ -288,6 +295,7 @@ export const UserOrgCard: FC<UserCardProps> = ({
             </Collapse>
             <Collapse in={transactionType ? true : false}>
               <Confirmation
+                loading={loading}
                 header={t("Are your sure?")}
                 onConfirm={onConfirmFunction()}
                 onCancel={clearTransactionType}
@@ -312,6 +320,7 @@ interface ConfirmationProps {
   actionButtonText: string;
   member: MemberData;
   header: string;
+  loading: boolean;
 }
 
 export const Confirmation: FC<ConfirmationProps> = ({
@@ -320,6 +329,7 @@ export const Confirmation: FC<ConfirmationProps> = ({
   actionDescribe,
   actionButtonText,
   header,
+  loading
 }) => {
   const buttonProps = {
     size: "lg",
@@ -340,6 +350,7 @@ export const Confirmation: FC<ConfirmationProps> = ({
           colorScheme="kraikub.red.always"
           color="white"
           onClick={onConfirm}
+          isLoading={loading}
         >
           {actionButtonText}
         </Button>
