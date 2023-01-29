@@ -74,7 +74,7 @@ export const colors = {
     },
   },
   bg: {
-    light: "#f8fafb",
+    light: "#f8f9fa",
     dark: "#141414",
   },
   card: {
@@ -94,20 +94,20 @@ export const colors = {
 const fonts = {
   // body: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
   // heading: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
-  body: `'Rubik', sans-serif`,
-  heading: `'Rubik', sans-serif`,
+  body: `'Inter', sans-serif`,
+  heading: `'inter Tight', sans-serif`,
 };
 
 const components: { [key: string]: ComponentStyleConfig } = {
   Text: {
     baseStyle: {
       fontSize: 14,
-      fontWeight: 400,
+      fontWeight: 500,
     },
   },
   Heading: {
     baseStyle: {
-      fontWeight: 400,
+      fontWeight: 600,
     },
     sizes: {
       xl: {

@@ -13,7 +13,11 @@ interface UserWithApplication extends UserWithStudent {
 }
 
 interface DashboardServerSideProps extends PageWithTranslation {
-  data: UserWithApplication;
+  user: User
+  userApps: Application[];
+  org: Organization | null;
+  orgApps: Application[];
+  role: Role<OrganizationRoleData> | null;
   lang: string;
 }
 

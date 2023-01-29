@@ -40,6 +40,7 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
   data,
 }) => {
   const router = useRouter();
+  const { ref_type, ref_id } = router.query;
   const { register, handleSubmit, getValues } = useForm();
   const [hasName, setHasName] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
@@ -55,6 +56,10 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
 
   if (!ready) {
     return null;
+  }
+
+  if (!ref_type || (ref_type === "org" && !ref_id)) {
+    return <>Invalid references</>;
   }
 
   return (
@@ -77,7 +82,10 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
               return;
             }
             try {
-              const res = await appService.createApplication(data);
+              const res = await appService.createApplication(data, {
+                refId: (ref_id as string) || "",
+                refType: (ref_type as string) || "",
+              });
               setLoading(false);
               router.push(`${p.projects}/${res?.payload.clientId}`);
             } catch (err) {
@@ -107,16 +115,6 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
             {...register("appDescription")}
             {...inputStyles}
             placeholder="A really cool app."
-          />
-
-          <FormLabel htmlFor="app-creator" mt={6}>
-            {t("creator-name")}
-          </FormLabel>
-          <Input
-            id="app-creator"
-            placeholder="Alice"
-            {...register("creatorName")}
-            {...inputStyles}
           />
 
           <FormLabel htmlFor="app-type" mt={6}>

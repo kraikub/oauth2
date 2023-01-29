@@ -45,7 +45,6 @@ export const UserProvider: FC<UserProviderProps> = ({ children, user }) => {
     router.push(getSigninUrl({}));
     return null;
   }
-
   return (
     <userContext.Provider
       value={{

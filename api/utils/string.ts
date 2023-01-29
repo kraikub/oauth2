@@ -12,6 +12,16 @@ export const testOrgUsername = (orgUsername: string) => {
   );
 };
 
+export const testStandardUsername = (username: string) => {
+  return /^(?=.{4,20}$)(?![_.])(?!.*[_.]{2})[a-z0-9._]+(?<![_.])$/.test(
+    username
+  );
+};
+
+export const convertToUsername = (name: string) => {
+  return name.toLowerCase().replaceAll(" ", "_");
+}
+
 export const concatFullName = (firstName: string, lastName: string) => {
   const res = [];
   if (firstName) {

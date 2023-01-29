@@ -41,6 +41,7 @@ export const UserSelector: FC<UserSelectorProps> = ({
         </Heading>
         <Text fontSize={14}>{t("account-description")}</Text>
         <Card
+        disableMobileBorder
           props={{
             my: 3,
             rounded: 16,

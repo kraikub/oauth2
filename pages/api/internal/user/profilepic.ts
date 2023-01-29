@@ -11,10 +11,11 @@ const controller = async (req: NextApiRequest, res: NextApiResponse) => {
       return;
     }
     if (req.method === "POST") {
-      const { url } = req.body;
+      const { key, index } = req.body;
       const result = await userUsecase.updateProfilePic(
         payload.uid,
-        url
+        key,
+        index
       );
       return res.status(result.httpStatus || 200).send(
         createResponse(result.success, result.message || "", {

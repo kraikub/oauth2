@@ -21,11 +21,12 @@ class UserService {
     >(`/api/internal/user/safe?username=${username}`);
   };
 
-  public changeProfilePic = async (url: string) => {
+  public changeProfilePic = async (key: string, index: number) => {
     return await nextApiBaseInstance.post<CustomApiResponse>(
       `/api/internal/user/profilepic`,
       {
-        url,
+        key,
+        index
       }
     );
   };

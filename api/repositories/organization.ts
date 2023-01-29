@@ -33,5 +33,9 @@ class OrganizationRepo {
     }
     return res[0] as FullOrganizationDisplayData;
   };
+
+  updateAppOwned = async (orgId: string, newValue: number) => {
+    return await organizationModel.updateOne<Organization>({ orgId, appOwned: newValue })
+  }
 }
 export const orgRepo = new OrganizationRepo();

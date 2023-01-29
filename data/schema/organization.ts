@@ -7,6 +7,8 @@ export const organizationSchema = new Schema<Organization>(
     orgName: { type: String },
     orgUsername: { type: String },
     owner: { type: String },
+    appOwned: { type: Number },
+    appQuota: { type: Number },
     availableRoles: [{ type: rolePrototypeSchema }],
   },
   { timestamps: true }

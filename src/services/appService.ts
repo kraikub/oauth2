@@ -1,12 +1,8 @@
 import { nextApiBaseInstance } from "../../libs/axios";
 
-interface CreateApp {
-  appName: string;
-  appDescription: string;
-  creatorName: string;
-  callbackUrl: string;
-  devCallbackUrl: string;
-  appType: string;
+interface AppReferences {
+  refId: string;
+  refType: string;
 }
 
 class AppService {
@@ -28,10 +24,10 @@ class AppService {
       return data.payload;
     }
   }
-  public async createApplication(a: any) {
+  public async createApplication(a: any, references: AppReferences) {
     const { data, status } = await nextApiBaseInstance.post<
       CustomApiResponse<Application>
-    >(`/api/app`, a);
+    >(`/api/app`, { ...a, ...references });
     if (status === 200) {
       return data;
     }
@@ -46,10 +42,7 @@ class AppService {
     }
   }
 
-  public async updateAppplcation(
-    clientId: string,
-    payload: any
-  ) {
+  public async updateAppplcation(clientId: string, payload: any) {
     const { data, status } = await nextApiBaseInstance.put<
       CustomApiResponse<Application>
     >(`/api/app/${clientId}`, payload);
@@ -63,7 +56,7 @@ class AppService {
       CustomApiResponse<boolean>
     >(`/api/app/hasname?name=${appNameToCheck}`);
     if (status === 200) {
-      return data
+      return data;
     }
   }
 }
