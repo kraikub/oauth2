@@ -60,5 +60,9 @@ class UserRepository {
     await mongodb.connect();
     return await UserModel.updateOne<User>({ uid }, { profileImageUrl });
   };
+
+  updateAppOwned = async (uid: string, newValue: number) => {
+    return UserModel.updateOne<User>({ uid }, { appOwned: newValue });
+  }
 }
 export const userRepository = new UserRepository();

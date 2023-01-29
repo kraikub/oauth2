@@ -44,3 +44,4 @@ export const roleMap: RoleMap = {
   3: builtInRoles["developer"],
   4: builtInRoles["member"],
 }
+

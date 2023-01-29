@@ -4,6 +4,7 @@ interface ApplicationFilter {
   clientId?: string;
   ownerId?: string;
   appName?: string;
+  refId?: string;
 }
 
 interface ApplicationUpdatable {
@@ -26,12 +27,11 @@ export default class ApplicationRepository {
     await ApplicationModel.create(app);
   };
 
-  hasAppName = async (appName: string) => {
+  hasAppId = async (appId: string) => {
     mongodb.connect();
-    const app = await ApplicationModel.findOne<Application>({
-      appName: appName,
+    return await ApplicationModel.findOne<Application>({
+      appId: appId,
     });
-    return app === null ? false : true;
   };
 
   deleteOne = async (clientId: string) => {

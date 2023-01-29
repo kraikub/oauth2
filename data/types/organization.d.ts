@@ -6,6 +6,8 @@ interface Organization {
   availableRoles: RolePrototype[];
   createdAt?: string;
   updatedAt?: string;
+  appQuota: number;
+  appOwned: number;
 }
 
 interface OrganizationRoleData {

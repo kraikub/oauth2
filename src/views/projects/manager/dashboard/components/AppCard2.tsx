@@ -1,8 +1,6 @@
 import {
-  Badge,
   Box,
   Flex,
-  Heading,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -17,8 +15,6 @@ interface AppCardProps {
 }
 
 const AppCard2: FC<AppCardProps> = ({ app }) => {
-  const router = useRouter();
-
   const bgWhenActive = useColorModeValue("blackAlpha.50", "whiteAlpha.50");
   return (
     <Link href={`${p.projects}/${app.clientId}`}>

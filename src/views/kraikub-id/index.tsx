@@ -15,6 +15,7 @@ import { LinkWrap } from "../../components/LinkWrap";
 import { useUser } from "../../contexts/User";
 import { useClientTranslation } from "../../hooks/client-translation";
 import { useOnClient } from "../../hooks/on-client";
+import { DynamicContainer } from "../../layouts/DynamicContainer";
 import { dictWhenNoActiveAccount } from "../../translate/kraikubid";
 import { AccessesCard } from "./components/AccessesCard";
 import { DevicesCard } from "./components/DevicesCard";
@@ -72,7 +73,11 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
   }
 
   return (
-    <Container maxW="container.xl" py="20px">
+    <DynamicContainer
+      containerProps={{
+        maxW: "container.xl",
+      }}
+    >
       <Grid templateColumns="repeat(12, 1fr)" columnGap={4} rowGap={4} w="full">
         <GridItem colSpan={[12, 12, 8]}>
           <VStack spacing={4}>
@@ -105,6 +110,6 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
         </Grid>
         <AccessesCard accesses={props.accesses} /> */}
       </VStack>
-    </Container>
+    </DynamicContainer>
   );
 };

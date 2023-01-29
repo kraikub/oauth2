@@ -218,7 +218,7 @@ const Navbar: FC = () => {
                 cursor="pointer"
                 transition="300ms ease"
                 _hover={{
-                  boxShadow: "0 0 0 2px #3182f5",
+                  boxShadow: "0 0 0 3px #35bda4",
                 }}
               />
 

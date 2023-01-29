@@ -80,6 +80,8 @@ class OragnizationUsecase {
       orgId: generatedId,
       orgName,
       orgUsername,
+      appQuota: appConfig.INIT_MAX_APP_QUOTA,
+      appOwned: 0,
       owner: ownerUid,
       availableRoles: [],
     };

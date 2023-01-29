@@ -1,3 +1,4 @@
+import { profileCollections } from "./../config/app";
 import {
   checkRedisTopic,
   concatFullName,
@@ -300,19 +301,26 @@ export class UserUsecase {
 
   updateProfilePic = async (
     uid: string,
-    profilePicUrl: string
+    key: string,
+    index: number
   ): Promise<UseCaseResult> => {
-    if (!profilePicUrl) {
+    if (!key) {
       return {
         success: false,
-        message: "Require profilePicUrl",
+        message: "Require profile key",
         httpStatus: 400,
       };
     }
-    const result = await userRepository.updateProfileImageUrl(
-      uid,
-      profilePicUrl
-    );
+    const collection = profileCollections[key];
+    if (index > collection.urls.length - 1 || index < 0) {
+      return {
+        success: false,
+        message: "Index out of range",
+        httpStatus: 400,
+      };
+    }
+    const url = collection.baseUrl + collection.urls[index];
+    const result = await userRepository.updateProfileImageUrl(uid, url);
     if (!result.modifiedCount) {
       return {
         success: false,

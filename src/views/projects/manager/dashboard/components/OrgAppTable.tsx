@@ -25,8 +25,10 @@ import { Card, CardContent } from "../../../../../components/Card";
 import { p } from "../../../../../utils/path";
 import { CustomDivider } from "../../../../../components/CustomDivider";
 
-interface AppTableProps {
+interface OrgAppTableProps {
   apps: Application[];
+  org: Organization | null;
+  role: Role<OrganizationRoleData> | null;
 }
 
 const isLimit = (limit: boolean, v1: any, v2: any) => {
@@ -37,7 +39,7 @@ const isLimit = (limit: boolean, v1: any, v2: any) => {
   }
 };
 
-const AppTable: FC<AppTableProps> = ({ apps }) => {
+const OrgAppTable: FC<OrgAppTableProps> = ({ apps, org, role }) => {
   const { user } = useUser();
   const [c] = useCookies(["LANG"]);
 
@@ -55,6 +57,10 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
     return null;
   }
 
+  if (!org || !role) {
+    return null;
+  }
+
   return (
     <Box>
       <Card
@@ -65,9 +71,9 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
         }}
       >
         <CardContent props={{ px: 8 }}>
-          <Heading size="md">{t("page-header")}</Heading>
+          <Heading size="md">{t("page-header-org")}</Heading>
           <Text mt={2} fontWeight={500} opacity={0.7} fontSize={14}>
-            {t("page-quota-msg-1")} {user.appQuota - user.appOwned}{" "}
+            {t("page-quota-msg-1")} {org.appQuota - org.appOwned}{" "}
             {t("page-quota-msg-2")}
           </Text>
         </CardContent>
@@ -93,8 +99,8 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
           <Box w="full">
             <Link
               href={isLimit(
-                user.appOwned >= user.appQuota,
-                `${p.projects}/create?ref_type=user`,
+                org.appOwned >= org.appQuota,
+                `${p.projects}/create?ref_type=org&ref_id=${org.orgId}`,
                 "quotas"
               )}
             >
@@ -128,4 +134,4 @@ const AppTable: FC<AppTableProps> = ({ apps }) => {
     </Box>
   );
 };
-export default AppTable;
+export default OrgAppTable;

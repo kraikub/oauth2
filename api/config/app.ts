@@ -3,7 +3,8 @@ export const appConfig = {
   grantTypes: ["code"],
   codeChallengeMethod: ["SHA256"],
   tokenPayloadTypes: ["json", "http_cookie"],
-  defaultProfileImageUrl: "https://resources-kraikub.firebaseapp.com/v1/default-profile.png",
+  defaultProfileImageUrl:
+    "https://kraikub.com/static/avatar/default/profile.png",
   openid: {
     iss: "https://app.kraikub.com",
   },
@@ -11,17 +12,17 @@ export const appConfig = {
     accessToken: {
       str: "60m",
       ms: 60 * 60 * 1000,
-      s: 60 * 60
+      s: 60 * 60,
     },
     refreshToken: {
       str: "14d",
       ms: 60 * 60 * 24 * 14 * 1000,
-      s: 60 * 60 * 24 * 14
+      s: 60 * 60 * 24 * 14,
     },
     authorizationCode: {
       str: "1m",
       ms: 60 * 1000,
-      s: 60
+      s: 60,
     },
     idtoken: {
       str: "90d",
@@ -36,8 +37,26 @@ export const appConfig = {
     invites: {
       str: "14d",
       ms: 60 * 60 * 24 * 14 * 1000,
-      s: 60 * 60 * 24 * 14
-    }
-  }
+      s: 60 * 60 * 24 * 14,
+    },
+  },
+};
 
+export const profileCollections: {
+  [key: string]: { name: string; baseUrl: string; urls: string[] };
+} = {
+  bricks: {
+    name: "Bricks Edition",
+    baseUrl: "https://kraikub.com",
+    urls: [
+      "/static/avatar/bricks/wm1.jpg",
+      "/static/avatar/bricks/wm2.jpg",
+      "/static/avatar/bricks/wm3.jpg",
+      "/static/avatar/bricks/wm4.jpg",
+      "/static/avatar/bricks/m1.jpg",
+      "/static/avatar/bricks/m2.jpg",
+      "/static/avatar/bricks/m3.jpg",
+      "/static/avatar/bricks/m4.jpg",
+    ],
+  },
 };

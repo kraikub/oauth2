@@ -1,12 +1,16 @@
+import { CheckCircleIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
   Button,
   ButtonGroup,
   Flex,
+  Grid,
+  GridItem,
   Heading,
   HStack,
   IconButton,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -15,6 +19,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  position,
   Text,
   useColorModeValue,
   VStack,
@@ -26,6 +31,7 @@ import { FC, useState } from "react";
 import { BsDot } from "react-icons/bs";
 import { IoMdMore } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
+import { profileCollections } from "../../../../api/config/app";
 import { Card, CardContent } from "../../../components/Card";
 import { useClientTranslation } from "../../../hooks/client-translation";
 import { userService } from "../../../services/userService";
@@ -48,8 +54,11 @@ const menuButtonProps = {
 export const UserCard: FC<UserCardProps> = ({ user }) => {
   const { t } = useClientTranslation(dictUserCard);
   const router = useRouter();
+  const [profileSelector, setProfileSelector] = useState<{
+    key: string;
+    index: number;
+  }>();
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
-  const [profileInputProfile, setProfileInputProfile] = useState<string>("");
   const [isChangeProfilePicModalOpen, setIsChangeProfilePicModalOpen] =
     useState<boolean>(false);
   const handleChangeProfilePicModalOpen = () => {
@@ -59,10 +68,10 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
     setIsChangeProfilePicModalOpen(false);
   };
   const handleProfilePicChange = async () => {
-    if (!profileInputProfile) return;
+    if (!profileSelector) return alert("No profile selected");
     try {
       setIsUpdatingProfile(true);
-      await userService.changeProfilePic(profileInputProfile);
+      await userService.changeProfilePic(profileSelector.key, profileSelector.index);
       handleChangeProfilePicModalClose();
       router.reload();
     } catch (error) {
@@ -99,7 +108,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
           h="200px"
           w="100%"
           position="relative"
-          background="linear-gradient(155deg, rgba(206,250,252,1) 0%, rgba(203,213,255,1) 100%)"
+          background="linear-gradient(155deg, rgba(206,252,231,1) 0%, rgba(213,255,203,1) 100%)"
         >
           <Box position="absolute" bottom="-55px" left={["20px"]}>
             <Box position="relative">
@@ -184,21 +193,64 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
         isCentered
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent maxH="90vh">
           <ModalHeader>{t("Change profile picture")}</ModalHeader>
           <ModalCloseButton rounded="full" />
-          <ModalBody>
-            <Text>{t("change-desc")}</Text>
-            <VStack my={4}>
-              <Avatar src={profileInputProfile} size="2xl" />
-              <Text opacity={0.6}>{t("Preview")}</Text>
-            </VStack>
-            <Input
-              w="full"
-              variant="filled"
-              placeholder="https://"
-              onChange={(e) => setProfileInputProfile(e.target.value)}
-            />
+          <ModalBody overflowY="auto">
+            {Object.keys(profileCollections).map((key, index) => {
+              let collection = profileCollections[key];
+              return (
+                <>
+                  <Heading size="sm" mb={2} opacity={0.8}>
+                    {collection.name}
+                  </Heading>
+                  <Grid
+                    templateColumns="repeat(12, 1fr)"
+                    gap={1}
+                    key={`profile-collection-${index}`}
+                  >
+                    {collection.urls.map((url, k) => {
+                      const fullUrl = collection.baseUrl + url;
+                      return (
+                        <GridItem
+                          colSpan={[6, 3]}
+                          key={`profile-${index}-${k}`}
+                        >
+                          <Box
+                            cursor="pointer"
+                            position="relative"
+                            transition="300ms ease"
+                            boxShadow={
+                              profileSelector?.index === k &&
+                              profileSelector?.key === key
+                                ? "0 0 0 4px #392bfc"
+                                : "none"
+                            }
+                            onClick={() =>
+                              setProfileSelector({ key: key, index: k })
+                            }
+                          >
+                            <Image
+                              w="full"
+                              src={fullUrl}
+                              alt={`${collection.name}-${k}`}
+                            />
+                            <Box position="absolute" bottom="10px" right="10px" display={
+                              profileSelector?.index === k &&
+                              profileSelector?.key === key
+                                ? "block"
+                                : "none"
+                            }>
+                              <CheckCircleIcon color="#392bfc" fontSize="30px"/>
+                            </Box>
+                          </Box>
+                        </GridItem>
+                      );
+                    })}
+                  </Grid>
+                </>
+              );
+            })}
           </ModalBody>
 
           <ModalFooter>
@@ -219,7 +271,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
                 size="lg"
                 isLoading={isUpdatingProfile}
                 onClick={handleProfilePicChange}
-                isDisabled={!profileInputProfile}
+                isDisabled={!profileSelector}
               >
                 {t("Change profile picture")}
               </Button>

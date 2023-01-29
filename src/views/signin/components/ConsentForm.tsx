@@ -86,6 +86,7 @@ export const ConsentForm: FC<ConsentFormProps> = ({
           {t("consent-msg-1")} {appName} {t("consent-msg-2")}
         </Text>
         <Card
+          disableMobileBorder
           props={{
             p: 0,
             my: 6,
