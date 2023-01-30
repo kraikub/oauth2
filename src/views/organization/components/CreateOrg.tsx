@@ -15,7 +15,9 @@ import { useRouter } from "next/router";
 import { ChangeEvent, FC, SyntheticEvent, useState } from "react";
 import { Card } from "../../../components/Card";
 import { CustomDivider } from "../../../components/CustomDivider";
+import { useClientTranslation } from "../../../hooks/client-translation";
 import { orgService } from "../../../services/organizationService";
+import { orgCreateDict } from "../../../translate/org";
 
 const InputStack: FC<StackProps> = (props) => {
   return (
@@ -26,6 +28,7 @@ const InputStack: FC<StackProps> = (props) => {
 };
 
 export const CreateOrg: FC = () => {
+  const { t } = useClientTranslation(orgCreateDict);
   const [orgName, setOrgName] = useState("");
   const [orgUsername, setOrgUsername] = useState("");
   const [nameError, setNameError] = useState<boolean>(false);
@@ -75,12 +78,12 @@ export const CreateOrg: FC = () => {
   return (
     <Card>
       <Box mt="18px" mb="30px">
-        <Heading size="md">{"Create or Join an organization"}</Heading>
+        <Heading size="md">{t("create-title")}</Heading>
       </Box>
       <form onSubmit={handleFormSubmit}>
         <VStack alignItems="start" spacing={6}>
           <InputStack w="full">
-            <Text fontWeight={600}>Organization name</Text>
+            <Text fontWeight={600}>{t("org-name")}</Text>
             <Input
               size="sm"
               rounded={8}
@@ -90,11 +93,13 @@ export const CreateOrg: FC = () => {
               w="full"
               maxW="400px"
             />
-            <Text fontWeight={500} color="red.500">{nameErrString}</Text>
+            <Text fontWeight={500} color="red.500">
+              {nameErrString}
+            </Text>
           </InputStack>
 
           <InputStack w="full">
-            <Text fontWeight={600}>Organization username</Text>
+            <Text fontWeight={600}>{t("org-username")}</Text>
             <HStack spacing={[0, 2]} flexWrap="wrap" w="full" rowGap={2}>
               <Input
                 size="sm"
@@ -110,16 +115,20 @@ export const CreateOrg: FC = () => {
                 rounded={10}
                 w={["full", "auto"]}
               >
-                <Text fontWeight={600}>Display as @{orgUsername}</Text>
+                <Text fontWeight={600}>
+                  {t("display-as")} @{orgUsername}
+                </Text>
               </Box>
             </HStack>
-            <Text fontWeight={500} color="red.500">{userNameErrString}</Text>
+            <Text fontWeight={500} color="red.500">
+              {userNameErrString}
+            </Text>
           </InputStack>
           <InputStack w="full">
             <Box>
-              <Text fontWeight={600}>Position</Text>
+              <Text fontWeight={600}>{t("position")}</Text>
               <Text fontSize={12} opacity={0.6}>
-                What you do at your organization.
+                {t("position-description")}
               </Text>
             </Box>
             <Input
@@ -132,9 +141,9 @@ export const CreateOrg: FC = () => {
               maxW="400px"
             />
             <Text display={position ? "inline" : "none"}>
-              This will be shown on your profile as{" "}
+              {t("show-profile-as")}{" "}
               <strong>
-                {position} at {orgName}
+                {position} {t("at")} {orgName}
               </strong>
             </Text>
           </InputStack>
@@ -145,18 +154,17 @@ export const CreateOrg: FC = () => {
             color="white"
             disabled={!orgName || !orgUsername || !position}
             type="submit"
+            isLoading={isLoading}
           >
-            Create organization
+            {t("btn-create")}
           </Button>
         </ButtonGroup>
       </form>
       <CustomDivider />
       <Box mt={4}>
-        <Heading size="sm">Join an organization</Heading>
+        <Heading size="sm">{t("join-title")}</Heading>
         <Text mt={2} opacity={0.6}>
-          {
-            "Please cantact your organization's admin to invite you to their organization."
-          }
+          {t("join-description")}
         </Text>
       </Box>
     </Card>

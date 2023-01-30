@@ -27,7 +27,7 @@ interface OrgDashboardPage {
 export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
   const { user } = useUser();
   const ready = useOnClient();
-  const { t } = useClientTranslation(orgDict)
+  const { t } = useClientTranslation(orgDict);
   if (!user) {
     return null;
   }
@@ -42,9 +42,9 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
 
   if (!user?.orgId) {
     return (
-      <Container maxW="container.lg" py="20px">
+      <DynamicContainer containerProps={{ maxW: "container.lg" }}>
         <CreateOrg />
-      </Container>
+      </DynamicContainer>
     );
   }
   const myRoles = org.members.filter((e) => {
@@ -64,7 +64,7 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
   const myRole = myRoles[0];
 
   return (
-    <DynamicContainer containerProps={{ maxW: "container.lg"}}>
+    <DynamicContainer containerProps={{ maxW: "container.lg" }}>
       <Card props={{ p: 0 }}>
         <CardContent props={{ py: 6 }}>
           <HStack spacing={4}>

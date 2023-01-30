@@ -112,7 +112,7 @@ export const dictNotificationCard: Dictionary = {
 
 export const dictDeviceCard: Dictionary = {
   en: {
-    "header": "Devices",
+    "header": "Signed in devices",
     "btn-see-more": "See more",
     "btn-see-less": "See less",
   },

@@ -108,7 +108,9 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
           h="200px"
           w="100%"
           position="relative"
-          background="linear-gradient(155deg, rgba(90,224,127,1) 0%, rgba(89,178,186,1) 100%)"
+          backgroundImage="url(https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg?w=2000&t=st=1675069219~exp=1675069819~hmac=f9e878a28bd0ce0282155ac1ba0fec364b91cc187b6c883f1de7b226474b033a)"
+          backgroundSize="cover"
+          backgroundPosition="center"
         >
           <Box position="absolute" bottom="-55px" left={["20px"]}>
             <Box position="relative">
