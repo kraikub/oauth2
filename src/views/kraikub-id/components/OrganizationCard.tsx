@@ -32,31 +32,42 @@ export const OrganizationCard: FC<OrganizationCardProps> = ({ user }) => {
       }}
     >
       {user.orgId ? (
-        <CardContent>
-          <Heading size="md">{t("title")}</Heading>
-          <VStack spacing={4} mt={4} alignItems="start">
-            <AvatarGroup max={6} size="sm">
-              {user.roles?.map((e, index) => {
-                return (
-                  <Avatar
-                    name={e.user.fullName}
-                    src={e.user.profileImageUrl}
-                    key={`user-in-org-${index}`}
-                  />
-                );
-              })}
-            </AvatarGroup>
-            <Box w="full">
-              <Link href="/id/organization">
-                <a>
-                  <Button variant="outline" w="full">
-                    {t("btn-see-more")}
-                  </Button>
-                </a>
-              </Link>
-            </Box>
-          </VStack>
-        </CardContent>
+        <>
+          <CardContent>
+            <Heading size="md">{t("title")}</Heading>
+          </CardContent>
+          <CustomDivider sx={{ my: 0 }}/>
+          <CardContent>
+            <VStack spacing={4} alignItems="start">
+              <AvatarGroup max={6} size="sm">
+                {user.roles?.map((e, index) => {
+                  return (
+                    <Avatar
+                      name={e.user.fullName}
+                      src={e.user.profileImageUrl}
+                      key={`user-in-org-${index}`}
+                    />
+                  );
+                })}
+              </AvatarGroup>
+              <Box w="full">
+                <Link href="/id/organization">
+                  <a>
+                    <Button
+                      w="full"
+                      textTransform="uppercase"
+                      color="kraikub.blue.400"
+                      fontWeight={700}
+                      size="sm"
+                    >
+                      {t("btn-see-more")}
+                    </Button>
+                  </a>
+                </Link>
+              </Box>
+            </VStack>
+          </CardContent>
+        </>
       ) : (
         <CardContent
           props={{
@@ -75,18 +86,18 @@ export const OrganizationCard: FC<OrganizationCardProps> = ({ user }) => {
             left={0}
             right={0}
             p={4}
-            bg="blackAlpha.200"
+            bg="blackAlpha.600"
           >
             <VStack
               h="full"
               w="full"
               alignItems="start"
               justifyContent="space-between"
-              pt={4}
+              pt={2}
             >
               <Box maxW="60%">
                 <Heading size="md">{t("title-no-org")}</Heading>
-                <Text mt={1} opacity={0.8}>
+                <Text mt={2} opacity={0.6} fontSize={12}>
                   {t("title-no-org-text")}
                 </Text>
               </Box>
@@ -96,6 +107,9 @@ export const OrganizationCard: FC<OrganizationCardProps> = ({ user }) => {
                     <Button
                       variant="solid"
                       w="full"
+                      size="sm"
+                      textTransform="uppercase"
+                      fontWeight={700}
                       bg="whiteAlpha.800"
                       _hover={{ bg: "whiteAlpha.900" }}
                       color="black"

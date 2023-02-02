@@ -80,7 +80,9 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
         render: () => (
           <NotificationToast
             title={t("Invite sent")}
-            detail={`${t("Sucessfully invite")} ${selectedUser.fullName}${t("invite-suffix")}`}
+            detail={`${t("Sucessfully invite")} ${selectedUser.fullName}${t(
+              "invite-suffix"
+            )}`}
           />
         ),
       });
@@ -117,6 +119,10 @@ export const Invite: FC<InviteProps> = ({ orgId, myRole }) => {
       setIsModalOpen(false);
     }
   }, [selectedUser]);
+
+  if (myRole.priority > 2) {
+    return null;
+  }
 
   return (
     <>

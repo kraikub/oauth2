@@ -16,6 +16,7 @@ import { useOnClient } from "../../hooks/on-client";
 import { DynamicContainer } from "../../layouts/DynamicContainer";
 import { orgDict } from "../../translate/org";
 import { CreateOrg } from "./components/CreateOrg";
+import { DeleteOrg } from "./components/Delete";
 import { Invite } from "./components/Invite";
 import { NoKraikubID } from "./components/NoKraikubID";
 import { UserOrgCard } from "./components/UserOrgCard";
@@ -73,7 +74,7 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
               {org.members.length} {t("users")}
             </Badge>
           </HStack>
-          <Text mt={1} opacity={0.6}>
+          <Text mt={1} opacity={0.6} textTransform="uppercase" fontWeight={600} fontSize={12}>
             {t("People in")} {org.orgName}
           </Text>
           <Invite orgId={org.orgId} myRole={myRole} />
@@ -110,6 +111,8 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
               );
             })}
         </VStack>
+        <CustomDivider sx={{ py: 0 }} />
+        <DeleteOrg org={org}/>
       </Card>
     </DynamicContainer>
   );

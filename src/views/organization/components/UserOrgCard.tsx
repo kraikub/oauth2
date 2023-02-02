@@ -199,7 +199,7 @@ export const UserOrgCard: FC<UserCardProps> = ({
           <Avatar src={member.user.profileImageUrl} />
           <Box>
             <HStack spacing={2}>
-              <Text fontWeight={600}>{member.user.fullName}</Text>
+              <Text fontWeight={600} textTransform="uppercase">{member.user.fullName}</Text>
               {me ? <Badge colorScheme="purple">{t("me")}</Badge> : null}
               {member.priority === 0 ? (
                 <Badge

@@ -74,8 +74,8 @@ export const colors = {
     },
   },
   bg: {
-    light: "#f8f9fa",
-    dark: "#141414",
+    light: "#f5f5f7",
+    dark: "#000000",
   },
   card: {
     light: "#ffffff",
@@ -107,7 +107,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
   },
   Heading: {
     baseStyle: {
-      fontWeight: 600,
+      fontWeight: 500,
     },
     sizes: {
       xl: {

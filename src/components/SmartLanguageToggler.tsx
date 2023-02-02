@@ -53,8 +53,10 @@ export const SmartLanguageToggler: FC<SmartLanguageTogglerProps> = (props) => {
 
   return (
     <Button
-      variant="outline"
       rounded="full"
+      textTransform="uppercase"
+      color="kraikub.green.500"
+      fontWeight={700}
       onClick={() => setLang(toggleLangValue())}
       borderColor={borderColor}
       _hover={onHoverStyles}

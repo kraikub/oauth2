@@ -1,5 +1,6 @@
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import {
+  AspectRatio,
   Avatar,
   Box,
   Button,
@@ -71,7 +72,10 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
     if (!profileSelector) return alert("No profile selected");
     try {
       setIsUpdatingProfile(true);
-      await userService.changeProfilePic(profileSelector.key, profileSelector.index);
+      await userService.changeProfilePic(
+        profileSelector.key,
+        profileSelector.index
+      );
       handleChangeProfilePicModalClose();
       router.reload();
     } catch (error) {
@@ -105,14 +109,79 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
         }}
       >
         <Box
-          h="200px"
-          w="100%"
           position="relative"
-          backgroundImage="url(https://img.freepik.com/free-vector/white-abstract-background-design_23-2148825582.jpg?w=2000&t=st=1675069219~exp=1675069819~hmac=f9e878a28bd0ce0282155ac1ba0fec364b91cc187b6c883f1de7b226474b033a)"
+          h="28vh"
+          display={["block", "none"]}
+          backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
           backgroundSize="cover"
           backgroundPosition="center"
-        >
-          <Box position="absolute" bottom="-55px" left={["20px"]}>
+        ></Box>
+        <Box h={["30vh", "40vh"]} w="100%" position="relative">
+          <Box
+            position="absolute"
+            top={0}
+            bottom={0}
+            left={0}
+            right={0}
+            zIndex={32}
+          >
+            <Box
+              position="absolute"
+              top={0}
+              bottom={0}
+              left={0}
+              right={0}
+              bg="blackAlpha.50"
+              zIndex={41}
+            />
+            <Box
+              position="absolute"
+              left={[0, "40%"]}
+              right={0}
+              top={0}
+              bottom={0}
+              backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
+              backgroundSize="cover"
+              backgroundPosition="center"
+              zIndex={40}
+            ></Box>
+            <Box
+              position="absolute"
+              left={0}
+              w={["100%", "40%"]}
+              top={0}
+              bottom={0}
+              backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
+              backgroundSize="cover"
+              backgroundPosition="center"
+              zIndex={40}
+            >
+              <Box
+                position="absolute"
+                top={0}
+                bottom={0}
+                left={0}
+                right={0}
+                bg="blackAlpha.600"
+                backdropFilter="blur(20px)"
+                py={8}
+                px={6}
+                color="white"
+              >
+                <Text textTransform="uppercase" fontWeight={600} fontSize={12}>
+                  KRAIKUB ID
+                </Text>
+                <Heading size="md" fontWeight={500} mt={2}>
+                  The most innovative way to use your university account
+                </Heading>
+                <Text mt={3} opacity={0.6} fontSize={12}>
+                  KRAIKUB ID is one of the most advanced university account ever
+                  created.
+                </Text>
+              </Box>
+            </Box>
+          </Box>
+          <Box position="absolute" bottom="-55px" left={["20px"]} zIndex={35}>
             <Box position="relative">
               <Avatar
                 width="110px"
@@ -158,7 +227,14 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
         <CardContent {...cardContentProps}>
           <VStack spacing={2} alignItems="start">
             <Heading size="lg">{user.fullName}</Heading>
-            <Text opacity={0.7}>{t(user.type)}</Text>
+            <Text
+              opacity={0.7}
+              textTransform="uppercase"
+              fontSize={12}
+              fontWeight={600}
+            >
+              {t(user.type)}
+            </Text>
             <HStack spacing={2}>
               <Text>
                 <strong>@{user.username}</strong>
@@ -203,9 +279,16 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
               let collection = profileCollections[key];
               return (
                 <>
-                  <Heading size="sm" mb={2} opacity={0.8}>
+                  <Text
+                    fontWeight={700}
+                    fontSize={12}
+                    mt={4}
+                    mb={2}
+                    opacity={0.6}
+                    textTransform="uppercase"
+                  >
                     {collection.name}
-                  </Heading>
+                  </Text>
                   <Grid
                     templateColumns="repeat(12, 1fr)"
                     gap={1}
@@ -232,18 +315,28 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
                               setProfileSelector({ key: key, index: k })
                             }
                           >
-                            <Image
-                              w="full"
-                              src={fullUrl}
-                              alt={`${collection.name}-${k}`}
-                            />
-                            <Box position="absolute" bottom="10px" right="10px" display={
-                              profileSelector?.index === k &&
-                              profileSelector?.key === key
-                                ? "block"
-                                : "none"
-                            }>
-                              <CheckCircleIcon color="#392bfc" fontSize="30px"/>
+                            <AspectRatio ratio={1} width="100%">
+                              <Image
+                                w="full"
+                                src={fullUrl}
+                                alt={`${collection.name}-${k}`}
+                              />
+                            </AspectRatio>
+                            <Box
+                              position="absolute"
+                              bottom="10px"
+                              right="10px"
+                              display={
+                                profileSelector?.index === k &&
+                                profileSelector?.key === key
+                                  ? "block"
+                                  : "none"
+                              }
+                            >
+                              <CheckCircleIcon
+                                color="#392bfc"
+                                fontSize="30px"
+                              />
                             </Box>
                           </Box>
                         </GridItem>

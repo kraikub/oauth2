@@ -170,7 +170,7 @@ export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
     <Box w="full">
       <Card>
         <Box mb={6}>
-          <Heading size="md">{t("header")}</Heading>
+          <Text fontWeight={600} textTransform="uppercase" opacity={0.6} fontSize={12}>{t("header")}</Text>
         </Box>
         {/* <Button>Learn more about device detection</Button> */}
         <VStack spacing={5}>

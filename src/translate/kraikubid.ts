@@ -126,12 +126,16 @@ export const dictDeviceCard: Dictionary = {
 
 export const dictAccessesCard: Dictionary = {
   en: {
-    "header": "Apps & Accesses",
+    "header": "Apps",
+    "header-desc": "Apps that use your account",
+    "learn": "What are these apps?",
     "at-time": "At",
     "no-access": "You account has not been logged in to any application yet."
   },
   th: {
     "header": "แอปและการเข้าถึง",
+    "header-desc": "แอปที่ใช้บัญชีของคุณ",
+    "learn": "แอปเหล่านี้มาจากไหน?",
     "at-time": "เมื่อ",
     "no-access": "บัญชีของคุณยังไม่เคยใช้งานบนแอปพลิเคชันอื่น"
   },

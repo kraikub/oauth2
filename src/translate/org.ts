@@ -140,3 +140,14 @@ export const orgCreateDict: Dictionary = {
       "โปรดติดต่อผู้ดูแลระบบขององค์กรคุณเพื่อให้พวกเขาดำเนินการเชิญคุณให้เข้าร่วมองค์กร",
   },
 };
+
+export const orgDeleteDict: Dictionary = {
+  en: {
+    "top-title": "Delete Organization",
+    "delete": "Delete",
+  },
+  th: {
+    "top-title": "ลบองค์กร",
+    "delete": "ลบ",
+  }
+}
