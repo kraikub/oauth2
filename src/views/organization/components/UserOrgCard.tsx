@@ -68,7 +68,7 @@ export const UserOrgCard: FC<UserCardProps> = ({
   };
 
   const handleRemove = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       await orgService.removeMember(orgId, member.user.uid);
       router.reload();
@@ -81,7 +81,7 @@ export const UserOrgCard: FC<UserCardProps> = ({
   };
 
   const handleLeave = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       await orgService.leave();
       location.reload();
@@ -94,7 +94,7 @@ export const UserOrgCard: FC<UserCardProps> = ({
   };
 
   const handleTransferOwnership = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       await orgService.transferOwnership(orgId, member.user.uid);
       location.reload();
@@ -199,7 +199,9 @@ export const UserOrgCard: FC<UserCardProps> = ({
           <Avatar src={member.user.profileImageUrl} />
           <Box>
             <HStack spacing={2}>
-              <Text fontWeight={600} textTransform="uppercase">{member.user.fullName}</Text>
+              <Text fontWeight={600} textTransform="uppercase">
+                {member.user.fullName}
+              </Text>
               {me ? <Badge colorScheme="purple">{t("me")}</Badge> : null}
               {member.priority === 0 ? (
                 <Badge
@@ -249,7 +251,7 @@ export const UserOrgCard: FC<UserCardProps> = ({
                     </Text>
 
                     <Text opacity={0.7} fontSize={18}>
-                      {member.user.personalEmail}
+                      {member.user.username}
                     </Text>
                   </VStack>
                   <Box w="full">
@@ -329,7 +331,7 @@ export const Confirmation: FC<ConfirmationProps> = ({
   actionDescribe,
   actionButtonText,
   header,
-  loading
+  loading,
 }) => {
   const buttonProps = {
     size: "lg",

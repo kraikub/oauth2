@@ -25,6 +25,7 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { useOnClient } from "../../hooks/on-client";
 import { Card } from "../../components/Card";
 import { ThemeToggler } from "../../components/ThemeToggler";
+import { SmartLanguageToggler } from "../../components/SmartLanguageToggler";
 interface SigninPageProps {
   query: Query;
   app: Application | null;
@@ -169,7 +170,12 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
   return (
     <>
       <Box position="fixed" top="22px" right="22px">
-        <ThemeToggler />
+        <SmartLanguageToggler
+          reloadOnToggle
+          sx={{
+            size: "sm",
+          }}
+        />
       </Box>
       <SigninForm
         app={app}

@@ -163,6 +163,7 @@ const components: { [key: string]: ComponentStyleConfig } = {
         alignSelf: ["flex-end", "flex-center"],
         m: [0, 0, "auto"],
         minW: ["100vw", "100vw", "container.sm"],
+        maxH: ["92vh", "92vh", "70vh"],
         bg: mode(colors.card.light, colors.card.dark)(props),
       },
     }),

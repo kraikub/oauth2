@@ -90,8 +90,14 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
   const [signInMethod, setSigninMethod] = useState<SignInMethodType>("nontri");
 
   const styles = {
-    input: {
+    button: {
+      bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
+      color: useColorModeValue("kraikub.green.600", "kraikub.green.400"),
+      fontSize: 14,
       fontWeight: 600,
+    },
+    input: {
+      fontWeight: 400,
       bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
       _hover: {
         bg: useColorModeValue("blackAlpha.300", "whiteAlpha.400"),
@@ -285,8 +291,11 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
     return (
       <Fragment>
         <Head>
-          <title>Signin with KU</title>
-          <meta property="og:title" content={`Kraikub - Sign in with KU`} />
+          <title>Sign in with Kasetsart</title>
+          <meta
+            property="og:title"
+            content={`Kraikub - Sign in with Kasetsart`}
+          />
           <meta
             property="og:description"
             content={`Sign in to ${app?.appName} with your Kasetsart Account.`}
@@ -342,10 +351,10 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                       alignItems="center"
                       gap="20px"
                     >
-                      <Heading size="lg">
-                        {t("form-title")}
-                      </Heading>
-                      <Text>{t("form-description")}</Text>
+                      <Heading size="lg">{t("form-title")}</Heading>
+                      <Text textTransform="uppercase" fontWeight={600} opacity={0.6}>
+                        {t("form-description")}
+                      </Text>
                       <Box mt="30px" w="full">
                         <Text fontSize={14}>
                           {t("form-app-text")}
@@ -453,6 +462,8 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                         <Button
                           size="lg"
                           w="full"
+                          {...styles.button}
+                          textTransform="uppercase"
                           onClick={
                             signInMethod === "nontri"
                               ? changeToKraikubId
@@ -463,15 +474,6 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                             ? t("form-btn-use-kraikubid")
                             : t("form-btn-use-nontri")}
                         </Button>
-                        {/* {signInMethod === "nontri" ? (
-                          <Button onClick={changeToKraikubId}>
-                            {t("form-btn-use-kraikubid")}
-                          </Button>
-                        ) : (
-                          <Button onClick={changeToNontri}>
-                            {t("form-btn-use-nontri")}
-                          </Button>
-                        )} */}
                       </VStack>
                     </Flex>
                   </form>

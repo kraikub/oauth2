@@ -112,12 +112,14 @@ export const dictNotificationCard: Dictionary = {
 
 export const dictDeviceCard: Dictionary = {
   en: {
-    "header": "Signed in devices",
+    "header": "Devices",
+    "header-desc": "Your account are on these devices",
     "btn-see-more": "See more",
     "btn-see-less": "See less",
   },
   th: {
     "header": "อุปกรณ์",
+    "header-desc": "บัญชีของคุณถูกใช้งานบนอุปกรณ์เหล่านี้",
     "btn-see-more": "ดูเพิ่มเติม",
     "btn-see-less": "ซ่อน",
 

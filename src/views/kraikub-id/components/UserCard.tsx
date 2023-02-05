@@ -278,7 +278,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
             {Object.keys(profileCollections).map((key, index) => {
               let collection = profileCollections[key];
               return (
-                <>
+                <Box key={`map-profile-collection-${index}`}>
                   <Text
                     fontWeight={700}
                     fontSize={12}
@@ -343,7 +343,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
                       );
                     })}
                   </Grid>
-                </>
+                </Box>
               );
             })}
           </ModalBody>

@@ -46,6 +46,7 @@ export const orgFullDataForDisplay = (orgId: string) => [
           profileImageUrl: 1,
           fullName: 1,
           type: 1,
+          username: 1,
           personalEmail: 1,
           createdAt: 1,
         },
