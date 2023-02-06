@@ -2,12 +2,12 @@ export const dictWhenNoActiveAccount: Dictionary =  {
   en: {
     "header": "Get started with Kraikub ID",
     "description": "Kraikub ID makes your KU account stay safe and secure on the internet.",
-    "btn-activate": "Activate Kraikub ID"
+    "btn-activate": "Activate KRAIKUB ID"
   },
   th: {
     "header": "เริ่มต้นใช้งาน Kraikub ID",
     "description": "Kraikub ID ทำให้บัญชี KU ของคุณปลอดภัยมากยิ่งขึ้นจากการใช้งานบนอินเตอร์เน็ต",
-    "btn-activate": "เปิดใช้งาน Kraikub ID"
+    "btn-activate": "เปิดใช้งาน KRAIKUB ID"
   }
 }
 

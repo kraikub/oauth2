@@ -98,7 +98,7 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
   const matchedRoleName = matchedRoles?.length
     ? matchedRoles[0].data.displayPosition
     : "";
-
+  console.log(user)
   return (
     <>
       <Card
@@ -109,124 +109,39 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
         }}
       >
         <Box
-          position="relative"
-          h="28vh"
-          display={["block", "none"]}
-          backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
+          h="40vh"
+          backgroundImage={user.profileImageUrl}
           backgroundSize="cover"
           backgroundPosition="center"
-        ></Box>
-        <Box h={["30vh", "40vh"]} w="100%" position="relative">
+          position="relative"
+        >
           <Box
             position="absolute"
             top={0}
             bottom={0}
             left={0}
             right={0}
-            zIndex={32}
+            background="linear-gradient(180deg, rgba(0,0,0,0) 54%, rgba(0,0,0,0.74401698179271705) 100%)"
           >
-            <Box
-              position="absolute"
-              top={0}
-              bottom={0}
-              left={0}
-              right={0}
-              bg="blackAlpha.50"
-              zIndex={41}
-            />
-            <Box
-              position="absolute"
-              left={[0, "40%"]}
-              right={0}
-              top={0}
-              bottom={0}
-              backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
-              backgroundSize="cover"
-              backgroundPosition="center"
-              zIndex={40}
-            ></Box>
-            <Box
-              position="absolute"
-              left={0}
-              w={["100%", "40%"]}
-              top={0}
-              bottom={0}
-              backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
-              backgroundSize="cover"
-              backgroundPosition="center"
-              zIndex={40}
-            >
-              <Box
-                position="absolute"
-                top={0}
-                bottom={0}
-                left={0}
-                right={0}
-                bg="blackAlpha.600"
-                backdropFilter="blur(20px)"
-                py={8}
-                px={6}
-                color="white"
-              >
-                <Text textTransform="uppercase" fontWeight={600} fontSize={12}>
-                  KRAIKUB ID
-                </Text>
-                <Heading size="md" fontWeight={500} mt={2}>
-                  The most innovative way to use your university account
-                </Heading>
-                <Text mt={3} opacity={0.6} fontSize={12}>
-                  KRAIKUB ID is one of the most advanced university account ever
-                  created.
-                </Text>
-              </Box>
+            <Box position="absolute" left="20px" bottom="20px" color="white">
+              <Heading fontWeight={700}>{user.fullName}</Heading>
             </Box>
           </Box>
-          <Box position="absolute" bottom="-55px" left={["20px"]} zIndex={35}>
-            <Box position="relative">
-              <Avatar
-                width="110px"
-                height="110px"
-                borderStyle="solid"
-                borderWidth="5px"
-                borderColor={useColorModeValue("card.light", "card.dark")}
-                src={user.profileImageUrl}
-              ></Avatar>
-              <Box position="absolute" bottom="14px" right="2px">
-                <IconButton
-                  size="sm"
-                  rounded="full"
-                  aria-label="profile-pic-edit"
-                  bg="black"
-                  color="white"
-                  borderStyle="solid"
-                  borderWidth="2px"
-                  _hover={{
-                    transform: "scale(1.1)",
-                  }}
-                  borderColor={useColorModeValue("card.light", "card.dark")}
-                  onClick={handleChangeProfilePicModalOpen}
-                >
-                  <MdEdit size="20px" />
-                </IconButton>
-              </Box>
-            </Box>
+          <Box position="absolute" right="20px" bottom="20px" color="white">
+            <IconButton
+              aria-label="edit-profilepic"
+              bg="blackAlpha.400"
+              _hover={{ bg: "blackAlpha.600" }}
+              fontSize={20}
+              onClick={handleChangeProfilePicModalOpen}
+              rounded="full"
+            >
+              <MdEdit />
+            </IconButton>
           </Box>
         </Box>
-        <CardContent props={{ ...cardContentProps.props, py: 4 }}>
-          <Flex justifyContent="end">
-            <IconButton
-              aria-label="profile-more-button"
-              variant="ghost"
-              rounded="full"
-              fontSize={20}
-            >
-              <IoMdMore />
-            </IconButton>
-          </Flex>
-        </CardContent>
         <CardContent {...cardContentProps}>
           <VStack spacing={2} alignItems="start">
-            <Heading size="lg">{user.fullName}</Heading>
             <Text
               opacity={0.7}
               textTransform="uppercase"
@@ -239,7 +154,6 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
               <Text>
                 <strong>@{user.username}</strong>
               </Text>
-
               {user.orgId ? (
                 <>
                   <BsDot opacity={0.6} size="20px" />

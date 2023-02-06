@@ -26,49 +26,86 @@ import { UserCard } from "./components/UserCard";
 export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
   const { user } = useUser();
   const { t } = useClientTranslation(dictWhenNoActiveAccount);
-
+  const sharedHeightBoxNonKraikubId = ["50vh", "80vh"]
   if (!user) {
     return null;
   }
 
   if (!user.personalEmail) {
     return (
-      <Container
-        maxW="container.md"
-        h="50vh"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
+      <DynamicContainer
+        containerProps={{
+          maxW: "container.xl",
+          pt: "20px",
+        }}
       >
         <Card
           props={{
-            pt: "40px",
-            rounded: 16,
+            w: "full",
+            p: 0,
+            overflow: "hidden",
+            h: ["auto", "80vh"],
           }}
         >
-          <Container maxW="container.sm">
-            <Box textAlign="center">
-              <Heading size="lg">{t("header")}</Heading>
-              <Text fontSize={16} opacity={0.8} mt={4}>
-                {t("description")}
-              </Text>
-              <LinkWrap href="/id/activate">
-                <Button
-                  size="lg"
-                  w="full"
-                  fontWeight={600}
-                  mt={16}
-                  px={14}
-                  colorScheme="kraikub.green.always"
-                  color="white"
-                >
-                  {t("btn-activate")}
-                </Button>
-              </LinkWrap>
-            </Box>
-          </Container>
+          <Grid templateColumns="repeat(12, 1fr)">
+            <GridItem
+              colSpan={[12, 4]}
+              position="relative"
+              h={sharedHeightBoxNonKraikubId}
+              backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
+              backgroundSize="cover"
+              backgroundPosition="center"
+            >
+              <Box
+                position="absolute"
+                top={0}
+                bottom={0}
+                left={0}
+                right={0}
+                bg="blackAlpha.600"
+                backdropFilter="blur(20px)"
+                py={8}
+                px={6}
+                color="white"
+                zIndex={45}
+              >
+                <Text textTransform="uppercase" fontWeight={600} fontSize={12}>
+                  KRAIKUB ID
+                </Text>
+                <Heading size="md" fontWeight={500} mt={2}>
+                  The most innovative way to use your university account
+                </Heading>
+                <Text mt={3} opacity={0.6} fontSize={12}>
+                  KRAIKUB ID is one of the most advanced university account ever
+                  created.
+                </Text>
+                <LinkWrap href="/id/activate">
+                  <Button
+                    size="lg"
+                    w="full"
+                    fontWeight={600}
+                    mt={16}
+                    px={14}
+                    bg="white"
+                    color="blackAlpha.700"
+                    textTransform="uppercase"
+                    fontSize={14}
+                  >
+                    {t("btn-activate")}
+                  </Button>
+                </LinkWrap>
+              </Box>
+            </GridItem>
+            <GridItem
+              colSpan={[12, 8]}
+              backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
+              backgroundSize="cover"
+              backgroundPosition="center"
+              h={sharedHeightBoxNonKraikubId}
+            ></GridItem>
+          </Grid>
         </Card>
-      </Container>
+      </DynamicContainer>
     );
   }
 
