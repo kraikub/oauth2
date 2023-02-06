@@ -98,7 +98,6 @@ export const UserCard: FC<UserCardProps> = ({ user }) => {
   const matchedRoleName = matchedRoles?.length
     ? matchedRoles[0].data.displayPosition
     : "";
-  console.log(user)
   return (
     <>
       <Card
