@@ -25,41 +25,65 @@ class OrganizationService {
       {
         orgName,
         orgUsername,
-        position
+        position,
       }
     );
   };
 
-  invite = async (orgId: string, uid: string, priority: number, position: string) => {
+  invite = async (
+    orgId: string,
+    uid: string,
+    priority: number,
+    position: string
+  ) => {
     return nextApiBaseInstance.post<CustomApiResponse<any>>(
       `/api/internal/org/${orgId}/add-member`,
       {
         uid,
         priority,
-        position
+        position,
       }
     );
   };
 
   updateRole = async (orgId: string, uid: string, priority: number) => {
-    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/${orgId}/update/role`, {
-      uid,
-      priority,
-    })
-  }
+    return nextApiBaseInstance.post<CustomApiResponse>(
+      `/api/internal/org/${orgId}/update/role`,
+      {
+        uid,
+        priority,
+      }
+    );
+  };
   transferOwnership = async (orgId: string, uid: string) => {
-    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/${orgId}/update/ownership`, {
-      uid,
-    })
-  }
+    return nextApiBaseInstance.post<CustomApiResponse>(
+      `/api/internal/org/${orgId}/update/ownership`,
+      {
+        uid,
+      }
+    );
+  };
 
   removeMember = async (orgId: string, uid: string) => {
-    return nextApiBaseInstance.post<CustomApiResponse>(`/api/internal/org/${orgId}/remove`, {
-      uid,
-    })
-  }
+    return nextApiBaseInstance.post<CustomApiResponse>(
+      `/api/internal/org/${orgId}/remove`,
+      {
+        uid,
+      }
+    );
+  };
+
+  deleteOrg = async (orgId: string) => {
+    return nextApiBaseInstance.post<CustomApiResponse>(
+      `/api/internal/org/${orgId}/delete`,
+      {}
+    );
+  };
+
   leave = async () => {
-    return nextApiBaseInstance.get<CustomApiResponse>(`/api/internal/org/leave`)
-  }
+    return nextApiBaseInstance.get<CustomApiResponse>(
+      `/api/internal/org/leave`
+    );
+  };
 }
 export const orgService = new OrganizationService();

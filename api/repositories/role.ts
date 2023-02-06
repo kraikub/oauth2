@@ -52,5 +52,9 @@ class RoleRepo {
       userRef: uid,
     });
   };
+  clearOrganizationRole = async (orgId: string) => {
+    await mongodb.connect();
+    return await RoleModel.deleteMany({ roleRef: orgId });
+  }
 }
 export const roleRepo = new RoleRepo();

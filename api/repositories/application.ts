@@ -43,5 +43,9 @@ export default class ApplicationRepository {
     await mongodb.connect();
     return await ApplicationModel.updateOne<Application>({ clientId }, a);
   };
+  deleteOrgApps = async (orgId: string) => {
+    await mongodb.connect();
+    return await ApplicationModel.deleteMany({ refId: orgId });
+  };
 }
 export const applicationRepository = new ApplicationRepository();

@@ -62,7 +62,13 @@ class UserRepository {
   };
 
   updateAppOwned = async (uid: string, newValue: number) => {
+    await mongodb.connect();
     return UserModel.updateOne<User>({ uid }, { appOwned: newValue });
-  }
+  };
+
+  clearOrganization = async (orgId: string) => {
+    await mongodb.connect();
+    return UserModel.updateMany<User>({ orgId }, { orgId: "" });
+  };
 }
 export const userRepository = new UserRepository();

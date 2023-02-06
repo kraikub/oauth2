@@ -145,9 +145,11 @@ export const orgDeleteDict: Dictionary = {
   en: {
     "top-title": "Delete Organization",
     "delete": "Delete",
+    "cancel": "Cancel"
   },
   th: {
     "top-title": "ลบองค์กร",
     "delete": "ลบ",
+    "cancel": "ยกเลิก"
   }
 }

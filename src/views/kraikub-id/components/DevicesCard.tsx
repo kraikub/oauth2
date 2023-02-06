@@ -116,8 +116,8 @@ interface EachProps {
 
 const Each: FC<EachProps> = ({ keyName, device, last }) => {
   const { t } = useClientTranslation(dictDeviceCard);
-  const deviceIconBg = useColorModeValue("#2e2e2e", "#00b35e");
-  const deviceIconColor = useColorModeValue("#46f0a0", "#ffffff");
+  const deviceIconBg = useColorModeValue("#00b35e", "#00b35e");
+  const deviceIconColor = useColorModeValue("#ffffff", "#ffffff");
   const [expand, setExpand] = useState(false);
   const mainCardStyles = {
     rounded: 12,
@@ -137,8 +137,8 @@ const Each: FC<EachProps> = ({ keyName, device, last }) => {
       <HStack justifyContent="space-between" alignItems="end" py={3} pe={4}>
         <HStack spacing={4}>
           <Flex
-            w="42px"
-            h="42px"
+            w="38px"
+            h="38px"
             justifyContent="center"
             alignItems="center"
             bg={deviceIconBg}
@@ -281,7 +281,7 @@ export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
           }}
         >
           <VStack spacing={0}>
-            {Object.keys(catMap).map((k, index) => {
+            {Object.keys(catMap).slice(0,6).map((k, index) => {
               const keyName = k.replaceAll(`"`, "");
               const device = catMap[k];
               return (

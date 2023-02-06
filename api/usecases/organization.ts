@@ -1,3 +1,4 @@
+import { applicationRepository } from './../repositories/application';
 import { roleMap } from "./../config/org";
 import { mailService } from "./../mail/index";
 import { appConfig } from "./../config/app";
@@ -568,5 +569,58 @@ class OragnizationUsecase {
       success: true,
     };
   };
+
+  deleteOrganization = async (uid: string, orgId: string): Promise<UseCaseResult> => {
+    const user = await userRepository.findOne({ uid });
+    if (!user) {
+      return {
+        success: false,
+        message: "Cannot validate active user",
+        httpStatus: 409,
+      }
+    }
+    if (user.orgId !== orgId) {
+      return {
+        success: false,
+        message: "OrgId not matched",
+        httpStatus: 409,
+      }
+    }
+    const role = await roleRepo.getOrgRole(orgId, user.uid);
+    if (!role) {
+      return {
+        success: false,
+        message: "Cannot validate user role",
+        httpStatus: 409,
+      }
+    }
+    if (role.priority !== 0) {
+      return {
+        success: false,
+        message: "Permission denied",
+        httpStatus: 409,
+      }
+    }
+    const clearUserResult = await userRepository.clearOrganization(orgId);
+    if (!clearUserResult.matchedCount) {
+      return {
+        success: false,
+        message: "User clearance failed",
+        httpStatus: 409,
+      }
+    }
+    const deleteRoleResult = await roleRepo.clearOrganizationRole(orgId)
+    if (!deleteRoleResult.deletedCount) {
+      return {
+        success: false,
+        message: "Role deletion failed",
+        httpStatus: 409,
+      }
+    }
+    await applicationRepository.deleteOrgApps(orgId);
+    return {
+      success: true,
+    }
+  }
 }
 export const orgUsecase = new OragnizationUsecase();
