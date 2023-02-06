@@ -27,6 +27,7 @@ class OrganizationRepo {
   };
 
   getFullOrg = async (orgId: string) => {
+    await mongodb.connect();
     const res = await organizationModel.aggregate(orgFullDataForDisplay(orgId));
     if (!res.length) {
       return null;
@@ -35,10 +36,15 @@ class OrganizationRepo {
   };
 
   updateAppOwned = async (orgId: string, newValue: number) => {
+    await mongodb.connect();
     return await organizationModel.updateOne<Organization>(
       { orgId },
       { appOwned: newValue }
     );
   };
+  deleteOrg = async (orgId: string) => {
+    await mongodb.connect();
+    return await organizationModel.deleteOne({ orgId });
+  }
 }
 export const orgRepo = new OrganizationRepo();

@@ -1,4 +1,4 @@
-import { applicationRepository } from './../repositories/application';
+import { applicationRepository } from "./../repositories/application";
 import { roleMap } from "./../config/org";
 import { mailService } from "./../mail/index";
 import { appConfig } from "./../config/app";
@@ -466,45 +466,49 @@ class OragnizationUsecase {
     assigneeId: string,
     assignerId: string
   ): Promise<UseCaseResult> => {
-    const assigner = await userRepository.findOne({ uid: assignerId })
-    const assignee = await userRepository.findOne({ uid: assigneeId })
+    const assigner = await userRepository.findOne({ uid: assignerId });
+    const assignee = await userRepository.findOne({ uid: assigneeId });
 
     if (!assigner) {
       return {
         success: false,
         message: "Unknown assigner",
         httpStatus: 422,
-      }
+      };
     }
     if (!assignee) {
       return {
         success: false,
         message: "Unknown assignee",
         httpStatus: 422,
-      }
+      };
     }
     if (assignee.orgId !== orgId || assigner.orgId !== orgId) {
       return {
         success: false,
-        message: "Both assigner and assignee need to be in the same organization",
+        message:
+          "Both assigner and assignee need to be in the same organization",
         httpStatus: 422,
-      }
+      };
     }
 
-    const assignerRole = await roleRepo.getOrgRole(assigner.orgId, assigner.uid);
+    const assignerRole = await roleRepo.getOrgRole(
+      assigner.orgId,
+      assigner.uid
+    );
     if (!assignerRole) {
       return {
         success: false,
         message: "Cannot find assigner role in roles collection",
         httpStatus: 422,
-      }
+      };
     }
     if (assignerRole.priority !== 0) {
       return {
         success: false,
         message: "Assigner is not an owner.",
         httpStatus: 405,
-      }
+      };
     }
 
     ///// ======== Assign new role to the new owner (assignee)
@@ -570,21 +574,24 @@ class OragnizationUsecase {
     };
   };
 
-  deleteOrganization = async (uid: string, orgId: string): Promise<UseCaseResult> => {
+  deleteOrganization = async (
+    uid: string,
+    orgId: string
+  ): Promise<UseCaseResult> => {
     const user = await userRepository.findOne({ uid });
     if (!user) {
       return {
         success: false,
         message: "Cannot validate active user",
         httpStatus: 409,
-      }
+      };
     }
     if (user.orgId !== orgId) {
       return {
         success: false,
         message: "OrgId not matched",
         httpStatus: 409,
-      }
+      };
     }
     const role = await roleRepo.getOrgRole(orgId, user.uid);
     if (!role) {
@@ -592,35 +599,37 @@ class OragnizationUsecase {
         success: false,
         message: "Cannot validate user role",
         httpStatus: 409,
-      }
+      };
     }
     if (role.priority !== 0) {
       return {
         success: false,
         message: "Permission denied",
         httpStatus: 409,
-      }
+      };
     }
+
     const clearUserResult = await userRepository.clearOrganization(orgId);
     if (!clearUserResult.matchedCount) {
       return {
         success: false,
         message: "User clearance failed",
         httpStatus: 409,
-      }
+      };
     }
-    const deleteRoleResult = await roleRepo.clearOrganizationRole(orgId)
+    const deleteRoleResult = await roleRepo.clearOrganizationRole(orgId);
     if (!deleteRoleResult.deletedCount) {
       return {
         success: false,
         message: "Role deletion failed",
         httpStatus: 409,
-      }
+      };
     }
     await applicationRepository.deleteOrgApps(orgId);
+    await orgRepo.deleteOrg(orgId);
     return {
       success: true,
-    }
-  }
+    };
+  };
 }
 export const orgUsecase = new OragnizationUsecase();
