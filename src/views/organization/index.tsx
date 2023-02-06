@@ -74,7 +74,13 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
               {org.members.length} {t("users")}
             </Badge>
           </HStack>
-          <Text mt={1} opacity={0.6} textTransform="uppercase" fontWeight={600} fontSize={12}>
+          <Text
+            mt={1}
+            opacity={0.6}
+            textTransform="uppercase"
+            fontWeight={600}
+            fontSize={12}
+          >
             {t("People in")} {org.orgName}
           </Text>
           <Invite orgId={org.orgId} myRole={myRole} />
@@ -111,8 +117,12 @@ export const OrgDashboardPage: FC<OrgDashboardPage> = ({ org }) => {
               );
             })}
         </VStack>
-        <CustomDivider sx={{ py: 0 }} />
-        <DeleteOrg org={org}/>
+        {myRole.priority === 0 ? (
+          <>
+            <CustomDivider sx={{ py: 0 }} />
+            <DeleteOrg org={org} />
+          </>
+        ) : null}
       </Card>
     </DynamicContainer>
   );
