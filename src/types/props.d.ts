@@ -2,7 +2,7 @@ interface PageWithTranslation {
   lang: string;
 }
 
-type UserVariant = UserWithStudent | UserWithApplication;
+type UserVariant = UserWithStudent | UserWithApplication | UserWithExtra;
 
 interface BasePageProps {
   user: UserWithStudent | null;
@@ -13,7 +13,11 @@ interface UserWithApplication extends UserWithStudent {
 }
 
 interface DashboardServerSideProps extends PageWithTranslation {
-  data: UserWithApplication;
+  user: User
+  userApps: Application[];
+  org: Organization | null;
+  orgApps: Application[];
+  role: Role<OrganizationRoleData> | null;
   lang: string;
 }
 

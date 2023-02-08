@@ -4,6 +4,10 @@ interface MailArgs {
   name?: string;
   deviceName?: string;
   ref?: string;
+  orgName?: string;
+  orgUsername?: string;
+  by?: string;
+  position?: string;
 }
 
 class MailService {
@@ -38,24 +42,20 @@ class MailService {
     }
   }
   async sendOTP(to: string, lang: string, args: MailArgs) {
-    try {
-      const res = await axios.post(`${this.host}/api/v1/2fa`, {
-        to,
-        lang,
-        ...args,
-      });
-      return res;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error(error.code, error.message, error.status, {
-          to,
-          lang,
-          ...args,
-        });
-      } else {
-        console.error(error);
-      }
-    }
+    const res = await axios.post(`${this.host}/api/v1/2fa`, {
+      to,
+      lang,
+      ...args,
+    });
+    return res;
+  }
+
+  async inviteToOrg(to: string, args: MailArgs) {
+    const res = await axios.post(`${this.host}/api/v1/org-invite`, {
+      to,
+      ...args,
+    });
+    return res;
   }
 }
 

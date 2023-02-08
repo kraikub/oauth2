@@ -20,14 +20,16 @@ const StaticNavbar: FC<NavbarOptions> = (props) => {
       >
         <Flex alignItems="center" gap={3}>
           <LinkWrap href="/">
-            <Heading size="sm" fontWeight={700} letterSpacing={-1}>
+            <Heading size="sm" fontWeight={700}>
               KRAIKUB{" "}
             </Heading>
           </LinkWrap>
         </Flex>
         <HStack spacing={3}>
           <ThemeToggler />
-          {props.hideLanguageSelector ? null : <SmartLanguageToggler />}
+          {props.hideLanguageSelector ? null : (
+            <SmartLanguageToggler sx={{ size: "sm" }} />
+          )}
         </HStack>
       </Flex>
     </Container>

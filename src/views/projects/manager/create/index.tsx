@@ -40,6 +40,7 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
   data,
 }) => {
   const router = useRouter();
+  const { ref_type, ref_id } = router.query;
   const { register, handleSubmit, getValues } = useForm();
   const [hasName, setHasName] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
@@ -47,18 +48,18 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
   const ready = useOnClient();
 
   const inputStyles = {
-    variant: "solid",
-    size: "lg",
+    variant: "outline",
+    size: "md",
     rounded: 8,
-    bg: useColorModeValue("blackAlpha.100", "whiteAlpha.100"),
     transition: "100ms ease",
-    _focus: {
-      boxShadow: `0 0 2px 2px #00CED1`,
-    },
   };
 
   if (!ready) {
     return null;
+  }
+
+  if (!ref_type || (ref_type === "org" && !ref_id)) {
+    return <>Invalid references</>;
   }
 
   return (
@@ -81,7 +82,10 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
               return;
             }
             try {
-              const res = await appService.createApplication(data);
+              const res = await appService.createApplication(data, {
+                refId: (ref_id as string) || "",
+                refType: (ref_type as string) || "",
+              });
               setLoading(false);
               router.push(`${p.projects}/${res?.payload.clientId}`);
             } catch (err) {
@@ -113,16 +117,6 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
             placeholder="A really cool app."
           />
 
-          <FormLabel htmlFor="app-creator" mt={6}>
-            {t("creator-name")}
-          </FormLabel>
-          <Input
-            id="app-creator"
-            placeholder="Alice"
-            {...register("creatorName")}
-            {...inputStyles}
-          />
-
           <FormLabel htmlFor="app-type" mt={6}>
             {t("categories")}
           </FormLabel>
@@ -139,14 +133,15 @@ export const CreateProjectPage: NextPage<CreateProjectPageProps> = ({
             ))}
           </Select>
           <ButtonGroup mt={10}>
-            <Button size="lg" onClick={() => router.push(p.projects)}>
+            <Button size="md" onClick={() => router.push(p.projects)}>
               {t("btn-cancel")}
             </Button>
             <Button
               type="submit"
-              colorScheme="teal"
+              colorScheme="kraikub.green.always"
+              color="white"
               isLoading={loading}
-              size="lg"
+              size="md"
             >
               {t("btn-submit")}
             </Button>

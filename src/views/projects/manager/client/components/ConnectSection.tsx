@@ -20,6 +20,7 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { useOnClient } from "../../../../../hooks/on-client";
 import { useClientTranslation } from "../../../../../hooks/client-translation";
 import { connectionComponentDict } from "../../../../../translate/connection";
+import { DynamicContainer } from "../../../../../layouts/DynamicContainer";
 
 interface ConnectSectionProps {
   app: Application | null;
@@ -38,7 +39,9 @@ export const ConnectSection: FC<ConnectSectionProps> = ({ app }) => {
   }
 
   return (
-    <Container maxW="container.xl">
+    <DynamicContainer containerProps={{
+      maxW: "container.xl"
+    }}>
       <Card>
         <Grid templateColumns="repeat(12, 1fr)" columnGap={6} rowGap={4}>
           <GridItem
@@ -87,7 +90,7 @@ export const ConnectSection: FC<ConnectSectionProps> = ({ app }) => {
               <Text fontSize={12} opacity={0.5}>
                 {t("connect-step-1-tip-secret")}
               </Text>
-              <Button size="sm" colorScheme="teal" gap={2}>
+              <Button size="sm" colorScheme="kraikub.green" gap={2}>
                 {t("connect-step-1-btn-safety")}{" "}
                 <IoIosArrowRoundForward size="20px" />
               </Button>
@@ -119,7 +122,7 @@ export const ConnectSection: FC<ConnectSectionProps> = ({ app }) => {
                 <Highlight
                   query={["<redirect-url>"]}
                   styles={{
-                    bg: "teal.200",
+                    bg: "kraikub.green.200",
                     py: "0.008em",
                   }}
                 >
@@ -140,6 +143,6 @@ export const ConnectSection: FC<ConnectSectionProps> = ({ app }) => {
           </GridItem>
         </Grid>
       </Card>
-    </Container>
+    </DynamicContainer>
   );
 };

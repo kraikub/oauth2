@@ -3,6 +3,7 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Head from "next/head";
 import { PageAuthMiddleware } from "../../api/middlewares/auth.middleware";
 import { aggregations } from "../../data/aggregations";
+import { userWithExtraAggr } from "../../data/aggregations/user";
 import { UserModel } from "../../data/models/user";
 import { mongodb } from "../../data/mongo";
 import { ClientRender } from "../../src/components/ClientRender";
@@ -21,12 +22,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  const u = await UserModel.aggregate([
-    ...aggregations.private.user(uid),
-    ...aggregations.private.student(),
-  ]);
+  const u = await UserModel.aggregate(userWithExtraAggr(uid));
 
-  const pipeline = [
+  const accessPipeline = [
     {
       $match: {
         uid: uid,
@@ -49,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         pipeline: [
           {
             $lookup: {
-              from: "clientId",
+              from: "applications",
               localField: "clientId",
               foreignField: "clientId",
               as: "app",
@@ -60,8 +58,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   ];
 
-  let res = await UserModel.aggregate(pipeline);
-
+  let res = await UserModel.aggregate(accessPipeline);
   return {
     props: {
       user: u.length ? jsonSerialize(u[0]) : null,
@@ -72,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 interface KraikubIDPageProps extends OAuthActivitiesProps {
-  user: UserWithStudent;
+  user: UserWithExtra;
 }
 
 const KraikubIDPage: NextPage<KraikubIDPageProps> = (props) => {

@@ -2,6 +2,7 @@ import { Progress } from "@chakra-ui/react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { createContext, FC, useContext, useEffect, useState } from "react";
+import { useOnClient } from "../hooks/on-client";
 import { userService } from "../services/userService";
 import { getSigninUrl } from "../utils/path";
 
@@ -25,8 +26,8 @@ const defaultUserContextValue = {
 export const userContext = createContext<UserContext>(defaultUserContextValue);
 
 export const UserProvider: FC<UserProviderProps> = ({ children, user }) => {
-
-  const router = useRouter()
+  const router = useRouter();
+  const ready = useOnClient();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,10 +35,16 @@ export const UserProvider: FC<UserProviderProps> = ({ children, user }) => {
     setIsLoading(true);
     await userService.signout();
     setIsLoading(false);
-    router.push(getSigninUrl({}))
-    
+    router.push(getSigninUrl({}));
   };
 
+  if (!ready) {
+    return null;
+  }
+  if (!user) {
+    router.push(getSigninUrl({}));
+    return null;
+  }
   return (
     <userContext.Provider
       value={{

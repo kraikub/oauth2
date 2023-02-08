@@ -17,61 +17,122 @@ export const colors = {
   },
   kraikub: {
     blue: {
-      200: "#7B65FF",
-      300: "#644AFC",
-      400: "#5238EC",
-      500: "#2D19A6",
+      100: "#e0edff",
+      200: "#abceff",
+      300: "#70acff",
+      400: "#3d8eff",
+      500: "#1468de",
+      600: "#0952b8",
+      700: "#033c8c",
+      800: "#00275e",
+      900: "#001430",
+      always: {
+        200: "#1468de",
+        300: "#1468de",
+        400: "#1468de",
+        500: "#1468de",
+        600: "#1468de",
+      },
+    },
+    green: {
+      50: "#ebf8f6",
+      100: "#d7f2ed",
+      200: "#aee5db",
+      300: "#86d7c8",
+      400: "#5dcab6",
+      500: "#35bda4",
+      600: "#2a9783",
+      700: "#207162",
+      800: "#154c42",
+      900: "#0b2621",
+      always: {
+        200: "#35bda4",
+        300: "#35bda4",
+        400: "#35bda4",
+        500: "#35bda4",
+        600: "#35bda4",
+      },
+    },
+    red: {
+      50: "#ffeaec",
+      100: "#ffd5d8",
+      200: "#ffaab1",
+      300: "#ff808b",
+      400: "#ff5564",
+      500: "#ff2b3d",
+      600: "#cc2231",
+      700: "#991a25",
+      800: "#661118",
+      900: "#33090c",
+      always: {
+        200: "#ff2b3d",
+        300: "#ff2b3d",
+        400: "#ff2b3d",
+        500: "#ff2b3d",
+        600: "#ff2b3d",
+      },
     },
   },
   bg: {
-    light: "#ffffff",
+    light: "#f5f5f7",
     dark: "#000000",
+  },
+  card: {
+    light: "#ffffff",
+    dark: "#1a1c1c",
   },
   color: {
     light: "#262626",
     dark: "#e6e9ea",
   },
+  notificationCard: {
+    light: "#ffffff",
+    dark: "#101010",
+  },
 };
 
 const fonts = {
-  body: `-apple-system, BlinkMacSystemFont, "Segoe UI", "", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
-  heading: `-apple-system, BlinkMacSystemFont, "Segoe UI", "", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  // body: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  // heading: `-apple-system, BlinkMacSystemFont, Helvetica, "Sukhumvit", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,
+  body: `'Inter', sans-serif`,
+  heading: `'inter Tight', sans-serif`,
 };
 
 const components: { [key: string]: ComponentStyleConfig } = {
   Text: {
     baseStyle: {
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: 500,
     },
   },
   Heading: {
     baseStyle: {
-      fontWeight: 700,
+      fontWeight: 500,
     },
     sizes: {
       xl: {
         fontSize: "3rem",
-        letterSpacing: "-0.05em",
+        // letterSpacing: "-0.05em",
       },
       lg: {
-        letterSpacing: "-0.03em",
+        // letterSpacing: "-0.03em",
       },
       md: {
-        letterSpacing: "-0.015em",
+        // letterSpacing: "-0.015em",
       },
     },
   },
   Input: {
     defaultProps: {
       fontSize: 20,
-      fontWeight: 600,
+      fontWeight: 500,
+      focusBorderColor: "kraikub.green.500",
     },
   },
   Button: {
     baseStyle: {
       rounded: 8,
-      fontWeight: 600,
+      fontWeight: 500,
     },
     sizes: {
       sm: {
@@ -85,6 +146,42 @@ const components: { [key: string]: ComponentStyleConfig } = {
         fontSize: 16,
       },
     },
+  },
+  Modal: {
+    defaultProps: {
+      isCentered: true,
+      motionPreset: "slideInBottom",
+    },
+    baseStyle: (props) => ({
+      closeButton: {
+        rounded: "full",
+      },
+      dialog: {
+        rounded: 14,
+        roundedBottomLeft: [0, 0, 14],
+        roundedBottomRight: [0, 0, 14],
+        alignSelf: ["flex-end", "flex-center"],
+        m: [0, 0, "auto"],
+        minW: ["100vw", "100vw", "container.sm"],
+        maxH: ["92vh", "92vh", "70vh"],
+        bg: mode(colors.card.light, colors.card.dark)(props),
+      },
+    }),
+  },
+  Menu: {
+    baseStyle: (props) => ({
+      list: {
+        bg: mode(colors.card.light, colors.card.dark)(props),
+        boxShadow: "0 10px 20px #00000030",
+        rounded: 14,
+      },
+      item: {
+        bg: "transparent",
+        _hover: {
+          bg: mode("blackAlpha.100", "whiteAlpha.100")(props),
+        },
+      },
+    }),
   },
 };
 

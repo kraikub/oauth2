@@ -17,7 +17,7 @@ export const OAuthSuggestion: FC = () => {
         <Heading size="md">Explore more about OAuth 2.0 Protocol</Heading>
         <Text my={4}>
           Visit the official website of{" "}
-          <Link href="https://oauth.net/2/" color="kraikub.blue.200">
+          <Link href="https://oauth.net/2/" color="kraikub.green.200">
             oauth.net
           </Link>{" "}
           and dive in to OAuth2 standards and explanation

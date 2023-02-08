@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -8,17 +9,17 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { FC } from "react";
+import { Dispatch, FC, SetStateAction, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../../../../api/config/app";
 import { Card } from "../../../components/Card";
-import { FooterShort } from "../../../layouts/FooterShort";
 
 interface UserSelectorProps {
-  user: FullUserData;
+  user: UserWithStudent;
   reject: () => void;
   next: () => void;
   loading: boolean;
+  setSigninMethod: Dispatch<SetStateAction<SignInMethodType>>;
 }
 
 export const UserSelector: FC<UserSelectorProps> = ({
@@ -26,8 +27,12 @@ export const UserSelector: FC<UserSelectorProps> = ({
   reject,
   next,
   loading,
+  setSigninMethod,
 }) => {
   const { t } = useTranslation("signin");
+  useEffect(() => {
+    setSigninMethod("credential");
+  }, []);
   return (
     <>
       <Box width="full">
@@ -36,6 +41,7 @@ export const UserSelector: FC<UserSelectorProps> = ({
         </Heading>
         <Text fontSize={14}>{t("account-description")}</Text>
         <Card
+        disableMobileBorder
           props={{
             my: 3,
             rounded: 16,
@@ -44,19 +50,18 @@ export const UserSelector: FC<UserSelectorProps> = ({
         >
           <Flex width="full" gap={4}>
             <Box>
-              <Image
+              <Avatar
                 src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
-                alt="account-owner-profile-image"
-                w={50}
+                size="lg"
                 rounded="full"
-              ></Image>
+              />
             </Box>
-            <Box>
+            <Box pt={1}>
               <Text fontWeight={600}>
-                {user.student.nameEn.split(" ").splice(1).join(" ")}
+                {user.fullName}
               </Text>
               <Text fontWeight={400} fontSize={14} opacity={0.7}>
-                {user.student.nameTh.split(" ").splice(1).join(" ")}
+                @{user.username}
               </Text>
             </Box>
           </Flex>
@@ -71,7 +76,7 @@ export const UserSelector: FC<UserSelectorProps> = ({
             {t("account-btn-no")}
           </Button>
           <Button
-            colorScheme="teal"
+            colorScheme="kraikub.green.always"
             fontWeight={600}
             onClick={next}
             isLoading={loading}

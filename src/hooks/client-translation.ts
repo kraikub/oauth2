@@ -13,7 +13,7 @@ export const useClientTranslation = (dict: Dictionary) => {
   
 
   const t = (key: string) => {
-    return dict[cookie.LANG][key] || key;
+    return dict[cookie.LANG] ? dict[cookie.LANG][key] : key;
   };
   return {
     t,

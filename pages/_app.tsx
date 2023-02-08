@@ -6,12 +6,15 @@ import theme from "../styles/theme";
 import Head from "next/head";
 import { appWithTranslation } from "next-i18next";
 import { LanguageProvider } from "../src/contexts/Language";
+import { Loader } from "../src/components/Loader";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+        <Loader>
+          <Component {...pageProps} />
+        </Loader>
       </ChakraProvider>
     </>
   );

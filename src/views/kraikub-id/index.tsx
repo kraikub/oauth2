@@ -15,56 +15,123 @@ import { LinkWrap } from "../../components/LinkWrap";
 import { useUser } from "../../contexts/User";
 import { useClientTranslation } from "../../hooks/client-translation";
 import { useOnClient } from "../../hooks/on-client";
+import { DynamicContainer } from "../../layouts/DynamicContainer";
 import { dictWhenNoActiveAccount } from "../../translate/kraikubid";
 import { AccessesCard } from "./components/AccessesCard";
 import { DevicesCard } from "./components/DevicesCard";
 import { NotificationCard } from "./components/NotificationCard";
+import { OrganizationCard } from "./components/OrganizationCard";
 import { UserCard } from "./components/UserCard";
 
 export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
   const { user } = useUser();
   const { t } = useClientTranslation(dictWhenNoActiveAccount);
-
+  const sharedHeightBoxNonKraikubId = ["50vh", "80vh"]
   if (!user) {
     return null;
   }
 
   if (!user.personalEmail) {
     return (
-      <Container
-        maxW="container.xl"
-        h="50vh"
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
+      <DynamicContainer
+        containerProps={{
+          maxW: "container.xl",
+          pt: "20px",
+        }}
       >
-        <Box textAlign="center">
-          <Heading>{t("header")}</Heading>
-          <Text fontSize={18} fontWeight={600} opacity={0.6} mt={4}>
-            {t("description")}
-          </Text>
-          <LinkWrap href="/id/activate">
-            <Button
-              height="80px"
-              fontSize={20}
-              fontWeight={600}
-              mt={16}
-              px={14}
-              rounded={18}
-              colorScheme="teal"
+        <Card
+          props={{
+            w: "full",
+            p: 0,
+            overflow: "hidden",
+            h: ["auto", "80vh"],
+          }}
+        >
+          <Grid templateColumns="repeat(12, 1fr)">
+            <GridItem
+              colSpan={[12, 4]}
+              position="relative"
+              h={sharedHeightBoxNonKraikubId}
+              backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
+              backgroundSize="cover"
+              backgroundPosition="center"
             >
-              {t("btn-activate")}
-            </Button>
-          </LinkWrap>
-        </Box>
-      </Container>
+              <Box
+                position="absolute"
+                top={0}
+                bottom={0}
+                left={0}
+                right={0}
+                bg="blackAlpha.600"
+                backdropFilter="blur(20px)"
+                py={8}
+                px={6}
+                color="white"
+                zIndex={45}
+              >
+                <Text textTransform="uppercase" fontWeight={600} fontSize={12}>
+                  KRAIKUB ID
+                </Text>
+                <Heading size="md" fontWeight={500} mt={2}>
+                  The most innovative way to use your university account
+                </Heading>
+                <Text mt={3} opacity={0.6} fontSize={12}>
+                  KRAIKUB ID is one of the most advanced university account ever
+                  created.
+                </Text>
+                <LinkWrap href="/id/activate">
+                  <Button
+                    size="lg"
+                    w="full"
+                    fontWeight={600}
+                    mt={16}
+                    px={14}
+                    bg="white"
+                    color="blackAlpha.700"
+                    textTransform="uppercase"
+                    fontSize={14}
+                  >
+                    {t("btn-activate")}
+                  </Button>
+                </LinkWrap>
+              </Box>
+            </GridItem>
+            <GridItem
+              colSpan={[12, 8]}
+              backgroundImage="url(https://i.graphicmama.com/blog/wp-content/uploads/2016/12/06085555/dribbble_1.gif)"
+              backgroundSize="cover"
+              backgroundPosition="center"
+              h={sharedHeightBoxNonKraikubId}
+            ></GridItem>
+          </Grid>
+        </Card>
+      </DynamicContainer>
     );
   }
 
   return (
-    <Container maxW="container.xl" py="60px">
-      <VStack my={8} spacing={6}>
-        <UserCard user={user} />
+    <DynamicContainer
+      containerProps={{
+        maxW: "container.xl",
+      }}
+    >
+      <Grid templateColumns="repeat(12, 1fr)" columnGap={4} rowGap={4} w="full">
+        <GridItem colSpan={[12, 12, 8]}>
+          <VStack spacing={4}>
+            <UserCard user={user} />
+            <DevicesCard logs={props.logs} />
+            <AccessesCard accesses={props.accesses} />
+          </VStack>
+        </GridItem>
+        <GridItem colSpan={[12, 12, 4]}>
+          <VStack spacing={4}>
+            <OrganizationCard user={user} />
+            <NotificationCard user={user} />
+          </VStack>
+        </GridItem>
+      </Grid>
+      <VStack spacing={4}>
+        {/* <UserCard user={user} />
         <Grid
           templateColumns="repeat(12, 1fr)"
           columnGap={6}
@@ -78,8 +145,8 @@ export const KraikubIdPageBody: FC<OAuthActivitiesProps> = (props) => {
             <DevicesCard logs={props.logs} />
           </GridItem>
         </Grid>
-        <AccessesCard accesses={props.accesses} />
+        <AccessesCard accesses={props.accesses} /> */}
       </VStack>
-    </Container>
+    </DynamicContainer>
   );
 };

@@ -10,8 +10,8 @@ export const ThemeToggler = () => {
   }
   return (
     <Switch
-      size="lg"
-      colorScheme="teal"
+      size="md"
+      colorScheme="kraikub.green.always"
       isChecked={colorMode === "dark"}
       onChange={toggleColorMode}
     />

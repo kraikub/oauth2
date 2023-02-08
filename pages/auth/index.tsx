@@ -1,14 +1,15 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { GetServerSideProps } from "next";
 import { getSigninUrl } from "../../src/utils/path";
 
-export default function AuthRandomizer() {
-  const router = useRouter();
-  // no need to generate code_challenge
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    redirect: {
+      destination: getSigninUrl({}),
+    },
+    props: {},
+  };
+};
 
-  useEffect(() => {
-    router.push(getSigninUrl({}));
-  }, []);
+const Content = () => null;
 
-  return null;
-}
+export default Content;

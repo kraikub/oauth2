@@ -23,7 +23,7 @@ import { SimpleFadeInRight } from "../../../components/animations/SimpleFadeInRi
 import { getCountDownString } from "../../../utils/time";
 
 interface TwoFactorProps {
-  signinType: string;
+  signInMethod: SignInMethodType;
   handleSignin: (options?: SigninOptions) => Promise<any>;
   OTPRef: string;
   authForEmail: string;
@@ -32,7 +32,7 @@ interface TwoFactorProps {
 }
 
 export const TwoFactor: FC<TwoFactorProps> = ({
-  signinType,
+  signInMethod,
   handleSignin,
   OTPRef,
   authForEmail,
@@ -41,22 +41,30 @@ export const TwoFactor: FC<TwoFactorProps> = ({
 }) => {
   const [code, setCode] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [exp, setExp] = useState<string>(getCountDownString(OTPExpire * 1000))
+  const [exp, setExp] = useState<string>(getCountDownString(OTPExpire * 1000));
   const { t } = useTranslation("signin");
-  const tealThemeColor = useColorModeValue("teal.500", "teal.200")
+
+  const greenThemeColor = useColorModeValue(
+    "kraikub.green.600",
+    "kraikub.green.300"
+  );
+  const defaultButtonBgColor = useColorModeValue(
+    "blackAlpha.100",
+    "whiteAlpha.300"
+  );
   const eachDigitStyles = {
     fontWeight: 600,
-    bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
     flex: 1,
+    bg: defaultButtonBgColor,
     h: "66px",
   };
 
   useEffect(() => {
     const intv = setInterval(() => {
-      setExp(getCountDownString(OTPExpire * 1000))
-    }, 1000)
+      setExp(getCountDownString(OTPExpire * 1000));
+    }, 1000);
     return () => clearInterval(intv);
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (code.length === 6) {
@@ -73,7 +81,7 @@ export const TwoFactor: FC<TwoFactorProps> = ({
     setLoading(true);
     await handleSignin({
       otp: code,
-      signin_method: signinType
+      signin_method: signInMethod,
     });
     setCode("");
     setLoading(false);
@@ -94,7 +102,9 @@ export const TwoFactor: FC<TwoFactorProps> = ({
           {t("2fa-description-2")}
         </Text>
         <Text mt={2}>REF: {OTPRef}</Text>
-        <Text mt={2} color={tealThemeColor} fontWeight={700}>{exp || t("expired")}</Text>
+        <Text mt={2} color={greenThemeColor} fontWeight={700}>
+          {exp || t("expired")}
+        </Text>
         <form onSubmit={handleFormSubmit}>
           <HStack my={6} justifyContent="space-between">
             <PinInput
@@ -102,16 +112,40 @@ export const TwoFactor: FC<TwoFactorProps> = ({
               type="number"
               size="lg"
               placeholder=""
-              variant="filled"
+              variant="solid"
               value={code}
               onChange={handleInputChange}
             >
-              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
-              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
-              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
-              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
-              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
-              <PinInputField {...eachDigitStyles} autoComplete="off" autoSave="off"/>
+              <PinInputField
+                {...eachDigitStyles}
+                autoComplete="off"
+                autoSave="off"
+              />
+              <PinInputField
+                {...eachDigitStyles}
+                autoComplete="off"
+                autoSave="off"
+              />
+              <PinInputField
+                {...eachDigitStyles}
+                autoComplete="off"
+                autoSave="off"
+              />
+              <PinInputField
+                {...eachDigitStyles}
+                autoComplete="off"
+                autoSave="off"
+              />
+              <PinInputField
+                {...eachDigitStyles}
+                autoComplete="off"
+                autoSave="off"
+              />
+              <PinInputField
+                {...eachDigitStyles}
+                autoComplete="off"
+                autoSave="off"
+              />
             </PinInput>
           </HStack>
           <Button
@@ -119,7 +153,12 @@ export const TwoFactor: FC<TwoFactorProps> = ({
             gap={2}
             onClick={back}
             h="60px"
-            colorScheme={loading ? "teal" : "gray"}
+            bgColor={defaultButtonBgColor}
+            color={greenThemeColor}
+            textTransform="uppercase"
+            fontWeight={600}
+            rounded="full"
+            isDisabled={loading}
           >
             {loading ? (
               t("2fa-btn-verify")

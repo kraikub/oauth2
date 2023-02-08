@@ -45,6 +45,7 @@ import { useClientTranslation } from "../../../../../hooks/client-translation";
 import { appFormComponentDict } from "../../../../../translate/appform";
 import { useOnClient } from "../../../../../hooks/on-client";
 import { p } from "../../../../../utils/path";
+import { DynamicContainer } from "../../../../../layouts/DynamicContainer";
 
 interface AppFormProps {
   app: Application;
@@ -54,7 +55,10 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
   const router = useRouter();
   const { t } = useClientTranslation(appFormComponentDict);
   const saveWindowBg = useColorModeValue("blackAlpha.200", "whiteAlpha.200");
-  const tealColor = useColorModeValue("teal.400", "teal.200");
+  const greenColor = useColorModeValue(
+    "kraikub.green.400",
+    "kraikub.green.200"
+  );
   const ready = useOnClient();
   const { register, getValues, watch, reset, handleSubmit, control } = useForm({
     defaultValues: app,
@@ -63,7 +67,6 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
     control,
     name: "redirects",
   });
-  const [hideSecret, setHideSecret] = useState(true);
   const [hasChanged, setHasChanged] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteInputValue, setDeleteInputValue] = useState<string>("");
@@ -122,12 +125,11 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               alignItems="center"
               rounded={10}
             >
-              <Heading size="lg">{app.appName[0]}</Heading>
+              <Heading size="lg">{app.appName[0].toUpperCase()}</Heading>
             </Box>
             <Box>
               <Heading
                 size="lg"
-                fontFamily={`'Rubik', sans-serif`}
                 letterSpacing={1}
                 mb={1}
                 textTransform="uppercase"
@@ -145,7 +147,11 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
         <ConnectSection app={app} />
       </Box>
 
-      <Container maxW="container.xl" py="20px">
+      <DynamicContainer
+        containerProps={{
+          maxW: "container.xl",
+        }}
+      >
         <Card>
           <Text as="span" fontWeight={600} letterSpacing={1}>
             {t("section-redirect-header")}
@@ -166,7 +172,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                   my={2}
                   rounded={0}
                   placeholder="https://mydomain.com/redirect/path"
-                  _focus={{ borderColor: "teal.400" }}
+                  _focus={{ borderColor: "kraikub.green.400" }}
                   {...register(`redirects.${index}.url`)}
                 />
                 <ButtonGroup>
@@ -189,7 +195,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               gap={2}
               size="lg"
               variant="solid"
-              colorScheme="teal"
+              colorScheme="kraikub.green"
               rounded="full"
               onClick={() =>
                 append({
@@ -201,9 +207,13 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             </Button>
           </Center>
         </Card>
-      </Container>
+      </DynamicContainer>
 
-      <Container maxW="container.xl" py="10vh">
+      <DynamicContainer
+        containerProps={{
+          maxW: "container.xl",
+        }}
+      >
         <Card>
           <Grid
             templateColumns={{ sm: "repeat(1, 1fr)", md: "repeat(12, 1fr)" }}
@@ -231,19 +241,6 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                   disabled
                 />
               </FieldContainer>
-              <FieldContainer title={t("app-creator")}>
-                <Text fontSize={12} color="gray.600">
-                  {t("editable")}
-                </Text>
-                <Input
-                  variant="filled"
-                  fontWeight={500}
-                  py={2}
-                  size="md"
-                  my={2}
-                  {...register("creatorName")}
-                />
-              </FieldContainer>
               <FieldContainer title={t("app-description")}>
                 <Text fontSize={12} color="gray.600">
                   {t("editable")}
@@ -251,7 +248,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
                 <Textarea
                   my={2}
                   width="100%"
-                  variant="filled"
+                  variant="outline"
                   fontSize={16}
                   fontWeight={500}
                   py={2}
@@ -262,9 +259,13 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             </GridItem>
           </Grid>
         </Card>
-      </Container>
+      </DynamicContainer>
       <Divider my={10} />
-      <Container maxW="container.xl">
+      <DynamicContainer
+        containerProps={{
+          maxW: "container.xl",
+        }}
+      >
         <Card>
           <Flex justifyContent="space-between">
             {app.clientId === process.env.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID ? (
@@ -304,11 +305,12 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
             )}
           </Flex>
         </Card>
-      </Container>
+      </DynamicContainer>
       <Box my={20}></Box>
       <Slide direction="bottom" in={hasChanged} style={{ zIndex: 10 }}>
         <Container my={4}>
           <Card
+            disableMobileBorder
             props={{
               bg: saveWindowBg,
               backdropFilter: "blur(20px)",
@@ -321,7 +323,11 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               <Spacer />
               <ButtonGroup>
                 <Button onClick={resetForm}>{t("btn-undo")}</Button>
-                <Button type="submit" colorScheme="teal" isLoading={isUpdating}>
+                <Button
+                  type="submit"
+                  colorScheme="kraikub.green"
+                  isLoading={isUpdating}
+                >
                   {t("btn-save")}
                 </Button>
               </ButtonGroup>
@@ -340,7 +346,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
           <ModalHeader py={4}>
             <Text fontWeight={600} fontSize={16}>
               {t("delete-popup-msg-1")}{" "}
-              <Box as="span" fontWeight={700} color={tealColor}>
+              <Box as="span" fontWeight={700} color={greenColor}>
                 {app.appName}
               </Box>{" "}
               {t("delete-popup-msg-2")}
@@ -352,7 +358,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               <Text mb={3} fontSize={14}>
                 {t("delete-popup-msg-3")}{" "}
                 <Box as="span" fontWeight={500} color="red.500">
-                  delete/{noWhiteSpace(app.appName)}
+                  <strong>@{app.appId}</strong>
                 </Box>{" "}
                 {t("delete-popup-msg-4")}
               </Text>
@@ -380,7 +386,7 @@ export const AppForm: FC<AppFormProps> = ({ app }) => {
               size="sm"
               onClick={handleDeleteApp}
               disabled={
-                deleteInputValue !== `delete/${noWhiteSpace(app.appName)}`
+                deleteInputValue !== `@${app.appId}`
               }
             >
               {t("delete-popup-btn-yes")}
