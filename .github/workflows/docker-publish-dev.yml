@@ -92,6 +92,7 @@ jobs:
           image_tag: latest
           dockerfile: ./Dockerfile
           context: ./
+          build_args: NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }},MONGODB_URL_ARG=${{ secrets.MONGODB_URL }},MYKU_APPKEY_ARG=${{ secrets.MYKU_APPKEY }},NEXT_PUBLIC_SERVER_DOMAIN_ARG=${{ secrets.NEXT_PUBLIC_SERVER_DOMAIN }}
 
       # Remote
       - name: Deploy to dev.kraikub.com
