@@ -88,7 +88,7 @@ jobs:
           service_account: only-storage-object-adm@kraikub.iam.gserviceaccount.com
       - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
         with:
-          # gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }} # can be base64 encoded or plain text || not needed if you use google-github-actions/auth
+          gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }} # can be base64 encoded or plain text || not needed if you use google-github-actions/auth
           registry: gcr.io
           project_id: kraikub
           image_name: oauth2-develop
