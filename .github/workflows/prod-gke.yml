@@ -7,7 +7,7 @@ name: Build and Deploy to GKE
 
 on:
   push:
-    branches: ["devops/k8s"]
+    branches: ["main"]
     # Publish semver tags as releases.
     tags: ["v*.*.*"]
 
