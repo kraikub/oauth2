@@ -35,5 +35,6 @@
   "err-modal-header": "Cannot authenticate your account",
   "err-modal-description": "Please check your inputs and try again.",
   "err-modal-btn-close": "Close",
-  "expired": "Code has expired"
+  "expired": "Code has expired",
+  "form-btn-not-student": "Not Kasetsart Universitystudent?"
 }

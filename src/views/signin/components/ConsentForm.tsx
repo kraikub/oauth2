@@ -10,7 +10,7 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { BsFillCheckCircleFill } from "react-icons/bs";
 import { SimpleFadeInRight } from "../../../components/animations/SimpleFadeInRight";
-import { Card } from "../../../components/Card";
+import { Card, CardContent } from "../../../components/Card";
 import { CustomDivider } from "../../../components/CustomDivider";
 
 interface ConsentFormProps {
@@ -76,23 +76,22 @@ export const ConsentForm: FC<ConsentFormProps> = ({
   return (
     <Box overflow="hidden" w="100%">
       <SimpleFadeInRight>
-        <Heading size="md" mb={6}>
-          <Box as="span" lang="en">
-            {appName}
-          </Box>{" "}
-          {t("conset-header")}
-        </Heading>
-        <Text mb={3} fontSize={14}>
-          {t("consent-msg-1")} {appName} {t("consent-msg-2")}
-        </Text>
         <Card
-          disableMobileBorder
           props={{
             p: 0,
-            my: 6,
-            boxShadow: "none",
           }}
         >
+          <CardContent>
+            <Heading size="md" mb={2}>
+              <Box as="span" lang="en">
+                {appName}
+              </Box>{" "}
+              {t("conset-header")}
+            </Heading>
+            <Text mb={3} fontSize={14}>
+              {t("consent-msg-1")} {appName} {t("consent-msg-2")}
+            </Text>
+          </CardContent>
           {scope === "0" ? (
             <Each
               label="ไม่มีการเปิดเผยข้อมูล"
@@ -140,6 +139,7 @@ const Each: FC<EachProps> = ({ label, disableBorder }) => {
   );
   return (
     <>
+    <CustomDivider sx={{ my: 0 }} />
       <Flex py={4} px={6} gap={3} alignItems="center">
         <Box color={dynamicTealColor}>
           <BsFillCheckCircleFill fontSize={20} />
@@ -148,7 +148,7 @@ const Each: FC<EachProps> = ({ label, disableBorder }) => {
           {label}
         </Text>
       </Flex>
-      {disableBorder ? null : <CustomDivider sx={{ my: 0 }} />}
+      {/* {disableBorder ? null : <CustomDivider sx={{ my: 0 }} />} */}
     </>
   );
 };
