@@ -8,7 +8,12 @@
     "start": "next start",
     "lint": "next lint",
     "production": "next build && next start",
-    "build-image": "docker build -t kraikub-oauth2 ."
+    "build-image": "docker build -t kraikub-oauth2 --build-arg NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=7267700f83a8066dd55505a9512e2073 --build-arg MONGODB_URL_ARG=mongodb://kraikub:123456@localhost:27017/kraikub --build-arg MYKU_APPKEY_ARG=txCR5732xYYWDGdd49M3R19o1OVwdRFc --build-arg NEXT_PUBLIC_SERVER_DOMAIN_ARG=http://localhost:3000 .",
+    "k8s-deploy-local": "sh k8s/scripts/local-deployment.sh",
+    "up": "docker compose down && docker compose -f ./docker-compose.yaml up -d",
+    "down": "docker compose -f ./docker-compose.yaml down",
+    "db-up": "docker compose down && docker compose -f ./docker-compose-db.yaml up -d",
+    "db-down": "docker compose -f ./docker-compose-db.yaml down"
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.16",

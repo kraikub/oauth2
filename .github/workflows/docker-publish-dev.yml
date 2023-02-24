@@ -77,23 +77,6 @@ jobs:
             MONGODB_URL_ARG=${{ secrets.MONGODB_URL }}
             MYKU_APPKEY_ARG=${{ secrets.MYKU_APPKEY }}
             NEXT_PUBLIC_SERVER_DOMAIN_ARG=${{ secrets.NEXT_PUBLIC_SERVER_DOMAIN }}
-
-      - name: Build and Push to Google Cloud
-        id: auth
-        uses: google-github-actions/auth@v0
-        with:
-          credentials_json: ${{ secrets.GCLOUD_SERVICE_KEY }}
-      - uses: RafikFarhad/push-to-gcr-github-action@v5-beta
-        with:
-          # gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }} # can be base64 encoded or plain text || not needed if you use google-github-actions/auth
-          registry: gcr.io
-          project_id: kraikub
-          image_name: oauth2-develop
-          image_tag: latest
-          dockerfile: ./Dockerfile
-          context: ./
-          build_args: NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID_ARG=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }},MONGODB_URL_ARG=${{ secrets.MONGODB_URL }},MYKU_APPKEY_ARG=${{ secrets.MYKU_APPKEY }},NEXT_PUBLIC_SERVER_DOMAIN_ARG=${{ secrets.NEXT_PUBLIC_SERVER_DOMAIN }}
-
       # Remote
       - name: Deploy to dev.kraikub.com
         uses: appleboy/ssh-action@master

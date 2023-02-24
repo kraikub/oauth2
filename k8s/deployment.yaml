@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth2
+spec:
+  selector:
+    matchLabels:
+      app: oauth2
+  template:
+    metadata:
+      labels:
+        app: oauth2
+    spec:
+      containers:
+      - name: oauth2
+        env:
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: JWT_SECRET
+
+          - name: IDENTITY_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: IDENTITY_SECRET
+
+          - name: MONGODB_URL
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: MONGODB_URL
+
+          - name: MYKU_APPKEY
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: MYKU_APPKEY
+
+          - name: MYKU_AUTH_URL
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: MYKU_AUTH_URL
+
+          - name: NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID
+
+          - name: SHARE_ACCESS_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: SHARE_ACCESS_DOMAIN
+
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: REDIS_PASSWORD
+
+          - name: NEXT_PUBLIC_SERVER_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: NEXT_PUBLIC_SERVER_DOMAIN
+
+          - name: MAIL_SERVICE_HOST
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: MAIL_SERVICE_HOST
+            
+        image: gcr.io/kraikub/oauth2:latest
+        resources:
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
