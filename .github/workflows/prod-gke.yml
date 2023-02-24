@@ -54,6 +54,7 @@ jobs:
 
         # Get the GKE credentials so we can deploy to the cluster
       - run: |-
+          gcloud components install gke-gcloud-auth-plugin
           gcloud container clusters get-credentials "${{ secrets.GKE_CLUSTER_NAME }}" --region "${{ secrets.GKE_CLUSTER_REGION }}" --project "${{ secrets.GCP_PROJECT_ID }}"
           kubectl delete secret oauth2-secret
           kubectl create secret generic oauth2-secret \
