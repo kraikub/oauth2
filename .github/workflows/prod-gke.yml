@@ -60,12 +60,12 @@ jobs:
           kubectl delete secret oauth2-secret || echo "oauth2-secret not existed"
           echo "applying secret"
           kubectl create secret generic oauth2-secret \
-            --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
-            --from-literal=IDENTITY_SECRET="${{ secrets.IDENTITY_SECRET }}" \
+            --from-literal=JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            --from-literal=IDENTITY_SECRET=${{ secrets.IDENTITY_SECRET }} \
             --from-literal=MONGODB_URL="${{ secrets.MONGODB_URL }}" \
-            --from-literal=MYKU_APPKEY="${{ secrets.MYKU_APPKEY }}" \
+            --from-literal=MYKU_APPKEY=${{ secrets.MYKU_APPKEY }} \
             --from-literal=MYKU_AUTH_URL="${{ secrets.MYKU_AUTH_URL }}" \
-            --from-literal=NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID="${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }}" \
+            --from-literal=NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID=${{ secrets.NEXT_PUBLIC_ACCOUNTS_API_CLIENT_ID }} \
             --from-literal=SHARE_ACCESS_DOMAIN="${{ secrets.SHARE_ACCESS_DOMAIN }}" \
             --from-literal=REDIS_PASSWORD="${{ secrets.REDIS_PASSWORD }}" \
             --from-literal=REDIS_HOST=${{ secrets.REDIS_HOST }} \
