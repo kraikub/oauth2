@@ -56,7 +56,7 @@ jobs:
       - run: |-
           gcloud components install gke-gcloud-auth-plugin
           gcloud container clusters get-credentials "${{ secrets.GKE_CLUSTER_NAME }}" --region "${{ secrets.GKE_CLUSTER_REGION }}" --project "${{ secrets.GCP_PROJECT_ID }}"
-          kubectl delete secret oauth2-secret
+          kubectl delete secret oauth2-secret || echo "oauth2-secret not existed"
           kubectl create secret generic oauth2-secret \
             --from-literal=JWT_SECRET="${{ secrets.JWT_SECRET }}" \
             --from-literal=IDENTITY_SECRET="${{ secrets.IDENTITY_SECRET }}" \
