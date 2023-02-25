@@ -100,9 +100,13 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
     },
     input: {
       fontWeight: 500,
-      bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
+      bg: "transparent",
+      borderColor: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
       _hover: {
-        bg: useColorModeValue("blackAlpha.300", "whiteAlpha.400"),
+        bg: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
+      },
+      _focus: {
+        bg: useColorModeValue("blue.50", "gray.800"),
       },
       _placeholder: {
         color: useColorModeValue("blackAlpha.600", "whiteAlpha.600"),
@@ -128,6 +132,9 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
         bg: useColorModeValue("blackAlpha.50", "whiteAlpha.100"),
         backdropFilter: "blur(30px)",
       },
+    },
+    outlineButton: {
+      borderColor: useColorModeValue("blackAlpha.300", "whiteAlpha.300"),
     },
   };
 
@@ -344,12 +351,12 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
             ) : (
               // Begin sign in form
               <Box w="100%" overflow="hidden">
-                <SimpleFadeInLeft>
-                  <Card hideMobileBorder>
+                <Card hideMobileBorder>
+                  <SimpleFadeInLeft>
                     <form onSubmit={toConsent}>
                       <Flex
                         minH="60vh"
-                        h="auto"
+                        h="fit-content"
                         pt="40px"
                         direction="column"
                         alignItems="center"
@@ -394,6 +401,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                                 onChange={handleUsernameChange}
                                 value={username}
                                 {...styles.input}
+                                borderWidth="1px 1px 0px 1px"
                               />
                               <CustomDivider
                                 sx={{
@@ -413,6 +421,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                                   onChange={handlePasswordChange}
                                   value={password}
                                   {...styles.input}
+                                  borderWidth="0 1px 1px 1px"
                                 />
                                 <IconButton
                                   aria-label="toggle-password"
@@ -486,7 +495,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                             size="lg"
                             w="full"
                             variant="outline"
-                            borderColor="blackAlpha.300"
+                            borderColor={styles.outlineButton.borderColor}
                             // {...styles.button}
                             textTransform="uppercase"
                             onClick={
@@ -502,8 +511,8 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                         </VStack>
                       </Flex>
                     </form>
-                  </Card>
-                </SimpleFadeInLeft>
+                  </SimpleFadeInLeft>
+                </Card>
               </Box>
             )}
           </DynamicContainer>

@@ -8,6 +8,7 @@ import { UserModel } from "../../data/models/user";
 import { mongodb } from "../../data/mongo";
 import { ClientRender } from "../../src/components/ClientRender";
 import { UserProvider } from "../../src/contexts/User";
+import { AppLayout } from "../../src/layouts/AppLayout";
 import Navbar from "../../src/layouts/Navbar";
 import { jsonSerialize } from "../../src/utils/json";
 import { KraikubIdPageBody } from "../../src/views/kraikub-id";
@@ -54,10 +55,11 @@ const OragnizationPage: NextPage<OrganizationPageProps> = (props) => {
       <Head>
         <title>Kraikub ID</title>
       </Head>
-      <Navbar />
-      <ClientRender>
-        <OrgDashboardPage org={props.organization} />
-      </ClientRender>
+      <AppLayout>
+        <ClientRender>
+          <OrgDashboardPage org={props.organization} />
+        </ClientRender>
+      </AppLayout>
     </UserProvider>
   );
 };

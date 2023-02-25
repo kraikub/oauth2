@@ -75,7 +75,7 @@ export const colors = {
   },
   bg: {
     light: "#ffffff",
-    dark: "#000000",
+    dark: "#121212",
   },
   card: {
     light: "#ffffff",

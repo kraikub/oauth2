@@ -1,5 +1,6 @@
 import { LogModel } from "./../../data/models/log";
 import { mongodb } from "../../data/mongo";
+import { getUserLogsAggregation } from "../../data/aggregations/logs";
 
 class LogRepository {
   async newLog(
@@ -10,7 +11,7 @@ class LogRepository {
     uaPlatform: string,
     uaMobile: string,
     ip: string,
-    ssid: string,
+    ssid: string
   ) {
     await mongodb.connect();
     return await LogModel.create<Log>({
@@ -25,6 +26,11 @@ class LogRepository {
       timestamp: new Date(Date.now()),
     });
   }
+  getUserLogsWithApps = async (uid: string) => {
+    await mongodb.connect();
+    return await LogModel.aggregate<LogDTO>(getUserLogsAggregation(uid));
+  };
+
 }
 
 export const logRepository = new LogRepository();

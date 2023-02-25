@@ -20,7 +20,7 @@ export const Card: FC<CardProps> = (props) => {
           ? defaultBorderRadius
           : [0, defaultBorderRadius]
       }
-      borderStyle={props.disableMobileBorder ? "none" : "solid"}
+      borderStyle={"solid"}
       borderWidth={
         props.hideMobileBorder ? ["0px", "1px"] : ["1px 0 1px 0", "1px"]
       }

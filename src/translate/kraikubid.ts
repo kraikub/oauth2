@@ -116,12 +116,14 @@ export const dictDeviceCard: Dictionary = {
     "header-desc": "Your account are on these devices",
     "btn-see-more": "See more",
     "btn-see-less": "See less",
+    "see-all": "See all login devices"
   },
   th: {
     "header": "อุปกรณ์",
     "header-desc": "บัญชีของคุณถูกใช้งานบนอุปกรณ์เหล่านี้",
     "btn-see-more": "ดูเพิ่มเติม",
     "btn-see-less": "ซ่อน",
+    "see-all": "ดูอุปกรณ์ทั้งหมด",
 
   },
 }

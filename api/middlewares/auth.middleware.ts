@@ -7,6 +7,7 @@ export const PageAuthMiddleware = (token: any) => {
   const [success, payload, error] = verify(token);
   return {
     uid: success ? payload.uid as string : undefined,
+    ssid: success ? payload.ssid as string : undefined,
     error: error,
   }
 }

@@ -228,9 +228,9 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       url: redirectUrl,
       code: code,
     };
-
+    const ssid = sha256(code)
     await authUsecase.saveLog(
-      sha256(code),
+      ssid,
       uid,
       clientId,
       scope,
@@ -242,6 +242,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const internalServiceAccessToken = authUsecase.signInternalAccessToken({
       uid,
+      ssid,
     });
 
     const response = createResponse(true, "Authorized", payload);
