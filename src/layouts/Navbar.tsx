@@ -23,6 +23,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useColorMode,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
@@ -76,6 +77,7 @@ const Tab: FC<TabProps> = (props) => {
 
 const Navbar: FC = () => {
   const { user, signout } = useUser();
+  const { colorMode } = useColorMode();
   const { t } = useClientTranslation(navbarDict);
   const [showUserModal, setShowUserModal] = useState(false);
   const [shadow, setShadow] = useState(false);
@@ -184,8 +186,10 @@ const Navbar: FC = () => {
             <LinkWrap href="/">
               <HStack spacing={2}>
                 <Image
-                  src="https://resources-kraikub.firebaseapp.com/static/logo/transparent/kraikub-logo-256.png"
-                  width="28px"
+                  src={`https://kraikub.com/static/logo/transparent/${
+                    colorMode === "light" ? "color" : "white"
+                  }/kraikub-logo-128.png`}
+                  width="24px"
                   alt="kraikub-nav-logo"
                   rounded={10}
                 />

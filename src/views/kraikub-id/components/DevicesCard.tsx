@@ -297,27 +297,25 @@ export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
               })}
           </VStack>
         </CardContent>
-        {!Object.keys(catMap).slice(6).length ? (
-          <>
-            <CustomDivider
-              sx={{
-                my: 0,
-              }}
-            />
-            <Link href="/id/login-devices" style={{ textDecoration: "none" }}>
-              <Button
-                w="full"
-                variant="ghost"
-                rounded={0}
-                color="kraikub.green.500"
-                textDecoration="none"
-                _hover={{ bg: buttonBg }}
-              >
-                {t("see-all")}
-              </Button>
-            </Link>
-          </>
-        ) : null}
+
+        <CustomDivider
+          sx={{
+            my: 0,
+          }}
+        />
+        <Link href="/id/login-devices" style={{ textDecoration: "none" }}>
+          <Button
+            w="full"
+            size="lg"
+            variant="ghost"
+            rounded={0}
+            color="kraikub.green.500"
+            textDecoration="none"
+            _hover={{ bg: buttonBg }}
+          >
+            {t("see-all")}
+          </Button>
+        </Link>
       </Card>
     </Box>
   );

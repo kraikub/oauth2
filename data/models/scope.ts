@@ -24,16 +24,20 @@ export class Scope {
     
     for (const e of this.list) {
       switch (e) {
-        case "university_email": {
-          requires.push("universityEmail")
-          break;
-        }
-        case "personal_email": {
-          requires.push("personalEmail")
+        case "fullname": {
+          requires.push("fullName")
           break;
         }
         case "profile_pic": {
           requires.push("profileImageUrl")
+          break;
+        }
+        case "email": {
+          requires.push("personalEmail")
+          break;
+        }
+        case "account_type": {
+          requires.push("type")
           break;
         }
       }

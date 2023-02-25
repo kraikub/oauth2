@@ -1,14 +1,16 @@
 export const validScope = [
   "provider",
   "openid",
-  "university_email",
-  "personal_email",
+  "email",
+  "fullname",
+  "account_type",
   "student",
   "educations",
   "profile_pic",
 ];
 export const isValideScope = (s: string) => {
   const ssplitted = s.split(" ");
+  console.log(ssplitted);
   for (const each of ssplitted) {
     if (!validScope.includes(each)) {
       return false;

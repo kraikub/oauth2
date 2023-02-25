@@ -51,6 +51,7 @@ import { CustomDivider } from "../../../components/CustomDivider";
 import Link from "next/link";
 import { Card } from "../../../components/Card";
 import { DynamicContainer } from "../../../layouts/DynamicContainer";
+import { SimpleCard } from "../../../components/SimpleCard";
 
 interface SigninFormProps {
   query: {
@@ -311,47 +312,49 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
           />
         </Head>
         <Box>
-          <DynamicContainer
-            containerProps={{
-              maxW: "500px",
-              height: "100vh",
-              py: "4%",
-              ...styles.layout.container,
-            }}
+          <Container
+            maxW="500px"
+            h="100vh"
+            py="4%"
+            {...styles.layout.container}
           >
-            {step === 1 ? (
-              <ConsentForm
-                scope={query.scope}
-                appName={app?.appName}
-                handleSignin={validateBeforeSignin}
-                handleReject={backToSigninForm}
-                loading={isSigninButtonLoading}
-                signInMethod={signInMethod}
-              />
-            ) : step === 2 ? (
-              <TwoFactor
-                handleSignin={handleSigninEvent}
-                OTPRef={OTPRef}
-                OTPExpire={OTPExpire}
-                authForEmail={authForEmail}
-                back={backToSigninForm}
-                signInMethod={signInMethod}
-              />
-            ) : activeUser ? (
-              <UserSelector
-                setSigninMethod={setSigninMethod}
-                user={activeUser}
-                reject={() => {
-                  setActiveUser(null);
-                  setSigninMethod("nontri");
-                }}
-                next={handleNextWhenHasActiveUser}
-                loading={isSigninButtonLoading}
-              />
-            ) : (
-              // Begin sign in form
-              <Box w="100%" overflow="hidden">
-                <Card hideMobileBorder>
+            <SimpleCard
+              props={{
+                w: "full",
+              }}
+            >
+              {step === 1 ? (
+                <ConsentForm
+                  scope={query.scope}
+                  appName={app?.appName}
+                  handleSignin={validateBeforeSignin}
+                  handleReject={backToSigninForm}
+                  loading={isSigninButtonLoading}
+                  signInMethod={signInMethod}
+                />
+              ) : step === 2 ? (
+                <TwoFactor
+                  handleSignin={handleSigninEvent}
+                  OTPRef={OTPRef}
+                  OTPExpire={OTPExpire}
+                  authForEmail={authForEmail}
+                  back={backToSigninForm}
+                  signInMethod={signInMethod}
+                />
+              ) : activeUser ? (
+                <UserSelector
+                  setSigninMethod={setSigninMethod}
+                  user={activeUser}
+                  reject={() => {
+                    setActiveUser(null);
+                    setSigninMethod("nontri");
+                  }}
+                  next={handleNextWhenHasActiveUser}
+                  loading={isSigninButtonLoading}
+                />
+              ) : (
+                // Begin sign in form
+                <Box w="100%" overflow="hidden">
                   <SimpleFadeInLeft>
                     <form onSubmit={toConsent}>
                       <Flex
@@ -512,10 +515,10 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                       </Flex>
                     </form>
                   </SimpleFadeInLeft>
-                </Card>
-              </Box>
-            )}
-          </DynamicContainer>
+                </Box>
+              )}
+            </SimpleCard>
+          </Container>
           <FooterShort />
         </Box>
 

@@ -13,6 +13,7 @@ import { Dispatch, FC, SetStateAction, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { appConfig } from "../../../../api/config/app";
 import { Card } from "../../../components/Card";
+import { CustomDivider } from "../../../components/CustomDivider";
 
 interface UserSelectorProps {
   user: UserWithStudent;
@@ -39,37 +40,27 @@ export const UserSelector: FC<UserSelectorProps> = ({
         <Heading size="md" mb="30px">
           {t("account-header")}
         </Heading>
-        <Text fontSize={14}>{t("account-description")}</Text>
-        <Card
-          disableMobileBorder
-          props={{
-            my: 3,
-            rounded: 16,
-            boxShadow: "none",
-          }}
-        >
-          <Flex width="full" gap={4}>
-            <Box>
-              <Avatar
-                src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
-                size="lg"
-                rounded="full"
-              />
-            </Box>
-            <Box pt={1}>
-              <Text fontWeight={600}>
-                {user.fullName}
-              </Text>
-              <Text fontWeight={400} fontSize={14} opacity={0.7}>
-                @{user.username}
-              </Text>
-            </Box>
-          </Flex>
-        </Card>
+        <Text fontSize={14} opacity={0.7}>{t("account-description")}</Text>
+        <Flex width="full" gap={4} mt={8}>
+          <Box>
+            <Avatar
+              src={user.profileImageUrl || appConfig.defaultProfileImageUrl}
+              size="md"
+              rounded="full"
+            />
+          </Box>
+          <Box pt={1}>
+            <Text fontWeight={600}>{user.fullName}</Text>
+            <Text fontWeight={400} fontSize={14} opacity={0.7}>
+              @{user.username}
+            </Text>
+          </Box>
+        </Flex>
+        <CustomDivider />
         <ButtonGroup
           justifyContent="end"
           width="full"
-          my={4}
+          mt={1}
           alignItems="center"
         >
           <Button variant="ghost" fontSize={14} onClick={reject}>

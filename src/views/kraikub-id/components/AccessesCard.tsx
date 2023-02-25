@@ -30,7 +30,6 @@ const Each: FC<EachProps> = ({ access }) => {
       props={{
         w: "full",
         py: 2,
-        cursor: "pointer",
         _hover: {
           bg: useColorModeValue("blackAlpha.100", "whiteAlpha.100"),
         },
@@ -40,9 +39,9 @@ const Each: FC<EachProps> = ({ access }) => {
         <HStack spacing={6}>
           <Center
             display="flex"
-            w="40px"
-            h="40px"
-            bg="linear-gradient(155deg, rgba(0,114,154,1) 0%, rgba(0,162,119,1) 100%)"
+            w="34px"
+            h="34px"
+            bg="kraikub.green.500"
             textTransform="uppercase"
             color="white"
             fontWeight={600}
@@ -59,7 +58,7 @@ const Each: FC<EachProps> = ({ access }) => {
           </HStack>
         </HStack>
         <Box opacity={0.4}>
-          <IoIosArrowForward />
+          
         </Box>
       </HStack>
     </CardContent>
@@ -120,7 +119,7 @@ export const AccessesCard: FC<AccessesCardProps> = ({ accesses }) => {
           <Text opacity={0.7}>{t("no-access")}</Text>
         </CardContent>
       ) : (
-        <VStack spacing={5}>
+        <VStack spacing={0}>
           {accesses.map((access, index) => {
             return (
               <Box w="full" key={`access-${index}`}>

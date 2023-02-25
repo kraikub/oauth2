@@ -10,7 +10,7 @@ interface SigninPageProps {
 }
 
 const Signin: NextPage<SigninPageProps> = ({ query, app }) => {
-  const {ready} = useTranslation()
+  const { ready } = useTranslation()
   return <SigninPage app={app} query={query} />;
 };
 

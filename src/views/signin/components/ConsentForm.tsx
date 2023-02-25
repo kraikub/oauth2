@@ -39,24 +39,32 @@ export const ConsentForm: FC<ConsentFormProps> = ({
   const { t } = useTranslation("signin");
   const consentDataList: ConsentData[] = [
     {
-      label: t("consent-scope-name"),
-      requires: ["provider", "student"],
+      label: t("consent-scope-openid"),
+      requires: ["openid"],
     },
     {
-      label: t("consent-scope-uemail"),
-      requires: ["provider", "university_email"],
+      label: t("consent-scope-fullname"),
+      requires: ["provider", "fullname"],
     },
     {
-      label: t("consent-scope-pemail"),
+      label: t("consent-scope-profile-pic"),
+      requires: ["provider", "profile_pic"],
+    },
+    {
+      label: t("consent-scope-email"),
       requires: ["provider", "personal_email"],
     },
     {
-      label: t("consent-scope-edu"),
-      requires: ["provider", "education"],
+      label: t("consent-scope-account-type"),
+      requires: ["provider", "account_type"],
     },
     {
-      label: t("consent-scope-openid"),
-      requires: ["openid"],
+      label: t("consent-scope-student"),
+      requires: ["provider", "student"],
+    },
+    {
+      label: t("consent-scope-education"),
+      requires: ["provider", "educations"],
     },
   ];
   const dataListWithScope = (scope: string) => {
@@ -74,36 +82,30 @@ export const ConsentForm: FC<ConsentFormProps> = ({
     return result;
   };
   return (
-    <Box overflow="hidden" w="100%">
+    <Box overflow="hidden" w="100%" pt={5}>
       <SimpleFadeInRight>
-        <Card
-          props={{
-            p: 0,
-          }}
-        >
-          <CardContent>
-            <Heading size="md" mb={2}>
-              <Box as="span" lang="en">
-                {appName}
-              </Box>{" "}
-              {t("conset-header")}
-            </Heading>
-            <Text mb={3} fontSize={14}>
-              {t("consent-msg-1")} {appName} {t("consent-msg-2")}
-            </Text>
-          </CardContent>
-          {scope === "0" ? (
-            <Each
-              label="ไม่มีการเปิดเผยข้อมูล"
-              requires={["0"]}
-              disableBorder={true}
-              scope={scope}
-            />
-          ) : null}
-          {dataListWithScope(scope).map((data: ConsentData, index: number) => {
-            return <Each scope={scope} {...data} key={`consent-${index}`} />;
-          })}
-        </Card>
+        <Heading size="md" mb={2}>
+          <Box as="span" lang="en">
+            {appName}
+          </Box>{" "}
+          {t("conset-header")}
+        </Heading>
+        <Text mb={3} fontSize={14}>
+          {t("consent-msg-1")} {appName} {t("consent-msg-2")}
+        </Text>
+
+        {scope === "0" ? (
+          <Each
+            label="ไม่มีการเปิดเผยข้อมูล"
+            requires={["0"]}
+            disableBorder={true}
+            scope={scope}
+          />
+        ) : null}
+        {dataListWithScope(scope).map((data: ConsentData, index: number) => {
+          return <Each scope={scope} {...data} key={`consent-${index}`} />;
+        })}
+
         <Flex justifyContent="end" mt={12} alignItems="center" gap={2}>
           <Button
             size="lg"
@@ -139,7 +141,7 @@ const Each: FC<EachProps> = ({ label, disableBorder }) => {
   );
   return (
     <>
-    <CustomDivider sx={{ my: 0 }} />
+      {/* <CustomDivider sx={{ my: 0 }} /> */}
       <Flex py={4} px={6} gap={3} alignItems="center">
         <Box color={dynamicTealColor}>
           <BsFillCheckCircleFill fontSize={20} />
