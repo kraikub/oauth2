@@ -10,6 +10,7 @@ import {
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import { appConfig } from "../../../../api/config/app";
 
 interface LangButtonProps {
   children?: any;
@@ -37,7 +38,7 @@ export const LangSetup: FC<SteperProps> = ({ next }) => {
   const router = useRouter();
   const [checked, setChecked] = useState<boolean>(false);
   const setLanguage = (l: string) => {
-    setCookie("LANG", l);
+    setCookie("LANG", l, { maxAge: appConfig.cookieMaxAge });
     // router.push(router.asPath, router.asPath, { locale: l });
     location.reload();
   };
