@@ -49,6 +49,9 @@ import { useTranslation } from "react-i18next";
 import { TwoFactor } from "./TwoFactor";
 import { CustomDivider } from "../../../components/CustomDivider";
 import Link from "next/link";
+import { Card } from "../../../components/Card";
+import { DynamicContainer } from "../../../layouts/DynamicContainer";
+import { SimpleCard } from "../../../components/SimpleCard";
 
 interface SigninFormProps {
   query: {
@@ -97,10 +100,14 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
       fontWeight: 600,
     },
     input: {
-      fontWeight: 400,
-      bg: useColorModeValue("blackAlpha.100", "whiteAlpha.300"),
+      fontWeight: 500,
+      bg: "transparent",
+      borderColor: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
       _hover: {
-        bg: useColorModeValue("blackAlpha.300", "whiteAlpha.400"),
+        bg: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
+      },
+      _focus: {
+        bg: useColorModeValue("blue.50", "gray.800"),
       },
       _placeholder: {
         color: useColorModeValue("blackAlpha.600", "whiteAlpha.600"),
@@ -126,6 +133,9 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
         bg: useColorModeValue("blackAlpha.50", "whiteAlpha.100"),
         backdropFilter: "blur(30px)",
       },
+    },
+    outlineButton: {
+      borderColor: useColorModeValue("blackAlpha.300", "whiteAlpha.300"),
     },
   };
 
@@ -303,183 +313,211 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
         </Head>
         <Box>
           <Container
-            maxW={500}
-            height="100vh"
+            maxW="500px"
+            h="100vh"
             py="4%"
             {...styles.layout.container}
           >
-            {step === 1 ? (
-              <ConsentForm
-                scope={query.scope}
-                appName={app?.appName}
-                handleSignin={validateBeforeSignin}
-                handleReject={backToSigninForm}
-                loading={isSigninButtonLoading}
-                signInMethod={signInMethod}
-              />
-            ) : step === 2 ? (
-              <TwoFactor
-                handleSignin={handleSigninEvent}
-                OTPRef={OTPRef}
-                OTPExpire={OTPExpire}
-                authForEmail={authForEmail}
-                back={backToSigninForm}
-                signInMethod={signInMethod}
-              />
-            ) : activeUser ? (
-              <UserSelector
-                setSigninMethod={setSigninMethod}
-                user={activeUser}
-                reject={() => {
-                  setActiveUser(null);
-                  setSigninMethod("nontri");
-                }}
-                next={handleNextWhenHasActiveUser}
-                loading={isSigninButtonLoading}
-              />
-            ) : (
-              // Begin sign in form
-              <Box w="100%" overflow="hidden">
-                <SimpleFadeInLeft>
-                  <form onSubmit={toConsent}>
-                    <Flex
-                      minH="60vh"
-                      h="auto"
-                      px="30px"
-                      py="40px"
-                      direction="column"
-                      alignItems="center"
-                      gap="20px"
-                    >
-                      <Heading size="lg">{t("form-title")}</Heading>
-                      <Text textTransform="uppercase" fontWeight={600} opacity={0.6}>
-                        {t("form-description")}
-                      </Text>
-                      <Box mt="30px" w="full">
-                        <Text fontSize={14}>
-                          {t("form-app-text")}
-                          <Box as="span" fontWeight={700} {...styles.highlight}>
-                            {" "}
-                            {app?.appName}
-                          </Box>
+            <SimpleCard
+              props={{
+                w: "full",
+              }}
+            >
+              {step === 1 ? (
+                <ConsentForm
+                  scope={query.scope}
+                  appName={app?.appName}
+                  handleSignin={validateBeforeSignin}
+                  handleReject={backToSigninForm}
+                  loading={isSigninButtonLoading}
+                  signInMethod={signInMethod}
+                />
+              ) : step === 2 ? (
+                <TwoFactor
+                  handleSignin={handleSigninEvent}
+                  OTPRef={OTPRef}
+                  OTPExpire={OTPExpire}
+                  authForEmail={authForEmail}
+                  back={backToSigninForm}
+                  signInMethod={signInMethod}
+                />
+              ) : activeUser ? (
+                <UserSelector
+                  setSigninMethod={setSigninMethod}
+                  user={activeUser}
+                  reject={() => {
+                    setActiveUser(null);
+                    setSigninMethod("nontri");
+                  }}
+                  next={handleNextWhenHasActiveUser}
+                  loading={isSigninButtonLoading}
+                />
+              ) : (
+                // Begin sign in form
+                <Box w="100%" overflow="hidden">
+                  <SimpleFadeInLeft>
+                    <form onSubmit={toConsent}>
+                      <Flex
+                        minH="60vh"
+                        h="fit-content"
+                        pt="40px"
+                        direction="column"
+                        alignItems="center"
+                        gap="20px"
+                      >
+                        <Heading size="lg">{t("form-title")}</Heading>
+                        <Text
+                          textTransform="uppercase"
+                          fontWeight={600}
+                          opacity={0.6}
+                        >
+                          {t("form-description")}
                         </Text>
-                      </Box>
-                      <Box mt="10px" w="full">
-                        <Progress
-                          size="xs"
-                          isIndeterminate
-                          colorScheme="kraikub.green.always"
-                          background="transparent"
-                          opacity={isSigninButtonLoading ? 1 : 0}
-                        />
-                        {signInMethod === "nontri" ? (
-                          <>
-                            <Input
-                              variant="outlined"
-                              borderRadius="8px 8px 0 0"
-                              size="lg"
-                              placeholder={t("form-input-username") as string}
-                              onChange={handleUsernameChange}
-                              value={username}
-                              {...styles.input}
-                            />
-                            <CustomDivider
-                              sx={{
-                                my: 0,
-                                opacity: 0.6,
-                              }}
-                            />
-                            <Box position="relative">
+                        <Box mt="30px" w="full">
+                          <Text fontSize={14}>
+                            {t("form-app-text")}
+                            <Box
+                              as="span"
+                              fontWeight={700}
+                              {...styles.highlight}
+                            >
+                              {" "}
+                              {app?.appName}
+                            </Box>
+                          </Text>
+                        </Box>
+                        <Box mt="10px" w="full">
+                          <Progress
+                            size="xs"
+                            isIndeterminate
+                            colorScheme="kraikub.green.always"
+                            background="transparent"
+                            opacity={isSigninButtonLoading ? 1 : 0}
+                          />
+                          {signInMethod === "nontri" ? (
+                            <>
+                              <Input
+                                variant="outlined"
+                                borderRadius="8px 8px 0 0"
+                                size="lg"
+                                placeholder={t("form-input-username") as string}
+                                onChange={handleUsernameChange}
+                                value={username}
+                                {...styles.input}
+                                borderWidth="1px 1px 0px 1px"
+                              />
+                              <CustomDivider
+                                sx={{
+                                  my: 0,
+                                  opacity: 0.6,
+                                }}
+                              />
+                              <Box position="relative">
+                                <Input
+                                  variant="outlined"
+                                  size="lg"
+                                  placeholder={
+                                    t("form-input-password") as string
+                                  }
+                                  borderRadius="0 0 8px 8px"
+                                  type={showPassword ? "text" : "password"}
+                                  onChange={handlePasswordChange}
+                                  value={password}
+                                  {...styles.input}
+                                  borderWidth="0 1px 1px 1px"
+                                />
+                                <IconButton
+                                  aria-label="toggle-password"
+                                  onClick={() => setShowPassword(!showPassword)}
+                                  position="absolute"
+                                  top="50%"
+                                  right="10px"
+                                  transform="translate(0,-50%);"
+                                  fontSize={20}
+                                  variant="ghost"
+                                  size="sm"
+                                >
+                                  {!showPassword ? (
+                                    <IoIosEye />
+                                  ) : (
+                                    <IoIosEyeOff />
+                                  )}
+                                </IconButton>
+                              </Box>
+                            </>
+                          ) : signInMethod === "kraikubid" ? (
+                            <>
                               <Input
                                 variant="outlined"
                                 size="lg"
-                                placeholder={t("form-input-password") as string}
-                                borderRadius="0 0 8px 8px"
-                                type={showPassword ? "text" : "password"}
-                                onChange={handlePasswordChange}
-                                value={password}
+                                placeholder={t("form-input-email") as string}
+                                type="email"
+                                onChange={handleEmailChange}
+                                value={email}
                                 {...styles.input}
                               />
-                              <IconButton
-                                aria-label="toggle-password"
-                                onClick={() => setShowPassword(!showPassword)}
-                                position="absolute"
-                                top="50%"
-                                right="10px"
-                                transform="translate(0,-50%);"
-                                fontSize={20}
-                                variant="ghost"
-                                size="sm"
+                            </>
+                          ) : null}
+                        </Box>
+                        <Box w="full" textAlign="end">
+                          <Link href="/signup">
+                            <a>
+                              <Text
+                                color="kraikub.green.500"
+                                fontSize={14}
+                                _hover={{ textDecoration: "underline" }}
                               >
-                                {!showPassword ? <IoIosEye /> : <IoIosEyeOff />}
-                              </IconButton>
-                            </Box>
-                          </>
-                        ) : signInMethod === "kraikubid" ? (
-                          <>
-                            <Input
-                              variant="outlined"
-                              size="lg"
-                              placeholder={t("form-input-email") as string}
-                              type="email"
-                              onChange={handleEmailChange}
-                              value={email}
-                              {...styles.input}
-                            />
-                          </>
-                        ) : null}
-                      </Box>
-                      <Box w="full" textAlign="end">
-                        <Link href="/signup">
-                          <a>
-                            <Text
-                              color="kraikub.green.500"
-                              fontSize={14}
-                              _hover={{ textDecoration: "underline" }}
-                            >
-                              {t("form-link-sign-up")}
-                            </Text>
-                          </a>
-                        </Link>
-                      </Box>
-                      <VStack
-                        spacing={2}
-                        justifyContent="space-between"
-                        w="full"
-                      >
-                        <Button
-                          colorScheme="kraikub.green.always"
-                          color="white"
-                          type="submit"
+                                {t("form-link-sign-up")}
+                              </Text>
+                            </a>
+                          </Link>
+                        </Box>
+                        <VStack
+                          spacing={2}
+                          justifyContent="space-between"
                           w="full"
-                          size="lg"
-                          aria-label="sign-in-button"
-                          isLoading={isSigninButtonLoading}
-                          isDisabled={(!username || !password) && !email}
                         >
-                          {t("form-btn-continue")}
-                        </Button>
-                        <Button
-                          size="lg"
-                          w="full"
-                          {...styles.button}
-                          textTransform="uppercase"
-                          onClick={
-                            signInMethod === "nontri"
-                              ? changeToKraikubId
-                              : changeToNontri
-                          }
-                        >
-                          {signInMethod === "nontri"
-                            ? t("form-btn-use-kraikubid")
-                            : t("form-btn-use-nontri")}
-                        </Button>
-                      </VStack>
-                    </Flex>
-                  </form>
-                </SimpleFadeInLeft>
-              </Box>
-            )}
+                          <Button
+                            h="60px"
+                            colorScheme="kraikub.green.always"
+                            color="white"
+                            type="submit"
+                            w="full"
+                            size="lg"
+                            aria-label="sign-in-button"
+                            isLoading={isSigninButtonLoading}
+                            isDisabled={(!username || !password) && !email}
+                          >
+                            {t("form-btn-continue")}
+                          </Button>
+                          <Text fontSize={12} opacity={0.6} py={2}>
+                            {t("form-btn-not-student")}
+                          </Text>
+                          <Button
+                            h="60px"
+                            size="lg"
+                            w="full"
+                            variant="outline"
+                            borderColor={styles.outlineButton.borderColor}
+                            // {...styles.button}
+                            textTransform="uppercase"
+                            onClick={
+                              signInMethod === "nontri"
+                                ? changeToKraikubId
+                                : changeToNontri
+                            }
+                          >
+                            {signInMethod === "nontri"
+                              ? t("form-btn-use-kraikubid")
+                              : t("form-btn-use-nontri")}
+                          </Button>
+                        </VStack>
+                      </Flex>
+                    </form>
+                  </SimpleFadeInLeft>
+                </Box>
+              )}
+            </SimpleCard>
           </Container>
           <FooterShort />
         </Box>

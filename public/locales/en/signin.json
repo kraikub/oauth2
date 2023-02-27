@@ -16,11 +16,13 @@
   "conset-header": "wants to",
   "consent-msg-1": "This application named",
   "consent-msg-2": "want to access your personal information.",
-  "consent-scope-name": "See your firstname, lastname and some personal information",
-  "consent-scope-uemail": "See your registered university email (if available)",
-  "consent-scope-pemail": "See your verified personal email (if available)",
-  "consent-scope-edu": "See your educational profile under Kasetsart University",
+  "consent-scope-fullname": "See your firstname, and lastname",
+  "consent-scope-account-type": "See your account type",
+  "consent-scope-student": "See your student information (if available)",
+  "consent-scope-email": "See your verified email (if available)",
+  "consent-scope-education": "See your educational profile under Kasetsart University (if available)",
   "consent-scope-openid": "Verify your identity with OpenID Connect",
+  "consent-scope-profile-pic": "See your profile picture",
   "consent-btn-cancel": "Cancel",
   "consent-btn-allow": "Allow",
   "account-header": "Continue with KU Account",
@@ -35,5 +37,6 @@
   "err-modal-header": "Cannot authenticate your account",
   "err-modal-description": "Please check your inputs and try again.",
   "err-modal-btn-close": "Close",
-  "expired": "Code has expired"
+  "expired": "Code has expired",
+  "form-btn-not-student": "Not Kasetsart University student?"
 }

@@ -3,6 +3,7 @@ export const appConfig = {
   grantTypes: ["code"],
   codeChallengeMethod: ["SHA256"],
   tokenPayloadTypes: ["json", "http_cookie"],
+  cookieMaxAge: 1707109200,
   defaultProfileImageUrl:
     "https://kraikub.com/static/avatar/default/profile.png",
   openid: {

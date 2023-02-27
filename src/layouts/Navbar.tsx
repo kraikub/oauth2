@@ -23,11 +23,12 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useColorMode,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useUser } from "../contexts/User";
 import { SmartLanguageToggler } from "../components/SmartLanguageToggler";
 import { useOnClient } from "../hooks/on-client";
@@ -76,8 +77,10 @@ const Tab: FC<TabProps> = (props) => {
 
 const Navbar: FC = () => {
   const { user, signout } = useUser();
+  const { colorMode } = useColorMode();
   const { t } = useClientTranslation(navbarDict);
   const [showUserModal, setShowUserModal] = useState(false);
+  const [shadow, setShadow] = useState(false);
   const [navModal, setNavModal] = useState(false);
   const ready = useOnClient();
 
@@ -115,13 +118,25 @@ const Navbar: FC = () => {
     desktop: {
       bg: useColorModeValue("card.light", "card.dark"),
       borderStyle: "solid",
-      borderWidth: "0 0 1px 0",
+      borderWidth: shadow ? "0px" : "0 0 1px 0",
       borderColor: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
+      boxShadow: shadow ? "0 2px 5px 1px #00000038" : "none",
+      transition: "300ms ease",
     },
     mobile: {
       bg: useColorModeValue("card.light", "card.dark"),
     },
   };
+
+  useEffect(() => {
+    window.addEventListener("scroll", (e) => {
+      if (window.scrollY === 0) {
+        setShadow(false);
+      } else {
+        setShadow(true);
+      }
+    });
+  }, []);
 
   if (!user || !ready) {
     return null;
@@ -152,7 +167,14 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <Box {...navStyles.desktop}>
+      <Box
+        {...navStyles.desktop}
+        position="fixed"
+        top={0}
+        left={0}
+        right={0}
+        zIndex={600}
+      >
         <Container
           maxW="container.xl"
           py="14px"
@@ -164,8 +186,10 @@ const Navbar: FC = () => {
             <LinkWrap href="/">
               <HStack spacing={2}>
                 <Image
-                  src="https://resources-kraikub.firebaseapp.com/static/logo/transparent/kraikub-logo-256.png"
-                  width="28px"
+                  src={`https://kraikub.com/static/logo/transparent/${
+                    colorMode === "light" ? "color" : "white"
+                  }/kraikub-logo-128.png`}
+                  width="24px"
                   alt="kraikub-nav-logo"
                   rounded={10}
                 />

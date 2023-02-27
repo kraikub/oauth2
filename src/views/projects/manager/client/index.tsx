@@ -5,14 +5,14 @@ import { AppForm } from "./components/AppForm";
 import { Center } from "@chakra-ui/react";
 import { InterWindLoader } from "../../../../layouts/Loader";
 import { ConnectSection } from "./components/ConnectSection";
+import { AppLayout } from "../../../../layouts/AppLayout";
 
 const ClientPage: FC<ClientPageServerSideProps> = ({ app, permission }) => {
   const router = useRouter();
   const { clientId } = router.query;
 
   return (
-    <>
-      <Navbar />
+    <AppLayout>
       {app ? (
         <>
           <AppForm app={app} />
@@ -22,7 +22,7 @@ const ClientPage: FC<ClientPageServerSideProps> = ({ app, permission }) => {
           <InterWindLoader />
         </Center>
       )}
-    </>
+    </AppLayout>
   );
 };
 

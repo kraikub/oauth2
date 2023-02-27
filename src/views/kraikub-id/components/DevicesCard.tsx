@@ -51,7 +51,7 @@ export const deviceMap = (ua: string, uap: string) => {
   return "Unknown";
 };
 
-const whichIcon = (k: string) => {
+export const whichIcon = (k: string) => {
   switch (k) {
     case "iPhone": {
       return <IoPhonePortraitOutline />;
@@ -253,6 +253,7 @@ const Each: FC<EachProps> = ({ keyName, device, last }) => {
 
 export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
   const { t } = useClientTranslation(dictDeviceCard);
+  const buttonBg = useColorModeValue("blackAlpha.100", "whiteAlpha.100");
   const catMap = classify(logs);
   return (
     <Box w="full">
@@ -281,19 +282,40 @@ export const DevicesCard: FC<DevicesCardProps> = ({ logs }) => {
           }}
         >
           <VStack spacing={0}>
-            {Object.keys(catMap).slice(0,6).map((k, index) => {
-              const keyName = k.replaceAll(`"`, "");
-              const device = catMap[k];
-              return (
-                <Each
-                  key={`device-list-${index}`}
-                  {...{ keyName, device }}
-                  last={index === Object.keys(catMap).length - 1}
-                />
-              );
-            })}
+            {Object.keys(catMap)
+              .slice(0, 6)
+              .map((k, index) => {
+                const keyName = k.replaceAll(`"`, "");
+                const device = catMap[k];
+                return (
+                  <Each
+                    key={`device-list-${index}`}
+                    {...{ keyName, device }}
+                    last={index === Object.keys(catMap).length - 1}
+                  />
+                );
+              })}
           </VStack>
         </CardContent>
+
+        <CustomDivider
+          sx={{
+            my: 0,
+          }}
+        />
+        <Link href="/id/login-devices" style={{ textDecoration: "none" }}>
+          <Button
+            w="full"
+            size="lg"
+            variant="ghost"
+            rounded={0}
+            color="kraikub.green.500"
+            textDecoration="none"
+            _hover={{ bg: buttonBg }}
+          >
+            {t("see-all")}
+          </Button>
+        </Link>
       </Card>
     </Box>
   );

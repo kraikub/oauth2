@@ -33,11 +33,9 @@ interface SigninPageProps {
 }
 
 const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
-  const { toggleColorMode, colorMode } = useColorMode();
   const client = useOnClient();
 
   if (!client) return null;
-
   if (
     app === null ||
     !query.scope ||
@@ -55,7 +53,7 @@ const SigninPage: FC<SigninPageProps> = ({ app, query }) => {
             name="description"
             content="เราไม่สามารถดำเนินการลิงค์ของคุณได้ คุณควรที่จะตรวจสอบความถูกต้องของลิงค์ของคุณหรือติดต่อผู้พัฒนาแอปพลิเคชั่นที่เกี่ยวข้องกับคุณ"
           />
-          <meta name="author" content="Kraikub Official" />
+          <meta name="author" content="Kraikub" />
           <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0"

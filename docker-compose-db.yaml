@@ -1,27 +1,9 @@
 version: '3'
-
 services:
-  oauth: 
-    image: kraikub-oauth2:latest
-    ports:
-      - 3000:3000
-    network_mode: "host"
-    env_file:
-      - ./.env
-  
-  mail-service:
-    image: kraikub-mail-service:latest
-    ports:
-      - 3064:3064
-    network_mode: "host"
-    env_file:
-      - ./external/mail-service/.env
-  
   mongo: 
     image: mongo:6.0.3
     ports:
       - 27017:27017
-    network_mode: "host"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=123456
@@ -35,6 +17,7 @@ services:
     image: redis:7.0.5-alpine
     command: redis-server --requirepass @kraikub.redis
     restart: always
-    network_mode: "host"
     ports:
       - '6379:6379'
+    
+

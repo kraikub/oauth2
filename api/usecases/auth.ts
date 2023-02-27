@@ -64,11 +64,12 @@ class AuthUsecase {
     );
   }
 
-  signInternalAccessToken(authObject: { uid: string }) {
+  signInternalAccessToken(authObject: { uid: string; ssid: string }) {
     return signAuthObject(
       {
         uid: authObject.uid,
         token_type: "internal-service-access-token",
+        ssid: authObject.ssid,
       },
       "14d"
     );
