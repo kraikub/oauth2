@@ -61,6 +61,12 @@ spec:
               secretKeyRef:
                 name: oauth2-secret
                 key: REDIS_PASSWORD
+          
+          - name: REDIS_HOST
+            valueFrom:
+              secretKeyRef:
+                name: oauth2-secret
+                key: REDIS_HOST
 
           - name: NEXT_PUBLIC_SERVER_DOMAIN
             valueFrom:

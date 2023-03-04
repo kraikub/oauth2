@@ -52,7 +52,7 @@ export const ConsentForm: FC<ConsentFormProps> = ({
     },
     {
       label: t("consent-scope-email"),
-      requires: ["provider", "personal_email"],
+      requires: ["provider", "email"],
     },
     {
       label: t("consent-scope-account-type"),
