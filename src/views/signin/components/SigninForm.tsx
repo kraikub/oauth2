@@ -130,7 +130,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
         borderStyle: "solid",
         borderWidth: "1px",
         borderColor: useColorModeValue("blackAlpha.200", "whiteAlpha.200"),
-        bg: useColorModeValue("blackAlpha.50", "whiteAlpha.100"),
+        bg: useColorModeValue("bg.light", "bg.dark"),
         backdropFilter: "blur(30px)",
       },
     },
@@ -547,9 +547,9 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
               <Container maxW="container.lg" overflow="auto">
                 <Stack spacing={10}>
                   <Heading size="md">
-                    Sorry, PDPA Agreement will comming soon. 🙁
+                    Welcome to KRAIKUB
                   </Heading>
-                  <Text>Agree a PDPA with the button below</Text>
+                  <Text>Looks like you are new to KRAIKUB. Welcome!</Text>
                 </Stack>
               </Container>
             </DrawerBody>
@@ -562,7 +562,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                     onClick={backToSigninForm}
                     variant="ghost"
                   >
-                    Disagree
+                    Cancel
                   </Button>
                   <Button
                     size="lg"
@@ -573,7 +573,7 @@ export const SigninForm: FC<SigninFormProps> = ({ query, app, secret }) => {
                     }
                     isLoading={isSigninButtonLoading}
                   >
-                    Agree
+                    Continue
                   </Button>
                 </ButtonGroup>
               </Container>
