@@ -20,7 +20,6 @@ export const UserLogsPage: FC<UserLogsProps> = ({ logs, ssid }) => {
         <CustomDivider  />
         <VStack alignItems="start" spacing={3} mt={5}>
           {[...logs].reverse().map((log, index) => {
-            console.log(log.timestamp);
             return (
               <LogCard
                 log={log}

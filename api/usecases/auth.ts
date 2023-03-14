@@ -219,6 +219,30 @@ class AuthUsecase {
     }
   };
 
+  /// IMPLICIT TYPE //// ///////////////////////////////////////////////////////////////
+  getIdTokenOnImplicit = async (
+    uid: string,
+    scope: string,
+    clientId: string
+  ) => {
+    const requestScope = new Scope(uid, scope);
+
+    if (requestScope.isOpenIDConnect) {
+      const result = await userRepository.useAggregationPipeline(
+        requestScope.baseAggregation
+      );
+      const idtoken = this.signNewIdtoken({
+        iss: appConfig.openid.iss,
+        iat: Math.round(Date.now() / 1000),
+        aud: clientId,
+        sub: uid,
+        ...result[0],
+      });
+      return idtoken
+    }
+  };
+  //////////////////////////////////////////////////////////////////////
+
   public async refreshAccessToken(res: NextApiResponse, refreshToken: string) {
     const [success, payload, error] = verify(refreshToken);
     if (!success) {

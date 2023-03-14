@@ -1,6 +1,6 @@
 export const appConfig = {
   INIT_MAX_APP_QUOTA: 10,
-  grantTypes: ["code"],
+  grantTypes: ["code", "implicit"],
   codeChallengeMethod: ["SHA256"],
   tokenPayloadTypes: ["json", "http_cookie"],
   cookieMaxAge: 1707109200,

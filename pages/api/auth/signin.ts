@@ -72,7 +72,7 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     // For handling PKCE
     if (
-      response_type === "authorization_code" &&
+      response_type === "code" &&
       code_challenge &&
       !appConfig.codeChallengeMethod.includes(code_challenge_method)
     ) {
@@ -217,18 +217,45 @@ const signinHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     }
 
-    const redirectUrl = redirectToAuthenticateCallback(selectedUrl, {
-      state: state,
-      code: code,
-      scope: scope,
-      clientId: clientId,
-    });
+    let redirectQueries = {}
+
+    if (response_type === "implicit") {
+      const idtoken = await authUsecase.getIdTokenOnImplicit(
+        uid,
+        scope,
+        clientId
+      );
+      if (!idtoken) {
+        return res
+            .status(409)
+            .send(createResponse(false, "Error on generating id_token", null));
+      }
+      redirectQueries = {
+        state: state,
+        id_token: idtoken,
+        scope: scope,
+        client_id: clientId,
+      }
+    } else if (response_type === "code") {
+      redirectQueries = {
+        state: state,
+        code: code,
+        scope: scope,
+        client_id: clientId,
+      }
+    }
+
+
+    const redirectUrl = redirectToAuthenticateCallback(
+      selectedUrl,
+      redirectQueries
+    );
 
     let payload = {
       url: redirectUrl,
       code: code,
     };
-    const ssid = sha256(code)
+    const ssid = sha256(code);
     await authUsecase.saveLog(
       ssid,
       uid,
