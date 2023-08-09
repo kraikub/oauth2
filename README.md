@@ -7,6 +7,11 @@ databases. You are totally safe and secure, Kraikub won't remember your credenti
 
 ![Authorization Flow](https://user-images.githubusercontent.com/62375505/206862485-112a9dd8-9516-438d-8ee3-c67852d0df98.png)
 
+### Two Factor Authentication support (2FA)
+Kraikub's OAuth2 use 6 digits code to verify your identity by sending it to your registered email inbox. For Kasetsart University students, please activate Kraikub ID after linking your university account with Kraikub to use 2FA feature.
+
+
+
 ### About contributions
 All PRs are accepted. Please feel free to make any contribution.
 
